@@ -7,7 +7,7 @@ Author: person(given = "Jayani",
                   role = c("aut", "cre", "cph"),
                   email = "jayanilakshika76@gmail.com",
                   comment = c(ORCID = "0000-0002-6265-6481"))
-Maintainer: jayanilakshika76@gmail.com
+Maintainer: Jayani P.G. Lakshika <jayanilakshika76@gmail.com>
 Description: Questioning how a high-dimensional object looks in low-dimensions. With 'quollr', you can create linked interactive graphics that facilitate the exploration and analysis of high-dimensional datasets. This powerful tool allows you to diagnose the quality of dimension reduction techniques and gain insights into the global structure of your data through interactive tours. A complete description of the method is discussed in paper.
 License: MIT + file LICENSE
 Encoding: UTF-8
@@ -19,3 +19,5 @@ Imports:
     tibble
 URL: https://github.com/JayaniLakshika/quollr
 BugReports: https://github.com/JayaniLakshika/quollr/issues
+Depends: 
+    R (>= 2.10)

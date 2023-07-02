@@ -3,6 +3,7 @@
 #' @param x A numeric vector with one element.
 #'
 #' @return A numeric value.
+#' @importFrom stats IQR
 #' @export
 #'
 #' @examples
@@ -20,6 +21,11 @@ calculate_opt_bin_val_along_axis <- function(x){
 #' @param var2 A literal variable name which represents y-axis.
 #'
 #' @return A numeric value.
+#' @importFrom dplyr %>%
+#' @name %>%
+#' @rdname pipe
+#' @importFrom dplyr pull
+#' @import tibble
 #' @export
 #'
 #' @examples
@@ -50,15 +56,19 @@ calculate_effective_number_of_bins <- function(.data, var1 = var1, var2 = var2){
 #' @param var2 A literal variable name which represents y-axis.
 #'
 #' @return A numeric value.
+#' @importFrom dplyr %>%
+#' @name %>%
+#' @rdname pipe
+#' @importFrom dplyr pull
 #' @export
 #'
 #' @examples
 #' data <- tibble::tibble(x = rnorm(300), y = rnorm(300))
 #' calculate_effective_shape_value(data, x, y)
 calculate_effective_shape_value <- function(.data, var1 = var1, var2 = var2){
-  xwidth <- diff(range(data %>%
+  xwidth <- diff(range(.data %>%
                          pull({{ var1 }})))
-  yheight <- diff(range(data %>%
+  yheight <- diff(range(.data %>%
                           pull({{ var2 }})))
 
   shape <- yheight/xwidth # Here, yheight is the range of y and xwidth is the renge of x
