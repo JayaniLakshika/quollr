@@ -8,8 +8,7 @@ Author: person(given = "Jayani",
                   email = "jayanilakshika76@gmail.com",
                   comment = c(ORCID = "0000-0002-6265-6481"))
 Maintainer: jayanilakshika76@gmail.com
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
+Description: Questioning how a high-dimensional object looks in low-dimensions. With 'quollr', you can create linked interactive graphics that facilitate the exploration and analysis of high-dimensional datasets. This powerful tool allows you to diagnose the quality of dimension reduction techniques and gain insights into the global structure of your data through interactive tours. A complete description of the method is discussed in paper.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
