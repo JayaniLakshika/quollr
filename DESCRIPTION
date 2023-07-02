@@ -1,15 +1,21 @@
 Package: quollr
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Visualising How Nonlinear Dimension Reduction Warps Your Data
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
+Author: person(given = "Jayani", 
+                  family = "P.G. Lakshika",
+                  role = c("aut", "cre", "cph"),
+                  email = "jayanilakshika76@gmail.com",
+                  comment = c(ORCID = "0000-0002-6265-6481"))
+Maintainer: jayanilakshika76@gmail.com
 Description: More about what it does (maybe more than one line)
     Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.2.3
 Imports: 
     stats,
     tibble
+URL: https://github.com/JayaniLakshika/quollr
+BugReports: https://github.com/JayaniLakshika/quollr/issues
