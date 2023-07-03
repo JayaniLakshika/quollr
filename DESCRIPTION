@@ -15,6 +15,7 @@ LazyData: true
 RoxygenNote: 7.2.3
 Imports: 
     dplyr,
+    hexbin,
     stats,
     tibble
 URL: https://github.com/JayaniLakshika/quollr
