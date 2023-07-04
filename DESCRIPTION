@@ -17,7 +17,8 @@ Imports:
     dplyr,
     hexbin,
     stats,
-    tibble
+    tibble,
+    tidyselect
 URL: https://github.com/JayaniLakshika/quollr
 BugReports: https://github.com/JayaniLakshika/quollr/issues
 Depends: 
