@@ -29,9 +29,8 @@ find_benchmark_value <- function(.data, distance_col) {
       {
         distance_col
       }
-    }, round, 4))
-  distance$distance <- round(distance$distance, 4)
-  distance_df <- distance
+    }, \(x) round(x, 4)))
+
 
   sorted_distance_df <- .data |>
     dplyr::arrange({
@@ -49,11 +48,11 @@ find_benchmark_value <- function(.data, distance_col) {
     unique()  ## Get the unique distances
 
   dist_u <- tibble::tibble(unique_dist = unique_dist)
-  dist_u <- dplyr::bind_cols(dist_u, rbind(NA, apply(dist_u, 2, diff)))  ## Calculate differences between unique distance
+  dist_u <- dplyr::bind_cols(dist_u, rbind(NA, apply(dist_u, 2, diff)), .name_repair = "unique_quiet")  ## Calculate differences between unique distance
   names(dist_u)[2] <- "difference"
 
   dist_u <- dist_u |>
-    dplyr::mutate(dplyr::across(difference, round, 4))  ## For simplicity
+    dplyr::mutate(dplyr::across(difference, \(x) round(x, 4)))  ## For simplicity
 
   dist_u[is.na(dist_u)] <- 0  ## To replace missing values with zero
 
@@ -62,11 +61,17 @@ find_benchmark_value <- function(.data, distance_col) {
   ## To find the first largest difference (Define a benchmark value
   ## to remove long edges)
   for (i in 1:dim(dist_u)[1]) {
-    if (dist_u$difference[i] > dist_u$difference[i + 1]) {
-      if (!(is.na(dist_u$difference[i]))) {
-        benchmark_value_vec[i] <- dist_u$difference[i]
-        break
+    if(!is.na(dist_u$difference[i + 1])){
+      if (dist_u$difference[i] > dist_u$difference[i + 1]) {
+        if (!(is.na(dist_u$difference[i]))) {
+          benchmark_value_vec[i] <- dist_u$difference[i]
+          break
+        }
+      } else {
+        benchmark_value_vec[i] <- min(dist_u$difference)
       }
+    } else{
+      benchmark_value_vec[i] <- min(dist_u$difference)
     }
   }
 
@@ -81,29 +86,68 @@ find_benchmark_value <- function(.data, distance_col) {
 
 }
 
-show_langevitour <- function(df, df_b, df_b_with_center_data, benchmark_value = NA, distance_df, distance_col){
+show_langevitour <- function(df, df_b, df_b_with_center_data, benchmark_value = NA,
+                             distance_df, distance_col, min_points_threshold = NA) {
 
   ### Define type column
   df <- df |>
-    dplyr::mutate(type = "data") ## original dataset
+    dplyr::mutate(type = "data")  ## original dataset
 
   df_b <- df_b |>
-    dplyr::mutate(type = "model") ## Data with summarized mean
+    dplyr::mutate(type = "model")  ## Data with summarized mean
 
   df_exe <- dplyr::bind_rows(df_b, df)
 
-  if(is.na(benchmark_value)){
-    langevitour::langevitour(df_exe[1:(length(df_exe)-2)], lineFrom = tr_from_to_df$from , lineTo = tr_from_to_df$to, group = df_exe$type)
-  } else {
+
+  if ((is.na(benchmark_value)) && (is.na(min_points_threshold))) {
+    tr1 <- triangulate_bin_centroids(df_b_with_center_data)
+    tr_from_to_df <- generate_edge_info(triangular_object = tr1)
+
+    langevitour::langevitour(df_exe[1:(length(df_exe) - 2)], lineFrom = tr_from_to_df$from,
+                             lineTo = tr_from_to_df$to, group = df_exe$type)
+  } else if ((!(is.na(benchmark_value))) && (is.na(min_points_threshold))) {
     ## Set the maximum difference as the criteria
-    distance_df_small_edges <- distance_df %>%
-      dplyr::filter({{ distance_col }} < benchmark_value)
+    distance_df_small_edges <- distance_df |>
+      dplyr::filter({
+        {
+          distance_col
+        }
+      } < benchmark_value)
     ## Since erase brushing is considerd.
 
-    langevitour::langevitour(df_exe[1:(length(df_exe)-2)], lineFrom = distance_df_small_edges$from, lineTo = distance_df_small_edges$to, group = df_exe$type)
+    langevitour::langevitour(df_exe[1:(length(df_exe) - 2)], lineFrom = distance_df_small_edges$from,
+                             lineTo = distance_df_small_edges$to, group = df_exe$type)
+
+  } else if ((is.na(benchmark_value)) && (!(is.na(min_points_threshold)))) {
+    df_bin_centroids_filterd <- df_bin_centroids |>
+      dplyr::filter(Cell_count > min_points_threshold)
+
+    tr1 <- triangulate_bin_centroids(df_bin_centroids_filterd)
+    tr_from_to_df <- generate_edge_info(triangular_object = tr1)
+
+    langevitour::langevitour(df_exe[1:(length(df_exe) - 2)], lineFrom = tr_from_to_df$from,
+                             lineTo = tr_from_to_df$to, group = df_exe$type)
+
+  } else if ((!(is.na(benchmark_value))) && (!(is.na(min_points_threshold)))) {
+
+    df_bin_centroids_filterd <- df_bin_centroids |>
+      dplyr::filter(Cell_count > min_points_threshold)
+
+    tr1 <- triangulate_bin_centroids(df_bin_centroids_filterd)
+    tr_from_to_df <- generate_edge_info(triangular_object = tr1)
+
+    distance_d <- cal_2D_dist(.data = tr_from_to_df)
+    ## Set the maximum difference as the criteria
+    distance_df_small_edges <- distance_d |>
+      dplyr::filter(distance < benchmark_value)
+    ## Since erase brushing is considerd.
+
+    langevitour::langevitour(df_exe[1:(length(df_exe) - 2)], lineFrom = distance_df_small_edges$from,
+                             lineTo = distance_df_small_edges$to, group = df_exe$type)
+
+  } else {
 
   }
 
 
 }
-
