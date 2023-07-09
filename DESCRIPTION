@@ -15,10 +15,16 @@ LazyData: true
 RoxygenNote: 7.2.3
 Imports: 
     dplyr,
+    geozoo,
+    ggplot2,
     hexbin,
+    langevitour,
+    snedata,
     stats,
     tibble,
-    tidyselect
+    tidyr,
+    tidyselect,
+    tripack
 URL: https://github.com/JayaniLakshika/quollr
 BugReports: https://github.com/JayaniLakshika/quollr/issues
 Depends: 
