@@ -66,11 +66,7 @@ find_benchmark_value <- function(.data, distance_col) {
           benchmark_value_vec[i] <- dist_u$difference[i]
           break
         }
-      } else {
-        benchmark_value_vec[i] <- min(dist_u$difference)
       }
-    } else{
-      benchmark_value_vec[i] <- min(dist_u$difference)
     }
   }
 

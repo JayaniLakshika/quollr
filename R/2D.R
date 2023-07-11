@@ -85,7 +85,7 @@ extract_hexbin_centroids <- function(.data, hb) {
 }
 
 triangulate_bin_centroids <- function(.data){
-  tr1 <- tripack::tri.mesh(.data |> dplyr::pull(x_val_center), .data |> dplyr::pull(y_val_center), duplicate = "remove")
+  tr1 <- tripack::tri.mesh(.data |> dplyr::pull(x_val_center), .data |> dplyr::pull(y_val_center))
   return(tr1)
 }
 
