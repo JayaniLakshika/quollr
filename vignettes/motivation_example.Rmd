@@ -1,0 +1,815 @@
+---
+title: "motivation_example"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{motivation_example}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(quollr)
+```
+
+```{r}
+library(dplyr)
+library(langevitour)
+library(ggplot2)
+library(purrr) ## map function
+library(gridExtra) ## for grid.arrange
+library(rsample)
+library(DT)
+library(ggbeeswarm)
+
+
+set.seed(563)
+```
+
+```{r}
+# Simulate some data
+
+n <- 2000
+mat <- cbind(
+    rnorm(n),
+    rnorm(n),
+    rnorm(n)*0.3 + rep(c(-1,1),n/2))
+
+gene_mat <- mat %*% cbind(
+    x1 = c(1,1,0),
+    x2 = c(1,-1,0),
+    x3 = c(1,0,2))
+
+gene_mat <- tibble::as_tibble(gene_mat)
+```
+
+
+```{r}
+#| warning: false
+
+langevitour(gene_mat)
+```
+
+```{r}
+#| warning: false
+
+data_split <- initial_split(gene_mat)
+training_data <- training(data_split)
+test_data <- testing(data_split)
+```
+
+### Pre-processing
+
+```{r}
+#| warning: false
+## num_pcs: selected number of PCs to get results (deafukt is all) 
+
+calculate_pca <- function(data, num_pcs = NCOL(data), center = TRUE, scale = FALSE){
+  pcaY_cal <- prcomp(data, center = TRUE, scale = FALSE)
+  
+  PCAresults <- tibble::as_tibble(pcaY_cal$x[, 1:num_pcs])
+  names(PCAresults) <- paste0(rep("PC", num_pcs), 1:num_pcs)
+  
+  summary_pca <- summary(pcaY_cal)
+  
+  var_explained_df <- tibble::tibble(PC = paste0("PC",1:NCOL(data)),
+                               var_explained = (pcaY_cal$sdev[1:NCOL(data)])^2/sum((pcaY_cal$sdev[1:NCOL(data)])^2))
+  
+  ## Scree plot
+  plot <- var_explained_df %>%
+    ggplot(aes(x = PC,y = var_explained, group = 1)) +
+    geom_point(size=1) +
+    geom_line() +
+    labs(title="Scree plot: variance explained by each principal component", 
+         x = "Principal components",
+         y = "Variance explained") +
+    scale_x_discrete(limits = paste0(rep("PC", NCOL(data)), 1:NCOL(data))) +
+    theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+    
+  return(list(prcomp_out = pcaY_cal, pca_components = PCAresults, summary = summary_pca, var_explained_pca  = var_explained_df, plot = plot))
+}
+```
+
+```{r}
+#| warning: false
+pca_out <- calculate_pca(training_data, 3)
+data_pca <- pca_out$pca_components
+data_pca <- data_pca %>% 
+  distinct()
+
+pca_out$plot
+```
+
+```{r}
+## data: pca projections
+visualize_pca_combinations <- function(data){
+  
+  # To get all PCA combinations
+  l <- seq_len(NCOL(data)) %>%
+    cross2(., ., .filter = `==`) %>%
+    map(setNames, c("x", "y"))
+  
+  ## To convert the list to a dataframe
+  df1 <- data.frame(matrix(unlist(l), nrow=length(l), byrow=TRUE))
+  
+  ## To extract distinct pairs
+  df <- df1 %>%
+    mutate(x = pmin(X1, X2),
+    y = pmax(X1, X2)) %>%
+    distinct(x, y)
+  
+  ## To add string before numeric values in the column
+  df$x <- sub("^", "PC", df$x)
+  df$y <- sub("^", "PC", df$y)
+  
+  plot_list = list()
+  
+  for (i in 1:nrow(df)) {
+      p = data %>%
+      ggplot(aes_string(x = df$x[i],
+                 y = df$y[i]))+
+      geom_point() +
+      coord_equal() +
+        theme(plot.margin = unit(c(1,1,1,1), "lines"))
+      plot_list[[i]] = p
+  }
+  
+  do.call(grid.arrange, c(plot_list, ncol = 3))
+  
+}
+```
+
+```{r}
+visualize_pca_combinations(data_pca)
+```
+
+### Processing
+
+```{r}
+#| warning: false
+
+calculate_effective_perplexity <- function(data){
+  
+  opt_perplexity <- data %>%
+    NROW() %>%
+    sqrt()
+  
+  opt_perplexity
+  
+}
+```
+
+
+```{r}
+
+# num_dim: Number of dimensions to fit (default is 2): 2, or 3
+
+Fit_tSNE <- function(data, opt_perplexity = NA, num_dim = 2, with_seed = NULL, ...){
+  # If a seed is specified, then use it, otherwise ignore
+  if(is.null(with_seed)){set.seed(with_seed)}
+  
+  if(is.na(opt_perplexity)){
+    opt_perplexity <- calculate_effective_perplexity(data)
+    }
+  
+  tSNE_fit <- data %>%
+    select(where(is.numeric)) %>%
+    Rtsne::Rtsne(perplexity = opt_perplexity, pca = FALSE, pca_center = FALSE, normalize = FALSE, dims = num_dim)
+
+  tSNE_df <- tSNE_fit$Y %>%
+    tibble::as_tibble(.name_repair = "unique")  %>%
+    mutate(ID = row_number())
+
+  names(tSNE_df)[1:(NCOL(tSNE_df) - 1)] <- paste0(rep("tSNE",(NCOL(tSNE_df) - 1)), 1:(NCOL(tSNE_df) - 1))
+  return(tSNE_df)
+}
+
+```
+
+```{r}
+tSNE_data <- Fit_tSNE(data_pca, opt_perplexity = 40, with_seed = 20230531)
+
+tSNE_data %>%
+  datatable()
+```
+
+```{r}
+## var_tsne_1: name of the column with tSNE component 1 (default is tSNE1)
+## var_tsne_2: name of the column with tSNE component 2 (default is tSNE2)
+## cluster_var: name of the cluster variable
+## available_label: is available the cluster label (Boolean, default value is FALSE)
+
+plot_tSNE_2D <- function(data, var_tsne_1 = tSNE1, var_tsne_2 = tSNE2, avaiable_label = FALSE, cluster_var = NULL, ...){
+  
+  if (isTRUE(avaiable_label)) {
+    
+    cluster_names <- data %>%
+      pull({{ cluster_var }}) 
+    
+    tSNE_df_plot <- data %>%
+    ggplot(aes(x = {{ var_tsne_1 }},
+               y = {{ var_tsne_2 }},
+               colour = cluster_names))+
+    geom_point() +
+    coord_equal() +
+    scale_color_manual(values=c("#a6cee3", "#1f78b4", "#b2df8a", "#33a02c", "#fb9a99", "#e31a1c", "#fdbf6f", "#ff7f00", "#cab2d6", "#6a3d9a", "#ffff99", "#b15928", "#8dd3c7", "#ffffb3", "#bebada", "#fb8072", "#80b1d3", "#fdb462", "#b3de69", "#fccde5", "#d9d9d9", "#bc80bd", "#ccebc5", "#ffed6f", "#000000", "#bdbdbd"))
+    ggtitle("Visualization by tSNE") +
+    theme(plot.title = element_text(hjust = 0.5, size = 18, face = "bold"))
+    
+  } else {
+    tSNE_df_plot <- data %>%
+    ggplot(aes(x = {{ var_tsne_1 }},
+               y = {{ var_tsne_2 }}))+
+    geom_point() +
+    coord_equal() +
+    ggtitle("Visualization by tSNE") +
+    theme(plot.title = element_text(hjust = 0.5, size = 18, face = "bold"))
+    
+  }
+  
+  
+  return(tSNE_df_plot)
+}
+```
+
+```{r}
+plot_tSNE_2D(tSNE_data)
+```
+
+**Step 1: Determine the Optimal Number of Bins**
+
+```{r}
+calculate_opt_bin_val_along_axis <- function(x){
+  h <- 2 * IQR(x) / length(x)^(1/3) # bin width
+  return(h)
+}
+
+calculate_effective_number_of_bins <- function(.data, x, y){
+
+  bw1 <- calculate_opt_bin_val_along_axis(.data |>
+                                            dplyr::pull({{ x }}))
+
+  bw2 <- calculate_opt_bin_val_along_axis(.data |>
+                                            dplyr::pull({{ y }}))
+
+  diameter <- sqrt(bw1^2 + bw2^2)
+
+  xbnds <- range(.data |>
+                   dplyr::pull({{ x }}))
+
+  num_bins <- round(diff(xbnds)/diameter, 0) ## This should be an integer
+  num_bins
+
+}
+```
+
+```{r}
+num_bins <- calculate_effective_number_of_bins(tSNE_data, x = tSNE1, y = tSNE2)
+```
+
+**Step 2: Determine the Optimal Shape Parameter**
+
+```{r}
+calculate_effective_shape_value <- function(.data, x, y){
+  xwidth <- diff(range(.data |>
+                         dplyr::pull({{ x }})))
+  yheight <- diff(range(.data |>
+                          dplyr::pull({{ y }})))
+
+  shape <- yheight/xwidth # Here, yheight is the range of y and xwidth is the renge of x
+  shape
+
+}
+```
+
+```{r}
+shape_val <- calculate_effective_shape_value(tSNE_data, x = tSNE1, y = tSNE2)
+shape_val
+```
+
+**Step 3: Generate the Hexagonal Grid**
+
+```{r}
+hb <- hexbin::hexbin(tSNE_data %>% pull(tSNE1), tSNE_data %>% pull(tSNE2), num_bins, IDs = TRUE, shape = shape_val)
+hb
+```
+
+**Step 4: Assign Observations to Hex Bins**
+
+```{r}
+
+create_hexbin <- function(.data, nldr_df, embedding_1, embedding_2, num_bins = 30,
+    shape_val = 1, apply_pca = TRUE) {
+    ### Merge tSNE dataset in 2D with original dataset which contains
+    ### 4D coordinates
+    .data <- .data |>
+        dplyr::mutate(ID = dplyr::row_number())
+
+    df_new <- .data |>
+        dplyr::inner_join(nldr_df, by = "ID")
+
+    ### Fit hexbins and store hexbin IDs
+    hb <- hexbin::hexbin(nldr_df |>
+        dplyr::pull({
+            {
+                embedding_1
+            }
+        }), nldr_df |>
+        dplyr::pull({
+            {
+                embedding_2
+            }
+        }), xbins = num_bins, IDs = TRUE, shape = shape_val)
+    ### Add hexbin Ids as a column to the original dataset
+
+    df_new <- df_new |>
+        dplyr::mutate(hb_id = hb@cID)
+
+    ## To change column names to lower case
+    names(df_new) <- tolower(names(df_new))
+
+    ### Select specific columns to get the average number of 4D
+    ### points in each bin
+    if (isTRUE(apply_pca)) {
+        ## Column names starts with pc
+        df <- df_new |>
+            dplyr::select(tidyselect::starts_with("pc"), hb_id)
+
+    } else {
+        ## Column names starts with x
+        df <- df_new |>
+            dplyr::select(tidyselect::starts_with("x"), hb_id)
+
+    }
+
+    return(list(df = df, hb = hb, df_new = df_new))
+}
+```
+
+```{r}
+hexbin <- create_hexbin(data_pca, tSNE_data, tSNE1, tSNE2, num_bins = num_bins, shape_val = shape_val)
+
+df_all <- hexbin$df 
+
+hexbin$df %>%
+  datatable()
+
+hexbin$df_new %>%
+  datatable()
+
+hb_object <- hexbin$hb
+hexbin$hb
+```
+
+**Step 5: Create the Hex Bin Plot**
+
+```{r}
+hex_bin_plot <- ggplot(tSNE_data, aes(tSNE1, tSNE2)) +
+    geom_hex(bins = num_bins) + 
+    geom_point() +
+    scale_fill_viridis_c() +
+    ggtitle("Hexbin plot by tSNE") +
+    theme(plot.title = element_text(hjust = 0.5, size = 18, face = "bold"))
+
+hex_bin_plot
+```
+
+**Step 11: Use Bin IDs to Compute High-Dimensional Average**
+
+```{r}
+avg_highD_data <- function(.data, apply_pca = TRUE) {
+  df_b <- .data |>
+    dplyr::group_by(hb_id) |>
+    dplyr::summarise(across(everything(), mean))
+
+  ## To change column names to lower case
+  names(df_b) <- tolower(names(df_b))
+
+  if (isTRUE(apply_pca)) {
+    ## Column names starts with pc
+    df_b <- df_b |>
+      dplyr::select(tidyselect::starts_with("pc"), hb_id)
+
+  } else {
+    ## Column names starts with x
+    df_b <- df_b |>
+      dplyr::select(tidyselect::starts_with("x"), hb_id)
+
+  }
+
+  return(df_b)
+}
+```
+
+```{r}
+df_bin <- avg_highD_data(df_all)
+
+df_bin %>%
+  datatable()
+```
+**Step 6: Triangulate Bin Centroids**
+
+
+```{r}
+extract_hexbin_centroids <- function(.data, hb) {
+
+    ### Computes x and y coordinates from hexagon cell id's
+    xy <- hexbin::hcell2xy(hb)
+
+    d_cell <- tibble::tibble(x_val_center = xy$x, y_val_center = xy$y)
+
+    ### Data of each cell (bin) which contain ID as hex_bin ID
+    df_cell_data1 <- tibble::tibble(ID = hb@cell, Cell_count = hb@count)
+
+    df_cell_data <- dplyr::bind_cols(df_cell_data1, d_cell)
+
+    df_cell_data <- df_cell_data |>
+        dplyr::rename(hb_id = "ID")
+
+    ### Merge hexbin data with original mean dataset
+    df_b_with_center_data <- .data |>
+        dplyr::inner_join(df_cell_data, by = "hb_id")
+
+    df_b_with_center_data <- df_b_with_center_data |>
+        dplyr::mutate(ID = dplyr::row_number())
+    return(df_b_with_center_data)
+}
+```
+
+```{r}
+df_bin_centroids <- extract_hexbin_centroids(df_bin, hb_object)
+
+df_bin_centroids %>%
+  datatable()
+```
+
+```{r}
+triangulate_bin_centroids <- function(.data){
+  tr1 <- tripack::tri.mesh(.data |> dplyr::pull(x_val_center), .data |> dplyr::pull(y_val_center))
+  return(tr1)
+}
+```
+
+```{r}
+tr1_object <- triangulate_bin_centroids(df_bin_centroids)
+```
+
+**Step 7: Generate Data Set with From, To, and Distance (Edge Info)**
+
+```{r}
+generate_edge_info <- function(triangular_object) {
+    tr_df <- tibble::tibble(x = triangular_object$x, y = triangular_object$y)  ## Create a dataframe with tri.mesh x and y coordinate values
+    tr_df <- tr_df |>
+        dplyr::mutate(ID = dplyr::row_number())  ## To add ID numbers, beacuse to join with from and to points in tri$arcs
+
+    trang <- tripack::triangles(triangular_object)
+    trang <- tibble::as_tibble(trang)
+
+    tr_arcs_df1 <- tibble::tibble(from = trang$node1, to = trang$node2)  ## Create dataframe with from and to edges
+    tr_arcs_df2 <- tibble::tibble(from = trang$node1, to = trang$node3)
+    tr_arcs_df3 <- tibble::tibble(from = trang$node2, to = trang$node3)
+    tr_arcs_df <- dplyr::bind_rows(tr_arcs_df1, tr_arcs_df2, tr_arcs_df3)  ## Create dataframe with from and to edges
+
+    ## To obtain x and values of from to in a dataframe
+    vec <- stats::setNames(rep("", 6), c("from", "to", "x_from", "y_from",
+        "x_to", "y_to"))  ## Define column names
+    # Initialize an empty dataframe to store data in a specific
+    # format
+    tr_from_to_df_coord <- dplyr::bind_rows(vec)[0, ]
+    tr_from_to_df_coord <- tr_from_to_df_coord |>
+        dplyr::mutate_if(is.character, as.numeric)
+
+    for (i in 1:NROW(tr_arcs_df)) {
+        from_row <- tr_df |>
+            dplyr::filter(dplyr::row_number() == (tr_arcs_df |>
+                dplyr::pull(from) |>
+                dplyr::nth(i)))
+        to_row <- tr_df |>
+            dplyr::filter(dplyr::row_number() == (tr_arcs_df |>
+                dplyr::pull(to) |>
+                dplyr::nth(i)))
+        tr_from_to_df_coord <- tr_from_to_df_coord |>
+            tibble::add_row(from = from_row |>
+                dplyr::pull(ID), to = to_row |>
+                dplyr::pull(ID), x_from = from_row |>
+                dplyr::pull(x), y_from = from_row |>
+                dplyr::pull(y), x_to = to_row |>
+                dplyr::pull(x), y_to = to_row |>
+                dplyr::pull(y))  ## Add vector as an       appending row to the dataframe
+    }
+
+    return(tr_from_to_df_coord)
+}
+
+```
+
+```{r}
+tr_from_to_df <- generate_edge_info(tr1_object)
+
+tr_from_to_df %>%
+  datatable()
+```
+
+**Step 8: Calculate 2D Distances between Triangular Edges**
+
+```{r}
+
+cal_2D_dist <- function(.data){
+  
+  .data$distance <- lapply(seq(nrow(.data)), function(x) {
+    start <- unlist(.data[x, c("x_from","y_from")])
+    end <- unlist(.data[x, c("x_to","y_to")])
+    sqrt(sum((start - end)^2))})
+  
+  distance_df <- .data %>% 
+    dplyr::select("from", "to", "distance")
+  
+  distance_df$distance <- unlist(distance_df$distance)
+  return(distance_df)
+}
+```
+
+```{r}
+distance <- cal_2D_dist(tr_from_to_df)
+
+distance %>%
+  datatable()
+```
+
+```{r}
+## To plot the distribution of distance
+plot_dist <- function(distance_df){
+  distance_df$group <- "1"
+  dist_plot <- ggplot(distance_df, aes(x = group, y = distance)) +
+    geom_quasirandom()+
+    ylim(0, max(unlist(distance_df$distance))+ 0.5) + coord_flip()
+  return(dist_plot)
+}
+```
+
+```{r}
+plot_dist(distance)
+```
+
+**Step 10: Plot Triangular Mesh in 2D Space**
+
+```{r}
+StatTrimesh <- ggproto("StatTrimesh", Stat, compute_group = function(data,
+    scales) {
+
+    tr1 <- tripack::tri.mesh(data$x, data$y, duplicate = "remove")
+    tr_df <- tibble::tibble(x = tr1$x, y = tr1$y)  ## Create a dataframe with tri.mesh x and y coordinate values
+    tr_df <- tr_df |>
+        dplyr::mutate(ID = dplyr::row_number())  ## To add ID numbers, beacuse to join with from and to points in tri$arcs
+
+
+    trang <- tripack::triangles(tr1)
+    trang <- tibble::as_tibble(trang)
+
+    tr_arcs_df1 <- tibble::tibble(from = trang$node1, to = trang$node2)  ## Create dataframe with from and to edges
+    tr_arcs_df2 <- tibble::tibble(from = trang$node1, to = trang$node3)
+    tr_arcs_df3 <- tibble::tibble(from = trang$node2, to = trang$node3)
+    tr_arcs_df <- dplyr::bind_rows(tr_arcs_df1, tr_arcs_df2, tr_arcs_df3)  ## Create dataframe with from and to edges
+
+    ## To obtain x and values of from to in a dataframe
+    vec <- stats::setNames(rep("", 6), c("from", "to", "x_from", "y_from",
+        "x_to", "y_to"))  ## Define column names
+    # Initialize an empty dataframe to store data in a specific
+    # format
+    tr_from_to_df_coord <- dplyr::bind_rows(vec)[0, ]
+    tr_from_to_df_coord <- tr_from_to_df_coord |>
+        dplyr::mutate_if(is.character, as.numeric)
+
+    for (i in 1:NROW(tr_arcs_df)) {
+        from_row <- tr_df |>
+            dplyr::filter(dplyr::row_number() == (tr_arcs_df |>
+                dplyr::pull(from) |>
+                dplyr::nth(i)))
+        to_row <- tr_df |>
+            dplyr::filter(dplyr::row_number() == (tr_arcs_df |>
+                dplyr::pull(to) |>
+                dplyr::nth(i)))
+        tr_from_to_df_coord <- tr_from_to_df_coord |>
+            tibble::add_row(from = from_row |>
+                dplyr::pull(ID), to = to_row |>
+                dplyr::pull(ID), x_from = from_row |>
+                dplyr::pull(x), y_from = from_row |>
+                dplyr::pull(y), x_to = to_row |>
+                dplyr::pull(x), y_to = to_row |>
+                dplyr::pull(y))  ## Add vector as an       appending row to the dataframe
+    }
+
+    trimesh <- tibble::tibble(x = tr_from_to_df_coord$x_from, y = tr_from_to_df_coord$y_from,
+        xend = tr_from_to_df_coord$x_to, yend = tr_from_to_df_coord$y_to,
+        PANEL = as.factor(rep(1, nrow(tr_from_to_df_coord))), group = rep(-1,
+            nrow(tr_from_to_df_coord)), size = rep(0.5, nrow(tr_from_to_df_coord)),
+        linetype = rep(1, nrow(tr_from_to_df_coord)), linewidth = rep(0.5,
+            nrow(tr_from_to_df_coord)), alpha = rep(NA, nrow(tr_from_to_df_coord)),
+        colour = rep("black", nrow(tr_from_to_df_coord)))
+    trimesh
+}, required_aes = c("x", "y"))
+
+stat_trimesh <- function(mapping = NULL, data = NULL, geom = "trimesh",
+    position = "identity", show.legend = NA, outliers = TRUE, inherit.aes = TRUE,
+    ...) {
+    ggplot2::layer(stat = StatTrimesh, data = data, mapping = mapping,
+        geom = geom, position = position, show.legend = show.legend, inherit.aes = inherit.aes,
+        params = list(outliers = outliers, ...))
+}
+
+library(scales)
+draw_panel_function <- function(data, panel_scales, coord) {
+
+
+    vertices <- tibble::tibble(x = data$x, y = data$y, colour = data$colour,
+        shape = data$shape, size = rep(2, nrow(data)), fill = rep("black",
+            nrow(data)), alpha = data$alpha, stroke = 0.5, stringsAsFactors = FALSE)
+
+    trimesh <- tibble::tibble(x = data$x, xend = data$xend, y = data$y,
+        yend = data$yend, PANEL = data$PANEL, group = data$group, size = data$size,
+        linetype = data$linetype, linewidth = data$linewidth, alpha = data$alpha,
+        colour = data$colour)
+
+    ggplot2:::ggname("geom_trimesh", grid::grobTree(ggplot2::GeomPoint$draw_panel(vertices,
+        panel_scales, coord), ggplot2::GeomSegment$draw_panel(trimesh,
+        panel_scales, coord)))
+}
+
+GeomTrimesh <- ggproto("GeomTrimesh", Geom, required_aes = c("x", "y",
+    "xend", "yend"), default_aes = aes(shape = 19, linetype = 1, linewidth = 0.5,
+    size = 0.5, alpha = NA, colour = "black"), draw_key = draw_key_point,
+    draw_panel = draw_panel_function)
+
+
+geom_trimesh <- function(mapping = NULL, data = NULL, stat = "trimesh",
+    position = "identity", show.legend = NA, na.rm = FALSE, inherit.aes = TRUE,
+    ...) {
+    layer(data = data, mapping = mapping, stat = stat, geom = GeomTrimesh,
+        position = position, show.legend = show.legend, inherit.aes = inherit.aes,
+        params = list(na.rm = na.rm, ...))
+}
+```
+
+```{r}
+ggplot(df_bin_centroids, aes(x = x_val_center, y = y_val_center)) + geom_trimesh() + 
+  coord_equal()
+```
+
+**Step 9: Remove Long Edges**
+
+```{r}
+find_benchmark_value <- function(.data, distance_col) {
+
+    .data <- .data |>
+        dplyr::mutate(dplyr::across({
+            {
+                distance_col
+            }
+        }, \(x) round(x, 4)))
+
+
+    sorted_distance_df <- .data |>
+        dplyr::arrange({
+            {
+                distance_col
+            }
+        })  ## Sort the distances
+
+    unique_dist <- sorted_distance_df |>
+        dplyr::pull({
+            {
+                distance_col
+            }
+        }) |>
+        unique()  ## Get the unique distances
+
+    dist_u <- tibble::tibble(unique_dist = unique_dist)
+    dist_u <- dplyr::bind_cols(dist_u, rbind(NA, apply(dist_u, 2, diff)), .name_repair = "unique_quiet")  ## Calculate differences between unique distance
+    names(dist_u)[2] <- "difference"
+
+    dist_u <- dist_u |>
+        dplyr::mutate(dplyr::across(difference, \(x) round(x, 4)))  ## For simplicity
+
+    dist_u[is.na(dist_u)] <- 0  ## To replace missing values with zero
+
+    benchmark_value_vec <- c()
+
+    ## To find the first largest difference (Define a benchmark value
+    ## to remove long edges)
+    for (i in 1:dim(dist_u)[1]) {
+      if(!is.na(dist_u$difference[i + 1])){
+        if (dist_u$difference[i] > dist_u$difference[i + 1]) {
+            if (!(is.na(dist_u$difference[i]))) {
+                benchmark_value_vec[i] <- dist_u$difference[i]
+                break
+            }
+        }
+      }
+    }
+
+
+    benchmark_value_df <- dist_u[which(dist_u$difference == benchmark_value_vec[!(is.na(benchmark_value_vec))]),
+        1]  # To get the first value which contain large difference 
+    names(benchmark_value_df) <- "unique_dist"
+    benchmark_value <- benchmark_value_df |>
+        dplyr::pull(unique_dist) |>
+        dplyr::nth(1)
+    benchmark_value
+
+}
+```
+
+
+```{r}
+benchmark <- find_benchmark_value(distance, distance)
+benchmark
+```
+
+```{r}
+## To color according to hover selection (long edges in red)
+
+color_long_edges <- function(.data, benchmark_value, triangular_object,
+    distance_col) {
+    tr_df <- tibble::tibble(x = triangular_object$x, y = triangular_object$y)
+
+    tr_from_to_df_coord <- generate_edge_info(triangular_object)
+    distance_df_small_edges <- .data |>
+        dplyr::filter({
+            {
+                distance_col
+            }
+        } < benchmark_value)
+    distance_df_long_edges <- .data |>
+        dplyr::filter({
+            {
+                distance_col
+            }
+        } >= benchmark_value)
+
+    distance_df_small_edges <- distance_df_small_edges |>
+        dplyr::mutate(type = "small_edges")
+
+    distance_df_long_edges <- distance_df_long_edges |>
+        dplyr::mutate(type = "long_edges")
+
+    distance_edges <- dplyr::bind_rows(distance_df_small_edges, distance_df_long_edges)
+
+    tr_from_to_df_coord_with_group <- merge(tr_from_to_df_coord, distance_edges,
+        by = c("from", "to"))
+
+
+    ## To draw the tri.mesh plot using ggplot
+    tri_mesh_plot <- ggplot2::ggplot(tr_df, aes(x = x, y = y)) + ggplot2::geom_segment(aes(x = x_from,
+        y = y_from, xend = x_to, yend = y_to, color = type), data = tr_from_to_df_coord_with_group) +
+        ggplot2::geom_point() + ggplot2::coord_equal() + ggplot2::scale_colour_manual(values = c("#de2d26",
+        "#636363"))
+    return(tri_mesh_plot)
+
+}
+```
+
+```{r}
+color_long_edges(distance, benchmark, tr1_object, distance)
+```
+
+**Step 12: Tour View**
+
+```{r}
+
+show_langevitour <- function(df, df_b, df_b_with_center_data, benchmark_value = NA, distance_df, distance_col){
+
+  ### Define type column
+  df <- df |> 
+    dplyr::mutate(type = "data") ## original dataset
+
+  df_b <- df_b |>  
+    dplyr::mutate(type = "model") ## Data with summarized mean
+
+  df_exe <- dplyr::bind_rows(df_b, df)
+  
+  if(is.na(benchmark_value)){
+    langevitour::langevitour(df_exe[1:(length(df_exe)-2)], lineFrom = tr_from_to_df$from , lineTo = tr_from_to_df$to, group = df_exe$type)
+  } else {
+    ## Set the maximum difference as the criteria
+  distance_df_small_edges <- distance_df %>% 
+    dplyr::filter({{ distance_col }} < benchmark_value)
+  ## Since erase brushing is considerd.
+
+  langevitour::langevitour(df_exe[1:(length(df_exe)-2)], lineFrom = distance_df_small_edges$from, lineTo = distance_df_small_edges$to, group = df_exe$type)
+    
+  }
+
+  
+}
+
+```
+
+```{r}
+show_langevitour(df_all, df_bin, df_bin_centroids, benchmark_value = benchmark, distance)
+```
