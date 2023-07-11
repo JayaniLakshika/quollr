@@ -1,8 +1,7 @@
 avg_highD_data <- function(.data, apply_pca = TRUE) {
   df_b <- .data |>
     dplyr::group_by(hb_id) |>
-    dplyr::mutate(dplyr::across(tidyselect::all_of(names(.data)[-NCOL(.data)]),
-                                mean))
+    dplyr::summarise(across(everything(), mean))
 
   ## To change column names to lower case
   names(df_b) <- tolower(names(df_b))
