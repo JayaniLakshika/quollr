@@ -1,8 +1,8 @@
 ---
-title: "motivation_example"
+title: "Five_Gaussian_clusters"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{motivation_example}
+  %\VignetteIndexEntry{Five_Gaussian_clusters}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -28,47 +28,43 @@ library(gridExtra) ## for grid.arrange
 library(rsample)
 library(DT)
 library(ggbeeswarm)
+library(readr)
 
-
-set.seed(563)
-```
-
-```{r}
-# Simulate some data
-
-n <- 2000
-mat <- cbind(
-    rnorm(n),
-    rnorm(n),
-    rnorm(n)*0.3 + rep(c(-1,1),n/2))
-
-gene_mat <- mat %*% cbind(
-    x1 = c(1,1,0),
-    x2 = c(1,-1,0),
-    x3 = c(1,0,2))
-
-gene_mat <- tibble::as_tibble(gene_mat)
-```
-
-
-```{r}
-#| warning: false
-
-langevitour(gene_mat)
+set.seed(20230531)
 ```
 
 ```{r}
 #| warning: false
+#| echo: false 
 
-data_split <- initial_split(gene_mat)
+sample_size <- 1500
+cluster_size <- sample_size/5
+df1 <- tibble::tibble(x=rnorm(cluster_size, mean = 0, sd = 0.05), y=rnorm(cluster_size, mean = 0, sd = 0.05), z=rnorm(cluster_size, mean = 0, sd = 0.05), w=rnorm(cluster_size, mean = 0, sd = 0.05))
+
+df2 <- tibble::tibble(x=rnorm(cluster_size, mean = 1, sd = 0.05), y=rnorm(cluster_size, mean = 0, sd = 0.05), z=rnorm(cluster_size, mean = 0, sd = 0.05), w=rnorm(cluster_size, mean = 0, sd = 0.05))
+
+df3 <- tibble::tibble(x=rnorm(cluster_size, mean = 0, sd = 0.05), y=rnorm(cluster_size, mean = 1, sd = 0.05), z=rnorm(cluster_size, mean = 0, sd = 0.05), w=rnorm(cluster_size, mean = 0, sd = 0.05))
+
+df4 <- tibble::tibble(x=rnorm(cluster_size, mean = 0, sd = 0.05), y=rnorm(cluster_size, mean = 0, sd = 0.05), z=rnorm(cluster_size, mean = 1, sd = 0.05), w=rnorm(cluster_size, mean = 0, sd = 0.05))
+
+df5 <- tibble::tibble(x=rnorm(cluster_size, mean = 0, sd = 0.05), y=rnorm(cluster_size, mean = 0, sd = 0.05), z=rnorm(cluster_size, mean = 0, sd = 0.05), w=rnorm(cluster_size, mean = 1, sd = 0.05))
+
+df_2 <- rbind(df1, df2, df3, df4, df5) 
+df_2 <- df_2 %>% 
+  rename(x1 = x, x2 = y, x3 = z, x4 = w)
+```
+
+```{r}
+langevitour(df_2)
+```
+
+```{r}
+data_split <- initial_split(df_2)
 training_data <- training(data_split)
 test_data <- testing(data_split)
 ```
 
-### Pre-processing
-
 ```{r}
-#| warning: false
 ## num_pcs: selected number of PCs to get results (deafukt is all) 
 
 calculate_pca <- function(data, num_pcs = NCOL(data), center = TRUE, scale = FALSE){
@@ -98,14 +94,14 @@ calculate_pca <- function(data, num_pcs = NCOL(data), center = TRUE, scale = FAL
 ```
 
 ```{r}
-#| warning: false
-pca_out <- calculate_pca(training_data, 3)
+pca_out <- calculate_pca(training_data, 4)
 data_pca <- pca_out$pca_components
 data_pca <- data_pca %>% 
   distinct()
 
 pca_out$plot
 ```
+
 
 ```{r}
 ## data: pca projections
@@ -839,7 +835,6 @@ show_langevitour <- function(df, df_b, df_b_with_center_data, benchmark_value = 
 
   
 }
-
 
 ```
 

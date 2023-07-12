@@ -818,5 +818,5 @@ show_langevitour <- function(df, df_b, df_b_with_center_data, benchmark_value = 
 ```
 
 ```{r}
-show_langevitour(df_all, df_bin, df_bin_centroids, benchmark_value = benchmark, distance)
+show_langevitour(df_all, df_bin, df_bin_centroids, benchmark_value = benchmark, distance, distance)
 ```
