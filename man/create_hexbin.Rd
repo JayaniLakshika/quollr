@@ -2,7 +2,7 @@
 % Please edit documentation in R/2D.R
 \name{create_hexbin}
 \alias{create_hexbin}
-\title{Generate the Hexagonal}
+\title{Generate the Hexagonal Bins}
 \usage{
 create_hexbin(
   .data,
@@ -15,13 +15,44 @@ create_hexbin(
 )
 }
 \arguments{
-\item{apply_pca}{}
+\item{.data}{The input data frame containing the original dataset.}
+
+\item{nldr_df}{The non-linear dimensionality reduction data frame containing the 2D coordinates.}
+
+\item{embedding_1}{The name of the column in the non-linear dimensionality reduction data frame containing the first embedding coordinate.}
+
+\item{embedding_2}{The name of the column in the non-linear dimensionality reduction data frame containing the second embedding coordinate.}
+
+\item{num_bins}{The number of hexagonal bins to generate. Default is 30.}
+
+\item{shape_val}{The shape parameter for the hexagonal bins. Default is 1.}
+
+\item{apply_pca}{A logical value indicating whether .data only contains principal components. Default is TRUE.}
 }
 \value{
-an S4 object of class "hexbin".
-
-hb: an S4 object of class "hexbin".
+A list with the following elements:
+\describe{
+  \item{df}{A data frame containing the selected columns and hexbin IDs.}
+  \item{hb}{An S4 object of class "hexbin" representing the generated hexagonal bins.}
+  \item{df_new}{A data frame with the merged data and added hexbin IDs.}
+}
 }
 \description{
-Generate the Hexagonal
+This function generates hexagonal bins based on the provided data and returns an S4 object of class "hexbin".
+}
+\examples{
+data <- tibble::tribble(
+  ~ID, ~x, ~y, ~pc1, ~pc2,
+  1, 0.2, 0.5, 0.1, 0.3,
+  2, 0.3, 0.4, 0.2, 0.2,
+  3, 0.1, 0.7, 0.3, 0.1
+)
+nldr <- tibble::tribble(
+  ~ID, ~embedding1, ~embedding2,
+  1, 0.6, 0.9,
+  2, 0.7, 0.8,
+  3, 0.5, 0.7
+)
+create_hexbin(data, nldr, "embedding1", "embedding2")
+
 }

@@ -7,17 +7,17 @@
 calculate_effective_number_of_bins(.data, x, y)
 }
 \arguments{
-\item{.data}{A data frame, data frame extension (e.g. a tibble), or a lazy data frame (e.g. from dbplyr or dtplyr).}
+\item{.data}{A data frame, data frame extension (e.g., a tibble), or a lazy data frame (e.g., from dbplyr or dtplyr).}
 
-\item{x}{A literal variable name which represents x-axis.}
+\item{x}{A literal variable name representing the x-axis.}
 
-\item{y}{A literal variable name which represents y-axis.}
+\item{y}{A literal variable name representing the y-axis.}
 }
 \value{
-A numeric value.
+A numeric value representing the effective number of bins.
 }
 \description{
-Calculate the effective number of bins along x-axis
+This function calculates the effective number of bins along the x-axis of a scatter plot.
 }
 \examples{
 data <- tibble::tibble(x = rnorm(300), y = rnorm(300))

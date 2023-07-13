@@ -7,13 +7,13 @@
 calculate_opt_bin_val_along_axis(x)
 }
 \arguments{
-\item{x}{A numeric vector with one element.}
+\item{x}{A numeric vector.}
 }
 \value{
-A numeric value.
+A numeric value representing the optimal number of bins.
 }
 \description{
-Calculate optimal number of bins in a histogram
+This function calculates the optimal number of bins in a histogram using the IQR method.
 }
 \examples{
 x <- 1:100
