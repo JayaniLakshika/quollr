@@ -128,3 +128,76 @@ gaussian_clusters <- function(n = 300, with_seed = NULL, num_clusters = 3, mean_
 
 }
 
+
+hyperplane <- function(n = 100, with_seed = NULL, num_dims = 2, coefficient_matrix = rbind(c(1, 1), c(-1, 1)), intercept_vec = c(-10, 8),
+                       coordinate_min_vec = c(10, 10), coordinate_max_vec = c(30, 20), num_noise_dims = 2, min_noise = 0, max_noise = 1) {
+
+  # To check the seed is not assigned
+  if (!is.null(with_seed)) {
+    set.seed(with_seed)
+  }
+  #browser()
+
+  # To generate column names for dimensions
+  column_names_data <- paste0(rep("x", num_dims), 1:num_dims)
+
+  # Initialize an empty list to store the vectors with column
+  # values
+  dim_val_list <- list()
+
+  for(i in 1:num_dims) {
+
+    coeffiecient_vec <- coefficient_matrix |>
+      tibble::as_tibble(.name_repair = "unique") |>
+      dplyr::filter(dplyr::row_number() == i) |>
+      unlist(use.names = FALSE)
+
+    data_val_list <- list()
+
+    for(k in 1: length(coeffiecient_vec)){
+      data_axis_val <- runif(n, min = coordinate_min_vec[k], max = coordinate_max_vec[k])
+      data_val_list[[k]] <- coeffiecient_vec[k] * data_axis_val
+
+    }
+
+    data_axis <- tibble::as_tibble(data_val_list, .name_repair = "unique")
+
+    sum_dims <- data_axis %>%
+      mutate(sum = rowSums(., na.rm=TRUE)) %>%
+      select(sum)
+
+    sum_df <- sum_dims + intercept_vec[i]
+
+    dim_val_list[[column_names_data[i]]] <- sum_df %>%
+      pull(sum)
+
+  }
+
+
+  df <- tibble::as_tibble(dim_val_list)
+
+
+  # To generate column names for noise dimensions
+  column_names <- paste0(rep("x", num_noise_dims), (num_dims + 1):(num_dims + num_noise_dims))
+
+  # Initialize an empty list to store the vectors with column
+  # values
+  noise_dim_val_list <- list()
+
+  for (j in 1:num_noise_dims) {
+    if ((j%%2) == 0) {
+      noise_dim_val_list[[column_names[j]]] <- runif(n,
+                                                     min = min_noise, max = max_noise)
+    } else {
+      noise_dim_val_list[[column_names[j]]] <- (-1) * runif(n,
+                                                            min = min_noise, max = max_noise)
+    }
+
+
+  }
+
+  df_noise <- tibble::as_tibble(noise_dim_val_list)
+  df <- dplyr::bind_cols(df, df_noise)
+  df
+
+}
