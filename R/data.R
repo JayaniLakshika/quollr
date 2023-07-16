@@ -1,31 +1,73 @@
-gaussian_clusters <- function(sample_size = 300, with_seed = NULL, num_clusters = 3,
-                              cluster_sd = 0.05, num_dims = 3) {
+#' Generate Gaussian Clusters
+#'
+#' Generates a dataset with Gaussian clusters and additional random noise dimensions.
+#'
+#' @param n The number of observations in the dataset.
+#' @param with_seed Optional. The seed value for reproducibility.
+#' @param num_clusters The number of Gaussian clusters to generate.
+#' @param mean_matrix The mean matrix for each cluster, where each row represents the mean vector for a cluster.
+#'                    Default is rbind(c(1,0,0), c(0,1,0), c(0,0,1)).
+#' @param var_vec The variance vector for each cluster. Default is c(0.05, 0.05, 0.05).
+#' @param num_dims The number of dimensions for each observation. Should be at least 2. Default is 3.
+#' @param num_noise_dims The number of additional random noise dimensions to add to the dataset. Default is 2.
+#' @param min_noise The minimum value for the random noise dimensions. Default is -0.5.
+#' @param max_noise The maximum value for the random noise dimensions. Default is 0.5.
+#'
+#' @return A tibble (data frame) with the generated dataset, including Gaussian clusters and random noise dimensions.
+#'
+#' @examples
+#' data <- gaussian_clusters(n = 300, num_clusters = 3, mean_matrix = rbind(c(1,0,0), c(0,1,0), c(0,0,1)),
+#'                           var_vec = c(0.05, 0.05, 0.05), num_dims = 3, num_noise_dims = 2,
+#'                           min_noise = -0.5, max_noise = 0.5)
+#'
+#' @export
+gaussian_clusters <- function(n = 300, with_seed = NULL, num_clusters = 3, mean_matrix = rbind(c(1,0,0), c(0,1,0), c(0,0,1)),
+                              var_vec = c(0.05, 0.05, 0.05), num_dims = 3, num_noise_dims = 2,
+                              min_noise = -0.05, max_noise = 0.05) {
 
   # To check the seed is not assigned
   if (!is.null(with_seed)) {
     set.seed(with_seed)
   }
 
-  # To check that the assigned sample_size is divided by three
-  if ((sample_size%%num_clusters) != 0) {
-    warning("The sample size should be a product of number of clusters.")
-    cluster_size <- floor(sample_size/num_clusters)
+  if (n < num_clusters) {
+    stop('Number of clusters exceed the number of observations.')
 
-  } else {
-    cluster_size <- sample_size/num_clusters
   }
 
-  # Create a vector of possible values (0 and 1)
-  values <- c(0, 1)
+  if ((num_dims == 0) | (num_dims == 1)) {
+    stop('There should be at least two dimensions.')
 
-  # Create an expanded grid with 0's and 1's
-  mean_val_grid <- tidyr::expand_grid(!!!stats::setNames(rep(list(values), num_dims),
-                                                  paste0("mean_dim", 1:num_dims)))
+  }
 
-  # To select combinations for assigned number of clusters
+  if (dim(mean_matrix)[1] != length(var_vec)) {
+    stop('The length of mean and variance vectors are different.')
 
-  mean_val_grid <- mean_val_grid %>%
-    dplyr::slice_sample(n = num_clusters)
+  }
+
+  if (dim(mean_matrix)[1] != num_clusters) {
+    stop('There is not enough mean values for clusters.')
+
+  }
+
+  if (dim(mean_matrix)[2] != num_dims) {
+    stop('There is not enough mean values for dimensions.')
+
+  }
+
+  if (length(var_vec) != num_clusters) {
+    stop('There is not enough varaiance values for clusters.')
+
+  }
+
+  # To check that the assigned n is divided by three
+  if ((n%%num_clusters) != 0) {
+    warning("The sample size should be a product of number of clusters.")
+    cluster_size <- floor(n/num_clusters)
+
+  } else {
+    cluster_size <- n/num_clusters
+  }
 
 
   # To generate empty tibble
@@ -35,9 +77,13 @@ gaussian_clusters <- function(sample_size = 300, with_seed = NULL, num_clusters 
   for (i in 1:num_clusters) {
 
     # To filter the mean values for specific cluster
-    mean_val_for_cluster <- mean_val_grid %>%
-      dplyr::filter(dplyr::row_number() == i) %>%
+    mean_val_for_cluster <- mean_matrix |>
+      tibble::as_tibble(.name_repair = "unique") |>
+      dplyr::filter(dplyr::row_number() == i) |>
       unlist(use.names = FALSE)
+
+    # To filter the variance values for specific cluster
+    variance_val_for_cluster <- var_vec[i]
 
     # Initialize an empty list to store the vectors with column
     # values
@@ -46,7 +92,7 @@ gaussian_clusters <- function(sample_size = 300, with_seed = NULL, num_clusters 
     for (j in 1:num_dims) {
 
       dim_val_list[[column_names[j]]] <- stats::rnorm(cluster_size, mean = mean_val_for_cluster[j],
-                                               sd = cluster_sd)
+                                               sd = variance_val_for_cluster)
 
     }
     # To generate a tibble for a cluster
@@ -56,115 +102,19 @@ gaussian_clusters <- function(sample_size = 300, with_seed = NULL, num_clusters 
 
   }
 
-  df
-
-}
-
-plane_2D <- function(sample_size = 100, with_seed = NULL, coefficient_x_1 = 1,
-                     coefficient_x_2 = 1, coefficient_y_1 = -1, coefficient_y_2 = 1, intercept_x = -10,
-                     intercept_y = 8, u_min = 10, u_max = 30, v_min = 10, v_max = 20, num_of_noise_dim = 2,
-                     min_noise = 0, max_noise = 1) {
-
-  # To check the seed is not assigned
-  if (!is.null(with_seed)) {
-    set.seed(with_seed)
-  }
-
-  u <- stats::runif(sample_size, min = u_min, max = u_max)
-  v <- stats::runif(sample_size, min = v_min, max = v_max)
-  x <- coefficient_x_1 * u + coefficient_x_2 * v + intercept_x
-  y <- coefficient_y_1 * u + coefficient_y_2 * v + intercept_y
-
-  df <- tibble::tibble(x1 = x, x2 = y)
-
   # To generate column names for noise dimensions
-  column_names <- paste0(rep("x", num_of_noise_dim), 3:(3 + num_of_noise_dim))
+  column_names <- paste0(rep("x", num_noise_dims), (NCOL(df) + 1):((NCOL(df) + 1) + num_noise_dims))
 
   # Initialize an empty list to store the vectors with column
   # values
   noise_dim_val_list <- list()
 
-  for (j in 1:num_of_noise_dim) {
+  for (j in 1:num_noise_dims) {
     if ((j%%2) == 0) {
-      noise_dim_val_list[[column_names[j]]] <- stats::runif(sample_size,
+      noise_dim_val_list[[column_names[j]]] <- runif(n,
                                                      min = min_noise, max = max_noise)
     } else {
-      noise_dim_val_list[[column_names[j]]] <- (-1) * stats::runif(sample_size,
-                                                            min = min_noise, max = max_noise)
-    }
-
-
-  }
-
-  df_noise <- tibble::as_tibble(noise_dim_val_list)
-  df <- dplyr::bind_cols(df, df_noise)
-  df
-
-}
-
-curvilinear_2D <- function(sample_size = 100, with_seed = NULL, num_of_noise_dim = 2,
-                           min_noise = -1, max_noise = 1) {
-  # To check the seed is not assigned
-  if (!is.null(with_seed)) {
-    set.seed(with_seed)
-  }
-
-  x <- stats::runif(sample_size, 0, 2)
-  y <- -(x^3 + stats::runif(sample_size, 0, 3)) + stats::runif(sample_size, 0, 0.5)
-
-  df <- tibble::tibble(x1 = x, x2 = y)
-
-  # To generate column names for noise dimensions
-  column_names <- paste0(rep("x", num_of_noise_dim), 3:(3 + num_of_noise_dim))
-
-  # Initialize an empty list to store the vectors with column
-  # values
-  noise_dim_val_list <- list()
-
-  for (j in 1:num_of_noise_dim) {
-    if ((j%%2) == 0) {
-      noise_dim_val_list[[column_names[j]]] <- stats::runif(sample_size,
-                                                     min = min_noise, max = max_noise)
-    } else {
-      noise_dim_val_list[[column_names[j]]] <- (-1) * stats::runif(sample_size,
-                                                            min = min_noise, max = max_noise)
-    }
-
-
-  }
-
-  df_noise <- tibble::as_tibble(noise_dim_val_list)
-  df <- dplyr::bind_cols(df, df_noise)
-  df
-
-}
-
-cube_3D_with_noise <- function(with_seed = NULL, num_of_noise_dim = 2,
-                               min_noise = -0.1, max_noise = 0.1) {
-  # To check the seed is not assigned
-  if (!is.null(with_seed)) {
-    set.seed(with_seed)
-  }
-
-  cube <- geozoo::cube.solid.grid(p = 3, n = 8)
-  df <- tibble::as_tibble(cube$points, .name_repair = "unique")
-  names(df) <- paste0(rep("x", 3), 1:3)
-
-  sample_size <- NROW(df)
-
-  # To generate column names for noise dimensions
-  column_names <- paste0(rep("x", num_of_noise_dim), 4:(4 + num_of_noise_dim))
-
-  # Initialize an empty list to store the vectors with column
-  # values
-  noise_dim_val_list <- list()
-
-  for (j in 1:num_of_noise_dim) {
-    if ((j%%2) == 0) {
-      noise_dim_val_list[[column_names[j]]] <- stats::runif(sample_size,
-                                                     min = min_noise, max = max_noise)
-    } else {
-      noise_dim_val_list[[column_names[j]]] <- (-1) * stats::runif(sample_size,
+      noise_dim_val_list[[column_names[j]]] <- (-1) * runif(n,
                                                             min = min_noise, max = max_noise)
     }
 
@@ -174,164 +124,7 @@ cube_3D_with_noise <- function(with_seed = NULL, num_of_noise_dim = 2,
   df_noise <- tibble::as_tibble(noise_dim_val_list)
   df <- dplyr::bind_cols(df, df_noise)
 
-  return(list(df = df, sample_size = sample_size))
-
-}
-
-nonlinear_2D <- function(sample_size = 100, with_seed = NULL, num_of_noise_dim = 2,
-                         min_noise = -1, max_noise = 1) {
-  # To check the seed is not assigned
-  if (!is.null(with_seed)) {
-    set.seed(with_seed)
-  }
-
-  theta <- stats::runif(sample_size, 0.2, 0.6 * pi)
-  x <- cos(theta) + stats::rnorm(sample_size, 10, 0.03)
-  y <- sin(theta) + stats::rnorm(sample_size, 10, 0.03)
-
-  df <- tibble::tibble(x1 = x, x2 = y)
-
-  # To generate column names for noise dimensions
-  column_names <- paste0(rep("x", num_of_noise_dim), 3:(3 + num_of_noise_dim))
-
-  # Initialize an empty list to store the vectors with column
-  # values
-  noise_dim_val_list <- list()
-
-  for (j in 1:num_of_noise_dim) {
-    if ((j%%2) == 0) {
-      noise_dim_val_list[[column_names[j]]] <- stats::runif(sample_size,
-                                                     min = min_noise, max = max_noise)
-    } else {
-      noise_dim_val_list[[column_names[j]]] <- (-1) * stats::runif(sample_size,
-                                                            min = min_noise, max = max_noise)
-    }
-
-
-  }
-
-  df_noise <- tibble::as_tibble(noise_dim_val_list)
-  df <- dplyr::bind_cols(df, df_noise)
   df
 
 }
 
-sine_curve_with_noise <- function(sample_size = 100, with_seed = NULL,
-                                  num_of_noise_dim = 8, min_noise = -0.5, max_noise = 0.5) {
-  # To check the seed is not assigned
-  if (!is.null(with_seed)) {
-    set.seed(with_seed)
-  }
-
-  theta <- stats::runif(sample_size, 0, 1.8 * pi)
-  x <- theta
-  y <- sin(theta)
-
-  df <- tibble::tibble(x1 = x, x2 = y)
-
-  # To generate column names for noise dimensions
-  column_names <- paste0(rep("x", num_of_noise_dim), 3:(3 + num_of_noise_dim))
-
-  # Initialize an empty list to store the vectors with column
-  # values
-  noise_dim_val_list <- list()
-
-  for (j in 1:num_of_noise_dim) {
-    if ((j%%2) == 0) {
-      noise_dim_val_list[[column_names[j]]] <- stats::runif(sample_size,
-                                                     min = min_noise, max = max_noise)
-    } else {
-      noise_dim_val_list[[column_names[j]]] <- (-1) * stats::runif(sample_size,
-                                                            min = min_noise, max = max_noise)
-    }
-
-
-  }
-
-  df_noise <- tibble::as_tibble(noise_dim_val_list)
-  df <- dplyr::bind_cols(df, df_noise)
-  df
-
-}
-
-three_clusters_data_with_noise <- function(sample_size = 100, with_seed = NULL,
-                                           num_dims = 7, num_of_noise_dim = 8, min_noise = -0.5, max_noise = 0.5) {
-  # To check the seed is not assigned
-  if (!is.null(with_seed)) {
-    set.seed(with_seed)
-  }
-
-  # To check that the assigned sample_size is divided by three
-  if ((sample_size%%3) != 0) {
-    warning("The sample size should be a product of three.")
-    cluster_size <- floor(sample_size/3)
-
-  } else {
-    cluster_size <- sample_size/3
-  }
-  df <- snedata::three_clusters_data(n = cluster_size, dim = num_dims)  ## n = number of points per Gaussian
-  df <- df |>
-    select(-color)
-  names(df) <- paste0(rep("x", NCOL(df)), 1:NCOL(df))
-
-  # To generate column names for noise dimensions
-  column_names <- paste0(rep("x", num_of_noise_dim), (NCOL(df) + 1):((NCOL(df) +
-                                                                        1) + num_of_noise_dim))
-
-  # Initialize an empty list to store the vectors with column
-  # values
-  noise_dim_val_list <- list()
-
-  for (j in 1:num_of_noise_dim) {
-    if ((j%%2) == 0) {
-      noise_dim_val_list[[column_names[j]]] <- stats::runif(sample_size,
-                                                     min = min_noise, max = max_noise)
-    } else {
-      noise_dim_val_list[[column_names[j]]] <- (-1) * stats::runif(sample_size,
-                                                            min = min_noise, max = max_noise)
-    }
-
-
-  }
-
-  df_noise <- tibble::as_tibble(noise_dim_val_list)
-  df <- dplyr::bind_cols(df, df_noise)
-  df
-
-}
-
-torus_with_noise <- function(sample_size = 100, with_seed = NULL, num_of_noise_dim = 8,
-                             min_noise = -0.5, max_noise = 0.5) {
-  # To check the seed is not assigned
-  if (!is.null(with_seed)) {
-    set.seed(with_seed)
-  }
-
-  torus <- geozoo::torus(p = 3, n = sample_size)
-  df <- tibble::as_tibble(torus$points, .name_repair = "unique")
-  names(df) <- paste0(rep("x", 3), 1:3)
-
-  # To generate column names for noise dimensions
-  column_names <- paste0(rep("x", num_of_noise_dim), 4:(4 + num_of_noise_dim))
-
-  # Initialize an empty list to store the vectors with column
-  # values
-  noise_dim_val_list <- list()
-
-  for (j in 1:num_of_noise_dim) {
-    if ((j%%2) == 0) {
-      noise_dim_val_list[[column_names[j]]] <- stats::runif(sample_size,
-                                                     min = min_noise, max = max_noise)
-    } else {
-      noise_dim_val_list[[column_names[j]]] <- (-1) * stats::runif(sample_size,
-                                                            min = min_noise, max = max_noise)
-    }
-
-
-  }
-
-  df_noise <- tibble::as_tibble(noise_dim_val_list)
-  df <- dplyr::bind_cols(df, df_noise)
-  df
-
-}
