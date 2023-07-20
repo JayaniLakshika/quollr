@@ -256,10 +256,10 @@ cal_2D_dist <- function(.data) {
 #'   2, 3, 8.25
 #' )
 #' tr_object <- tripack::tri.mesh(df$from, df$to)
-#' color_long_edges(df, 5, tr_object, "distance")
+#' colour_long_edges(df, 5, tr_object, "distance")
 #'
 #' @export
-color_long_edges <- function(.data, benchmark_value, triangular_object, distance_col) {
+colour_long_edges <- function(.data, benchmark_value, triangular_object, distance_col) {
   # Create the tibble with x and y coordinates
   tr_df <- tibble::tibble(x = triangular_object$x, y = triangular_object$y)
 

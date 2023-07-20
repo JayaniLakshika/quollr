@@ -136,7 +136,6 @@ hyperplane <- function(n = 100, with_seed = NULL, num_dims = 2, coefficient_matr
   if (!is.null(with_seed)) {
     set.seed(with_seed)
   }
-  #browser()
 
   # To generate column names for dimensions
   column_names_data <- paste0(rep("x", num_dims), 1:num_dims)
@@ -198,6 +197,59 @@ hyperplane <- function(n = 100, with_seed = NULL, num_dims = 2, coefficient_matr
 
   df_noise <- tibble::as_tibble(noise_dim_val_list)
   df <- dplyr::bind_cols(df, df_noise)
+  df
+
+}
+
+s_curve_data_hole_with_noise <- function(n = 100, with_seed = NULL, num_noise_dims = 8,
+                                         min_noise = -0.5, max_noise = 0.5) {
+  # To check the seed is not assigned
+  if (!is.null(with_seed)) {
+    set.seed(with_seed)
+  }
+
+  scurve <- snedata::s_curve(n_samples = n, noise = 0) ## Should add more data because remove to create the hole
+
+  X <- scurve[, 1:3]
+
+  anchor <- c(0, 1, 0)
+  indices <- rowSums((sweep(X, 2, anchor, `-`)) ^ 2) > 0.3
+  scurve <- scurve[indices, ]
+  rownames(scurve) <- NULL
+
+  indices_hole <- rowSums((sweep(X, 2, anchor, `-`)) ^ 2) <= 0.3
+
+  scurve[indices_hole, ]
+
+
+  scurve
+
+  df <- df %>%
+    select(-color)
+  names(df) <- paste0(rep("x", NCOL(df)), 1:NCOL(df))
+
+  # To generate column names for noise dimensions
+  column_names <- paste0(rep("x", num_noise_dims), (NCOL(df) + 1):((NCOL(df) + 1) + num_noise_dims))
+
+  # Initialize an empty list to store the vectors with column
+  # values
+  noise_dim_val_list <- list()
+
+  for (j in 1:num_noise_dims) {
+    if ((j%%2) == 0) {
+      noise_dim_val_list[[column_names[j]]] <- runif(n,
+                                                     min = min_noise, max = max_noise)
+    } else {
+      noise_dim_val_list[[column_names[j]]] <- (-1) * runif(n,
+                                                            min = min_noise, max = max_noise)
+    }
+
+
+  }
+
+  df_noise <- tibble::as_tibble(noise_dim_val_list)
+  df <- dplyr::bind_cols(df, df_noise)
+
   df
 
 }
