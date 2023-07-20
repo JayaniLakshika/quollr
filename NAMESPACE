@@ -13,6 +13,7 @@ export(colour_long_edges)
 export(geom_trimesh)
 export(stat_trimesh)
 export(gaussian_clusters)
+export(s_curve_with_noise_dims)
 
 importFrom(dplyr, bind_rows, filter, mutate, nth, pull, row_number)
 importFrom(ggplot2, Geom, GeomPoint, GeomSegment, Stat, aes, layer)

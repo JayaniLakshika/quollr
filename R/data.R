@@ -128,6 +128,68 @@ gaussian_clusters <- function(n = 300, with_seed = NULL, num_clusters = 3, mean_
 
 }
 
+#' Generate S-curve Data with Additional Noise Dimensions
+#'
+#' Generates an S-curve dataset with additional random noise dimensions.
+#'
+#' @param n The number of observations in the dataset.
+#' @param with_seed Optional. The seed value for reproducibility.
+#' @param num_noise_dims The number of additional random noise dimensions to add to the dataset. Default is 8.
+#' @param min_noise The minimum value for the random noise dimensions. Default is -0.5.
+#' @param max_noise The maximum value for the random noise dimensions. Default is 0.5.
+#'
+#' @return A tibble (data frame) with the generated dataset, including an S-curve and random noise dimensions.
+#'
+#' @import snedata
+#' @importFrom dplyr select
+#' @examples
+#' data <- s_curve_with_noise_dims(n = 200, num_noise_dims = 3,
+#'                                 min_noise = -0.5, max_noise = 0.5)
+#'
+#' @export
+s_curve_with_noise_dims <- function(n = 200, with_seed = NULL, num_noise_dims = 3,
+                               min_noise = -0.5, max_noise = 0.5) {
+  # To check the seed is not assigned
+  if (!is.null(with_seed)) {
+    set.seed(with_seed)
+  }
+
+  if (num_noise_dims < 1) {
+    stop('The number of noise dimensions should be greater than 1.')
+
+  }
+
+  df <- snedata::s_curve(n_samples = n, noise = 0.05)
+  df <- df |>
+    dplyr::select(-color)
+  names(df) <- paste0(rep("x",3), 1:3)
+
+  # To generate column names for noise dimensions
+  column_names <- paste0(rep("x", num_noise_dims), (NCOL(df) + 1):((NCOL(df) + 1) + num_noise_dims))
+
+  # Initialize an empty list to store the vectors with column
+  # values
+  noise_dim_val_list <- list()
+
+  for (j in 1:num_noise_dims) {
+    if ((j%%2) == 0) {
+      noise_dim_val_list[[column_names[j]]] <- runif(n,
+                                                     min = min_noise, max = max_noise)
+    } else {
+      noise_dim_val_list[[column_names[j]]] <- (-1) * runif(n,
+                                                            min = min_noise, max = max_noise)
+    }
+
+
+  }
+
+  df_noise <- tibble::as_tibble(noise_dim_val_list)
+  df <- dplyr::bind_cols(df, df_noise)
+
+  df
+
+}
+
 
 hyperplane <- function(n = 100, with_seed = NULL, num_dims = 2, coefficient_matrix = rbind(c(1, 1), c(-1, 1)), intercept_vec = c(-10, 8),
                        coordinate_min_vec = c(10, 10), coordinate_max_vec = c(30, 20), num_noise_dims = 2, min_noise = 0, max_noise = 1) {

@@ -23,3 +23,10 @@ gaussian_clusters <- gaussian_clusters(n = 300, with_seed = 123, num_clusters = 
 
 langevitour::langevitour(gaussian_clusters)
 ```
+
+```{r, message=FALSE}
+s_curve <- s_curve_with_noise_dims(n = 200, with_seed = NULL, num_noise_dims = 3,
+                               min_noise = -0.5, max_noise = 0.5)
+
+langevitour::langevitour(s_curve)
+```
