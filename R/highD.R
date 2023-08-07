@@ -166,7 +166,8 @@ show_langevitour <- function(df, df_b, df_b_with_center_data, benchmark_value = 
     dplyr::mutate(type = "data")  # original dataset
 
   df_b <- df_b |>
-    dplyr::mutate(type = "model")  # Data with summarized mean
+    dplyr::filter(hb_id %in% df_b_with_center_data$hb_id) |>
+    dplyr::mutate(type = "model") ## Data with summarized mean
 
   df_exe <- dplyr::bind_rows(df_b, df)
 
