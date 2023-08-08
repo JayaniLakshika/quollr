@@ -264,10 +264,10 @@ langevitour::langevitour(dataset32)
 ```
 
 ```{r, message=FALSE}
-# dataset33 <- one_doublet_with_noise(sample_size = 220, num_of_noise_dim = 6,
-#     min_noise = -0.05, max_noise = 0.05)
-# 
-# langevitour::langevitour(dataset33)
+dataset33 <- one_doublet_with_noise(sample_size = 220, num_of_noise_dim = 6,
+    min_noise = -0.05, max_noise = 0.05)
+
+langevitour::langevitour(dataset33)
 ```
 
 ```{r, message=FALSE}
@@ -292,10 +292,10 @@ langevitour::langevitour(dataset36)
 ```
 
 ```{r, message=FALSE}
-# dataset37 <- one_doublet_four_clusters_with_noise(sample_size = 440, num_of_noise_dim = 6,
-#     min_noise = -0.05, max_noise = 0.05)
-# 
-# langevitour::langevitour(dataset37)
+dataset37 <- one_doublet_four_clusters_with_noise(sample_size = 440, num_of_noise_dim = 6,
+    min_noise = -0.05, max_noise = 0.05)
+
+langevitour::langevitour(dataset37)
 ```
 
 ```{r, message=FALSE}
@@ -313,10 +313,10 @@ langevitour::langevitour(dataset39)
 ```
 
 ```{r, message=FALSE}
-# dataset40 <- two_doublets_parallel_with_noise(sample_size = 440, num_of_noise_dim = 6,
-#     min_noise = -0.05, max_noise = 0.05)
-# 
-# langevitour::langevitour(dataset40)
+dataset40 <- two_doublets_parallel_with_noise(sample_size = 440, num_of_noise_dim = 6,
+    min_noise = -0.05, max_noise = 0.05)
+
+langevitour::langevitour(dataset40)
 ```
 
 ```{r, message=FALSE}
@@ -472,10 +472,10 @@ langevitour::langevitour(dataset64$df)
 ```
 
 ```{r, message=FALSE}
-# mirror_s_curves_df <- mirror_s_curves_with_noise(sample_size = 400, num_of_noise_dim = 5,
-#     min_noise = -0.05, max_noise = 0.05)
-# 
-# langevitour::langevitour(mirror_s_curves_df)
+mirror_s_curves_df <- mirror_s_curves_with_noise(sample_size = 400, num_of_noise_dim = 5,
+    min_noise = -0.05, max_noise = 0.05)
+
+langevitour::langevitour(mirror_s_curves_df)
 ```
 
 

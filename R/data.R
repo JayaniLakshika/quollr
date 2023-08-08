@@ -1125,7 +1125,7 @@ mirror_s_curves_with_noise <- function(sample_size = 200, with_seed = NULL, num_
   }
 
   # To check that the assigned sample_size is divided by three
-  if ((sample_size%%3) != 0) {
+  if ((sample_size%%2) != 0) {
     stop("The sample size should be a product of 2.")
 
   } else {
@@ -1732,11 +1732,11 @@ two_doublets_parallel_with_noise <- function(sample_size = 440, with_seed = NULL
   }
 
   # To check that the assigned sample_size is divided by 4.4
-  if ((sample_size%%4.4) != 0) {
+  if (((sample_size * 10)%%44) != 0) { #sample_size%%4.4
     stop("The sample size should be a product of 4.4.")
 
   } else {
-    cluster_size <- sample_size/4.4
+    cluster_size <- (sample_size * 10)/44
   }
 
 
@@ -1967,11 +1967,11 @@ one_doublet_four_clusters_with_noise <- function(sample_size = 210, with_seed = 
   }
 
   # To check that the assigned sample_size is divided by 4.4
-  if ((sample_size%%4.4) != 0) {
+  if (((sample_size * 10)%%44) != 0) { #sample_size%%4.4
     stop("The sample size should be a product of 4.4.")
 
   } else {
-    cluster_size <- sample_size/4.4
+    cluster_size <- (sample_size * 10)/44
   }
 
 
@@ -3949,6 +3949,65 @@ plane_2D <- function(sample_size = 100, with_seed = NULL, coefficient_x_1 = 1,
 
   df_noise <- tibble::as_tibble(noise_dim_val_list)
   df <- dplyr::bind_cols(df, df_noise)
+  df
+
+}
+
+one_doublet_with_noise <- function(sample_size = 110, with_seed = NULL, num_of_noise_dim = 8,
+                                   min_noise = -0.5, max_noise = 0.5) {
+  # To check the seed is not assigned
+  if (!is.null(with_seed)) {
+    set.seed(with_seed)
+  }
+
+
+  # To check that the assigned sample_size is divided by 2.2
+  if (((sample_size * 10)%%22) != 0) { #sample_size%%2.2
+    stop("The sample size should be a product of 2.2.")
+
+  } else {
+    cluster_size <- (sample_size * 10)/22
+  }
+
+
+  df1 <- tibble::tibble(x=rnorm(cluster_size, mean = 0, sd = 0.05), y=rnorm(cluster_size, mean = 1, sd = 0.05), z=rnorm(cluster_size, mean = 0, sd = 0.05), w=rnorm(cluster_size, mean = 0, sd = 0.05))
+
+  df2 <- tibble::tibble(x=rnorm(cluster_size, mean = 1, sd = 0.05), y=rnorm(cluster_size, mean = 0, sd = 0.05), z=rnorm(cluster_size, mean = 0, sd = 0.05), w=rnorm(cluster_size, mean = 0, sd = 0.05))
+
+  df3_new <- (df1 + df2) / 2
+  #get a sample of 10
+  samp <- sample(nrow(df3_new), cluster_size * 0.20) ## 20% from the original dataset
+
+  #data in the sample
+  df3 <- df3_new[samp,]
+
+
+  df <- dplyr::bind_rows(df1, df2, df3)
+  df <- df |>
+    dplyr::rename(x1 = x, x2 = y, x3 = z, x4 = w)
+
+  # To generate column names for noise dimensions
+  column_names <- paste0(rep("x", num_of_noise_dim), (NCOL(df) + 1):((NCOL(df) + 1) + num_of_noise_dim))
+
+  # Initialize an empty list to store the vectors with column
+  # values
+  noise_dim_val_list <- list()
+
+  for (j in 1:num_of_noise_dim) {
+    if ((j%%2) == 0) {
+      noise_dim_val_list[[column_names[j]]] <- runif(sample_size,
+                                                     min = min_noise, max = max_noise)
+    } else {
+      noise_dim_val_list[[column_names[j]]] <- (-1) * runif(sample_size,
+                                                            min = min_noise, max = max_noise)
+    }
+
+
+  }
+
+  df_noise <- tibble::as_tibble(noise_dim_val_list)
+  df <- dplyr::bind_cols(df, df_noise)
+
   df
 
 }

@@ -55,7 +55,7 @@ StatTrimesh <- ggplot2::ggproto(
   compute_group = function(data, scales, outliers = TRUE) {
     tr1 <- tripack::tri.mesh(data$x, data$y, duplicate = "remove")
     tr_df <- tibble::tibble(x = tr1$x, y = tr1$y)  ## Create a dataframe with tri.mesh x and y coordinate values
-    tr_df <- tr_df %>%
+    tr_df <- tr_df |>
       dplyr::mutate(ID = dplyr::row_number())  ## To add ID numbers, because to join with from and to points in tri$arcs
 
     trang <- tripack::triangles(tr1)
@@ -72,30 +72,30 @@ StatTrimesh <- ggplot2::ggproto(
     # Initialize an empty dataframe to store data in a specific
     # format
     tr_from_to_df_coord <- dplyr::bind_rows(vec)[0, ]
-    tr_from_to_df_coord <- tr_from_to_df_coord %>%
+    tr_from_to_df_coord <- tr_from_to_df_coord |>
       dplyr::mutate_if(is.character, as.numeric)
 
     for (i in 1:NROW(tr_arcs_df)) {
-      from_row <- tr_df %>%
-        dplyr::filter(dplyr::row_number() == (tr_arcs_df %>%
-                                                dplyr::pull(from) %>%
+      from_row <- tr_df |>
+        dplyr::filter(dplyr::row_number() == (tr_arcs_df |>
+                                                dplyr::pull(from) |>
                                                 dplyr::nth(i)))
-      to_row <- tr_df %>%
-        dplyr::filter(dplyr::row_number() == (tr_arcs_df %>%
-                                                dplyr::pull(to) %>%
+      to_row <- tr_df |>
+        dplyr::filter(dplyr::row_number() == (tr_arcs_df |>
+                                                dplyr::pull(to) |>
                                                 dplyr::nth(i)))
-      tr_from_to_df_coord <- tr_from_to_df_coord %>%
-        tibble::add_row(from = from_row %>%
+      tr_from_to_df_coord <- tr_from_to_df_coord |>
+        tibble::add_row(from = from_row |>
                           dplyr::pull(ID),
-                        to = to_row %>%
+                        to = to_row |>
                           dplyr::pull(ID),
-                        x_from = from_row %>%
+                        x_from = from_row |>
                           dplyr::pull(x),
-                        y_from = from_row %>%
+                        y_from = from_row |>
                           dplyr::pull(y),
-                        x_to = to_row %>%
+                        x_to = to_row |>
                           dplyr::pull(x),
-                        y_to = to_row %>%
+                        y_to = to_row |>
                           dplyr::pull(y))  ## Add vector as an appending row to the dataframe
     }
 
