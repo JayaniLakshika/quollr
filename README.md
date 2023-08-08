@@ -1,7 +1,7 @@
 
 # quollr: questioning how a high-dimensional object looks in low-dimensions using r
 
-<!--<img src="man/figures/logo.png" align="right" height="139" alt="" />-->
+<img src="man/figures/logo.png" align="right" height="139" alt="" />
 
 quollr constructs low-dimensional manifolds by combining Non-Linear
 Dimension Reduction (NLDR), hexagonal binning, and triangulation
@@ -137,10 +137,6 @@ trimesh <- ggplot(df_bin_centroids, aes(x = x_val_center, y = y_val_center)) +
 trimesh
 ```
 
-    ## Warning: Computation failed in `stat_trimesh()`
-    ## Caused by error in `tr_df %>% dplyr::mutate(ID = dplyr::row_number())`:
-    ## ! could not find function "%>%"
-
 ![](README_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
 
 12. **Remove Long Edges**: Enhance the representation by removing long
@@ -163,8 +159,6 @@ trimesh_gr
 ``` r
 show_langevitour(df_all, df_bin, df_bin_centroids, benchmark_value = benchmark, distance, distance)
 ```
-
-![](README_files/figure-gfm/unnamed-chunk-15-1.png)<!-- -->
 
 By following these steps, you can effectively leverage **quollr** to
 construct informative low-dimensional representations of

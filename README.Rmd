@@ -3,7 +3,7 @@ output: github_document
 ---
 
 # quollr: questioning how a high-dimensional object looks in low-dimensions using r 
-<!--<img src="man/figures/logo.png" align="right" height="139" alt="" />-->
+<img src="man/figures/logo.png" align="right" height="139" alt="" />
 
 quollr constructs low-dimensional manifolds by combining Non-Linear Dimension Reduction (NLDR), hexagonal binning, and triangulation techniques, enabling accurate high-dimensional data representations. The package integrates these manifolds with original data using the tour technique, while also offering tools for generating simulated data sets for comprehensive exploration.
 
@@ -131,7 +131,7 @@ trimesh_gr
 
 13. **Tour View**: Visualize the tour that simultaneously displays the original and model data along with the learned low-dimensional manifold in high-dimensional space.
 
-```{r}
+```{r, eval=FALSE}
 show_langevitour(df_all, df_bin, df_bin_centroids, benchmark_value = benchmark, distance, distance)
 ```
 
