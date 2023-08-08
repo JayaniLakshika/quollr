@@ -132,7 +132,8 @@ trimesh_gr
 13. **Tour View**: Visualize the tour that simultaneously displays the original and model data along with the learned low-dimensional manifold in high-dimensional space.
 
 ```{r, eval=FALSE}
-show_langevitour(df_all, df_bin, df_bin_centroids, benchmark_value = benchmark, distance, distance)
+show_langevitour(df_all, df_bin, df_bin_centroids, benchmark_value = benchmark, 
+                 ditance = distance, ditance_col = distance)
 ```
 
 By following these steps, you can effectively leverage **quollr** to construct informative low-dimensional representations of high-dimensional data, while also benefitting from its simulated data generation functions to explore various scenarios and conditions.

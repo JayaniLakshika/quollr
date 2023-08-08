@@ -157,7 +157,8 @@ trimesh_gr
     manifold in high-dimensional space.
 
 ``` r
-show_langevitour(df_all, df_bin, df_bin_centroids, benchmark_value = benchmark, distance, distance)
+show_langevitour(df_all, df_bin, df_bin_centroids, benchmark_value = benchmark, 
+                 ditance = distance, ditance_col = distance)
 ```
 
 By following these steps, you can effectively leverage **quollr** to
