@@ -20,11 +20,10 @@ calculate_effective_x_bins <- function(.data, x, cell_area = 1){
 
   xwidth <- diff(range(.data |>
                          dplyr::pull({{ x }})))
-  num_bins <- ceiling(xwidth/cell_diameter) # This should be an integer
+  num_bins <- ceiling(xwidth/cell_diameter)
   num_bins
 
 }
-
 
 #' Calculate effective shape parameter value
 #'

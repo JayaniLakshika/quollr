@@ -4,12 +4,10 @@
 \alias{avg_highD_data}
 \title{Average High-Dimensional Data}
 \usage{
-avg_highD_data(.data, apply_pca = TRUE)
+avg_highD_data(.data, column_start_text = "x")
 }
 \arguments{
 \item{.data}{The data frame containing the high-dimensional data.}
-
-\item{apply_pca}{Logical indicating whether to apply Principal Component Analysis (PCA) before calculating the averages. Default is TRUE.}
 }
 \value{
 A data frame with the average values of the high-dimensional data within each hexagonal bin.
@@ -24,6 +22,6 @@ df <- tibble::tribble(
   4, 5, 6, 2,
   7, 8, 9, 1
 )
-avg_highD_data(df, apply_pca = FALSE)
+avg_highD_data(df)
 
 }

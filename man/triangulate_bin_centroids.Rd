@@ -4,10 +4,14 @@
 \alias{triangulate_bin_centroids}
 \title{Triangulate Bin Centroids}
 \usage{
-triangulate_bin_centroids(.data)
+triangulate_bin_centroids(.data, x, y)
 }
 \arguments{
 \item{.data}{The data frame containing the bin centroids.}
+
+\item{x}{The name of the column that contains x coordinates of centroids.}
+
+\item{y}{The name of the column that contains y coordinates of centroids.}
 }
 \value{
 A triangular object representing the triangulated bin centroids.
@@ -17,6 +21,6 @@ This function triangulates the bin centroids using the x and y coordinates provi
 }
 \examples{
 df <- tibble::tibble(x_val_center = rnorm(100), y_val_center = rnorm(100))
-triangulate_bin_centroids(df)
+triangulate_bin_centroids(df, x = x_val_center, y = y_val_center)
 
 }

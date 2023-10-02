@@ -8,13 +8,11 @@
 #' @param embedding_2 The name of the column in the non-linear dimensionality reduction data frame containing the second embedding coordinate.
 #' @param num_bins The number of hexagonal bins to generate. Default is 30.
 #' @param shape_val The shape parameter for the hexagonal bins. Default is 1.
-#' @param apply_pca A logical value indicating whether .data only contains principal components. Default is TRUE.
 #'
 #' @return A list with the following elements:
 #' \describe{
-#'   \item{df}{A data frame containing the selected columns and hexbin IDs.}
-#'   \item{hb}{An S4 object of class "hexbin" representing the generated hexagonal bins.}
 #'   \item{df_new}{A data frame with the merged data and added hexbin IDs.}
+#'   \item{hb}{An S4 object of class "hexbin" representing the generated hexagonal bins.}
 #' }
 #'
 #' @importFrom dplyr mutate inner_join select starts_with
@@ -34,11 +32,12 @@
 #'   2, 0.7, 0.8,
 #'   3, 0.5, 0.7
 #' )
-#' create_hexbin(data, nldr, "embedding1", "embedding2")
+#' create_hexbin_df(data, nldr, "embedding1", "embedding2")
 #'
 #' @export
-create_hexbin <- function(.data, nldr_df, embedding_1, embedding_2, num_bins = 30,
-                          shape_val = 1, apply_pca = TRUE) {
+create_hexbin_df <- function(.data, nldr_df, embedding_1, embedding_2, num_bins = 30,
+                          shape_val = 1) {
+
   ### Merge tSNE dataset in 2D with original dataset which contains
   ### 4D coordinates
   .data <- .data |>
@@ -49,31 +48,22 @@ create_hexbin <- function(.data, nldr_df, embedding_1, embedding_2, num_bins = 3
 
   ### Fit hexbins and store hexbin IDs
   hb <- hexbin::hexbin(nldr_df |>
-                         dplyr::pull({{ embedding_1 }}), nldr_df |>
-                         dplyr::pull({{ embedding_2 }}), xbins = num_bins, IDs = TRUE, shape = shape_val)
+                         dplyr::pull({
+                           {
+                             embedding_1
+                           }
+                         }), nldr_df |>
+                         dplyr::pull({
+                           {
+                             embedding_2
+                           }
+                         }), xbins = num_bins, IDs = TRUE, shape = shape_val)
   ### Add hexbin Ids as a column to the original dataset
 
   df_new <- df_new |>
     dplyr::mutate(hb_id = hb@cID)
 
-  ## To change column names to lower case
-  names(df_new) <- tolower(names(df_new))
-
-  ### Select specific columns to get the average number of 4D
-  ### points in each bin
-  if (isTRUE(apply_pca)) {
-    ## Column names starts with pc
-    df <- df_new |>
-      dplyr::select(dplyr::starts_with("pc"), hb_id)
-
-  } else {
-    ## Column names starts with x
-    df <- df_new |>
-      dplyr::select(dplyr::starts_with("x"), hb_id)
-
-  }
-
-  return(list(df = df, hb = hb, df_new = df_new))
+  return(list(df_new = df_new, hb = hb))
 }
 
 
@@ -124,20 +114,20 @@ extract_hexbin_centroids <- function(.data, hb) {
 #' This function triangulates the bin centroids using the x and y coordinates provided in the input data frame and returns the triangular object.
 #'
 #' @param .data The data frame containing the bin centroids.
+#' @param x The name of the column that contains x coordinates of centroids.
+#' @param y The name of the column that contains y coordinates of centroids.
 #'
 #' @return A triangular object representing the triangulated bin centroids.
 #'
 #' @examples
 #' df <- tibble::tibble(x_val_center = rnorm(100), y_val_center = rnorm(100))
-#' triangulate_bin_centroids(df)
+#' triangulate_bin_centroids(df, x = x_val_center, y = y_val_center)
 #'
 #' @importFrom dplyr pull
 #' @importFrom tripack tri.mesh
 #' @export
-triangulate_bin_centroids <- function(.data){
-  # Triangulate the bin centroids
-  tr1 <- tripack::tri.mesh(.data |> dplyr::pull(x_val_center), .data |> dplyr::pull(y_val_center))
-
+triangulate_bin_centroids <- function(.data, x, y){
+  tr1 <- tripack::tri.mesh(.data |> dplyr::pull({{ x }}), .data |> dplyr::pull({{ y }}))
   return(tr1)
 }
 
@@ -295,5 +285,109 @@ colour_long_edges <- function(.data, benchmark_value, triangular_object, distanc
 }
 
 
+remove_long_edges <- function(.data, benchmark_value, triangular_object,
+                              distance_col) {
+  tr_df <- tibble::tibble(x = triangular_object$x, y = triangular_object$y)
+
+  tr_from_to_df_coord <- generate_edge_info(triangular_object)
+
+  distance_df_small_edges <- .data |>
+    dplyr::filter({
+      {
+        distance_col
+      }
+    } < benchmark_value)
+
+  tr_from_to_df_coord_with_group <- merge(tr_from_to_df_coord, distance_df_small_edges,
+                                          by = c("from", "to"))
 
 
+  ## To draw the tri.mesh plot using ggplot
+  tri_mesh_plot <- ggplot2::ggplot(tr_df, aes(x = x, y = y)) + ggplot2::geom_segment(aes(x = x_from,
+                                                                                         y = y_from, xend = x_to, yend = y_to), data = tr_from_to_df_coord_with_group) +
+    ggplot2::geom_point(size = 1) + ggplot2::coord_equal() + ggplot2::labs(color=NULL)
+  return(tri_mesh_plot)
+
+}
+
+
+draw_full_hexgrid <- function(.data = data, nldr_df = training_data,
+                              embedding_1 = UMAP1, embedding_2 = UMAP2,
+                              num_bins = num_bins_x, shape_val = shape_val){
+
+  hb_data <- hexbin::hexbin(x = nldr_df |> pull({{embedding_1}}),
+                            y = nldr_df |> pull({{embedding_2}}),
+                            xbins = num_bins, IDs = TRUE,
+                            shape = shape_val)
+
+  hexdf_data <- tibble::tibble(tibble::as_tibble(hexbin::hcell2xy(hb_data)),  hexID = hb_data@cell, counts = hb_data@count/max(hb_data@count))
+
+  #hexdf_data <- tibble::tibble(tibble::as_tibble(hexbin::hcell2xy(hb_data)),  hexID = hb_data@cell, counts = hb_data@count)
+
+  hex_grid <- expand.grid(nldr_df |> pull({{embedding_1}}), nldr_df |> pull({{embedding_2}}))
+
+  hex_grid_all <- expand.grid(min(nldr_df |> pull({{embedding_1}})): max(nldr_df |> pull({{embedding_1}})),
+                              min(nldr_df |> pull({{embedding_2}})): max(nldr_df |> pull({{embedding_2}})))
+
+  hex_grid <- bind_rows(hex_grid, hex_grid_all) %>%
+    distinct()
+
+  hb <- hexbin::hexbin(x = hex_grid |> pull(Var1),
+                       y = hex_grid |> pull(Var2),
+                       xbins = num_bins, IDs = TRUE,
+                       shape = shape_val)
+
+  #hexdf <- tibble::tibble(tibble::as_tibble(hexbin::hcell2xy(hb)),  hexID = hb@cell, counts = hb@count/max(hb@count))
+  # hexdf <- tibble::tibble(tibble::as_tibble(hexbin::hcell2xy(hb)),  hexID = hb@cell, counts = hb@count)
+  #
+  # hexdf <- hexdf %>%
+  #   mutate(counts = ifelse((hexID %in% (hexdf_data |> pull(hexID))),counts, NA))
+
+  hexdf <- tibble::tibble(tibble::as_tibble(hexbin::hcell2xy(hb)),  hexID = hb@cell)
+  hexdf <- full_join(hexdf, hexdf_data, by = c("hexID" = "hexID", "x" = "x", "y" = "y"))
+
+  embedding_hb <- create_hexbin(.data = .data, nldr_df = nldr_df,
+                                embedding_1 = {{embedding_1}}, embedding_2 = {{embedding_2}},
+                                num_bins = num_bins, shape_val = shape_val)$df_new
+
+  full_grid <- full_join(hexdf, embedding_hb, by = c("hexID" = "hb_id"))
+
+  ggplot(full_grid, aes(x = x, y = y, fill = counts, hexID = hexID)) +
+    geom_hex(stat = "identity", color = "#969696") +
+    #geom_label(size = 1.8) +
+    #geom_point(aes(x = tsne1, y = tsne2), na.rm = TRUE) +
+    scale_fill_viridis_c(na.value = "#ffffff") +
+    #ggtitle(paste0("A = ", 1 , ", b = (", hb_data@dimen[2], ", ", hb_data@dimen[1], ")")) +
+    theme_linedraw() +
+    #coord_equal() +
+    theme(legend.position = "none", plot.title = element_text(size = 5, hjust = 0.5, vjust = -0.5),
+          axis.title.x = element_blank(), axis.title.y = element_blank(),
+          axis.text.x = element_blank(), axis.ticks.x = element_blank(),
+          axis.text.y = element_blank(), axis.ticks.y = element_blank(),
+          panel.grid.major = element_blank(), panel.grid.minor = element_blank()#change legend key width
+    )
+
+}
+
+
+plot_dist <- function(distance_df){
+  distance_df$group <- "1"
+  dist_plot <- ggplot(distance_df, aes(x = group, y = distance)) +
+    geom_quasirandom()+
+    ylim(0, max(unlist(distance_df$distance))+ 0.5) + coord_flip()
+  return(dist_plot)
+}
+
+cal_2D_dist_umap <- function(.data){
+
+  .data$distance <- lapply(seq(nrow(.data)), function(x) {
+    start <- unlist(.data[x, c("avg_umap1","avg_umap2")])
+    end <- unlist(.data[x, c("UMAP1","UMAP2")])
+    sqrt(sum((start - end)^2))})
+
+  distance_df_cal <- .data %>%
+    dplyr::select("hb_id", "avg_umap1","avg_umap2", "UMAP1","UMAP2", "distance")
+
+  distance_df_cal$weight <- 1/(unlist(distance_df_cal$distance) + 0.05)
+  return(distance_df_cal)
+}

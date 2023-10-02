@@ -34,13 +34,13 @@ This function generates a LangeviTour visualization based on different condition
 }
 \examples{
 df <- tibble::tribble(
-  ~x, ~y, ~hb_id,
+  ~x1, ~x2, ~hb_id,
   1, 2, 1,
   4, 5, 2,
   7, 8, 3
 )
 df_b <- tibble::tribble(
-  ~x, ~y, ~hb_id,
+  ~x1, ~x2, ~hb_id,
   2, 3, 1,
   5, 6, 2,
   8, 9, 3
