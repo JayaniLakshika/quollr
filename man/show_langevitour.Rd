@@ -57,6 +57,7 @@ distance_df <- tibble::tribble(
   2, 3, 0.7,
   1, 3, 0.2
 )
-show_langevitour(df, df_b, df_b_with_center_data, benchmark_value = 0.6, distance_df, distance_col = distance)
+show_langevitour(df, df_b, df_b_with_center_data, benchmark_value = 0.6,
+distance_df, distance_col = distance)
 
 }

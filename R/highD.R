@@ -3,6 +3,7 @@
 #' This function calculates the average values of high-dimensional data within each hexagonal bin.
 #'
 #' @param .data The data frame containing the high-dimensional data.
+#' @param column_start_text The text that begin the column name of the high-D data
 #'
 #' @return A data frame with the average values of the high-dimensional data within each hexagonal bin.
 #'
@@ -22,7 +23,7 @@ avg_highD_data <- function(.data, column_start_text = "x") {
   df_b <- .data |>
     dplyr::select(rsample::starts_with(column_start_text), hb_id) |>
     dplyr::group_by(hb_id) |>
-    dplyr::summarise(across(everything(), mean))
+    dplyr::summarise(dplyr::across(tidyselect::everything(), mean))
 
   return(df_b)
 }
@@ -157,7 +158,8 @@ find_benchmark_value <- function(.data, distance_col) {
 #'   2, 3, 0.7,
 #'   1, 3, 0.2
 #' )
-#' show_langevitour(df, df_b, df_b_with_center_data, benchmark_value = 0.6, distance_df, distance_col = distance)
+#' show_langevitour(df, df_b, df_b_with_center_data, benchmark_value = 0.6,
+#' distance_df, distance_col = distance)
 #'
 #' @export
 show_langevitour <- function(df, df_b, df_b_with_center_data, benchmark_value = NA,

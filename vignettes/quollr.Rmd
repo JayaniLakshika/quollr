@@ -17,3 +17,18 @@ knitr::opts_chunk$set(
 ```{r setup}
 library(quollr)
 ```
+
+quollr constructs low-dimensional manifolds by combining Non-Linear Dimension Reduction (NLDR), hexagonal binning, and triangulation techniques, enabling accurate high-dimensional data representations. The package integrates these manifolds with original data using the tour technique, while also offering tools for generating simulated data sets for comprehensive exploration.
+
+To start with quollr, refer to the package documentation and explore its functions
+
+<!--An associated paper can be found at-->
+
+## Installation
+
+You can install the development version of quollr from GitHub with:
+
+```{r}
+#install.packages("remotes")
+#remotes::install_github("JayaniLakshika/quollr")
+```

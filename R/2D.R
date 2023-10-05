@@ -329,8 +329,8 @@ draw_full_hexgrid <- function(.data = data, nldr_df = training_data,
   hex_grid_all <- expand.grid(min(nldr_df |> pull({{embedding_1}})): max(nldr_df |> pull({{embedding_1}})),
                               min(nldr_df |> pull({{embedding_2}})): max(nldr_df |> pull({{embedding_2}})))
 
-  hex_grid <- bind_rows(hex_grid, hex_grid_all) %>%
-    distinct()
+  hex_grid <- dplyr::bind_rows(hex_grid, hex_grid_all) |>
+    dplyr::distinct()
 
   hb <- hexbin::hexbin(x = hex_grid |> pull(Var1),
                        y = hex_grid |> pull(Var2),
@@ -344,23 +344,23 @@ draw_full_hexgrid <- function(.data = data, nldr_df = training_data,
   #   mutate(counts = ifelse((hexID %in% (hexdf_data |> pull(hexID))),counts, NA))
 
   hexdf <- tibble::tibble(tibble::as_tibble(hexbin::hcell2xy(hb)),  hexID = hb@cell)
-  hexdf <- full_join(hexdf, hexdf_data, by = c("hexID" = "hexID", "x" = "x", "y" = "y"))
+  hexdf <- dplyr::full_join(hexdf, hexdf_data, by = c("hexID" = "hexID", "x" = "x", "y" = "y"))
 
-  embedding_hb <- create_hexbin(.data = .data, nldr_df = nldr_df,
+  embedding_hb <- create_hexbin_df(.data = .data, nldr_df = nldr_df,
                                 embedding_1 = {{embedding_1}}, embedding_2 = {{embedding_2}},
                                 num_bins = num_bins, shape_val = shape_val)$df_new
 
-  full_grid <- full_join(hexdf, embedding_hb, by = c("hexID" = "hb_id"))
+  full_grid <- dplyr::full_join(hexdf, embedding_hb, by = c("hexID" = "hb_id"))
 
-  ggplot(full_grid, aes(x = x, y = y, fill = counts, hexID = hexID)) +
-    geom_hex(stat = "identity", color = "#969696") +
+  ggplot2::ggplot(full_grid, aes(x = x, y = y, fill = counts, hexID = hexID)) +
+    ggplot2::geom_hex(stat = "identity", color = "#969696") +
     #geom_label(size = 1.8) +
     #geom_point(aes(x = tsne1, y = tsne2), na.rm = TRUE) +
-    scale_fill_viridis_c(na.value = "#ffffff") +
+    ggplot2::scale_fill_viridis_c(na.value = "#ffffff") +
     #ggtitle(paste0("A = ", 1 , ", b = (", hb_data@dimen[2], ", ", hb_data@dimen[1], ")")) +
-    theme_linedraw() +
+    ggplot2::theme_linedraw() +
     #coord_equal() +
-    theme(legend.position = "none", plot.title = element_text(size = 5, hjust = 0.5, vjust = -0.5),
+    ggplot2::theme(legend.position = "none", plot.title = element_text(size = 5, hjust = 0.5, vjust = -0.5),
           axis.title.x = element_blank(), axis.title.y = element_blank(),
           axis.text.x = element_blank(), axis.ticks.x = element_blank(),
           axis.text.y = element_blank(), axis.ticks.y = element_blank(),
@@ -372,9 +372,9 @@ draw_full_hexgrid <- function(.data = data, nldr_df = training_data,
 
 plot_dist <- function(distance_df){
   distance_df$group <- "1"
-  dist_plot <- ggplot(distance_df, aes(x = group, y = distance)) +
-    geom_quasirandom()+
-    ylim(0, max(unlist(distance_df$distance))+ 0.5) + coord_flip()
+  dist_plot <- ggplot2::ggplot(distance_df, aes(x = group, y = distance)) +
+    ggbeeswarm::geom_quasirandom() +
+    ggplot2::ylim(0, max(unlist(distance_df$distance))+ 0.5) + ggplot2::coord_flip()
   return(dist_plot)
 }
 
@@ -385,7 +385,7 @@ cal_2D_dist_umap <- function(.data){
     end <- unlist(.data[x, c("UMAP1","UMAP2")])
     sqrt(sum((start - end)^2))})
 
-  distance_df_cal <- .data %>%
+  distance_df_cal <- .data |>
     dplyr::select("hb_id", "avg_umap1","avg_umap2", "UMAP1","UMAP2", "distance")
 
   distance_df_cal$weight <- 1/(unlist(distance_df_cal$distance) + 0.05)

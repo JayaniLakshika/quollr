@@ -158,7 +158,7 @@ df_bin_centroids_filtered <- df_bin_centroids |>
 pred_data <- inner_join(pred_data, df_bin_centroids_filtered, by = c( "pred_hb_id" = "hb_id"))
 
 df_bin_train <- df_bin
-names(df_bin_train)[-length(df_bin_train)] <- paste0("avg_", names(df_bin_train)[-length(df_bin_train)])
+names(df_bin_train)[-1] <- paste0("avg_", names(df_bin_train)[-1])
 
 pred_data <- pred_data |>
   left_join(df_bin_train, by = c("pred_hb_id" = "hb_id")) ## Map high-D weighted mean coordinates
@@ -254,7 +254,7 @@ for (i in 1:length(num_bins_vec)) {
   pred_data_training <- inner_join(pred_data_training, df_bin_centroids_filtered, by = c( "pred_hb_id" = "hb_id"))
 
   df_bin_train <- df_bin
-  names(df_bin_train)[-length(df_bin_train)] <- paste0("avg_", names(df_bin_train)[-length(df_bin_train)])
+  names(df_bin_train)[-1] <- paste0("avg_", names(df_bin_train)[-1])
 
   pred_data_training <- pred_data_training |>
     left_join(df_bin_train, by = c("pred_hb_id" = "hb_id")) ## Map high-D weighted mean coordinates
@@ -272,10 +272,10 @@ for (i in 1:length(num_bins_vec)) {
     mutate(total = rowSums(pick(starts_with("error_square_x"))))
 
   pred_data_training <- pred_data_training |>
-    mutate(MSE_method_1 = total/NROW(test_data),
+    mutate(MSE_method_1 = total/NROW(training_data),
            MSE_method_2 = total/num_bins,
            number_of_bins = num_bins,
-           number_of_observations = NROW(test_data))
+           number_of_observations = NROW(training_data))
 
   total_error_method_1 <- sum(pred_data_training$MSE_method_1)
   total_error_method_2 <- sum(pred_data_training$MSE_method_2)
@@ -301,7 +301,7 @@ for (i in 1:length(num_bins_vec)) {
   pred_data <- inner_join(pred_data, df_bin_centroids_filtered, by = c( "pred_hb_id" = "hb_id"))
 
   df_bin_train <- df_bin
-  names(df_bin_train)[-length(df_bin_train)] <- paste0("avg_", names(df_bin_train)[-length(df_bin_train)])
+  names(df_bin_train)[-1] <- paste0("avg_", names(df_bin_train)[-1])
 
   pred_data <- pred_data |>
     left_join(df_bin_train, by = c("pred_hb_id" = "hb_id")) ## Map high-D weighted mean coordinates

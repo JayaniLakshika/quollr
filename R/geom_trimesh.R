@@ -29,6 +29,7 @@ geom_trimesh <- function(mapping = NULL, data = NULL, stat = "trimesh",
 
 #' @importFrom ggplot2 Geom
 #' @importFrom ggplot2 aes
+#' @importFrom ggplot2 ggproto
 #' @importFrom grid grobTree
 #' @importFrom tibble tibble
 #' @importFrom tibble as_tibble

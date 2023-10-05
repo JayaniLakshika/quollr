@@ -8,6 +8,8 @@ avg_highD_data(.data, column_start_text = "x")
 }
 \arguments{
 \item{.data}{The data frame containing the high-dimensional data.}
+
+\item{column_start_text}{The text that begin the column name of the high-D data}
 }
 \value{
 A data frame with the average values of the high-dimensional data within each hexagonal bin.
