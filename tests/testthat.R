@@ -8,5 +8,6 @@
 
 library(testthat)
 library(quollr)
+library(vdiffr)
 
 test_check("quollr")
