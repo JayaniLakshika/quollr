@@ -13,11 +13,12 @@ test_that("calculate_effective_shape_value() works", {
   expect_equal(calculate_effective_shape_value(data, x, y), 0.96955502)
 
   data <- data |> rbind(data.frame(x = NA, y = 2.5))
-  expect_error(calculate_effective_shape_value(data, x, y))
+  #expect_error(calculate_effective_shape_value(data, x, y))
+  expect_snapshot(calculate_effective_shape_value(data, x, y), error = TRUE)
 
   data <- data |> rbind(data.frame(x = 1.4, y = NA))
-  expect_error(calculate_effective_shape_value(data, x, y))
-
+  #expect_error(calculate_effective_shape_value(data, x, y))
+  expect_snapshot(calculate_effective_shape_value(data, x, y), error = TRUE)
 })
 
 
