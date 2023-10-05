@@ -41,6 +41,11 @@ calculate_effective_x_bins <- function(.data, x, cell_area = 1){
 #' data <- tibble::tibble(x = rnorm(300), y = rnorm(300))
 #' calculate_effective_shape_value(data, x, y)
 calculate_effective_shape_value <- function(.data, x, y){
+
+  if (any(is.na(.data$x)) || any(is.na(.data$y))) {
+    stop("NAs present")
+  }
+
   xwidth <- diff(range(.data |> dplyr::pull({{ x }})))
   yheight <- diff(range(.data |> dplyr::pull({{ y }})))
   shape <- yheight/xwidth  # Here, yheight is the range of y and xwidth is the range of x
