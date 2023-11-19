@@ -25,7 +25,11 @@ Imports:
     tidyr,
     tripack,
     mgc,
-    rsample
+    rsample,
+    class,
+    ggbeeswarm,
+    tidyselect,
+    vdiffr
 URL: https://github.com/JayaniLakshika/quollr
 BugReports: https://github.com/JayaniLakshika/quollr/issues
 Depends: 

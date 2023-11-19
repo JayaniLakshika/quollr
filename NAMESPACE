@@ -14,5 +14,6 @@ export(stat_trimesh)
 export(draw_full_hexgrid)
 export(plot_dist)
 export(remove_long_edges)
+export(predict_hex_id)
 
 importFrom(ggplot2, Geom, GeomPoint, GeomSegment, Stat, aes, layer, ggproto)

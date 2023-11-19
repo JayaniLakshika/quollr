@@ -2,6 +2,7 @@
 
     Code
       calculate_effective_shape_value(data, x, y)
-    Error <simpleError>
-      NAs present
+    Condition
+      Error in `calculate_effective_shape_value()`:
+      ! NAs present
 
