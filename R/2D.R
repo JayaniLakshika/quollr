@@ -391,3 +391,22 @@ cal_2D_dist_umap <- function(.data){
   distance_df_cal$weight <- 1/(unlist(distance_df_cal$distance) + 0.05)
   return(distance_df_cal)
 }
+
+full_hex_grid <- function(hexdf_data){
+
+  dx <- resolution(hexdf_data$x, FALSE)
+  dy <- resolution(hexdf_data$y, FALSE) / sqrt(3) / 2 * 1.15
+
+  hexC <- hexbin::hexcoords(dx, dy, n = 1)
+
+  n <- length(hexdf_data$x)
+
+  size <- rep(1, length(hexdf_data$x))
+
+  full_hex_coords <- tibble::tibble( x = rep.int(hexC$x, n) * rep(size, each = 6) + rep(hexdf_data$x, each = 6),
+                       y = rep.int(hexC$y, n) * rep(size, each = 6) + rep(hexdf_data$y, each = 6), id = rep(1:length(hexdf_data$x), each = 6))
+
+  return(full_hex_coords)
+
+
+}
