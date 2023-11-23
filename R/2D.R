@@ -394,8 +394,8 @@ cal_2D_dist_umap <- function(.data){
 
 full_hex_grid <- function(hexdf_data){
 
-  dx <- resolution(hexdf_data$x, FALSE)
-  dy <- resolution(hexdf_data$y, FALSE) / sqrt(3) / 2 * 1.15
+  dx <- ggplot2::resolution(hexdf_data$x, FALSE)
+  dy <- ggplot2::resolution(hexdf_data$y, FALSE) / sqrt(3) / 2 * 1.15
 
   hexC <- hexbin::hexcoords(dx, dy, n = 1)
 
