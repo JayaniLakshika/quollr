@@ -410,3 +410,18 @@ full_hex_grid <- function(hexdf_data){
 
 
 }
+
+
+generate_full_grid_centroids <- function(hexdf_data){
+
+  ## Generate initial grid
+  full_centroids1 <- tibble::as_tibble(expand.grid(x = seq(min(hexdf_data$x),max(hexdf_data$x), ggplot2:resolution(hexdf_data$x, FALSE) * 2), y = seq(min(hexdf_data$y),max(hexdf_data$y), ggplot2:resolution(hexdf_data$y, FALSE) * 2)))
+
+  ## Generate shifted grid
+  full_centroids2 <- tibble::tibble(x = full_centroids1$x + ggplot2:resolution(hexdf_data$x, FALSE), y = full_centroids1$y + ggplot2:resolution(hexdf_data$y, FALSE))
+  full_centroids <- dplyr::bind_rows(full_centroids1, full_centroids2)
+
+  return(full_centroids)
+
+
+}
