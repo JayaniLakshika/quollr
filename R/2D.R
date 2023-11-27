@@ -36,25 +36,52 @@ extract_hexbin_centroids <- function(nldr_df, num_bins, shape_val) {
   return(list(hexdf_data = hexdf_data, hb_data = hb_data))
 }
 
-extract_hexbin_mean <- function(.data, nldr, hb) {
 
-  df_cell_data <- nldr |>
-    select((names(UMAP_data) |> tolower())[!((names(UMAP_data) |> tolower()) %in% "id")], hb_id) |>
-    dplyr::group_by(hb_id) |>
-    dplyr::summarise(across(everything(), mean))
+#' Extract hexagonal bin mean and related information from non-linear dimensionality reduction data.
+#'
+#' @param nldr_df Non-linear dimensionality reduction data frame containing 2D coordinates.
+#' @param num_bins Number of bins along the x-axis for hexagon binning.
+#' @param shape_val The value of the shape parameter for hexagon binning.
+#'
+#' @return A list containing the hexagonal bin mean data frame and the hexbin object.
+#' @export
+#'
+#' @importFrom hexbin hexbin
+#' @importFrom dplyr pull as_tibble
+#' @importFrom utils globalVariables
+#'
+#' @examples
+#' # Example usage of extract_hexbin_centroids function
+#' nldr_df <- tibble::tibble(UMAP1 = rnorm(100), UMAP2 = rnorm(100))
+#' num_bins <- 20
+#' shape_val <- 0.8
+#' result <- extract_hexbin_mean(nldr_df, num_bins, shape_val)
+#' hexdf_data <- result$hexdf_data
+#' hb_data <- result$hb_data
+#' print(hexdf_data)
+#' print(hb_data)
+#'
+#'
+#' @rdname extract_hexbin_mean
+extract_hexbin_mean <- function(nldr_df, num_bins, shape_val) {
 
-  names(df_cell_data) <- c("hb_id", "x_val_center_mean", "y_val_center_mean")
+  hb_data <- hexbin::hexbin(x = nldr_df |> dplyr::pull(UMAP1),
+                            y = nldr_df |> dplyr::pull(UMAP2),
+                            xbins = num_bins, IDs = TRUE,
+                            shape = shape_val)
 
-  df_cell_data <- df_cell_data |>
-    mutate(Cell_count = hb@count)
+  df_cell_data <- nldr_df |>
+    dplyr::select(-ID) |>
+    dplyr::mutate(hexID = hb_data@cID) |>
+    dplyr::group_by(hexID) |>
+    dplyr::summarise(dplyr::across(tidyselect::everything(), mean))
 
-  ### Merge hexbin data with original mean dataset
-  df_b_with_center_data <- .data |>
-    dplyr::inner_join(df_cell_data, by = "hb_id")
+  names(df_cell_data) <- c("hexID", "x", "y")
 
-  df_b_with_center_data <- df_b_with_center_data |>
-    dplyr::mutate(ID = dplyr::row_number())
-  return(df_b_with_center_data)
+
+  hexdf_data <- tibble::tibble(df_cell_data, counts = hb_data@count)
+
+  return(list(hexdf_data = hexdf_data, hb_data = hb_data))
 }
 
 
