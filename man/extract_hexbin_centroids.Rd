@@ -2,24 +2,33 @@
 % Please edit documentation in R/2D.R
 \name{extract_hexbin_centroids}
 \alias{extract_hexbin_centroids}
-\title{Extract Hexagonal Bin Centroids}
+\title{Extract hexagonal bin centroids and related information from non-linear dimensionality reduction data.}
 \usage{
-extract_hexbin_centroids(.data, hb)
+extract_hexbin_centroids(nldr_df, num_bins, shape_val)
 }
 \arguments{
-\item{.data}{The original data frame containing the data points.}
+\item{nldr_df}{Non-linear dimensionality reduction data frame containing 2D coordinates.}
 
-\item{hb}{An S4 object of class "hexbin" representing the hexagonal bins.}
+\item{num_bins}{Number of bins along the x-axis for hexagon binning.}
+
+\item{shape_val}{The value of the shape parameter for hexagon binning.}
 }
 \value{
-A data frame containing the extracted centroid information, including the x and y coordinates of each centroid and the corresponding hexbin ID and cell count.
+A list containing the hexagonal bin centroids data frame and the hexbin object.
 }
 \description{
-This function computes the x and y coordinates of the centroids from the provided hexagon cell IDs and returns a data frame with the extracted centroid information.
+Extract hexagonal bin centroids and related information from non-linear dimensionality reduction data.
 }
 \examples{
-df <- tibble::tibble(pc1 = c(0.1, 0.2, 0.3), pc2 = c(0.3, 0.2, 0.1), hb_id = c(1, 2, 3))
-hb <- hexbin::hexbin(df$pc1, df$pc2, xbins = 30, IDs = TRUE, shape = 1)
-extract_hexbin_centroids(df, hb)
+# Example usage of extract_hexbin_centroids function
+nldr_df <- tibble::tibble(UMAP1 = rnorm(100), UMAP2 = rnorm(100))
+num_bins <- 20
+shape_val <- 0.8
+result <- extract_hexbin_centroids(nldr_df, num_bins, shape_val)
+hexdf_data <- result$hexdf_data
+hb_data <- result$hb_data
+print(hexdf_data)
+print(hb_data)
+
 
 }

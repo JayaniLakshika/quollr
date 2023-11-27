@@ -171,7 +171,7 @@ show_langevitour <- function(df, df_b, df_b_with_center_data, benchmark_value = 
     dplyr::mutate(type = "data") ## original dataset
 
   df_b <- df_b |>
-    dplyr::filter(hb_id %in% df_b_with_center_data$hb_id) |>
+    dplyr::filter(hb_id %in% df_b_with_center_data$hexID) |>
     dplyr::select(-hb_id) |>
     dplyr::mutate(type = "model") ## Data with summarized mean
 
@@ -185,14 +185,14 @@ show_langevitour <- function(df, df_b, df_b_with_center_data, benchmark_value = 
     langevitour::langevitour(df_exe[1:(length(df_exe)-1)], lineFrom = tr_from_to_df$from , lineTo = tr_from_to_df$to, group = df_exe$type)
   } else if ((!(is.na(benchmark_value))) && (is.na(min_points_threshold))) {
     ## Set the maximum difference as the criteria
-    distance_df_small_edges <- distance_df |>
+    distance_df_small_edges <- distance_df %>%
       dplyr::filter({{ distance_col }} < benchmark_value)
     ## Since erase brushing is considerd.
 
     langevitour::langevitour(df_exe[1:(length(df_exe)-1)], lineFrom = distance_df_small_edges$from, lineTo = distance_df_small_edges$to, group = df_exe$type)
 
   } else if ((is.na(benchmark_value)) && (!(is.na(min_points_threshold)))) {
-    df_bin_centroids_filterd <- df_bin_centroids |>
+    df_bin_centroids_filterd <- df_bin_centroids %>%
       dplyr::filter(Cell_count > min_points_threshold)
 
     tr1 <- triangulate_bin_centroids(df_bin_centroids_filterd)
@@ -202,7 +202,7 @@ show_langevitour <- function(df, df_b, df_b_with_center_data, benchmark_value = 
 
   }  else if ((!(is.na(benchmark_value))) && (!(is.na(min_points_threshold)))) {
 
-    df_bin_centroids_filterd <- df_bin_centroids |>
+    df_bin_centroids_filterd <- df_bin_centroids %>%
       dplyr::filter(Cell_count > min_points_threshold)
 
     tr1 <- triangulate_bin_centroids(df_bin_centroids_filterd)
@@ -210,7 +210,7 @@ show_langevitour <- function(df, df_b, df_b_with_center_data, benchmark_value = 
 
     distance_d <- cal_2D_dist(.data = tr_from_to_df)
     ## Set the maximum difference as the criteria
-    distance_df_small_edges <- distance_d |>
+    distance_df_small_edges <- distance_d %>%
       dplyr::filter(distance < benchmark_value)
     ## Since erase brushing is considerd.
 

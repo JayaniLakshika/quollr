@@ -1,111 +1,39 @@
-#' Generate the Hexagonal Bins
+#' Extract hexagonal bin centroids and related information from non-linear dimensionality reduction data.
 #'
-#' This function generates hexagonal bins based on the provided data and returns an S4 object of class "hexbin".
+#' @param nldr_df Non-linear dimensionality reduction data frame containing 2D coordinates.
+#' @param num_bins Number of bins along the x-axis for hexagon binning.
+#' @param shape_val The value of the shape parameter for hexagon binning.
 #'
-#' @param .data The input data frame containing the original dataset.
-#' @param nldr_df The non-linear dimensionality reduction data frame containing the 2D coordinates.
-#' @param embedding_1 The name of the column in the non-linear dimensionality reduction data frame containing the first embedding coordinate.
-#' @param embedding_2 The name of the column in the non-linear dimensionality reduction data frame containing the second embedding coordinate.
-#' @param num_bins The number of hexagonal bins to generate. Default is 30.
-#' @param shape_val The shape parameter for the hexagonal bins. Default is 1.
+#' @return A list containing the hexagonal bin centroids data frame and the hexbin object.
+#' @export
 #'
-#' @return A list with the following elements:
-#' \describe{
-#'   \item{df_new}{A data frame with the merged data and added hexbin IDs.}
-#'   \item{hb}{An S4 object of class "hexbin" representing the generated hexagonal bins.}
-#' }
-#'
-#' @importFrom dplyr mutate inner_join select starts_with
 #' @importFrom hexbin hexbin
-#' @importFrom tidyr gather
+#' @importFrom dplyr pull as_tibble
+#' @importFrom utils globalVariables
 #'
 #' @examples
-#' data <- tibble::tribble(
-#'   ~ID, ~x, ~y, ~pc1, ~pc2,
-#'   1, 0.2, 0.5, 0.1, 0.3,
-#'   2, 0.3, 0.4, 0.2, 0.2,
-#'   3, 0.1, 0.7, 0.3, 0.1
-#' )
-#' nldr <- tibble::tribble(
-#'   ~ID, ~embedding1, ~embedding2,
-#'   1, 0.6, 0.9,
-#'   2, 0.7, 0.8,
-#'   3, 0.5, 0.7
-#' )
-#' create_hexbin_df(data, nldr, "embedding1", "embedding2")
+#' # Example usage of extract_hexbin_centroids function
+#' nldr_df <- tibble::tibble(UMAP1 = rnorm(100), UMAP2 = rnorm(100))
+#' num_bins <- 20
+#' shape_val <- 0.8
+#' result <- extract_hexbin_centroids(nldr_df, num_bins, shape_val)
+#' hexdf_data <- result$hexdf_data
+#' hb_data <- result$hb_data
+#' print(hexdf_data)
+#' print(hb_data)
 #'
-#' @export
-create_hexbin_df <- function(.data, nldr_df, embedding_1, embedding_2, num_bins = 30,
-                          shape_val = 1) {
-
-  ### Merge tSNE dataset in 2D with original dataset which contains
-  ### 4D coordinates
-  .data <- .data |>
-    dplyr::mutate(ID = dplyr::row_number())
-
-  df_new <- .data |>
-    dplyr::inner_join(nldr_df, by = "ID")
-
-  ### Fit hexbins and store hexbin IDs
-  hb <- hexbin::hexbin(nldr_df |>
-                         dplyr::pull({
-                           {
-                             embedding_1
-                           }
-                         }), nldr_df |>
-                         dplyr::pull({
-                           {
-                             embedding_2
-                           }
-                         }), xbins = num_bins, IDs = TRUE, shape = shape_val)
-  ### Add hexbin Ids as a column to the original dataset
-
-  df_new <- df_new |>
-    dplyr::mutate(hb_id = hb@cID)
-
-  return(list(df_new = df_new, hb = hb))
-}
-
-
-#' Extract Hexagonal Bin Centroids
 #'
-#' This function computes the x and y coordinates of the centroids from the provided hexagon cell IDs and returns a data frame with the extracted centroid information.
-#'
-#' @param .data The original data frame containing the data points.
-#' @param hb An S4 object of class "hexbin" representing the hexagonal bins.
-#'
-#' @return A data frame containing the extracted centroid information, including the x and y coordinates of each centroid and the corresponding hexbin ID and cell count.
-#'
-#' @examples
-#' df <- tibble::tibble(pc1 = c(0.1, 0.2, 0.3), pc2 = c(0.3, 0.2, 0.1), hb_id = c(1, 2, 3))
-#' hb <- hexbin::hexbin(df$pc1, df$pc2, xbins = 30, IDs = TRUE, shape = 1)
-#' extract_hexbin_centroids(df, hb)
-#'
-#' @importFrom dplyr inner_join mutate rename
-#' @importFrom hexbin hcell2xy
-#' @export
-extract_hexbin_centroids <- function(.data, hb) {
-  # Computes x and y coordinates from hexagon cell IDs
-  xy <- hexbin::hcell2xy(hb)
+#' @rdname extract_hexbin_centroids
+extract_hexbin_centroids <- function(nldr_df, num_bins, shape_val) {
 
-  d_cell <- tibble::tibble(x_val_center = xy$x, y_val_center = xy$y)
+  hb_data <- hexbin::hexbin(x = nldr_df |> dplyr::pull(UMAP1),
+                            y = nldr_df |> dplyr::pull(UMAP2),
+                            xbins = num_bins, IDs = TRUE,
+                            shape = shape_val)
 
-  # Data of each cell (bin) which contains ID as hex_bin ID
-  df_cell_data1 <- tibble::tibble(ID = hb@cell, Cell_count = hb@count)
+  hexdf_data <- tibble::tibble(tibble::as_tibble(hexbin::hcell2xy(hb_data)),  hexID = hb_data@cell, std_counts = hb_data@count/max(hb_data@count))
 
-  df_cell_data <- dplyr::bind_cols(df_cell_data1, d_cell)
-
-  df_cell_data <- df_cell_data |>
-    dplyr::rename(hb_id = "ID")
-
-  # Merge hexbin data with the original data frame
-  df_b_with_center_data <- .data |>
-    dplyr::inner_join(df_cell_data, by = "hb_id")
-
-  df_b_with_center_data <- df_b_with_center_data |>
-    dplyr::mutate(ID = dplyr::row_number())
-
-  return(df_b_with_center_data)
+  return(list(hexdf_data = hexdf_data, hb_data = hb_data))
 }
 
 
@@ -284,7 +212,33 @@ colour_long_edges <- function(.data, benchmark_value, triangular_object, distanc
   return(tri_mesh_plot)
 }
 
-
+#' Remove Long Edges from a Triangular Mesh Plot
+#'
+#' This function removes long edges from a triangular mesh plot based on a benchmark value.
+#'
+#' @param .data The data frame containing the edge information.
+#' @param benchmark_value The threshold value to determine long edges. Edges with a distance greater than or equal to this value will be removed.
+#' @param triangular_object The triangular object containing the mesh information.
+#' @param distance_col The column name in `.data` representing the distances.
+#'
+#' @return A ggplot object with the triangular mesh plot where long edges are removed.
+#'
+#' @importFrom dplyr filter merge
+#' @importFrom ggplot2 ggplot geom_segment geom_point coord_equal labs
+#' @importFrom tibble tibble
+#' @importFrom stats setNames
+#'
+#' @examples
+#' df <- tibble::tribble(
+#'   ~from, ~to, ~distance,
+#'   1, 2, 5,
+#'   1, 3, 12.2,
+#'   2, 3, 8.25
+#' )
+#' tr_object <- tripack::tri.mesh(df$from, df$to)
+#' remove_long_edges(df, 10, tr_object, "distance")
+#'
+#' @export
 remove_long_edges <- function(.data, benchmark_value, triangular_object,
                               distance_col) {
   tr_df <- tibble::tibble(x = triangular_object$x, y = triangular_object$y)
@@ -311,87 +265,27 @@ remove_long_edges <- function(.data, benchmark_value, triangular_object,
 }
 
 
-draw_full_hexgrid <- function(.data = data, nldr_df = training_data,
-                              embedding_1 = UMAP1, embedding_2 = UMAP2,
-                              num_bins = num_bins_x, shape_val = shape_val){
-
-  hb_data <- hexbin::hexbin(x = nldr_df |> pull({{embedding_1}}),
-                            y = nldr_df |> pull({{embedding_2}}),
-                            xbins = num_bins, IDs = TRUE,
-                            shape = shape_val)
-
-  hexdf_data <- tibble::tibble(tibble::as_tibble(hexbin::hcell2xy(hb_data)),  hexID = hb_data@cell, counts = hb_data@count/max(hb_data@count))
-
-  #hexdf_data <- tibble::tibble(tibble::as_tibble(hexbin::hcell2xy(hb_data)),  hexID = hb_data@cell, counts = hb_data@count)
-
-  hex_grid <- expand.grid(nldr_df |> pull({{embedding_1}}), nldr_df |> pull({{embedding_2}}))
-
-  hex_grid_all <- expand.grid(min(nldr_df |> pull({{embedding_1}})): max(nldr_df |> pull({{embedding_1}})),
-                              min(nldr_df |> pull({{embedding_2}})): max(nldr_df |> pull({{embedding_2}})))
-
-  hex_grid <- dplyr::bind_rows(hex_grid, hex_grid_all) |>
-    dplyr::distinct()
-
-  hb <- hexbin::hexbin(x = hex_grid |> pull(Var1),
-                       y = hex_grid |> pull(Var2),
-                       xbins = num_bins, IDs = TRUE,
-                       shape = shape_val)
-
-  #hexdf <- tibble::tibble(tibble::as_tibble(hexbin::hcell2xy(hb)),  hexID = hb@cell, counts = hb@count/max(hb@count))
-  # hexdf <- tibble::tibble(tibble::as_tibble(hexbin::hcell2xy(hb)),  hexID = hb@cell, counts = hb@count)
-  #
-  # hexdf <- hexdf %>%
-  #   mutate(counts = ifelse((hexID %in% (hexdf_data |> pull(hexID))),counts, NA))
-
-  hexdf <- tibble::tibble(tibble::as_tibble(hexbin::hcell2xy(hb)),  hexID = hb@cell)
-  hexdf <- dplyr::full_join(hexdf, hexdf_data, by = c("hexID" = "hexID", "x" = "x", "y" = "y"))
-
-  embedding_hb <- create_hexbin_df(.data = .data, nldr_df = nldr_df,
-                                embedding_1 = {{embedding_1}}, embedding_2 = {{embedding_2}},
-                                num_bins = num_bins, shape_val = shape_val)$df_new
-
-  full_grid <- dplyr::full_join(hexdf, embedding_hb, by = c("hexID" = "hb_id"))
-
-  ggplot2::ggplot(full_grid, aes(x = x, y = y, fill = counts, hexID = hexID)) +
-    ggplot2::geom_hex(stat = "identity", color = "#969696") +
-    #geom_label(size = 1.8) +
-    #geom_point(aes(x = tsne1, y = tsne2), na.rm = TRUE) +
-    ggplot2::scale_fill_viridis_c(na.value = "#ffffff") +
-    #ggtitle(paste0("A = ", 1 , ", b = (", hb_data@dimen[2], ", ", hb_data@dimen[1], ")")) +
-    ggplot2::theme_linedraw() +
-    #coord_equal() +
-    ggplot2::theme(legend.position = "none", plot.title = element_text(size = 5, hjust = 0.5, vjust = -0.5),
-          axis.title.x = element_blank(), axis.title.y = element_blank(),
-          axis.text.x = element_blank(), axis.ticks.x = element_blank(),
-          axis.text.y = element_blank(), axis.ticks.y = element_blank(),
-          panel.grid.major = element_blank(), panel.grid.minor = element_blank()#change legend key width
-    )
-
-}
-
-
-plot_dist <- function(distance_df){
-  distance_df$group <- "1"
-  dist_plot <- ggplot2::ggplot(distance_df, aes(x = group, y = distance)) +
-    ggbeeswarm::geom_quasirandom() +
-    ggplot2::ylim(0, max(unlist(distance_df$distance))+ 0.5) + ggplot2::coord_flip()
-  return(dist_plot)
-}
-
-cal_2D_dist_umap <- function(.data){
-
-  .data$distance <- lapply(seq(nrow(.data)), function(x) {
-    start <- unlist(.data[x, c("avg_umap1","avg_umap2")])
-    end <- unlist(.data[x, c("UMAP1","UMAP2")])
-    sqrt(sum((start - end)^2))})
-
-  distance_df_cal <- .data |>
-    dplyr::select("hb_id", "avg_umap1","avg_umap2", "UMAP1","UMAP2", "distance")
-
-  distance_df_cal$weight <- 1/(unlist(distance_df_cal$distance) + 0.05)
-  return(distance_df_cal)
-}
-
+#' Generate Hexagonal Coordinates
+#'
+#' This function generates the coordinates of hexagons after passing hexagonal centroids.
+#'
+#' @param hexdf_data The dataset with hexbin ID and centroid coordinates.
+#'
+#' @return A tibble containing the coordinates of hexagons based on hexagonal centroids.
+#'
+#' @importFrom ggplot2 resolution
+#' @importFrom tibble as_tibble
+#' @importFrom hexbin hexcoords
+#' @importFrom dplyr rep.int
+#'
+#' @examples
+#' hexdf_data <- tibble::tibble(
+#'   x = c(0, 1, 0.5),
+#'   y = c(0, 0, 1)
+#' )
+#' full_hex_grid(hexdf_data)
+#'
+#' @export
 full_hex_grid <- function(hexdf_data){
 
   dx <- ggplot2::resolution(hexdf_data$x, FALSE)
@@ -404,14 +298,34 @@ full_hex_grid <- function(hexdf_data){
   size <- rep(1, length(hexdf_data$x))
 
   full_hex_coords <- tibble::tibble( x = rep.int(hexC$x, n) * rep(size, each = 6) + rep(hexdf_data$x, each = 6),
-                       y = rep.int(hexC$y, n) * rep(size, each = 6) + rep(hexdf_data$y, each = 6), id = rep(1:length(hexdf_data$x), each = 6))
+                                     y = rep.int(hexC$y, n) * rep(size, each = 6) + rep(hexdf_data$y, each = 6), id = rep(1:length(hexdf_data$x), each = 6))
 
   return(full_hex_coords)
 
 
 }
 
-
+#' Generate Full Grid Centroids
+#'
+#' This function generates all possible centroids in the full grid based on hexbin data.
+#'
+#' @param hexdf_data The dataset with hexbin ID and centroid coordinates.
+#'
+#' @return A tibble containing all possible centroids in the full grid.
+#'
+#' @importFrom ggplot2 resolution
+#' @importFrom tibble as_tibble
+#' @importFrom expand.grid expand.grid
+#' @importFrom dplyr bind_rows
+#'
+#' @examples
+#' hexdf_data <- tibble::tibble(
+#'   x = c(0, 1, 0.5),
+#'   y = c(0, 0, 1)
+#' )
+#' generate_full_grid_centroids(hexdf_data)
+#'
+#' @export
 generate_full_grid_centroids <- function(hexdf_data){
 
   ## Generate initial grid
