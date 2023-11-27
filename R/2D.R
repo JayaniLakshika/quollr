@@ -36,6 +36,27 @@ extract_hexbin_centroids <- function(nldr_df, num_bins, shape_val) {
   return(list(hexdf_data = hexdf_data, hb_data = hb_data))
 }
 
+extract_hexbin_mean <- function(.data, nldr, hb) {
+
+  df_cell_data <- nldr |>
+    select((names(UMAP_data) |> tolower())[!((names(UMAP_data) |> tolower()) %in% "id")], hb_id) |>
+    dplyr::group_by(hb_id) |>
+    dplyr::summarise(across(everything(), mean))
+
+  names(df_cell_data) <- c("hb_id", "x_val_center_mean", "y_val_center_mean")
+
+  df_cell_data <- df_cell_data |>
+    mutate(Cell_count = hb@count)
+
+  ### Merge hexbin data with original mean dataset
+  df_b_with_center_data <- .data |>
+    dplyr::inner_join(df_cell_data, by = "hb_id")
+
+  df_b_with_center_data <- df_b_with_center_data |>
+    dplyr::mutate(ID = dplyr::row_number())
+  return(df_b_with_center_data)
+}
+
 
 #' Triangulate Bin Centroids
 #'

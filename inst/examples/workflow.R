@@ -12,6 +12,8 @@ library(ggbeeswarm)
 library(umap)
 library(class)
 
+library(plotly)
+
 
 set.seed(20230531)
 
@@ -46,7 +48,8 @@ test_data <- testing(data_split) |>
 plot_umap_2d <- function(UMAP_df){
   UMAP_df_plot <- UMAP_df %>%
     ggplot(aes(x = UMAP1,
-               y = UMAP2))+
+               y = UMAP2,
+               label = ID))+
     geom_point(alpha=0.5) +
     coord_equal() +
     theme(plot.title = element_text(hjust = 0.5, size = 18, face = "bold"),
@@ -65,6 +68,7 @@ UMAP_data <- UMAP_data |>
   mutate(ID = training_data$ID)
 
 plot_umap_2d( UMAP_data)
+ggplotly()
 
 ## predict umap embeddings
 
@@ -78,6 +82,7 @@ predict_UMAP_df <- predict_UMAP_df |>
 
 plot_umap_2d(UMAP_data) +
   geom_point(data = predict_UMAP_df, aes(x = UMAP1, y = UMAP2), color = "red")
+ggplotly()
 
 ## Calculate number of bins along x-axis
 num_bins_x <- calculate_effective_x_bins(.data = UMAP_data, x = UMAP1,
@@ -92,13 +97,17 @@ shape_val
 
 ## To extract bin centroids
 
-hexbin_data_object <-extract_hexbin_centroids(UMAP_data, num_bins_x, shape_val)
+hexbin_data_object <- extract_hexbin_centroids(UMAP_data, num_bins_x, shape_val)
 
 df_bin_centroids <- hexbin_data_object$hexdf_data
 
 df_bin_centroids |>
   head() |>
   DT::datatable()
+
+ggplot(df_bin_centroids, aes(x = x, y = y, label = hexID)) +
+  geom_text() +
+  coord_equal()
 
 ## Data set with all possible centroids in the hexagonal grid
 
@@ -119,7 +128,7 @@ ggplot(data = hex_grid, aes(x = x, y = y)) + geom_polygon(fill = "white", color 
   geom_point(data = full_centroid_df, aes(x = x, y = y), color = "black") +
   geom_point(data = df_bin_centroids, aes(x = x, y = y), color = "red")
 
-ggplot(data = hex_grid, aes(x = x, y = y)) + geom_polygon(fill = "white", color = "black", aes(group = id))
+ggplot(data = hex_grid, aes(x = x, y = y)) + geom_polygon(fill = "white", color = "black", aes(group = id)) + geom_text(data = df_bin_centroids, aes(x = x, y = y, label = hexID))
 
 
 hexdf_data_c <- df_bin_centroids |>
@@ -161,7 +170,8 @@ pts_df |>
   DT::datatable()
 
 ## To generate a data set with high-D and 2D training data
-df_all <- dplyr::bind_cols(training_data |> dplyr::select(-ID), UMAP_data_with_hb_id)
+df_all <- training_data |> dplyr::select(-ID) |>
+  dplyr::bind_cols(UMAP_data_with_hb_id)
 
 df_all |>
   head() |>
@@ -169,7 +179,7 @@ df_all |>
 
 ## To generate averaged high-D data
 
-df_bin <- avg_highD_data(.data = df_all)
+df_bin <- avg_highD_data(.data = df_all) ## Need to pass ID column name
 
 df_bin |>
   head() |>

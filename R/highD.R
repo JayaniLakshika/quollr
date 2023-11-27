@@ -29,6 +29,87 @@ avg_highD_data <- function(.data, column_start_text = "x") {
 }
 
 
+cal_high_D_dist <- function(.data){
+
+  .data$distance <- lapply(seq(nrow(.data)), function(x) {
+    start <- unlist(.data[x, quanteda::char_select(names(.data), "avg*")])
+    end <- unlist(.data[x, quanteda::char_select(names(.data), "x_*")])
+    sqrt(sum((start - end)^2))})
+
+  distance_df <- .data %>%
+    dplyr::select("hb_id", starts_with("avg"), starts_with("x"), "distance")
+
+  distance_df$distance <- unlist(distance_df$distance)
+  return(distance_df)
+}
+
+weighted_highD_data <- function(.data, apply_pca = TRUE) {
+
+  avg_val_hexagons <- .data |>
+    dplyr::select(starts_with("x"), hb_id) |>
+    dplyr::group_by(hb_id) |>
+    dplyr::summarise(across(everything(), mean))
+
+  names(avg_val_hexagons)[-1] <- paste0(rep("avg_", (NCOL(avg_val_hexagons) - 1)), names(avg_val_hexagons)[-1])
+
+  high_D_with_avg_all <- dplyr::inner_join(avg_val_hexagons , df_all |>
+                                             select(starts_with("x"), hb_id), by = c("hb_id" = "hb_id"))
+
+
+  high_D_with_avg_all_split <- high_D_with_avg_all |>
+    dplyr::group_by(hb_id) |>
+    dplyr::group_split()
+
+
+  vec <- stats::setNames(1:NCOL(df_all), c("hb_id", paste0(rep("weighted_", (NCOL(df_all) - (length(df_all)))), names(df_all)[-(length(df_all))])))
+  weighted_mean_all <- dplyr::bind_rows(vec)[0, ]
+
+  for(i in 1:length(high_D_with_avg_all_split)){
+    weighted_mean_df <- high_D_with_avg_all_split[[i]] |> ## These are the weights for weighted mean
+      cal_high_D_dist()
+
+    weighted_mean_df_list <- list()
+
+    for (j in 1:(NCOL(avg_val_hexagons) - 1)) {
+
+      weighted_mean_df_list[[j]] <- weighted_mean_df |>
+        mutate(distance_trans =  1/ (distance + 0.05)) |>
+        select(hb_id, names(df_all)[-(length(df_all))][j], distance_trans) |>
+        group_by(hb_id) |>
+        summarise(across(names(df_all)[-(length(df_all))][j], ~ weighted.mean(., distance_trans)))
+
+    }
+
+    weighted_mean <- weighted_mean_df_list %>%
+      Reduce(function(dtf1,dtf2) dplyr::full_join(dtf1,dtf2,by="hb_id"), .)
+
+    names(weighted_mean) <- c("hb_id", paste0(rep("weighted_", (NCOL(df_all) - (length(df_all)))), names(df_all)[-(length(df_all))]))
+
+    weighted_mean_all <- dplyr::bind_rows(weighted_mean_all, weighted_mean)
+
+  }
+
+  weighted_mean_all
+
+  ## To change column names to lower case
+  names(weighted_mean_all) <- tolower(names(weighted_mean_all))
+
+  if (isTRUE(apply_pca)) {
+    ## Column names starts with pc
+    weighted_mean_all <- weighted_mean_all |>
+      dplyr::select(tidyselect::starts_with("pc"), hb_id)
+
+  } else {
+    ## Column names starts with x
+    weighted_mean_all <- weighted_mean_all |>
+      dplyr::select(tidyselect::starts_with("x"), hb_id)
+
+  }
+
+  return(weighted_mean_all)
+}
+
+
 #' Find Benchmark Value
 #'
 #' This function finds the benchmark value to remove long edges based on the differences in a distance column.
@@ -167,7 +248,7 @@ show_langevitour <- function(df, df_b, df_b_with_center_data, benchmark_value = 
 
   ### Define type column
   df <- df |>
-    dplyr::select(rsample::starts_with("x")) |>
+    dplyr::select(tidyselect::starts_with("x")) |>
     dplyr::mutate(type = "data") ## original dataset
 
   df_b <- df_b |>
@@ -179,7 +260,8 @@ show_langevitour <- function(df, df_b, df_b_with_center_data, benchmark_value = 
 
 
   if((is.na(benchmark_value)) && (is.na(min_points_threshold))){
-    tr1 <- triangulate_bin_centroids(df_b_with_center_data)
+
+    tr1 <- triangulate_bin_centroids(df_b_with_center_data, x, y)
     tr_from_to_df <- generate_edge_info(triangular_object = tr1)
 
     langevitour::langevitour(df_exe[1:(length(df_exe)-1)], lineFrom = tr_from_to_df$from , lineTo = tr_from_to_df$to, group = df_exe$type)
@@ -193,9 +275,9 @@ show_langevitour <- function(df, df_b, df_b_with_center_data, benchmark_value = 
 
   } else if ((is.na(benchmark_value)) && (!(is.na(min_points_threshold)))) {
     df_bin_centroids_filterd <- df_bin_centroids %>%
-      dplyr::filter(Cell_count > min_points_threshold)
+      dplyr::filter(counts > min_points_threshold)
 
-    tr1 <- triangulate_bin_centroids(df_bin_centroids_filterd)
+    tr1 <- triangulate_bin_centroids(df_bin_centroids_filterd, x, y)
     tr_from_to_df <- generate_edge_info(triangular_object = tr1)
 
     langevitour::langevitour(df_exe[1:(length(df_exe)-1)], lineFrom = tr_from_to_df$from , lineTo = tr_from_to_df$to, group = df_exe$type)
