@@ -45,7 +45,6 @@ stat_trimesh <- function(mapping = NULL, data = NULL, geom = GeomTrimesh$default
 #' @importFrom dplyr row_number
 #' @importFrom dplyr bind_rows
 #' @importFrom stats setNames
-#' @importFrom tripack tri.mesh
 #' @importFrom tripack triangles
 #' @importFrom tibble add_row
 

@@ -27,47 +27,79 @@ geom_trimesh <- function(mapping = NULL, data = NULL, stat = "trimesh",
                  params = list(na.rm = na.rm, ...))
 }
 
-#' @importFrom ggplot2 Geom
-#' @importFrom ggplot2 aes
-#' @importFrom ggplot2 ggproto
-#' @importFrom grid grobTree
-#' @importFrom tibble tibble
-#' @importFrom tibble as_tibble
-#' @importFrom dplyr mutate
-#' @importFrom dplyr filter
-#' @importFrom dplyr pull
-#' @importFrom dplyr nth
-#' @importFrom dplyr row_number
-#' @importFrom dplyr bind_rows
-#' @importFrom stats setNames
-#' @importFrom tripack tri.mesh
-#' @importFrom tripack triangles
-#' @importFrom tripack tri.mesh
-#' @importFrom tripack triangles
-#' @importFrom tripack tri.mesh
-#' @importFrom tripack triangles
-#' @importFrom tibble add_row
-
-
-#' GeomTrimesh Custom Geom for trimesh plot
+#' GeomTrimesh: A Custom ggplot2 Geom for Triangular Meshes
 #'
-GeomTrimesh <- ggplot2::ggproto("GeomTrimesh", ggplot2::Geom, required_aes = c("x", "y", "xend", "yend"),
-                                default_aes = ggplot2::aes(shape = 19, linetype = 1, linewidth = 0.5,
-                                                           size = 0.5, alpha = NA, colour = "black"),
+#' This function defines a custom ggplot2 Geom, GeomTrimesh, for rendering triangular meshes.
+#'
+#' @format A ggproto object
+#' @param required_aes A character vector of aesthetics that are required for this geom.
+#' @param default_aes Default aesthetic mappings
+#' @param draw_key A function describing how to draw the key glyph.
+#' @param draw_panel A function describing how to draw the panel.
+#'
+#' @details
+#' - \code{required_aes}: The required aesthetics for this geometry are \code{"x"}, \code{"y"}, \code{"xend"}, and \code{"yend"}.
+#' - \code{default_aes}: The default aesthetics for this geometry include \code{shape = 19}, \code{linetype = 1}, \code{linewidth = 0.5},
+#'   \code{size = 0.5}, \code{alpha = NA}, and \code{colour = "black"}.
+#' - \code{draw_key}: The function describing how to draw the key glyph is \code{ggplot2::draw_key_point}.
+#' - \code{draw_panel}: The function describing how to draw the panel takes \code{data}, \code{panel_scales}, and \code{coord}.
+#'   It creates a tibble of \code{vertices} and a tibble of \code{trimesh}. The final plot is constructed using \code{ggplot2::GeomPoint$draw_panel}
+#'   for vertices and \code{ggplot2::GeomSegment$draw_panel} for trimesh.
+#'
+#' @examples
+#' \dontrun{
+#'   # Example usage in a ggplot
+#'   ggplot(data = my_data, aes(x = x, y = y, xend = xend, yend = yend)) +
+#'     geom_trimesh()
+#' }
+#'
+#' @export
+GeomTrimesh <- ggplot2::ggproto("GeomTrimesh",
+                                ggplot2::Geom,
+                                required_aes = c("x", "y", "xend", "yend"),
+                                default_aes = ggplot2::aes(
+                                  shape = 19,
+                                  linetype = 1,
+                                  linewidth = 0.5,
+                                  size = 0.5,
+                                  alpha = NA,
+                                  colour = "black"
+                                ),
                                 draw_key = ggplot2::draw_key_point,
                                 draw_panel = function(data, panel_scales, coord) {
 
-                                  vertices <- tibble::tibble(x = data$x, y = data$y, colour = data$colour,
-                                                             shape = data$shape, size = rep(2, nrow(data)), fill = rep("black",
-                                                                                                                       nrow(data)), alpha = data$alpha, stroke = 0.5, stringsAsFactors = FALSE)
+                                  vertices <- tibble::tibble(
+                                    x = data$x,
+                                    y = data$y,
+                                    colour = data$colour,
+                                    shape = data$shape,
+                                    size = rep(2, nrow(data)),
+                                    fill = rep("black", nrow(data)),
+                                    alpha = data$alpha,
+                                    stroke = 0.5,
+                                    stringsAsFactors = FALSE
+                                  )
 
-                                  trimesh <- tibble::tibble(x = data$x, xend = data$xend, y = data$y,
-                                                            yend = data$yend, PANEL = data$PANEL, group = data$group, size = data$size,
-                                                            linetype = data$linetype, linewidth = data$linewidth, alpha = data$alpha,
-                                                            colour = data$colour)
+                                  trimesh <- tibble::tibble(
+                                    x = data$x,
+                                    xend = data$xend,
+                                    y = data$y,
+                                    yend = data$yend,
+                                    PANEL = data$PANEL,
+                                    group = data$group,
+                                    size = data$size,
+                                    linetype = data$linetype,
+                                    linewidth = data$linewidth,
+                                    alpha = data$alpha,
+                                    colour = data$colour
+                                  )
 
-                                  ggplot2:::ggname("geom_trimesh", grid::grobTree(ggplot2::GeomPoint$draw_panel(vertices,
-                                                                                                                panel_scales, coord), ggplot2::GeomSegment$draw_panel(trimesh,
-                                                                                                                                                                      panel_scales, coord)))
-                                })
-
+                                  ggplot2:::ggname(
+                                    "geom_trimesh",
+                                    grid::grobTree(
+                                      ggplot2::GeomPoint$draw_panel(vertices, panel_scales, coord),
+                                      ggplot2::GeomSegment$draw_panel(trimesh, panel_scales, coord)
+                                    )
+                                  )
+                                }
+)

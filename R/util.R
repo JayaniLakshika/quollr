@@ -16,10 +16,24 @@
 #' calculate_effective_x_bins(data, x)
 calculate_effective_x_bins <- function(.data, x, cell_area = 1){
 
+  if (any(is.na(.data$x))) {
+    stop("NAs present")
+  }
+
+  if (any(is.infinite(.data$x))) {
+    stop("Inf present")
+  }
+
+  if ((cell_area <= 0) || (is.infinite(cell_area))) {
+    stop("Invalid cell area value")
+
+  }
+
   cell_diameter <- sqrt(2 * cell_area / sqrt(3))
 
   xwidth <- diff(range(.data |>
                          dplyr::pull({{ x }})))
+
   num_bins <- ceiling(xwidth/cell_diameter)
   num_bins
 
@@ -46,8 +60,19 @@ calculate_effective_shape_value <- function(.data, x, y){
     stop("NAs present")
   }
 
+  if (any(is.infinite(.data$x)) || any(is.infinite(.data$y))) {
+    stop("Inf present")
+  }
+
+  if ((length(.data$x) == 1) || (length(.data$y) == 1)) {
+    stop("Presence one observation only")
+
+  }
+
   xwidth <- diff(range(.data |> dplyr::pull({{ x }})))
   yheight <- diff(range(.data |> dplyr::pull({{ y }})))
+
+
   shape <- yheight/xwidth  # Here, yheight is the range of y and xwidth is the range of x
   shape
 }

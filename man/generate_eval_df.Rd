@@ -32,7 +32,8 @@ data <- tibble::tibble(
 prediction_df <- tibble::tibble(
   pred_hb_id = c(1, 2, 1, 3, 2, 3),
   UMAP1 = rnorm(6),
-  UMAP2 = rnorm(6)
+  UMAP2 = rnorm(6),
+  ID = seq_along(c(1, 2, 1, 3, 2, 3))  # Adding an ID column to match data
 )
 df_bin_centroids <- tibble::tibble(
   hexID = 1:3,
@@ -45,8 +46,7 @@ df_bin <- tibble::tibble(
   avg_x2 = rnorm(3)
 )
 num_bins <- 5
-prediction_df <- prediction_df |>
-dplyr::mutate(ID = seq_along(pred_hb_id))
+prediction_df <- prediction_df |> dplyr::mutate(ID = seq_along(pred_hb_id))
 generate_eval_df(data, prediction_df, df_bin_centroids, df_bin, num_bins)
 
 }

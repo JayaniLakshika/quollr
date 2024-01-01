@@ -7,7 +7,7 @@
 #'
 #' @return A data frame with the average values of the high-dimensional data within each hexagonal bin.
 #'
-#' @importFrom dplyr group_by summarise across everything mean select starts_with
+#' @importFrom dplyr group_by summarise across everything select starts_with
 #'
 #' @examples
 #' df <- tibble::tribble(
@@ -80,46 +80,6 @@ compute_weights <- function(nldr_df, hb_object) {
 
 }
 
-
-compute_weights <- function(nldr_df, hb_object) {
-
-  ## To get the average of each bin
-  bin_val_hexagons <- nldr_df |>
-    dplyr::mutate(hb_id = hb_object@cID) |>
-    dplyr::select(-ID) |>
-    dplyr::group_by(hb_id) |>
-    dplyr::summarise(dplyr::across(tidyselect::everything(), mean))
-
-  names(bin_val_hexagons) <- c("hb_id", "avg_umap1", "avg_umap2")
-
-  ## To calculate distances from average point
-
-  umap_with_avg_all <- dplyr::inner_join(bin_val_hexagons , nldr_df |>
-                                           dplyr::mutate(hb_id = hb_object@cID) |>
-                                           dplyr::select(-ID), by = c("hb_id" = "hb_id"))
-
-
-  umap_with_avg_all_split <- umap_with_avg_all |>
-    dplyr::group_by(hb_id) |>
-    dplyr::group_split()
-
-  vec <- stats::setNames(1:6, c("hb_id", "avg_umap1", "avg_umap2", "UMAP1", "UMAP2", "distance"))
-  weight_df <- dplyr::bind_rows(vec)[0, ]
-
-  for(i in 1:length(umap_with_avg_all_split)){
-
-    weighted_mean_df <- umap_with_avg_all_split[[i]] |> ## These are the weights for weighted mean
-      cal_2D_dist_umap()
-
-    weight_df <- dplyr::bind_rows(weight_df, weighted_mean_df)
-
-  }
-
-  return(weight_df)
-
-}
-
-
 #' Find Benchmark Value
 #'
 #' This function finds the benchmark value to remove long edges based on the differences in a distance column.
@@ -129,8 +89,8 @@ compute_weights <- function(nldr_df, hb_object) {
 #'
 #' @return The benchmark value, which is the first largest difference in the distance column.
 #'
-#' @importFrom dplyr mutate across arrange pull nth
-#' @importFrom tibble tibble bind_cols
+#' @importFrom dplyr mutate across arrange pull nth bind_cols
+#' @importFrom tibble tibble
 #'
 #' @examples
 #' df <- tibble::tribble(

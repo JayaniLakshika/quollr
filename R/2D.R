@@ -8,12 +8,13 @@
 #' @export
 #'
 #' @importFrom hexbin hexbin
-#' @importFrom dplyr pull as_tibble
+#' @importFrom dplyr pull
+#' @importFrom tibble as_tibble
 #' @importFrom utils globalVariables
 #'
 #' @examples
 #' # Example usage of extract_hexbin_centroids function
-#' nldr_df <- tibble::tibble(UMAP1 = rnorm(100), UMAP2 = rnorm(100))
+#' nldr_df <- tibble::tibble(ID = 1:100, UMAP1 = rnorm(100), UMAP2 = rnorm(100))
 #' num_bins <- 20
 #' shape_val <- 0.8
 #' result <- extract_hexbin_centroids(nldr_df, num_bins, shape_val)
@@ -24,14 +25,14 @@
 #'
 #'
 #' @rdname extract_hexbin_centroids
-extract_hexbin_centroids <- function(nldr_df, num_bins, shape_val) {
+extract_hexbin_centroids <- function(nldr_df, num_bins, shape_val = 1, x = UMAP1, y = UMAP2) {
 
-  hb_data <- hexbin::hexbin(x = nldr_df |> dplyr::pull(UMAP1),
-                            y = nldr_df |> dplyr::pull(UMAP2),
+  hb_data <- hexbin::hexbin(x = nldr_df |> dplyr::pull({{ x }}),
+                            y = nldr_df |> dplyr::pull({{ y }}),
                             xbins = num_bins, IDs = TRUE,
                             shape = shape_val)
 
-  hexdf_data <- tibble::tibble(tibble::as_tibble(hexbin::hcell2xy(hb_data)),  hexID = hb_data@cell, std_counts = hb_data@count/max(hb_data@count))
+  hexdf_data <- tibble::tibble(tibble::as_tibble(hexbin::hcell2xy(hb_data)),  hexID = hb_data@cell, counts = hb_data@count, std_counts = hb_data@count/max(hb_data@count))
 
   return(list(hexdf_data = hexdf_data, hb_data = hb_data))
 }
@@ -47,12 +48,13 @@ extract_hexbin_centroids <- function(nldr_df, num_bins, shape_val) {
 #' @export
 #'
 #' @importFrom hexbin hexbin
-#' @importFrom dplyr pull as_tibble
+#' @importFrom dplyr pull
+#' @importFrom tibble as_tibble
 #' @importFrom utils globalVariables
 #'
 #' @examples
 #' # Example usage of extract_hexbin_centroids function
-#' nldr_df <- tibble::tibble(UMAP1 = rnorm(100), UMAP2 = rnorm(100))
+#' nldr_df <- tibble::tibble(ID = 1:100, UMAP1 = rnorm(100), UMAP2 = rnorm(100))
 #' num_bins <- 20
 #' shape_val <- 0.8
 #' result <- extract_hexbin_mean(nldr_df, num_bins, shape_val)
@@ -63,10 +65,10 @@ extract_hexbin_centroids <- function(nldr_df, num_bins, shape_val) {
 #'
 #'
 #' @rdname extract_hexbin_mean
-extract_hexbin_mean <- function(nldr_df, num_bins, shape_val) {
+extract_hexbin_mean <- function(nldr_df, num_bins, shape_val = 1, x = UMAP1, y = UMAP2) {
 
-  hb_data <- hexbin::hexbin(x = nldr_df |> dplyr::pull(UMAP1),
-                            y = nldr_df |> dplyr::pull(UMAP2),
+  hb_data <- hexbin::hexbin(x = nldr_df |> dplyr::pull({{ x }}),
+                            y = nldr_df |> dplyr::pull({{ y }}),
                             xbins = num_bins, IDs = TRUE,
                             shape = shape_val)
 
@@ -79,7 +81,7 @@ extract_hexbin_mean <- function(nldr_df, num_bins, shape_val) {
   names(df_cell_data) <- c("hexID", "x", "y")
 
 
-  hexdf_data <- tibble::tibble(df_cell_data, counts = hb_data@count)
+  hexdf_data <- tibble::tibble(df_cell_data, counts = hb_data@count, std_counts = hb_data@count/max(hb_data@count))
 
   return(list(hexdf_data = hexdf_data, hb_data = hb_data))
 }
@@ -212,7 +214,6 @@ cal_2D_dist <- function(.data) {
 #' @importFrom ggplot2 ggplot geom_segment geom_point coord_equal scale_colour_manual
 #' @importFrom stats setNames
 #' @importFrom tibble tibble as_tibble
-#' @importFrom merge merge
 #'
 #' @examples
 #' df <- tibble::tribble(
@@ -271,7 +272,7 @@ colour_long_edges <- function(.data, benchmark_value, triangular_object, distanc
 #'
 #' @return A ggplot object with the triangular mesh plot where long edges are removed.
 #'
-#' @importFrom dplyr filter merge
+#' @importFrom dplyr filter
 #' @importFrom ggplot2 ggplot geom_segment geom_point coord_equal labs
 #' @importFrom tibble tibble
 #' @importFrom stats setNames
@@ -317,14 +318,13 @@ remove_long_edges <- function(.data, benchmark_value, triangular_object,
 #'
 #' This function generates the coordinates of hexagons after passing hexagonal centroids.
 #'
-#' @param hexdf_data The dataset with hexbin ID and centroid coordinates.
+#' @param hexdf_data The dataset with all hexbin ID and centroid coordinates.
 #'
 #' @return A tibble containing the coordinates of hexagons based on hexagonal centroids.
 #'
 #' @importFrom ggplot2 resolution
 #' @importFrom tibble as_tibble
 #' @importFrom hexbin hexcoords
-#' @importFrom dplyr rep.int
 #'
 #' @examples
 #' hexdf_data <- tibble::tibble(
@@ -363,7 +363,6 @@ full_hex_grid <- function(hexdf_data){
 #'
 #' @importFrom ggplot2 resolution
 #' @importFrom tibble as_tibble
-#' @importFrom expand.grid expand.grid
 #' @importFrom dplyr bind_rows
 #'
 #' @examples
@@ -385,5 +384,198 @@ generate_full_grid_centroids <- function(hexdf_data){
 
   return(full_centroids)
 
+
+}
+
+
+#' Map HexID to Hexbin Centroids in the Full Grid
+#'
+#' This function maps the HexID to the hexbin centroids in the full grid, creating a data frame that includes the coordinates and standardized counts.
+#'
+#' @param full_centroid_df A data frame containing the full grid centroids.
+#' @param df_bin_centroids A data frame containing the hexbin centroids.
+#'
+#' @return A data frame with HexID, centroid coordinates, and standardized counts.
+#'
+#' @importFrom dplyr bind_rows mutate_if filter arrange full_join select rename
+#'
+#' @examples
+#' full_centroid_df <- tibble::tibble(x = c(1, 2, 3), y = c(4, 5, 6))
+#' df_bin_centroids <- tibble::tibble(hexID = c(1, 2, 3), x = c(1.5, 2.5, 3.5), y = c(4.5, 5.5, 6.5), counts = c(10, 15, 5))
+#' map_hexbin_id(full_centroid_df, df_bin_centroids)
+#'
+#' @export
+map_hexbin_id <- function(full_centroid_df, df_bin_centroids) {
+
+  vec1 <- stats::setNames(rep("", 2), c("x", "y"))  ## Define column names
+
+  full_grid_with_hexbin_id <- dplyr::bind_rows(vec1)[0, ]
+  full_grid_with_hexbin_id <- full_grid_with_hexbin_id |>
+    dplyr::mutate_if(is.character, as.numeric)
+
+  for(i in 1:length(sort(unique(full_centroid_df$y)))) {
+
+    ## Filter the data set with a specific y value
+    specific_y_val_df <- full_centroid_df |>
+      dplyr::filter(y == sort(unique(full_centroid_df$y))[i])
+
+    ordered_x_df <- specific_y_val_df |>
+      dplyr::arrange(x)
+
+    full_grid_with_hexbin_id <- dplyr::bind_rows(full_grid_with_hexbin_id, ordered_x_df)
+  }
+
+  full_grid_with_hexbin_id <- full_grid_with_hexbin_id |>
+    dplyr::mutate(hexID = row_number())
+
+  full_grid_with_hexbin_id <- full_grid_with_hexbin_id |>
+    dplyr::rename("c_x" = "x",
+                  "c_y" = "y")
+
+  full_grid_with_hexbin_id <- dplyr::full_join(full_grid_with_hexbin_id, df_bin_centroids, by = c("hexID" = "hexID")) |>
+    dplyr::select(-c(x, y))
+
+  full_grid_with_hexbin_id <- full_grid_with_hexbin_id |>
+    dplyr::mutate(std_counts = counts/max(counts, na.rm = TRUE))
+
+  return(full_grid_with_hexbin_id)
+}
+
+
+
+#' Map Polygon ID to Hexagon Coordinates
+#'
+#' This function maps polygon IDs to the corresponding hexagon coordinates in the full grid.
+#'
+#' @param full_grid_with_hexbin_id A data frame containing hexagon IDs, centroids, and standardized counts.
+#' @param hex_grid A data frame containing all coordinates of hexagons.
+#'
+#' @return A data frame with hexagon information along with mapped polygon IDs.
+#'
+#' @importFrom dplyr filter mutate bind_rows
+#'
+#' @examples
+#' full_grid_with_hexbin_id <- tibble::tibble(hexID = c(1, 2, 1, 3, 2, 3),
+#'                                            c_x = c(1.5, 2.5, 1.5, 3.5, 2.5, 3.5),
+#'                                            c_y = c(4.5, 5.5, 4.5, 6.5, 5.5, 6.5),
+#'                                            std_counts = c(0.5, 0.75, 0.25, 1, 0.5, 1))
+#' hex_grid <- tibble::tibble(id = c(1, 2, 3), x = c(1, 2, 3), y = c(4, 5, 6))
+#' map_polygon_id(full_grid_with_hexbin_id, hex_grid)
+#'
+#' @export
+map_polygon_id <- function(full_grid_with_hexbin_id, hex_grid) {
+
+  full_grid_with_polygon_id <- data.frame(matrix(ncol = 0, nrow = 0))
+
+  for (i in 1:length(unique(full_grid_with_hexbin_id$hexID))) {
+
+    full_grid_with_hexbin_id_filtered <- full_grid_with_hexbin_id |>
+      dplyr::filter(hexID == unique(full_grid_with_hexbin_id$hexID)[i])
+
+    for (j in 1:length(unique(hex_grid$id))) {
+
+      hex_grid_filtered <- hex_grid |>
+        dplyr::filter(id == unique(hex_grid$id)[j])
+
+      status_in_x_range <- dplyr::between(full_grid_with_hexbin_id_filtered$c_x, min(hex_grid_filtered$x), max(hex_grid_filtered$x))
+      status_in_y_range <- dplyr::between(full_grid_with_hexbin_id_filtered$c_y, min(hex_grid_filtered$y), max(hex_grid_filtered$y))
+
+      if (any(status_in_x_range) & any(status_in_y_range)) {
+
+        full_grid_with_hexbin_id_filtered <- full_grid_with_hexbin_id_filtered |>
+          dplyr::mutate(polygon_id = j)
+
+        full_grid_with_polygon_id <- dplyr::bind_rows(full_grid_with_polygon_id, full_grid_with_hexbin_id_filtered)
+      }
+    }
+  }
+
+  return(full_grid_with_polygon_id)
+}
+
+
+#' Generate Full Grid Information Data Frame
+#'
+#' This function generates a data frame containing coordinates and identifiers for hexagons,
+#' along with additional information like counts and polygon IDs.
+#'
+#' @param df_bin_centroids A data frame with hexagonal bin centroids.
+#'
+#' @return A data frame with columns "x", "y", "id", "c_x", "c_y", "hexID", "counts", "std_counts", and "polygon_id".
+#'
+#' @importFrom dplyr slice arrange bind_cols
+#'
+#' @examples
+#' df_bin_centroids <- tibble::tibble(
+#'   hexID = c(1, 2, 3),
+#'   x = c(1.5, 2.5, 3.5),
+#'   y = c(4.5, 5.5, 6.5)
+#' )
+#' generate_full_grid_info(df_bin_centroids)
+#'
+#' @export
+generate_full_grid_info <- function(df_bin_centroids) {
+
+  full_centroid_df <- generate_full_grid_centroids(df_bin_centroids)
+
+  full_grid_with_hexbin_id <- map_hexbin_id(full_centroid_df, df_bin_centroids)
+
+  ## Generate all coordinates of hexagons
+  hex_grid <- full_hex_grid(full_centroid_df)
+
+  full_grid_with_polygon_id_df <- map_polygon_id(full_grid_with_hexbin_id, hex_grid)
+
+  full_grid_with_hexbin_id_rep <- full_grid_with_polygon_id_df |>
+    dplyr::slice(rep(1:n(), each = 6)) |>
+    dplyr::arrange(polygon_id)
+
+  hex_full_count_df <- dplyr::bind_cols(hex_grid, full_grid_with_hexbin_id_rep)
+
+  return(hex_full_count_df)
+
+}
+
+
+#' Find Points in Hexagonal Bins
+#'
+#' This function maps points to their corresponding hexagonal bins based on the provided data frames.
+#'
+#' @param full_grid_with_hexbin_id A data frame with hexagonal bin IDs and coordinates.
+#' @param UMAP_data_with_hb_id A data frame with UMAP data and hexagonal bin IDs.
+#'
+#' @return A data frame with hexagonal bin IDs and the corresponding points.
+#'
+#' @examples
+#' full_grid_with_hexbin_id <- tibble::tibble(
+#'   hexID = c(1, 2, 3),
+#'   c_x = c(1.5, 2.5, 3.5),
+#'   c_y = c(4.5, 5.5, 6.5)
+#' )
+#' UMAP_data_with_hb_id <- tibble::tibble(
+#'   ID = 101:110,
+#'   UMAP1 = rnorm(10),
+#'   UMAP2 = rnorm(10),
+#'   hb_id = sample(c(1, 2, 3), 10, replace = TRUE)
+#' )
+#' find_pts_in_hexbins(full_grid_with_hexbin_id, UMAP_data_with_hb_id)
+#'
+#' @export
+find_pts_in_hexbins <- function(full_grid_with_hexbin_id, UMAP_data_with_hb_id) {
+
+  pts_df <- data.frame(matrix(ncol = 0, nrow = 0))
+
+  for (i in 1:length(UMAP_data_with_hb_id$hb_id)) {
+
+    pts_vec <- UMAP_data_with_hb_id |>
+      dplyr::filter(hb_id == UMAP_data_with_hb_id$hb_id[i]) |>
+      dplyr::pull(ID)
+
+    hb_pts <- tibble::tibble(hexID = UMAP_data_with_hb_id$hb_id[i], pts = list(pts_vec))
+
+    pts_df <- dplyr::bind_rows(pts_df, hb_pts)
+
+  }
+
+  return(pts_df)
 
 }

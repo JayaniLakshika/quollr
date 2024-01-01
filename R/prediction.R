@@ -100,7 +100,7 @@ predict_hex_id <- function(training_data, nldr_df, nldr_df_test, num_bins, shape
 #'
 #' @return A tibble containing evaluation metrics based on the provided inputs.
 #'
-#' @importFrom dplyr select inner_join left_join mutate rowSums pick starts_with
+#' @importFrom dplyr select inner_join left_join mutate pick starts_with
 #' @importFrom tibble tibble
 #'
 #' @examples
@@ -112,7 +112,8 @@ predict_hex_id <- function(training_data, nldr_df, nldr_df_test, num_bins, shape
 #' prediction_df <- tibble::tibble(
 #'   pred_hb_id = c(1, 2, 1, 3, 2, 3),
 #'   UMAP1 = rnorm(6),
-#'   UMAP2 = rnorm(6)
+#'   UMAP2 = rnorm(6),
+#'   ID = seq_along(c(1, 2, 1, 3, 2, 3))  # Adding an ID column to match data
 #' )
 #' df_bin_centroids <- tibble::tibble(
 #'   hexID = 1:3,
@@ -125,12 +126,12 @@ predict_hex_id <- function(training_data, nldr_df, nldr_df_test, num_bins, shape
 #'   avg_x2 = rnorm(3)
 #' )
 #' num_bins <- 5
-#' prediction_df <- prediction_df |>
-#' dplyr::mutate(ID = seq_along(pred_hb_id))
+#' prediction_df <- prediction_df |> dplyr::mutate(ID = seq_along(pred_hb_id))
 #' generate_eval_df(data, prediction_df, df_bin_centroids, df_bin, num_bins)
 #'
 #' @export
 generate_eval_df <- function(data, prediction_df, df_bin_centroids, df_bin, num_bins) {
+
 
   ## Generate all possible bin centroids in the full grid
   full_centroid_df <- generate_full_grid_centroids(df_bin_centroids)
@@ -159,20 +160,9 @@ generate_eval_df <- function(data, prediction_df, df_bin_centroids, df_bin, num_
   prediction_df <- prediction_df |>
     dplyr::mutate(total = rowSums(dplyr::pick(tidyselect::starts_with("error_square_x"))))
 
-  prediction_df <- prediction_df |>
-    dplyr::mutate(
-      aic = compute_aic((NCOL(df_bin) - 1), prediction_df$total, NROW(full_centroid_df), NROW(prediction_df)),
-      method2 = prediction_df$total * NROW(full_centroid_df)/NROW(prediction_df),
-      method3 = prediction_df$total /NROW(full_centroid_df)
 
-    )
-
-  total_error <- sum(prediction_df$aic)
-  totol_error_method_2 <- sum(prediction_df$method2)
-  totol_error_method_3 <- sum(prediction_df$method3)
-
-
-  eval_df <- tibble::tibble(number_of_bins = num_bins, number_of_observations = NROW(prediction_df), total_error = total_error, totol_error_method_2 = totol_error_method_2, totol_error_method_3 = totol_error_method_3)
+  #number_of_bins: Total number of bins with empty bins
+  eval_df <- tibble::tibble(number_of_bins = NROW(full_centroid_df), number_of_observations = NROW(prediction_df), total_error = compute_aic((NCOL(df_bin) - 1), prediction_df$total, NROW(full_centroid_df), NROW(prediction_df)), totol_error_method_2 = prediction_df$total * NROW(full_centroid_df)/NROW(prediction_df), totol_error_method_3 = prediction_df$total /NROW(full_centroid_df), total_mse = mean(prediction_df$total)/(NCOL(df_bin) - 1))
 
   return(eval_df)
 

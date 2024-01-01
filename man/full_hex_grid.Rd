@@ -7,7 +7,7 @@
 full_hex_grid(hexdf_data)
 }
 \arguments{
-\item{hexdf_data}{The dataset with hexbin ID and centroid coordinates.}
+\item{hexdf_data}{The dataset with all hexbin ID and centroid coordinates.}
 }
 \value{
 A tibble containing the coordinates of hexagons based on hexagonal centroids.

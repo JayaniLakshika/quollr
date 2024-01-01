@@ -105,9 +105,9 @@ df_bin_centroids |>
   head() |>
   DT::datatable()
 
-ggplot(df_bin_centroids, aes(x = x, y = y, label = hexID)) +
-  geom_text() +
-  coord_equal()
+# ggplot(df_bin_centroids, aes(x = x, y = y, label = hexID)) +
+#   geom_text() +
+#   coord_equal()
 
 ## Data set with all possible centroids in the hexagonal grid
 
@@ -128,46 +128,29 @@ ggplot(data = hex_grid, aes(x = x, y = y)) + geom_polygon(fill = "white", color 
   geom_point(data = full_centroid_df, aes(x = x, y = y), color = "black") +
   geom_point(data = df_bin_centroids, aes(x = x, y = y), color = "red")
 
-ggplot(data = hex_grid, aes(x = x, y = y)) + geom_polygon(fill = "white", color = "black", aes(group = id)) + geom_text(data = df_bin_centroids, aes(x = x, y = y, label = hexID))
-
-
-hexdf_data_c <- df_bin_centroids |>
-  rename("c_x" = "x",
-         "c_y" = "y")
-
-hex_full_count_df <- full_join(hex_grid, hexdf_data_c, by = c("id" = "hexID")) |>
-  dplyr::mutate(std_counts = tidyr::replace_na(std_counts, 0))
+hex_full_count_df <- generate_full_grid_info(df_bin_centroids)
 
 ggplot(data = hex_full_count_df, aes(x = x, y = y)) +
-  geom_polygon(color = "black", aes(group = id, fill = std_counts)) +
-  scale_fill_viridis_c(direction = -1)
+  geom_polygon(color = "black", aes(group = polygon_id, fill = std_counts)) +
+  geom_text(aes(x = c_x, y = c_y, label = hexID)) +
+  scale_fill_viridis_c(direction = -1, na.value = "#ffffff")
 
 ## Add hexbin Id to 2D embeddings
 UMAP_data_with_hb_id <- UMAP_data |>
   mutate(hb_id = hexbin_data_object$hb_data@cID)
 
 ## To generate data set with point info
+full_grid_with_hexbin_id <- map_hexbin_id(full_centroid_df, df_bin_centroids)
 
-pts_df <- data.frame(matrix(ncol = 0, nrow = 0))
+pts_df <- find_pts_in_hexbins(full_grid_with_hexbin_id, UMAP_data_with_hb_id)
 
-for (i in 1:length(UMAP_data_with_hb_id$hb_id)) {
-
-  pts_vec <- UMAP_data_with_hb_id |>
-    dplyr::filter(hb_id == UMAP_data_with_hb_id$hb_id[i]) |>
-    dplyr::pull(ID)
-
-  hb_pts <- tibble::tibble(hexID = UMAP_data_with_hb_id$hb_id[i], pts = list(pts_vec))
-
-  pts_df <- dplyr::bind_rows(pts_df, hb_pts)
-
-}
-
-pts_df <- dplyr:inner_join(df_bin_centroids, pts_df, by = c("hexID" = "hexID")) |>
-  dplyr::distinct()
+pts_df <- dplyr::full_join(full_grid_with_hexbin_id, pts_df, by = c("hexID" = "hexID")) |>
+  distinct()
 
 pts_df |>
   head() |>
-  DT::datatable()
+  datatable()
+
 
 ## To generate a data set with high-D and 2D training data
 df_all <- training_data |> dplyr::select(-ID) |>
@@ -230,7 +213,7 @@ trimesh <- trimesh +
 
 trimesh
 
-## To find the benchmark value
+## To find the benchmark value to remove long edges
 
 benchmark <- find_benchmark_value(.data = distance, distance_col = distance)
 benchmark
@@ -268,9 +251,9 @@ tour1
 shape_value <- calculate_effective_shape_value(.data = UMAP_data,
                                                x = UMAP1, y = UMAP2)
 
-num_bins_vec <- append(sample(1:50, 40), num_bins_x)
+num_bins_vec <- 1:10 ## Number of bins along the x-axis
 
-vec <- stats::setNames(rep("", 5), c("number_of_bins", "number_of_observations", "total_error", "totol_error_method_2", "totol_error_method_3"))  ## Define column names
+vec <- stats::setNames(rep("", 6), c("number_of_bins", "number_of_observations", "total_error", "totol_error_method_2", "totol_error_method_3", "total_mse"))  ## Define column names
 
 eval_data_test <- dplyr::bind_rows(vec)[0, ]
 eval_data_test <- eval_data_test |>
@@ -313,34 +296,28 @@ eval_data_test <- eval_data_test |>
 MSE_df <- dplyr::bind_rows(eval_data_training, eval_data_test)
 
 ## To draw with AIC
+ggplot(MSE_df |> dplyr::filter(data_type == "training"), aes(x = number_of_bins,
+                                                             y = total_error,
+                                                             color = data_type
+)) +
+  geom_point() +
+  geom_line() +
+  #geom_vline(xintercept = NROW(full_grid_with_hexbin_id)) +
+  #annotate("text", x= (NROW(full_grid_with_hexbin_id) - 10), y=-5000, label=paste0("effective number of bins = ", as.character(NROW(full_grid_with_hexbin_id))), angle=90) +
+  scale_fill_manual(values = c("#1b9e77", "#d95f02")) +
+  ylab("AIC") +
+  xlab("Total number of bins")
+## Effective number of bins along x-axis
+
 ggplot(MSE_df, aes(x = number_of_bins,
-                   y = total_error,
+                   y = total_mse,
                    color = data_type
 )) +
   geom_point() +
-  geom_smooth(method = "loess", se = FALSE) +
-  geom_vline(xintercept = num_bins_x) +
+  geom_line() +
+  # geom_vline(xintercept = NROW(full_grid_with_hexbin_id)) +
+  # annotate("text", x= (NROW(full_grid_with_hexbin_id) - 10), y=0.25, label=paste0("effective number of bins = ", as.character(NROW(full_grid_with_hexbin_id))), angle=90) +
   scale_fill_manual(values = c("#1b9e77", "#d95f02")) +
-  ylab("AIC")
-
-
-ggplot(MSE_df, aes(x = number_of_bins,
-                   y = totol_error_method_2,
-                   color = data_type
-)) +
-  geom_point() +
-  geom_smooth(method = "loess", se = FALSE) +
-  geom_vline(xintercept = num_bins_x) +
-  scale_fill_manual(values = c("#1b9e77", "#d95f02")) +
-  ylab("Method 2")
-
-ggplot(MSE_df, aes(x = number_of_bins,
-                   y = totol_error_method_3,
-                   color = data_type
-)) +
-  geom_point() +
-  geom_smooth(method = "loess", se = FALSE) +
-  geom_vline(xintercept = num_bins_x) +
-  scale_fill_manual(values = c("#1b9e77", "#d95f02")) +
-  ylab("Method 3")
+  ylab("MSE") +
+  xlab("Total number of bins")
 
