@@ -135,6 +135,87 @@ ggplot(data = hex_full_count_df, aes(x = x, y = y)) +
   geom_text(aes(x = c_x, y = c_y, label = hexID)) +
   scale_fill_viridis_c(direction = -1, na.value = "#ffffff")
 
+
+## To identify low-density hexagons
+df_bin_centroids_coordinates <- df_bin_centroids
+df_bin_centroids_coordinates <- df_bin_centroids_coordinates |>
+  dplyr::mutate(ID = row_number())
+remove_bins <- c()
+keep_bins <- c()
+mean_density_vec <- c()
+
+for (i in 1:length(df_bin_centroids$hexID)) {
+
+  df_bin_centroids_coordinates_spec_bin <- df_bin_centroids_coordinates |>
+    filter(hexID == df_bin_centroids$hexID[i])
+
+  available_near_check <- df_bin_centroids_coordinates |>
+    dplyr::filter((hexID == (df_bin_centroids$hexID[i] + 1)) | (hexID == (df_bin_centroids$hexID[i] - 1))) |>
+    head(1)
+
+  if (NROW(available_near_check) == 0) { #If the two sides of the hexgons to the specific hexagon is empty at all
+
+    df_bin_centroids_coordinates_spec_bin_near1 <- df_bin_centroids_coordinates |>
+      filter((hexID == (df_bin_centroids$hexID[i] + (num_bins_x + 1))) | (hexID == (df_bin_centroids$hexID[i] + num_bins_x))) |>
+      head(1)
+
+  } else {
+
+    df_bin_centroids_coordinates_spec_bin_near1 <- df_bin_centroids_coordinates |>
+      filter((hexID == (df_bin_centroids$hexID[i] + 1)) | (hexID == (df_bin_centroids$hexID[i] - 1))) |>
+      head(1)
+
+  }
+
+  near_df_1 <- dplyr::bind_rows(df_bin_centroids_coordinates_spec_bin, df_bin_centroids_coordinates_spec_bin_near1)
+
+  start <- unlist(near_df_1[1, c("x","y")])
+  end <- unlist(near_df_1[2, c("x","y")])
+  nearest_dist <- sqrt(sum((start - end)^2)) # Distance to nearest centroid
+
+  df_bin_centroids_coordinates$distance <- lapply(seq(nrow(df_bin_centroids_coordinates)), function(x) {
+    start <- unlist(df_bin_centroids_coordinates[(df_bin_centroids_coordinates_spec_bin |> pull(ID)), c("x","y")])
+    end <- unlist(df_bin_centroids_coordinates[x, c("x","y")])
+    sqrt(sum((start - end)^2))})
+
+  df_bin_centroids_coordinates <- df_bin_centroids_coordinates %>%
+    dplyr::select(names(df_bin_centroids_coordinates), "distance")
+
+  df_bin_centroids_coordinates$distance <- round(unlist(df_bin_centroids_coordinates$distance), 7)
+
+  neighbor_df <- df_bin_centroids_coordinates |>
+    filter(distance == round(nearest_dist, 7)) #identify neighbors
+
+  mean_density <- neighbor_df |>
+    pull(std_counts) |>
+    sum()/6 ## The reason to take the mean is to check the density in a considerable amount
+
+  mean_density_vec <- append(mean_density_vec, mean_density)
+
+  bin_ID <- df_bin_centroids_coordinates_spec_bin |>
+    pull(hexID)
+
+  if(mean_density < 0.05){ # remove
+    remove_bins <- append(remove_bins, bin_ID)
+
+
+  } else { # keep bins
+
+    keep_bins <- append(keep_bins, bin_ID)
+
+  }
+
+}
+
+a <- df_bin_centroids_coordinates |>
+  dplyr::mutate(mean_density = mean_density_vec)
+
+ggplot(a, aes(x = reorder(as.factor(hexID), -mean_density), y = mean_density)) + geom_point()
+
+df_bin_centroids <- df_bin_centroids |>
+  filter((hexID %in% keep_bins) & (!(hexID %in% remove_bins)))
+
+
 ## Add hexbin Id to 2D embeddings
 UMAP_data_with_hb_id <- UMAP_data |>
   mutate(hb_id = hexbin_data_object$hb_data@cID)

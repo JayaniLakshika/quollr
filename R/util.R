@@ -14,7 +14,7 @@
 #' @examples
 #' data <- tibble::tibble(x = rnorm(300), y = rnorm(300))
 #' calculate_effective_x_bins(data, x)
-calculate_effective_x_bins <- function(.data, x, cell_area = 1){
+calculate_effective_x_bins <- function(.data, x = UMAP1, cell_area = 1){
 
   if (any(is.na(.data$x))) {
     stop("NAs present")
@@ -54,7 +54,7 @@ calculate_effective_x_bins <- function(.data, x, cell_area = 1){
 #' @examples
 #' data <- tibble::tibble(x = rnorm(300), y = rnorm(300))
 #' calculate_effective_shape_value(data, x, y)
-calculate_effective_shape_value <- function(.data, x, y){
+calculate_effective_shape_value <- function(.data, x = UMAP1, y = UMAP2){
 
   if (any(is.na(.data$x)) || any(is.na(.data$y))) {
     stop("NAs present")
