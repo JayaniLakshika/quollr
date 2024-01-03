@@ -18,11 +18,14 @@ A data frame with hexagon information along with mapped polygon IDs.
 This function maps polygon IDs to the corresponding hexagon coordinates in the full grid.
 }
 \examples{
-full_grid_with_hexbin_id <- tibble::tibble(hexID = c(1, 2, 1, 3, 2, 3),
-                                           c_x = c(1.5, 2.5, 1.5, 3.5, 2.5, 3.5),
-                                           c_y = c(4.5, 5.5, 4.5, 6.5, 5.5, 6.5),
-                                           std_counts = c(0.5, 0.75, 0.25, 1, 0.5, 1))
-hex_grid <- tibble::tibble(id = c(1, 2, 3), x = c(1, 2, 3), y = c(4, 5, 6))
+nldr_df <- readRDS(paste0(here::here(), "/quollr/data-raw/s_curve_noise_umap.rds"))
+num_bins <- 8
+shape_val <- 2.031141
+hexbin_data_object <- extract_hexbin_mean(nldr_df, num_bins, shape_val)
+df_bin_centroids <- hexbin_data_object$hexdf_data
+full_centroid_df <- generate_full_grid_centroids(df_bin_centroids)
+hex_grid <- full_hex_grid(full_centroid_df)
+full_grid_with_hexbin_id <- map_hexbin_id(full_centroid_df, df_bin_centroids)
 map_polygon_id(full_grid_with_hexbin_id, hex_grid)
 
 }

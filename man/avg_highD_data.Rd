@@ -18,12 +18,14 @@ A data frame with the average values of the high-dimensional data within each he
 This function calculates the average values of high-dimensional data within each hexagonal bin.
 }
 \examples{
-df <- tibble::tribble(
-  ~x1, ~x2, ~x3, ~hb_id,
-  1, 2, 3, 1,
-  4, 5, 6, 2,
-  7, 8, 9, 1
-)
-avg_highD_data(df)
+nldr_df <- readRDS(paste0(here::here(), "/quollr/data-raw/s_curve_noise_umap.rds"))
+training_data <- readRDS(paste0(here::here(), "/quollr/data-raw/s_curve_noise_training.rds"))
+num_bins <- 8
+shape_val <- 2.031141
+hexbin_data_object <- extract_hexbin_mean(nldr_df, num_bins, shape_val)
+df_bin_centroids <- hexbin_data_object$hexdf_data
+UMAP_data_with_hb_id <- nldr_df |> dplyr::mutate(hb_id = hexbin_data_object$hb_data@cID)
+df_all <- dplyr::bind_cols(training_data |> dplyr::select(-ID), UMAP_data_with_hb_id)
+avg_highD_data(df_all)
 
 }

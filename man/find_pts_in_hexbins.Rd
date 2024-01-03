@@ -18,17 +18,15 @@ A data frame with hexagonal bin IDs and the corresponding points.
 This function maps points to their corresponding hexagonal bins based on the provided data frames.
 }
 \examples{
-full_grid_with_hexbin_id <- tibble::tibble(
-  hexID = c(1, 2, 3),
-  c_x = c(1.5, 2.5, 3.5),
-  c_y = c(4.5, 5.5, 6.5)
-)
-UMAP_data_with_hb_id <- tibble::tibble(
-  ID = 101:110,
-  UMAP1 = rnorm(10),
-  UMAP2 = rnorm(10),
-  hb_id = sample(c(1, 2, 3), 10, replace = TRUE)
-)
+nldr_df <- readRDS(paste0(here::here(), "/quollr/data-raw/s_curve_noise_umap.rds"))
+num_bins <- 8
+shape_val <- 2.031141
+hexbin_data_object <- extract_hexbin_mean(nldr_df, num_bins, shape_val)
+df_bin_centroids <- hexbin_data_object$hexdf_data
+full_centroid_df <- generate_full_grid_centroids(df_bin_centroids)
+hex_grid <- full_hex_grid(full_centroid_df)
+full_grid_with_hexbin_id <- map_hexbin_id(full_centroid_df, df_bin_centroids)
+UMAP_data_with_hb_id <- nldr_df |> dplyr::mutate(hb_id = hexbin_data_object$hb_data@cID)
 find_pts_in_hexbins(full_grid_with_hexbin_id, UMAP_data_with_hb_id)
 
 }

@@ -16,10 +16,12 @@ A tibble containing the coordinates of hexagons based on hexagonal centroids.
 This function generates the coordinates of hexagons after passing hexagonal centroids.
 }
 \examples{
-hexdf_data <- tibble::tibble(
-  x = c(0, 1, 0.5),
-  y = c(0, 0, 1)
-)
-full_hex_grid(hexdf_data)
+nldr_df <- readRDS(paste0(here::here(), "/quollr/data-raw/s_curve_noise_umap.rds"))
+num_bins <- 8
+shape_val <- 2.031141
+hexbin_data_object <- extract_hexbin_mean(nldr_df, num_bins, shape_val)
+df_bin_centroids <- hexbin_data_object$hexdf_data
+full_centroid_df <- generate_full_grid_centroids(df_bin_centroids)
+full_hex_grid(full_centroid_df)
 
 }

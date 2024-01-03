@@ -16,7 +16,12 @@ A data frame containing the edge information, including the from-to relationship
 This function generates edge information from a given triangular object, including the coordinates of the vertices and the from-to relationships between the vertices.
 }
 \examples{
-tr_obj <- tripack::tri.mesh(x = c(1, 2, 3), y = c(4, 5, 6))
-generate_edge_info(tr_obj)
+nldr_df <- readRDS(paste0(here::here(), "/quollr/data-raw/s_curve_noise_umap.rds"))
+num_bins <- 8
+shape_val <- 2.031141
+hexbin_data_object <- extract_hexbin_mean(nldr_df, num_bins, shape_val)
+df_bin_centroids <- hexbin_data_object$hexdf_data
+tr1_object <- triangulate_bin_centroids(df_bin_centroids, x, y)
+generate_edge_info(triangular_object = tr1_object)
 
 }

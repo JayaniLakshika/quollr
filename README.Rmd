@@ -27,8 +27,9 @@ The package's functionalities as follows:
 To begin, you need to load the high-dimensional data and 2D embeddings.
 
 ```{r}
-training_data <- readr::read_rds(file = paste0(here::here(), "/data/s_curve_noise_training.rds"))
-UMAP_data <- readr::read_rds(file = paste0(here::here(), "/data/s_curve_noise_umap.rds"))
+data <- readr::read_rds(file = paste0(here::here(), "/data-raw/s_curve_noise.rds"))
+training_data <- readr::read_rds(file = paste0(here::here(), "/data-raw/s_curve_noise_training.rds"))
+UMAP_data <- readr::read_rds(file = paste0(here::here(), "/data-raw/s_curve_noise_umap.rds"))
 ```
 
 ```{r}
@@ -111,7 +112,7 @@ distance <- cal_2D_dist(.data = tr_from_to_df)
 11. **Visualize Triangulated Mesh**: Visualize the triangulated mesh in low-dimensional space.
 
 ```{r}
-trimesh <- ggplot(df_bin_centroids, aes(x = x_val_center, y = y_val_center)) + 
+trimesh <- ggplot(df_bin_centroids, aes(x = x, y = y)) + 
   geom_point(size = 0.1) + 
   geom_trimesh() + 
   coord_equal() 

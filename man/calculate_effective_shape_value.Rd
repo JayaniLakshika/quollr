@@ -4,7 +4,7 @@
 \alias{calculate_effective_shape_value}
 \title{Calculate effective shape parameter value}
 \usage{
-calculate_effective_shape_value(.data, x, y)
+calculate_effective_shape_value(.data, x = UMAP1, y = UMAP2)
 }
 \arguments{
 \item{.data}{A data frame, data frame extension (e.g., a tibble), or a lazy data frame (e.g., from dbplyr or dtplyr).}
@@ -20,6 +20,6 @@ A numeric value representing the effective shape parameter.
 This function calculates the effective shape parameter value for a scatter plot based on the ranges of the x-axis and y-axis.
 }
 \examples{
-data <- tibble::tibble(x = rnorm(300), y = rnorm(300))
-calculate_effective_shape_value(data, x, y)
+nldr_df <- readRDS(paste0(here::here(), "/quollr/data-raw/s_curve_noise_umap.rds"))
+calculate_effective_shape_value(nldr_df, x = UMAP1, y = UMAP2)
 }

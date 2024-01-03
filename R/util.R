@@ -12,8 +12,8 @@
 #' @export
 #'
 #' @examples
-#' data <- tibble::tibble(x = rnorm(300), y = rnorm(300))
-#' calculate_effective_x_bins(data, x)
+#' nldr_df <- readRDS(paste0(here::here(), "/quollr/data-raw/s_curve_noise_umap.rds"))
+#' calculate_effective_x_bins(nldr_df, x = UMAP1, cell_area = 1)
 calculate_effective_x_bins <- function(.data, x = UMAP1, cell_area = 1){
 
   if (any(is.na(.data$x))) {
@@ -52,8 +52,8 @@ calculate_effective_x_bins <- function(.data, x = UMAP1, cell_area = 1){
 #' @export
 #'
 #' @examples
-#' data <- tibble::tibble(x = rnorm(300), y = rnorm(300))
-#' calculate_effective_shape_value(data, x, y)
+#' nldr_df <- readRDS(paste0(here::here(), "/quollr/data-raw/s_curve_noise_umap.rds"))
+#' calculate_effective_shape_value(nldr_df, x = UMAP1, y = UMAP2)
 calculate_effective_shape_value <- function(.data, x = UMAP1, y = UMAP2){
 
   if (any(is.na(.data$x)) || any(is.na(.data$y))) {

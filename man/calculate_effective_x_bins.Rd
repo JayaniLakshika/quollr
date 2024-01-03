@@ -4,7 +4,7 @@
 \alias{calculate_effective_x_bins}
 \title{Calculate the effective number of bins along x-axis}
 \usage{
-calculate_effective_x_bins(.data, x, cell_area = 1)
+calculate_effective_x_bins(.data, x = UMAP1, cell_area = 1)
 }
 \arguments{
 \item{.data}{A data frame, data frame extension (e.g., a tibble), or a lazy data frame (e.g., from dbplyr or dtplyr).}
@@ -20,6 +20,6 @@ A numeric value representing the effective number of bins along x-axis.
 This function calculates the effective number of bins along the x-axis of a hexbin plot.
 }
 \examples{
-data <- tibble::tibble(x = rnorm(300), y = rnorm(300))
-calculate_effective_x_bins(data, x)
+nldr_df <- readRDS(paste0(here::here(), "/quollr/data-raw/s_curve_noise_umap.rds"))
+calculate_effective_x_bins(nldr_df, x = UMAP1, cell_area = 1)
 }

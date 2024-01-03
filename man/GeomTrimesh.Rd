@@ -10,15 +10,6 @@ A ggproto object
 \usage{
 GeomTrimesh
 }
-\arguments{
-\item{required_aes}{A character vector of aesthetics that are required for this geom.}
-
-\item{default_aes}{Default aesthetic mappings}
-
-\item{draw_key}{A function describing how to draw the key glyph.}
-
-\item{draw_panel}{A function describing how to draw the panel.}
-}
 \description{
 This function defines a custom ggplot2 Geom, GeomTrimesh, for rendering triangular meshes.
 }

@@ -20,7 +20,11 @@ A triangular object representing the triangulated bin centroids.
 This function triangulates the bin centroids using the x and y coordinates provided in the input data frame and returns the triangular object.
 }
 \examples{
-df <- tibble::tibble(x_val_center = rnorm(100), y_val_center = rnorm(100))
-triangulate_bin_centroids(df, x = x_val_center, y = y_val_center)
+nldr_df <- readRDS(paste0(here::here(), "/quollr/data-raw/s_curve_noise_umap.rds"))
+num_bins <- 8
+shape_val <- 2.031141
+hexbin_data_object <- extract_hexbin_mean(nldr_df, num_bins, shape_val)
+df_bin_centroids <- hexbin_data_object$hexdf_data
+triangulate_bin_centroids(df_bin_centroids, x, y)
 
 }

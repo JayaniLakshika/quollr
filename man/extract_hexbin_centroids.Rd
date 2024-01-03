@@ -18,6 +18,10 @@ extract_hexbin_centroids(
 \item{num_bins}{Number of bins along the x-axis for hexagon binning.}
 
 \item{shape_val}{The value of the shape parameter for hexagon binning.}
+
+\item{x}{The name of the column that contains first embedding.}
+
+\item{y}{The name of the column that contains second embedding.}
 }
 \value{
 A list containing the hexagonal bin centroids data frame and the hexbin object.
@@ -27,9 +31,9 @@ Extract hexagonal bin centroids and related information from non-linear dimensio
 }
 \examples{
 # Example usage of extract_hexbin_centroids function
-nldr_df <- tibble::tibble(ID = 1:100, UMAP1 = rnorm(100), UMAP2 = rnorm(100))
-num_bins <- 20
-shape_val <- 0.8
+nldr_df <- readRDS(paste0(here::here(), "/quollr/data-raw/s_curve_noise_umap.rds"))
+num_bins <- 8
+shape_val <- 2.031141
 result <- extract_hexbin_centroids(nldr_df, num_bins, shape_val)
 hexdf_data <- result$hexdf_data
 hb_data <- result$hb_data

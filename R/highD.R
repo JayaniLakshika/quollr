@@ -10,13 +10,15 @@
 #' @importFrom dplyr group_by summarise across everything select starts_with
 #'
 #' @examples
-#' df <- tibble::tribble(
-#'   ~x1, ~x2, ~x3, ~hb_id,
-#'   1, 2, 3, 1,
-#'   4, 5, 6, 2,
-#'   7, 8, 9, 1
-#' )
-#' avg_highD_data(df)
+#' nldr_df <- readRDS(paste0(here::here(), "/quollr/data-raw/s_curve_noise_umap.rds"))
+#' training_data <- readRDS(paste0(here::here(), "/quollr/data-raw/s_curve_noise_training.rds"))
+#' num_bins <- 8
+#' shape_val <- 2.031141
+#' hexbin_data_object <- extract_hexbin_mean(nldr_df, num_bins, shape_val)
+#' df_bin_centroids <- hexbin_data_object$hexdf_data
+#' UMAP_data_with_hb_id <- nldr_df |> dplyr::mutate(hb_id = hexbin_data_object$hb_data@cID)
+#' df_all <- dplyr::bind_cols(training_data |> dplyr::select(-ID), UMAP_data_with_hb_id)
+#' avg_highD_data(df_all)
 #'
 #' @export
 avg_highD_data <- function(.data, column_start_text = "x") {
@@ -80,95 +82,6 @@ compute_weights <- function(nldr_df, hb_object) {
 
 }
 
-#' Find Benchmark Value
-#'
-#' This function finds the benchmark value to remove long edges based on the differences in a distance column.
-#'
-#' @param .data The data frame containing the distances.
-#' @param distance_col The name of the column containing the distances.
-#'
-#' @return The benchmark value, which is the first largest difference in the distance column.
-#'
-#' @importFrom dplyr mutate across arrange pull nth bind_cols
-#' @importFrom tibble tibble
-#'
-#' @examples
-#' df <- tibble::tribble(
-#'   ~x, ~y, ~distance,
-#'   1, 2, 0.5,
-#'   4, 5, 0.7,
-#'   7, 8, 0.2
-#' )
-#' find_benchmark_value(df, distance_col = "distance")
-#'
-#' @export
-find_benchmark_value <- function(.data, distance_col) {
-  #browser()
-
-  .data <- .data |>
-    dplyr::mutate(dplyr::across({
-      {
-        distance_col
-      }
-    }, \(x) round(x, 1)))
-
-
-  sorted_distance_df <- .data |>
-    dplyr::arrange({
-      {
-        distance_col
-      }
-    })  ## Sort the distances
-
-  # b <- sorted_distance_df %>%
-  #   group_by(distance) %>%
-  #   summarise(n = n())
-  #
-  # benchmark_value <- b$distance[which(b$n == median(b$n))[1]]
-
-  unique_dist <- sorted_distance_df |>
-    dplyr::pull({
-      {
-        distance_col
-      }
-    }) |>
-    unique()  ## Get the unique distances
-
-  dist_u <- tibble::tibble(unique_dist = unique_dist)
-  dist_u <- dplyr::bind_cols(dist_u, rbind(NA, apply(dist_u, 2, diff)), .name_repair = "unique_quiet")  ## Calculate differences between unique distance
-  names(dist_u)[2] <- "difference"
-
-  dist_u <- dist_u |>
-    dplyr::mutate(dplyr::across(difference, \(x) round(x, 4)))  ## For simplicity
-
-  dist_u[is.na(dist_u)] <- 0  ## To replace missing values with zero
-
-  benchmark_value_vec <- c()
-
-  ## To find the first largest difference (Define a benchmark value
-  ## to remove long edges)
-  for (i in 1:dim(dist_u)[1]) {
-    if(!is.na(dist_u$difference[i + 1])){
-      if (dist_u$difference[i] > dist_u$difference[i + 1]) {
-        if (!(is.na(dist_u$difference[i]))) {
-          benchmark_value_vec[i] <- dist_u$difference[i]
-          break
-        }
-      }
-    }
-  }
-
-  benchmark_value_df <- dist_u[which(dist_u$difference == benchmark_value_vec[!(is.na(benchmark_value_vec))]),
-                               1]  # To get the first value which contain large difference
-  names(benchmark_value_df) <- "unique_dist"
-  benchmark_value <- benchmark_value_df |>
-    dplyr::pull(unique_dist) |>
-    dplyr::nth(1)
-  benchmark_value
-
-}
-
-
 #' Show LangeviTour Visualization
 #'
 #' This function generates a LangeviTour visualization based on different conditions and input parameters.
@@ -185,32 +98,20 @@ find_benchmark_value <- function(.data, distance_col) {
 #' @importFrom langevitour langevitour
 #'
 #' @examples
-#' df <- tibble::tribble(
-#'   ~x1, ~x2, ~hb_id,
-#'   1, 2, 1,
-#'   4, 5, 2,
-#'   7, 8, 3
-#' )
-#' df_b <- tibble::tribble(
-#'   ~x1, ~x2, ~hb_id,
-#'   2, 3, 1,
-#'   5, 6, 2,
-#'   8, 9, 3
-#' )
-#' df_b_with_center_data <- tibble::tribble(
-#'   ~x_val_center, ~y_val_center, ~hb_id,
-#'   1.5, 2.5, 1,
-#'   4.5, 5.5, 2,
-#'   7.5, 8.5, 3
-#' )
-#' distance_df <- tibble::tribble(
-#'   ~from, ~to, ~distance,
-#'   1, 2, 0.5,
-#'   2, 3, 0.7,
-#'   1, 3, 0.2
-#' )
-#' show_langevitour(df, df_b, df_b_with_center_data, benchmark_value = 0.6,
-#' distance_df, distance_col = distance)
+#' nldr_df <- readRDS(paste0(here::here(), "/quollr/data-raw/s_curve_noise_umap.rds"))
+#' training_data <- readRDS(paste0(here::here(), "/quollr/data-raw/s_curve_noise_training.rds"))
+#' num_bins <- 8
+#' shape_val <- 2.031141
+#' hexbin_data_object <- extract_hexbin_mean(nldr_df, num_bins, shape_val)
+#' df_bin_centroids <- hexbin_data_object$hexdf_data
+#' UMAP_data_with_hb_id <- nldr_df |> dplyr::mutate(hb_id = hexbin_data_object$hb_data@cID)
+#' df_all <- dplyr::bind_cols(training_data |> dplyr::select(-ID), UMAP_data_with_hb_id)
+#' df_bin <- avg_highD_data(df_all)
+#' tr1_object <- triangulate_bin_centroids(df_bin_centroids, x, y)
+#' tr_from_to_df <- generate_edge_info(triangular_object = tr1_object)
+#' distance_df <- cal_2D_dist(.data = tr_from_to_df)
+#' show_langevitour(df_all, df_bin, df_bin_centroids, benchmark_value = 0.6,
+#' distance = distance_df, distance_col = distance)
 #'
 #' @export
 show_langevitour <- function(df, df_b, df_b_with_center_data, benchmark_value = NA,

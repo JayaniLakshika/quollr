@@ -2,24 +2,28 @@
 % Please edit documentation in R/2D.R
 \name{map_hexbin_id}
 \alias{map_hexbin_id}
-\title{Map HexID to Hexbin Centroids in the Full Grid}
+\title{Map Hexagon IDs to Centroids in the Full Grid}
 \usage{
 map_hexbin_id(full_centroid_df, df_bin_centroids)
 }
 \arguments{
-\item{full_centroid_df}{A data frame containing the full grid centroids.}
+\item{full_centroid_df}{Data frame containing centroid coordinates of the full grid.}
 
-\item{df_bin_centroids}{A data frame containing the hexbin centroids.}
+\item{df_bin_centroids}{Data frame containing hexagon IDs and their centroids.}
 }
 \value{
-A data frame with HexID, centroid coordinates, and standardized counts.
+A data frame with columns 'x', 'y', 'hexID', and 'counts' representing hexagon centroids and counts.
 }
 \description{
-This function maps the HexID to the hexbin centroids in the full grid, creating a data frame that includes the coordinates and standardized counts.
+This function generates a data frame with hexagon IDs mapped to their centroids in the full grid.
 }
 \examples{
-full_centroid_df <- tibble::tibble(x = c(1, 2, 3), y = c(4, 5, 6))
-df_bin_centroids <- tibble::tibble(hexID = c(1, 2, 3), x = c(1.5, 2.5, 3.5), y = c(4.5, 5.5, 6.5), counts = c(10, 15, 5))
+nldr_df <- readRDS(paste0(here::here(), "/quollr/data-raw/s_curve_noise_umap.rds"))
+num_bins <- 8
+shape_val <- 2.031141
+hexbin_data_object <- extract_hexbin_mean(nldr_df, num_bins, shape_val)
+df_bin_centroids <- hexbin_data_object$hexdf_data
+full_centroid_df <- generate_full_grid_centroids(df_bin_centroids)
 map_hexbin_id(full_centroid_df, df_bin_centroids)
 
 }

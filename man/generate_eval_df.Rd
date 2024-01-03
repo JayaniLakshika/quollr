@@ -24,29 +24,18 @@ A tibble containing evaluation metrics based on the provided inputs.
 This function generates an evaluation data frame based on the provided data and predictions.
 }
 \examples{
-data <- tibble::tibble(
-  ID = 1:10,
-  x1 = rnorm(10),
-  x2 = rnorm(10)
-)
-prediction_df <- tibble::tibble(
-  pred_hb_id = c(1, 2, 1, 3, 2, 3),
-  UMAP1 = rnorm(6),
-  UMAP2 = rnorm(6),
-  ID = seq_along(c(1, 2, 1, 3, 2, 3))  # Adding an ID column to match data
-)
-df_bin_centroids <- tibble::tibble(
-  hexID = 1:3,
-  x = rnorm(3),
-  y = rnorm(3)
-)
-df_bin <- tibble::tibble(
-  hb_id = c(1, 2, 3),
-  avg_x1 = rnorm(3),
-  avg_x2 = rnorm(3)
-)
-num_bins <- 5
-prediction_df <- prediction_df |> dplyr::mutate(ID = seq_along(pred_hb_id))
-generate_eval_df(data, prediction_df, df_bin_centroids, df_bin, num_bins)
+data <- readRDS(paste0(here::here(), "/quollr/data-raw/s_curve_noise.rds"))
+nldr_df <- readRDS(paste0(here::here(), "/quollr/data-raw/s_curve_noise_umap.rds"))
+nldr_df_test <- readRDS(paste0(here::here(), "/quollr/data-raw/s_curve_noise_umap.rds"))
+training_data <- readRDS(paste0(here::here(), "/quollr/data-raw/s_curve_noise_training.rds"))
+num_bins <- 8
+shape_val <- 2.031141
+pred_df_test_object <- predict_hex_id(training_data = training_data,
+nldr_df = nldr_df, nldr_df_test = nldr_df_test, num_bins = num_bins, shape_val = shape_val)
+pred_df_test <- pred_df_test_object$pred_data
+centroid_df_test <- pred_df_test_object$df_bin_centroids
+avg_df_test <- pred_df_test_object$df_bin
+generate_eval_df(data = data, prediction_df = pred_df_test,
+df_bin_centroids = centroid_df_test, df_bin = avg_df_test, num_bins = num_bins)
 
 }

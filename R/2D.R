@@ -3,6 +3,8 @@
 #' @param nldr_df Non-linear dimensionality reduction data frame containing 2D coordinates.
 #' @param num_bins Number of bins along the x-axis for hexagon binning.
 #' @param shape_val The value of the shape parameter for hexagon binning.
+#' @param x The name of the column that contains first embedding.
+#' @param y The name of the column that contains second embedding.
 #'
 #' @return A list containing the hexagonal bin centroids data frame and the hexbin object.
 #' @export
@@ -14,9 +16,9 @@
 #'
 #' @examples
 #' # Example usage of extract_hexbin_centroids function
-#' nldr_df <- tibble::tibble(ID = 1:100, UMAP1 = rnorm(100), UMAP2 = rnorm(100))
-#' num_bins <- 20
-#' shape_val <- 0.8
+#' nldr_df <- readRDS(paste0(here::here(), "/quollr/data-raw/s_curve_noise_umap.rds"))
+#' num_bins <- 8
+#' shape_val <- 2.031141
 #' result <- extract_hexbin_centroids(nldr_df, num_bins, shape_val)
 #' hexdf_data <- result$hexdf_data
 #' hb_data <- result$hb_data
@@ -43,6 +45,8 @@ extract_hexbin_centroids <- function(nldr_df, num_bins, shape_val = 1, x = UMAP1
 #' @param nldr_df Non-linear dimensionality reduction data frame containing 2D coordinates.
 #' @param num_bins Number of bins along the x-axis for hexagon binning.
 #' @param shape_val The value of the shape parameter for hexagon binning.
+#' @param x The name of the column that contains first embedding.
+#' @param y The name of the column that contains second embedding.
 #'
 #' @return A list containing the hexagonal bin mean data frame and the hexbin object.
 #' @export
@@ -51,12 +55,13 @@ extract_hexbin_centroids <- function(nldr_df, num_bins, shape_val = 1, x = UMAP1
 #' @importFrom dplyr pull
 #' @importFrom tibble as_tibble
 #' @importFrom utils globalVariables
+#' @importFrom here here
 #'
 #' @examples
-#' # Example usage of extract_hexbin_centroids function
-#' nldr_df <- tibble::tibble(ID = 1:100, UMAP1 = rnorm(100), UMAP2 = rnorm(100))
-#' num_bins <- 20
-#' shape_val <- 0.8
+#' # Example usage of extract_hexbin_mean function
+#' nldr_df <- readRDS(paste0(here::here(), "/quollr/data-raw/s_curve_noise_umap.rds"))
+#' num_bins <- 8
+#' shape_val <- 2.031141
 #' result <- extract_hexbin_mean(nldr_df, num_bins, shape_val)
 #' hexdf_data <- result$hexdf_data
 #' hb_data <- result$hb_data
@@ -98,8 +103,12 @@ extract_hexbin_mean <- function(nldr_df, num_bins, shape_val = 1, x = UMAP1, y =
 #' @return A triangular object representing the triangulated bin centroids.
 #'
 #' @examples
-#' df <- tibble::tibble(x_val_center = rnorm(100), y_val_center = rnorm(100))
-#' triangulate_bin_centroids(df, x = x_val_center, y = y_val_center)
+#' nldr_df <- readRDS(paste0(here::here(), "/quollr/data-raw/s_curve_noise_umap.rds"))
+#' num_bins <- 8
+#' shape_val <- 2.031141
+#' hexbin_data_object <- extract_hexbin_mean(nldr_df, num_bins, shape_val)
+#' df_bin_centroids <- hexbin_data_object$hexdf_data
+#' triangulate_bin_centroids(df_bin_centroids, x, y)
 #'
 #' @importFrom dplyr pull
 #' @importFrom tripack tri.mesh
@@ -119,8 +128,13 @@ triangulate_bin_centroids <- function(.data, x, y){
 #' @return A data frame containing the edge information, including the from-to relationships and the corresponding x and y coordinates.
 #'
 #' @examples
-#' tr_obj <- tripack::tri.mesh(x = c(1, 2, 3), y = c(4, 5, 6))
-#' generate_edge_info(tr_obj)
+#' nldr_df <- readRDS(paste0(here::here(), "/quollr/data-raw/s_curve_noise_umap.rds"))
+#' num_bins <- 8
+#' shape_val <- 2.031141
+#' hexbin_data_object <- extract_hexbin_mean(nldr_df, num_bins, shape_val)
+#' df_bin_centroids <- hexbin_data_object$hexdf_data
+#' tr1_object <- triangulate_bin_centroids(df_bin_centroids, x, y)
+#' generate_edge_info(triangular_object = tr1_object)
 #'
 #' @importFrom tibble tibble
 #' @importFrom dplyr mutate filter row_number pull nth bind_rows
@@ -172,13 +186,14 @@ generate_edge_info <- function(triangular_object) {
 #' @return A data frame with the from-to relationships and the corresponding 2D distances.
 #'
 #' @examples
-#' df <- tibble::tribble(
-#'   ~from, ~to, ~x_from, ~y_from, ~x_to, ~y_to,
-#'   1, 2, 6, 0, 3, 4,
-#'   1, 3, 7, 0, 5, 12,
-#'   2, 3, 3, 4, 5, 12
-#' )
-#' cal_2D_dist(df)
+#' nldr_df <- readRDS(paste0(here::here(), "/quollr/data-raw/s_curve_noise_umap.rds"))
+#' num_bins <- 8
+#' shape_val <- 2.031141
+#' hexbin_data_object <- extract_hexbin_mean(nldr_df, num_bins, shape_val)
+#' df_bin_centroids <- hexbin_data_object$hexdf_data
+#' tr1_object <- triangulate_bin_centroids(df_bin_centroids, x, y)
+#' tr_from_to_df <- generate_edge_info(triangular_object = tr1_object)
+#' cal_2D_dist(tr_from_to_df)
 #'
 #' @importFrom dplyr select
 #' @export
@@ -216,14 +231,15 @@ cal_2D_dist <- function(.data) {
 #' @importFrom tibble tibble as_tibble
 #'
 #' @examples
-#' df <- tibble::tribble(
-#'   ~from, ~to, ~distance,
-#'   1, 2, 5,
-#'   1, 3, 12.2,
-#'   2, 3, 8.25
-#' )
-#' tr_object <- tripack::tri.mesh(df$from, df$to)
-#' colour_long_edges(df, 5, tr_object, "distance")
+#' nldr_df <- readRDS(paste0(here::here(), "/quollr/data-raw/s_curve_noise_umap.rds"))
+#' num_bins <- 8
+#' shape_val <- 2.031141
+#' hexbin_data_object <- extract_hexbin_mean(nldr_df, num_bins, shape_val)
+#' df_bin_centroids <- hexbin_data_object$hexdf_data
+#' tr1_object <- triangulate_bin_centroids(df_bin_centroids, x, y)
+#' tr_from_to_df <- generate_edge_info(triangular_object = tr1_object)
+#' distance_df <- cal_2D_dist(tr_from_to_df)
+#' colour_long_edges(distance_df, 0.6, tr1_object, "distance")
 #'
 #' @export
 colour_long_edges <- function(.data, benchmark_value, triangular_object, distance_col) {
@@ -278,14 +294,15 @@ colour_long_edges <- function(.data, benchmark_value, triangular_object, distanc
 #' @importFrom stats setNames
 #'
 #' @examples
-#' df <- tibble::tribble(
-#'   ~from, ~to, ~distance,
-#'   1, 2, 5,
-#'   1, 3, 12.2,
-#'   2, 3, 8.25
-#' )
-#' tr_object <- tripack::tri.mesh(df$from, df$to)
-#' remove_long_edges(df, 10, tr_object, "distance")
+#' nldr_df <- readRDS(paste0(here::here(), "/quollr/data-raw/s_curve_noise_umap.rds"))
+#' num_bins <- 8
+#' shape_val <- 2.031141
+#' hexbin_data_object <- extract_hexbin_mean(nldr_df, num_bins, shape_val)
+#' df_bin_centroids <- hexbin_data_object$hexdf_data
+#' tr1_object <- triangulate_bin_centroids(df_bin_centroids, x, y)
+#' tr_from_to_df <- generate_edge_info(triangular_object = tr1_object)
+#' distance_df <- cal_2D_dist(tr_from_to_df)
+#' remove_long_edges(distance_df, 0.6, tr1_object, "distance")
 #'
 #' @export
 remove_long_edges <- function(.data, benchmark_value, triangular_object,
@@ -314,6 +331,41 @@ remove_long_edges <- function(.data, benchmark_value, triangular_object,
 }
 
 
+#' Generate Full Grid Centroids
+#'
+#' This function generates all possible centroids in the full grid based on hexbin data.
+#'
+#' @param hexdf_data The dataset with hexbin ID and centroid coordinates.
+#'
+#' @return A tibble containing all possible centroids in the full grid.
+#'
+#' @importFrom ggplot2 resolution
+#' @importFrom tibble as_tibble
+#' @importFrom dplyr bind_rows
+#'
+#' @examples
+#' nldr_df <- readRDS(paste0(here::here(), "/quollr/data-raw/s_curve_noise_umap.rds"))
+#' num_bins <- 8
+#' shape_val <- 2.031141
+#' hexbin_data_object <- extract_hexbin_mean(nldr_df, num_bins, shape_val)
+#' df_bin_centroids <- hexbin_data_object$hexdf_data
+#' generate_full_grid_centroids(df_bin_centroids)
+#'
+#' @export
+generate_full_grid_centroids <- function(hexdf_data){
+
+  ## Generate initial grid
+  full_centroids1 <- tibble::as_tibble(expand.grid(x = seq(min(hexdf_data$x),max(hexdf_data$x), ggplot2::resolution(hexdf_data$x, FALSE) * 2), y = seq(min(hexdf_data$y),max(hexdf_data$y), ggplot2::resolution(hexdf_data$y, FALSE) * 2)))
+
+  ## Generate shifted grid
+  full_centroids2 <- tibble::tibble(x = full_centroids1$x + ggplot2::resolution(hexdf_data$x, FALSE), y = full_centroids1$y + ggplot2::resolution(hexdf_data$y, FALSE))
+  full_centroids <- dplyr::bind_rows(full_centroids1, full_centroids2)
+
+  return(full_centroids)
+
+
+}
+
 #' Generate Hexagonal Coordinates
 #'
 #' This function generates the coordinates of hexagons after passing hexagonal centroids.
@@ -327,11 +379,13 @@ remove_long_edges <- function(.data, benchmark_value, triangular_object,
 #' @importFrom hexbin hexcoords
 #'
 #' @examples
-#' hexdf_data <- tibble::tibble(
-#'   x = c(0, 1, 0.5),
-#'   y = c(0, 0, 1)
-#' )
-#' full_hex_grid(hexdf_data)
+#' nldr_df <- readRDS(paste0(here::here(), "/quollr/data-raw/s_curve_noise_umap.rds"))
+#' num_bins <- 8
+#' shape_val <- 2.031141
+#' hexbin_data_object <- extract_hexbin_mean(nldr_df, num_bins, shape_val)
+#' df_bin_centroids <- hexbin_data_object$hexdf_data
+#' full_centroid_df <- generate_full_grid_centroids(df_bin_centroids)
+#' full_hex_grid(full_centroid_df)
 #'
 #' @export
 full_hex_grid <- function(hexdf_data){
@@ -353,55 +407,23 @@ full_hex_grid <- function(hexdf_data){
 
 }
 
-#' Generate Full Grid Centroids
+
+#' Map Hexagon IDs to Centroids in the Full Grid
 #'
-#' This function generates all possible centroids in the full grid based on hexbin data.
+#' This function generates a data frame with hexagon IDs mapped to their centroids in the full grid.
 #'
-#' @param hexdf_data The dataset with hexbin ID and centroid coordinates.
+#' @param full_centroid_df Data frame containing centroid coordinates of the full grid.
+#' @param df_bin_centroids Data frame containing hexagon IDs and their centroids.
 #'
-#' @return A tibble containing all possible centroids in the full grid.
-#'
-#' @importFrom ggplot2 resolution
-#' @importFrom tibble as_tibble
-#' @importFrom dplyr bind_rows
+#' @return A data frame with columns 'x', 'y', 'hexID', and 'counts' representing hexagon centroids and counts.
 #'
 #' @examples
-#' hexdf_data <- tibble::tibble(
-#'   x = c(0, 1, 0.5),
-#'   y = c(0, 0, 1)
-#' )
-#' generate_full_grid_centroids(hexdf_data)
-#'
-#' @export
-generate_full_grid_centroids <- function(hexdf_data){
-
-  ## Generate initial grid
-  full_centroids1 <- tibble::as_tibble(expand.grid(x = seq(min(hexdf_data$x),max(hexdf_data$x), ggplot2::resolution(hexdf_data$x, FALSE) * 2), y = seq(min(hexdf_data$y),max(hexdf_data$y), ggplot2::resolution(hexdf_data$y, FALSE) * 2)))
-
-  ## Generate shifted grid
-  full_centroids2 <- tibble::tibble(x = full_centroids1$x + ggplot2::resolution(hexdf_data$x, FALSE), y = full_centroids1$y + ggplot2::resolution(hexdf_data$y, FALSE))
-  full_centroids <- dplyr::bind_rows(full_centroids1, full_centroids2)
-
-  return(full_centroids)
-
-
-}
-
-
-#' Map HexID to Hexbin Centroids in the Full Grid
-#'
-#' This function maps the HexID to the hexbin centroids in the full grid, creating a data frame that includes the coordinates and standardized counts.
-#'
-#' @param full_centroid_df A data frame containing the full grid centroids.
-#' @param df_bin_centroids A data frame containing the hexbin centroids.
-#'
-#' @return A data frame with HexID, centroid coordinates, and standardized counts.
-#'
-#' @importFrom dplyr bind_rows mutate_if filter arrange full_join select rename
-#'
-#' @examples
-#' full_centroid_df <- tibble::tibble(x = c(1, 2, 3), y = c(4, 5, 6))
-#' df_bin_centroids <- tibble::tibble(hexID = c(1, 2, 3), x = c(1.5, 2.5, 3.5), y = c(4.5, 5.5, 6.5), counts = c(10, 15, 5))
+#' nldr_df <- readRDS(paste0(here::here(), "/quollr/data-raw/s_curve_noise_umap.rds"))
+#' num_bins <- 8
+#' shape_val <- 2.031141
+#' hexbin_data_object <- extract_hexbin_mean(nldr_df, num_bins, shape_val)
+#' df_bin_centroids <- hexbin_data_object$hexdf_data
+#' full_centroid_df <- generate_full_grid_centroids(df_bin_centroids)
 #' map_hexbin_id(full_centroid_df, df_bin_centroids)
 #'
 #' @export
@@ -413,9 +435,9 @@ map_hexbin_id <- function(full_centroid_df, df_bin_centroids) {
   full_grid_with_hexbin_id <- full_grid_with_hexbin_id |>
     dplyr::mutate_if(is.character, as.numeric)
 
-  for(i in 1:length(sort(unique(full_centroid_df$y)))) {
+  for(i in 1:length(sort(unique(full_centroid_df$y)))){
 
-    ## Filter the data set with a specific y value
+    ## Filter the data set with specific y value
     specific_y_val_df <- full_centroid_df |>
       dplyr::filter(y == sort(unique(full_centroid_df$y))[i])
 
@@ -423,6 +445,7 @@ map_hexbin_id <- function(full_centroid_df, df_bin_centroids) {
       dplyr::arrange(x)
 
     full_grid_with_hexbin_id <- dplyr::bind_rows(full_grid_with_hexbin_id, ordered_x_df)
+
   }
 
   full_grid_with_hexbin_id <- full_grid_with_hexbin_id |>
@@ -443,6 +466,7 @@ map_hexbin_id <- function(full_centroid_df, df_bin_centroids) {
 
 
 
+
 #' Map Polygon ID to Hexagon Coordinates
 #'
 #' This function maps polygon IDs to the corresponding hexagon coordinates in the full grid.
@@ -455,11 +479,14 @@ map_hexbin_id <- function(full_centroid_df, df_bin_centroids) {
 #' @importFrom dplyr filter mutate bind_rows
 #'
 #' @examples
-#' full_grid_with_hexbin_id <- tibble::tibble(hexID = c(1, 2, 1, 3, 2, 3),
-#'                                            c_x = c(1.5, 2.5, 1.5, 3.5, 2.5, 3.5),
-#'                                            c_y = c(4.5, 5.5, 4.5, 6.5, 5.5, 6.5),
-#'                                            std_counts = c(0.5, 0.75, 0.25, 1, 0.5, 1))
-#' hex_grid <- tibble::tibble(id = c(1, 2, 3), x = c(1, 2, 3), y = c(4, 5, 6))
+#' nldr_df <- readRDS(paste0(here::here(), "/quollr/data-raw/s_curve_noise_umap.rds"))
+#' num_bins <- 8
+#' shape_val <- 2.031141
+#' hexbin_data_object <- extract_hexbin_mean(nldr_df, num_bins, shape_val)
+#' df_bin_centroids <- hexbin_data_object$hexdf_data
+#' full_centroid_df <- generate_full_grid_centroids(df_bin_centroids)
+#' hex_grid <- full_hex_grid(full_centroid_df)
+#' full_grid_with_hexbin_id <- map_hexbin_id(full_centroid_df, df_bin_centroids)
 #' map_polygon_id(full_grid_with_hexbin_id, hex_grid)
 #'
 #' @export
@@ -506,11 +533,11 @@ map_polygon_id <- function(full_grid_with_hexbin_id, hex_grid) {
 #' @importFrom dplyr slice arrange bind_cols
 #'
 #' @examples
-#' df_bin_centroids <- tibble::tibble(
-#'   hexID = c(1, 2, 3),
-#'   x = c(1.5, 2.5, 3.5),
-#'   y = c(4.5, 5.5, 6.5)
-#' )
+#' nldr_df <- readRDS(paste0(here::here(), "/quollr/data-raw/s_curve_noise_umap.rds"))
+#' num_bins <- 8
+#' shape_val <- 2.031141
+#' hexbin_data_object <- extract_hexbin_mean(nldr_df, num_bins, shape_val)
+#' df_bin_centroids <- hexbin_data_object$hexdf_data
 #' generate_full_grid_info(df_bin_centroids)
 #'
 #' @export
@@ -546,17 +573,15 @@ generate_full_grid_info <- function(df_bin_centroids) {
 #' @return A data frame with hexagonal bin IDs and the corresponding points.
 #'
 #' @examples
-#' full_grid_with_hexbin_id <- tibble::tibble(
-#'   hexID = c(1, 2, 3),
-#'   c_x = c(1.5, 2.5, 3.5),
-#'   c_y = c(4.5, 5.5, 6.5)
-#' )
-#' UMAP_data_with_hb_id <- tibble::tibble(
-#'   ID = 101:110,
-#'   UMAP1 = rnorm(10),
-#'   UMAP2 = rnorm(10),
-#'   hb_id = sample(c(1, 2, 3), 10, replace = TRUE)
-#' )
+#' nldr_df <- readRDS(paste0(here::here(), "/quollr/data-raw/s_curve_noise_umap.rds"))
+#' num_bins <- 8
+#' shape_val <- 2.031141
+#' hexbin_data_object <- extract_hexbin_mean(nldr_df, num_bins, shape_val)
+#' df_bin_centroids <- hexbin_data_object$hexdf_data
+#' full_centroid_df <- generate_full_grid_centroids(df_bin_centroids)
+#' hex_grid <- full_hex_grid(full_centroid_df)
+#' full_grid_with_hexbin_id <- map_hexbin_id(full_centroid_df, df_bin_centroids)
+#' UMAP_data_with_hb_id <- nldr_df |> dplyr::mutate(hb_id = hexbin_data_object$hb_data@cID)
 #' find_pts_in_hexbins(full_grid_with_hexbin_id, UMAP_data_with_hb_id)
 #'
 #' @export

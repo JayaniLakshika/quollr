@@ -22,13 +22,14 @@ A ggplot object with the triangular mesh plot where long edges are colored diffe
 This function colors the long edges in a triangular mesh plot based on a benchmark value.
 }
 \examples{
-df <- tibble::tribble(
-  ~from, ~to, ~distance,
-  1, 2, 5,
-  1, 3, 12.2,
-  2, 3, 8.25
-)
-tr_object <- tripack::tri.mesh(df$from, df$to)
-colour_long_edges(df, 5, tr_object, "distance")
+nldr_df <- readRDS(paste0(here::here(), "/quollr/data-raw/s_curve_noise_umap.rds"))
+num_bins <- 8
+shape_val <- 2.031141
+hexbin_data_object <- extract_hexbin_mean(nldr_df, num_bins, shape_val)
+df_bin_centroids <- hexbin_data_object$hexdf_data
+tr1_object <- triangulate_bin_centroids(df_bin_centroids, x, y)
+tr_from_to_df <- generate_edge_info(triangular_object = tr1_object)
+distance_df <- cal_2D_dist(tr_from_to_df)
+colour_long_edges(distance_df, 0.6, tr1_object, "distance")
 
 }

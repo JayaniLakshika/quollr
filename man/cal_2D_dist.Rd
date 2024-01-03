@@ -16,12 +16,13 @@ A data frame with the from-to relationships and the corresponding 2D distances.
 This function calculates the 2D distances between points in a given data frame.
 }
 \examples{
-df <- tibble::tribble(
-  ~from, ~to, ~x_from, ~y_from, ~x_to, ~y_to,
-  1, 2, 6, 0, 3, 4,
-  1, 3, 7, 0, 5, 12,
-  2, 3, 3, 4, 5, 12
-)
-cal_2D_dist(df)
+nldr_df <- readRDS(paste0(here::here(), "/quollr/data-raw/s_curve_noise_umap.rds"))
+num_bins <- 8
+shape_val <- 2.031141
+hexbin_data_object <- extract_hexbin_mean(nldr_df, num_bins, shape_val)
+df_bin_centroids <- hexbin_data_object$hexdf_data
+tr1_object <- triangulate_bin_centroids(df_bin_centroids, x, y)
+tr_from_to_df <- generate_edge_info(triangular_object = tr1_object)
+cal_2D_dist(tr_from_to_df)
 
 }

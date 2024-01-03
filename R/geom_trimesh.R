@@ -13,8 +13,12 @@
 #'
 #' @examples
 #' # Basic usage
-#' df <- tibble::tibble(x = stats::rnorm(10), y = stats::rnorm(10))
-#' geom_trimesh(data = df, mapping = ggplot2::aes(x = x, y = y))
+#' nldr_df <- readRDS(paste0(here::here(), "/quollr/data-raw/s_curve_noise_umap.rds"))
+#' num_bins <- 8
+#' shape_val <- 2.031141
+#' hexbin_data_object <- extract_hexbin_mean(nldr_df, num_bins, shape_val)
+#' df_bin_centroids <- hexbin_data_object$hexdf_data
+#' geom_trimesh(data = df_bin_centroids, mapping = ggplot2::aes(x = x, y = y))
 #'
 #' @importFrom ggplot2 layer
 #' @importFrom ggplot2 aes
@@ -32,10 +36,6 @@ geom_trimesh <- function(mapping = NULL, data = NULL, stat = "trimesh",
 #' This function defines a custom ggplot2 Geom, GeomTrimesh, for rendering triangular meshes.
 #'
 #' @format A ggproto object
-#' @param required_aes A character vector of aesthetics that are required for this geom.
-#' @param default_aes Default aesthetic mappings
-#' @param draw_key A function describing how to draw the key glyph.
-#' @param draw_panel A function describing how to draw the panel.
 #'
 #' @details
 #' - \code{required_aes}: The required aesthetics for this geometry are \code{"x"}, \code{"y"}, \code{"xend"}, and \code{"yend"}.

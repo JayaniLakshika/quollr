@@ -16,10 +16,11 @@ A tibble containing all possible centroids in the full grid.
 This function generates all possible centroids in the full grid based on hexbin data.
 }
 \examples{
-hexdf_data <- tibble::tibble(
-  x = c(0, 1, 0.5),
-  y = c(0, 0, 1)
-)
-generate_full_grid_centroids(hexdf_data)
+nldr_df <- readRDS(paste0(here::here(), "/quollr/data-raw/s_curve_noise_umap.rds"))
+num_bins <- 8
+shape_val <- 2.031141
+hexbin_data_object <- extract_hexbin_mean(nldr_df, num_bins, shape_val)
+df_bin_centroids <- hexbin_data_object$hexdf_data
+generate_full_grid_centroids(df_bin_centroids)
 
 }

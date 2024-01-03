@@ -40,7 +40,11 @@ Create a trimesh plot
 }
 \examples{
 # Basic usage
-df <- tibble::tibble(x = stats::rnorm(10), y = stats::rnorm(10))
-geom_trimesh(data = df, mapping = ggplot2::aes(x = x, y = y))
+nldr_df <- readRDS(paste0(here::here(), "/quollr/data-raw/s_curve_noise_umap.rds"))
+num_bins <- 8
+shape_val <- 2.031141
+hexbin_data_object <- extract_hexbin_mean(nldr_df, num_bins, shape_val)
+df_bin_centroids <- hexbin_data_object$hexdf_data
+geom_trimesh(data = df_bin_centroids, mapping = ggplot2::aes(x = x, y = y))
 
 }

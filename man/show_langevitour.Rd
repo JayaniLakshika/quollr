@@ -33,31 +33,19 @@ show_langevitour(
 This function generates a LangeviTour visualization based on different conditions and input parameters.
 }
 \examples{
-df <- tibble::tribble(
-  ~x1, ~x2, ~hb_id,
-  1, 2, 1,
-  4, 5, 2,
-  7, 8, 3
-)
-df_b <- tibble::tribble(
-  ~x1, ~x2, ~hb_id,
-  2, 3, 1,
-  5, 6, 2,
-  8, 9, 3
-)
-df_b_with_center_data <- tibble::tribble(
-  ~x_val_center, ~y_val_center, ~hb_id,
-  1.5, 2.5, 1,
-  4.5, 5.5, 2,
-  7.5, 8.5, 3
-)
-distance_df <- tibble::tribble(
-  ~from, ~to, ~distance,
-  1, 2, 0.5,
-  2, 3, 0.7,
-  1, 3, 0.2
-)
-show_langevitour(df, df_b, df_b_with_center_data, benchmark_value = 0.6,
-distance_df, distance_col = distance)
+nldr_df <- readRDS(paste0(here::here(), "/quollr/data-raw/s_curve_noise_umap.rds"))
+training_data <- readRDS(paste0(here::here(), "/quollr/data-raw/s_curve_noise_training.rds"))
+num_bins <- 8
+shape_val <- 2.031141
+hexbin_data_object <- extract_hexbin_mean(nldr_df, num_bins, shape_val)
+df_bin_centroids <- hexbin_data_object$hexdf_data
+UMAP_data_with_hb_id <- nldr_df |> dplyr::mutate(hb_id = hexbin_data_object$hb_data@cID)
+df_all <- dplyr::bind_cols(training_data |> dplyr::select(-ID), UMAP_data_with_hb_id)
+df_bin <- avg_highD_data(df_all)
+tr1_object <- triangulate_bin_centroids(df_bin_centroids, x, y)
+tr_from_to_df <- generate_edge_info(triangular_object = tr1_object)
+distance_df <- cal_2D_dist(.data = tr_from_to_df)
+show_langevitour(df_all, df_bin, df_bin_centroids, benchmark_value = 0.6,
+distance = distance_df, distance_col = distance)
 
 }
