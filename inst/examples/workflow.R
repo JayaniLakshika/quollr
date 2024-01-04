@@ -147,15 +147,10 @@ ggplot(data = hex_full_count_df, aes(x = x, y = y)) +
 
 ## Identify bins
 
-
-identify_rm_bins <- find_low_density_hexagons(df_bin_centroids)
+identify_rm_bins <- find_low_density_hexagons(df_bin_centroids, num_bins_x)
 
 df_bin_centroids <- df_bin_centroids |>
   filter(!(hexID %in% identify_rm_bins))
-
-
-
-
 
 ## Add hexbin Id to 2D embeddings
 UMAP_data_with_hb_id <- UMAP_data |>
