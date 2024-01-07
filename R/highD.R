@@ -98,19 +98,52 @@ compute_weights <- function(nldr_df, hb_object) {
 }
 
 
-weighted_highD_data <- function(.data, weight_df, column_start_text = "x") {
+#' Compute Weighted Mean for High-Dimensional Data
+#'
+#' This function computes the weighted mean of the specified columns in the training data
+#' based on the distances from the average points in the non-linear dimensionality reduction (NLDR) space.
+#'
+#' @param training_data A data frame containing the training data with an ID column.
+#' @param nldr_df_with_id A data frame containing the non-linear dimensionality reduction (NLDR) data with an ID column.
+#' @param hb_object An object containing information about hexbin IDs.
+#' @param column_start_text The starting text of the column names in the training_data that should be considered for the weighted mean. Default is "x".
+#'
+#' @return A data frame with the computed weighted mean for each specified column.
+#'
+#' @examples
+#' training_data <- s_curve_noise_training
+#' nldr_df_with_id <- s_curve_noise_umap
+#' num_bins <- 8
+#' shape_val <- 2.031141
+#' result <- extract_hexbin_centroids(nldr_df, num_bins, shape_val)
+#' hexdf_data <- result$hexdf_data
+#' hb_object <- result$hb_data
+#' weighted_highD_data(training_data, nldr_df_with_id, hb_object)
+#'
+#' @seealso
+#' \code{\link{compute_weights}}
+#'
+#' @importFrom dplyr bind_cols full_join group_by select summarize across
+#' @importFrom dplyr tidyselect
+#'
+#' @export
+weighted_highD_data <- function(training_data, nldr_df_with_id, hb_object, column_start_text = "x") {
 
-  weighted_mean_all <- dplyr::inner_join(.data, weight_df, by = c("hb_id" = "hb_id", "UMAP1" = "UMAP1", "UMAP2" = "UMAP2")) |>
+  df_all <- dplyr::bind_cols(training_data |> dplyr::select(-ID), nldr_df_with_id)
+
+  weight_df <- compute_weights(nldr_df_with_id |> dplyr::select(-ID), hb_object)
+
+  weighted_mean_all <- dplyr::inner_join(df_all, weight_df, by = c("hb_id" = "hb_id", "UMAP1" = "UMAP1", "UMAP2" = "UMAP2")) |>
     mutate(distance_trans =  1/ (distance + 0.05))
 
   weighted_mean_df_list <- list()
 
-  for (j in 1:(NCOL(weighted_mean_all) - 8)) {
+  for (j in 1:(NCOL(training_data |> dplyr::select(-ID)))) {
 
     weighted_mean_df_list[[j]] <- weighted_mean_all |>
-      dplyr::select(hb_id, names(weighted_mean_all)[-((length(weighted_mean_all)-7):length(weighted_mean_all))][j], distance_trans) |>
+      dplyr::select(hb_id, names(training_data |> dplyr::select(-ID))[j], distance_trans) |>
       dplyr::group_by(hb_id) |>
-      dplyr::summarise(dplyr::across(names(weighted_mean_all)[-((length(weighted_mean_all)-7):length(weighted_mean_all))][j], ~ weighted.mean(., distance_trans)))
+      dplyr::summarise(dplyr::across(names(training_data |> dplyr::select(-ID))[j], ~ weighted.mean(., distance_trans)))
 
   }
 
@@ -118,12 +151,13 @@ weighted_highD_data <- function(.data, weight_df, column_start_text = "x") {
     Reduce(function(dtf1,dtf2) dplyr::full_join(dtf1,dtf2,by="hb_id"), .)
 
 
-  ## Column names starts with x
+  ## Column names start with x
   weighted_mean <- weighted_mean |>
     dplyr::select(hb_id, tidyselect::starts_with(column_start_text))
 
   return(weighted_mean)
 }
+
 
 
 #' Show LangeviTour Visualization
