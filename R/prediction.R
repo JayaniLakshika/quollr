@@ -44,7 +44,7 @@ compute_aic <- function(p, total, num_bins, num_obs) {
 #' @examples
 #' nldr_df <- s_curve_noise_umap
 #' nldr_df_test <- s_curve_noise_umap_predict
-#' training_data <- s_curve_noise_umap_training
+#' training_data <- s_curve_noise_training
 #' num_bins <- 8
 #' shape_val <- 2.031141
 #' hexbin_data_object <- extract_hexbin_mean(nldr_df, num_bins, shape_val)
@@ -99,7 +99,7 @@ predict_hex_id <- function(training_data, nldr_df, nldr_df_test, num_bins, shape
 #' data <- s_curve_noise
 #' nldr_df <- s_curve_noise_umap
 #' nldr_df_test <- s_curve_noise_umap_predict
-#' training_data <- s_curve_noise_umap_training
+#' training_data <- s_curve_noise_training
 #' num_bins <- 8
 #' shape_val <- 2.031141
 #' pred_df_test_object <- predict_hex_id(training_data = training_data,

@@ -10,27 +10,33 @@ vignette: >
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  warning = FALSE, 
+  message = FALSE
 )
 ```
 
-```{r setup}
+```{r setup, echo = FALSE}
 library(quollr)
+library(snedata)
+library(ggplot2)
+
+set.seed(20230531)
 ```
 
 quollr constructs low-dimensional manifolds by combining Non-Linear Dimension Reduction (NLDR), hexagonal binning, and triangulation techniques, enabling accurate high-dimensional data representations. The package integrates these manifolds with original data using the tour technique, while also offering tools for generating simulated data sets for comprehensive exploration.
 
-To start with quollr, refer to the package documentation and explore its functions
+To start with quollr, refer to the package documentation and explore its functions.
 
 <!--An associated paper can be found at-->
 
 ## Installation
 
-You can install the development version of quollr from GitHub with:
+You can install the development version of `quollr` from GitHub with:
 
-```{r}
-#install.packages("remotes")
-#remotes::install_github("JayaniLakshika/quollr")
+```{r, eval=FALSE}
+install.packages("remotes")
+remotes::install_github("JayaniLakshika/quollr")
 ```
 
 ## Usage
@@ -39,11 +45,52 @@ The package's functionalities as follows:
 
 To begin, you need to load the high-dimensional data and 2D embeddings.
 
+```{r echo = FALSE}
+# Simulate some s_curve_noise
 
-By following these steps, you can effectively leverage **quollr** to construct informative low-dimensional representations of high-dimensional data, while also benefitting from its simulated data generation functions to explore various scenarios and conditions.
+sample_size <- 1000
+data <- snedata::s_curve(n_samples = sample_size)
+data <- data |>
+  dplyr::select(-color)
+names(data) <- c("x1", "x2", "x3")
+
+data$x4 <- runif(sample_size, -0.02, 0.02)
+data$x5 <- runif(sample_size, -0.02, 0.02)
+data$x6 <- runif(sample_size, -0.1, 0.1)
+data$x7 <- runif(sample_size, -0.01, 0.01)
+
+## Add the ID to the s_curve_noise
+data <- data |>
+  dplyr::mutate(ID = dplyr::row_number()) |>
+  tibble::as_tibble()
+
+usethis::use_data(data, overwrite = TRUE)
+
+## Split the s_curve_noise as training and test
+data_split <- initial_split(data)
+training_data <- training(data_split) |>
+  dplyr::arrange(ID) |>
+  tibble::as_tibble()
+
+test_data <- testing(data_split) |>
+  dplyr::arrange(ID) |>
+  tibble::as_tibble()
+
+## Fit umap
+UMAP_fit <- umap(training_data |> dplyr::select(-ID), n_neighbors = 15, n_components =  2)
+
+UMAP_df <- UMAP_fit$layout |>
+  as.data.frame() |>
+  tibble::as_tibble()
+
+names(UMAP_df)[1:(ncol(UMAP_df))] <- paste0(rep("UMAP",(ncol(UMAP_df))), 1:(ncol(UMAP_df)))
+
+UMAP_df <- UMAP_df |>
+  dplyr::mutate(ID = training_data$ID)
+```
 
 
-## Copyright
 
-This package is licensed under the [MIT license](https://github.com/JayaniLakshika/quollr/LICENSE.md). 
+
+
 

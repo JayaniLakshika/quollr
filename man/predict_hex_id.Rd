@@ -26,7 +26,7 @@ This function predicts hexagonal IDs for a test set based on training data and n
 \examples{
 nldr_df <- s_curve_noise_umap
 nldr_df_test <- s_curve_noise_umap_predict
-training_data <- s_curve_noise_umap_training
+training_data <- s_curve_noise_training
 num_bins <- 8
 shape_val <- 2.031141
 hexbin_data_object <- extract_hexbin_mean(nldr_df, num_bins, shape_val)

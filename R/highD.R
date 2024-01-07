@@ -87,8 +87,7 @@ compute_weights <- function(nldr_df, hb_object) {
   for(i in 1:length(umap_with_avg_all_split)){
 
     weighted_mean_df <- umap_with_avg_all_split[[i]] |> ## These are the weights for weighted mean
-      cal_2D_dist(start_x = "avg_umap1", start_y = "avg_umap2", end_x = "UMAP1", end_y = "UMAP2", select_col_vec = c("hb_id", "avg_umap1","avg_umap2", "UMAP1","UMAP2", "distance")
-)
+      cal_2D_dist(start_x = new_col[1], start_y = new_col[2], end_x = names(nldr_df)[1], end_y = names(nldr_df)[2], select_col_vec = col_names)
 
     weight_df <- dplyr::bind_rows(weight_df, weighted_mean_df)
 
