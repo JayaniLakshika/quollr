@@ -32,3 +32,18 @@ You can install the development version of quollr from GitHub with:
 #install.packages("remotes")
 #remotes::install_github("JayaniLakshika/quollr")
 ```
+
+## Usage
+
+The package's functionalities as follows:
+
+To begin, you need to load the high-dimensional data and 2D embeddings.
+
+
+By following these steps, you can effectively leverage **quollr** to construct informative low-dimensional representations of high-dimensional data, while also benefitting from its simulated data generation functions to explore various scenarios and conditions.
+
+
+## Copyright
+
+This package is licensed under the [MIT license](https://github.com/JayaniLakshika/quollr/LICENSE.md). 
+

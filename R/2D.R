@@ -16,7 +16,7 @@
 #'
 #' @examples
 #' # Example usage of extract_hexbin_centroids function
-#' nldr_df <- readRDS(paste0(here::here(), "/quollr/data-raw/s_curve_noise_umap.rds"))
+#' nldr_df <- s_curve_noise_umap
 #' num_bins <- 8
 #' shape_val <- 2.031141
 #' result <- extract_hexbin_centroids(nldr_df, num_bins, shape_val)
@@ -59,7 +59,7 @@ extract_hexbin_centroids <- function(nldr_df, num_bins, shape_val = 1, x = UMAP1
 #'
 #' @examples
 #' # Example usage of extract_hexbin_mean function
-#' nldr_df <- readRDS(paste0(here::here(), "/quollr/data-raw/s_curve_noise_umap.rds"))
+#' nldr_df <- s_curve_noise_umap
 #' num_bins <- 8
 #' shape_val <- 2.031141
 #' result <- extract_hexbin_mean(nldr_df, num_bins, shape_val)
@@ -103,7 +103,7 @@ extract_hexbin_mean <- function(nldr_df, num_bins, shape_val = 1, x = UMAP1, y =
 #' @return A triangular object representing the triangulated bin centroids.
 #'
 #' @examples
-#' nldr_df <- readRDS(paste0(here::here(), "/quollr/data-raw/s_curve_noise_umap.rds"))
+#' nldr_df <- s_curve_noise_umap
 #' num_bins <- 8
 #' shape_val <- 2.031141
 #' hexbin_data_object <- extract_hexbin_mean(nldr_df, num_bins, shape_val)
@@ -128,7 +128,7 @@ triangulate_bin_centroids <- function(.data, x, y){
 #' @return A data frame containing the edge information, including the from-to relationships and the corresponding x and y coordinates.
 #'
 #' @examples
-#' nldr_df <- readRDS(paste0(here::here(), "/quollr/data-raw/s_curve_noise_umap.rds"))
+#' nldr_df <- s_curve_noise_umap
 #' num_bins <- 8
 #' shape_val <- 2.031141
 #' hexbin_data_object <- extract_hexbin_mean(nldr_df, num_bins, shape_val)
@@ -177,42 +177,48 @@ generate_edge_info <- function(triangular_object) {
   return(tr_from_to_df_coord)
 }
 
-#' Calculate 2D Distances
+#' Calculate 2D Distances Between Points
 #'
-#' This function calculates the 2D distances between points in a given data frame.
+#' This function calculates the 2D distances between pairs of points in a data frame.
 #'
-#' @param .data The data frame containing the points for which to calculate distances.
+#' @param .data A data frame containing columns for the x and y coordinates of start and end points.
+#' @param start_x Column name for the x-coordinate of the starting point.
+#' @param start_y Column name for the y-coordinate of the starting point.
+#' @param end_x Column name for the x-coordinate of the ending point.
+#' @param end_y Column name for the y-coordinate of the ending point.
+#' @param select_col_vec A character vector specifying the columns to be selected in the resulting data frame.
 #'
-#' @return A data frame with the from-to relationships and the corresponding 2D distances.
+#' @return A data frame with columns for the starting point, ending point, and calculated distances.
 #'
 #' @examples
-#' nldr_df <- readRDS(paste0(here::here(), "/quollr/data-raw/s_curve_noise_umap.rds"))
+#' nldr_df <- s_curve_noise_umap
 #' num_bins <- 8
 #' shape_val <- 2.031141
 #' hexbin_data_object <- extract_hexbin_mean(nldr_df, num_bins, shape_val)
 #' df_bin_centroids <- hexbin_data_object$hexdf_data
 #' tr1_object <- triangulate_bin_centroids(df_bin_centroids, x, y)
 #' tr_from_to_df <- generate_edge_info(triangular_object = tr1_object)
-#' cal_2D_dist(tr_from_to_df)
+#' cal_2D_dist(tr_from_to_df, start_x = "x_from", start_y = "y_from",
+#' end_x = "x_to", end_y = "y_to", select_col_vec = c("from", "to", "distance"))
 #'
 #' @importFrom dplyr select
+#'
 #' @export
-cal_2D_dist <- function(.data) {
+cal_2D_dist <- function(.data, start_x = "x_from", start_y = "y_from", end_x = "x_to", end_y = "y_to", select_col_vec = c("from", "to", "distance")) {
   # Calculate the 2D distances
   .data$distance <- lapply(seq(nrow(.data)), function(x) {
-    start <- unlist(.data[x, c("x_from", "y_from")])
-    end <- unlist(.data[x, c("x_to", "y_to")])
+    start <- unlist(.data[x, c(start_x, start_y)])
+    end <- unlist(.data[x, c(end_x, end_y)])
     sqrt(sum((start - end)^2))
   })
 
   # Create a data frame with the from-to relationships and distances
-  distance_df <- .data |> dplyr::select("from", "to", "distance")
+  distance_df <- .data |> dplyr::select(tidyselect::all_of(select_col_vec))
 
   # Convert the distances to a vector and return the data frame
   distance_df$distance <- unlist(distance_df$distance)
   return(distance_df)
 }
-
 
 #' Color Long Edges
 #'
@@ -231,7 +237,7 @@ cal_2D_dist <- function(.data) {
 #' @importFrom tibble tibble as_tibble
 #'
 #' @examples
-#' nldr_df <- readRDS(paste0(here::here(), "/quollr/data-raw/s_curve_noise_umap.rds"))
+#' nldr_df <- s_curve_noise_umap
 #' num_bins <- 8
 #' shape_val <- 2.031141
 #' hexbin_data_object <- extract_hexbin_mean(nldr_df, num_bins, shape_val)
@@ -294,7 +300,7 @@ colour_long_edges <- function(.data, benchmark_value, triangular_object, distanc
 #' @importFrom stats setNames
 #'
 #' @examples
-#' nldr_df <- readRDS(paste0(here::here(), "/quollr/data-raw/s_curve_noise_umap.rds"))
+#' nldr_df <- s_curve_noise_umap
 #' num_bins <- 8
 #' shape_val <- 2.031141
 #' hexbin_data_object <- extract_hexbin_mean(nldr_df, num_bins, shape_val)
@@ -344,7 +350,7 @@ remove_long_edges <- function(.data, benchmark_value, triangular_object,
 #' @importFrom dplyr bind_rows
 #'
 #' @examples
-#' nldr_df <- readRDS(paste0(here::here(), "/quollr/data-raw/s_curve_noise_umap.rds"))
+#' nldr_df <- s_curve_noise_umap
 #' num_bins <- 8
 #' shape_val <- 2.031141
 #' hexbin_data_object <- extract_hexbin_mean(nldr_df, num_bins, shape_val)
@@ -379,7 +385,7 @@ generate_full_grid_centroids <- function(hexdf_data){
 #' @importFrom hexbin hexcoords
 #'
 #' @examples
-#' nldr_df <- readRDS(paste0(here::here(), "/quollr/data-raw/s_curve_noise_umap.rds"))
+#' nldr_df <- s_curve_noise_umap
 #' num_bins <- 8
 #' shape_val <- 2.031141
 #' hexbin_data_object <- extract_hexbin_mean(nldr_df, num_bins, shape_val)
@@ -418,7 +424,7 @@ full_hex_grid <- function(hexdf_data){
 #' @return A data frame with columns 'x', 'y', 'hexID', and 'counts' representing hexagon centroids and counts.
 #'
 #' @examples
-#' nldr_df <- readRDS(paste0(here::here(), "/quollr/data-raw/s_curve_noise_umap.rds"))
+#' nldr_df <- s_curve_noise_umap
 #' num_bins <- 8
 #' shape_val <- 2.031141
 #' hexbin_data_object <- extract_hexbin_mean(nldr_df, num_bins, shape_val)
@@ -479,7 +485,7 @@ map_hexbin_id <- function(full_centroid_df, df_bin_centroids) {
 #' @importFrom dplyr filter mutate bind_rows
 #'
 #' @examples
-#' nldr_df <- readRDS(paste0(here::here(), "/quollr/data-raw/s_curve_noise_umap.rds"))
+#' nldr_df <- s_curve_noise_umap
 #' num_bins <- 8
 #' shape_val <- 2.031141
 #' hexbin_data_object <- extract_hexbin_mean(nldr_df, num_bins, shape_val)
@@ -533,7 +539,7 @@ map_polygon_id <- function(full_grid_with_hexbin_id, hex_grid) {
 #' @importFrom dplyr slice arrange bind_cols
 #'
 #' @examples
-#' nldr_df <- readRDS(paste0(here::here(), "/quollr/data-raw/s_curve_noise_umap.rds"))
+#' nldr_df <- s_curve_noise_umap
 #' num_bins <- 8
 #' shape_val <- 2.031141
 #' hexbin_data_object <- extract_hexbin_mean(nldr_df, num_bins, shape_val)
@@ -573,7 +579,7 @@ generate_full_grid_info <- function(df_bin_centroids) {
 #' @return A data frame with hexagonal bin IDs and the corresponding points.
 #'
 #' @examples
-#' nldr_df <- readRDS(paste0(here::here(), "/quollr/data-raw/s_curve_noise_umap.rds"))
+#' nldr_df <- s_curve_noise_umap
 #' num_bins <- 8
 #' shape_val <- 2.031141
 #' hexbin_data_object <- extract_hexbin_mean(nldr_df, num_bins, shape_val)

@@ -24,9 +24,9 @@ A list containing the predicted data, hexagonal bin centroids, and averaged high
 This function predicts hexagonal IDs for a test set based on training data and non-linear dimensionality reduction (NLDR) coordinates.
 }
 \examples{
-nldr_df <- readRDS(paste0(here::here(), "/quollr/data-raw/s_curve_noise_umap.rds"))
-nldr_df_test <- readRDS(paste0(here::here(), "/quollr/data-raw/s_curve_noise_umap_predict.rds"))
-training_data <- readRDS(paste0(here::here(), "/quollr/data-raw/s_curve_noise_training.rds"))
+nldr_df <- s_curve_noise_umap
+nldr_df_test <- s_curve_noise_umap_predict
+training_data <- s_curve_noise_umap_training
 num_bins <- 8
 shape_val <- 2.031141
 hexbin_data_object <- extract_hexbin_mean(nldr_df, num_bins, shape_val)

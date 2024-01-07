@@ -42,9 +42,9 @@ compute_aic <- function(p, total, num_bins, num_obs) {
 #' @importFrom class knn
 #'
 #' @examples
-#' nldr_df <- readRDS(paste0(here::here(), "/quollr/data-raw/s_curve_noise_umap.rds"))
-#' nldr_df_test <- readRDS(paste0(here::here(), "/quollr/data-raw/s_curve_noise_umap_predict.rds"))
-#' training_data <- readRDS(paste0(here::here(), "/quollr/data-raw/s_curve_noise_training.rds"))
+#' nldr_df <- s_curve_noise_umap
+#' nldr_df_test <- s_curve_noise_umap_predict
+#' training_data <- s_curve_noise_umap_training
 #' num_bins <- 8
 #' shape_val <- 2.031141
 #' hexbin_data_object <- extract_hexbin_mean(nldr_df, num_bins, shape_val)
@@ -96,10 +96,10 @@ predict_hex_id <- function(training_data, nldr_df, nldr_df_test, num_bins, shape
 #' @importFrom tibble tibble
 #'
 #' @examples
-#' data <- readRDS(paste0(here::here(), "/quollr/data-raw/s_curve_noise.rds"))
-#' nldr_df <- readRDS(paste0(here::here(), "/quollr/data-raw/s_curve_noise_umap.rds"))
-#' nldr_df_test <- readRDS(paste0(here::here(), "/quollr/data-raw/s_curve_noise_umap.rds"))
-#' training_data <- readRDS(paste0(here::here(), "/quollr/data-raw/s_curve_noise_training.rds"))
+#' data <- s_curve_noise
+#' nldr_df <- s_curve_noise_umap
+#' nldr_df_test <- s_curve_noise_umap_predict
+#' training_data <- s_curve_noise_umap_training
 #' num_bins <- 8
 #' shape_val <- 2.031141
 #' pred_df_test_object <- predict_hex_id(training_data = training_data,

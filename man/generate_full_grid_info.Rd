@@ -17,7 +17,7 @@ This function generates a data frame containing coordinates and identifiers for 
 along with additional information like counts and polygon IDs.
 }
 \examples{
-nldr_df <- readRDS(paste0(here::here(), "/quollr/data-raw/s_curve_noise_umap.rds"))
+nldr_df <- s_curve_noise_umap
 num_bins <- 8
 shape_val <- 2.031141
 hexbin_data_object <- extract_hexbin_mean(nldr_df, num_bins, shape_val)

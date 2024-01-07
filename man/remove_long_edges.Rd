@@ -22,7 +22,7 @@ A ggplot object with the triangular mesh plot where long edges are removed.
 This function removes long edges from a triangular mesh plot based on a benchmark value.
 }
 \examples{
-nldr_df <- readRDS(paste0(here::here(), "/quollr/data-raw/s_curve_noise_umap.rds"))
+nldr_df <- s_curve_noise_umap
 num_bins <- 8
 shape_val <- 2.031141
 hexbin_data_object <- extract_hexbin_mean(nldr_df, num_bins, shape_val)

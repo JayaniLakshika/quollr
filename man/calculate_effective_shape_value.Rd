@@ -20,6 +20,6 @@ A numeric value representing the effective shape parameter.
 This function calculates the effective shape parameter value for a scatter plot based on the ranges of the x-axis and y-axis.
 }
 \examples{
-nldr_df <- readRDS(paste0(here::here(), "/quollr/data-raw/s_curve_noise_umap.rds"))
+nldr_df <- s_curve_noise_umap
 calculate_effective_shape_value(nldr_df, x = UMAP1, y = UMAP2)
 }

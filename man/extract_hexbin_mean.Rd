@@ -25,7 +25,7 @@ Extract hexagonal bin mean and related information from non-linear dimensionalit
 }
 \examples{
 # Example usage of extract_hexbin_mean function
-nldr_df <- readRDS(paste0(here::here(), "/quollr/data-raw/s_curve_noise_umap.rds"))
+nldr_df <- s_curve_noise_umap
 num_bins <- 8
 shape_val <- 2.031141
 result <- extract_hexbin_mean(nldr_df, num_bins, shape_val)

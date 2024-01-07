@@ -12,7 +12,7 @@
 #' @export
 #'
 #' @examples
-#' nldr_df <- readRDS(paste0(here::here(), "/quollr/data-raw/s_curve_noise_umap.rds"))
+#' nldr_df <- s_curve_noise_umap
 #' calculate_effective_x_bins(nldr_df, x = UMAP1, cell_area = 1)
 calculate_effective_x_bins <- function(.data, x = UMAP1, cell_area = 1){
 
@@ -52,7 +52,7 @@ calculate_effective_x_bins <- function(.data, x = UMAP1, cell_area = 1){
 #' @export
 #'
 #' @examples
-#' nldr_df <- readRDS(paste0(here::here(), "/quollr/data-raw/s_curve_noise_umap.rds"))
+#' nldr_df <- s_curve_noise_umap
 #' calculate_effective_shape_value(nldr_df, x = UMAP1, y = UMAP2)
 calculate_effective_shape_value <- function(.data, x = UMAP1, y = UMAP2){
 

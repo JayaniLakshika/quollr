@@ -2,27 +2,45 @@
 % Please edit documentation in R/2D.R
 \name{cal_2D_dist}
 \alias{cal_2D_dist}
-\title{Calculate 2D Distances}
+\title{Calculate 2D Distances Between Points}
 \usage{
-cal_2D_dist(.data)
+cal_2D_dist(
+  .data,
+  start_x = "x_from",
+  start_y = "y_from",
+  end_x = "x_to",
+  end_y = "y_to",
+  select_col_vec = c("from", "to", "distance")
+)
 }
 \arguments{
-\item{.data}{The data frame containing the points for which to calculate distances.}
+\item{.data}{A data frame containing columns for the x and y coordinates of start and end points.}
+
+\item{start_x}{Column name for the x-coordinate of the starting point.}
+
+\item{start_y}{Column name for the y-coordinate of the starting point.}
+
+\item{end_x}{Column name for the x-coordinate of the ending point.}
+
+\item{end_y}{Column name for the y-coordinate of the ending point.}
+
+\item{select_col_vec}{A character vector specifying the columns to be selected in the resulting data frame.}
 }
 \value{
-A data frame with the from-to relationships and the corresponding 2D distances.
+A data frame with columns for the starting point, ending point, and calculated distances.
 }
 \description{
-This function calculates the 2D distances between points in a given data frame.
+This function calculates the 2D distances between pairs of points in a data frame.
 }
 \examples{
-nldr_df <- readRDS(paste0(here::here(), "/quollr/data-raw/s_curve_noise_umap.rds"))
+nldr_df <- s_curve_noise_umap
 num_bins <- 8
 shape_val <- 2.031141
 hexbin_data_object <- extract_hexbin_mean(nldr_df, num_bins, shape_val)
 df_bin_centroids <- hexbin_data_object$hexdf_data
 tr1_object <- triangulate_bin_centroids(df_bin_centroids, x, y)
 tr_from_to_df <- generate_edge_info(triangular_object = tr1_object)
-cal_2D_dist(tr_from_to_df)
+cal_2D_dist(tr_from_to_df, start_x = "x_from", start_y = "y_from",
+end_x = "x_to", end_y = "y_to", select_col_vec = c("from", "to", "distance"))
 
 }

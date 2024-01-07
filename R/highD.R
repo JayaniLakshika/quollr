@@ -10,8 +10,8 @@
 #' @importFrom dplyr group_by summarise across everything select starts_with
 #'
 #' @examples
-#' nldr_df <- readRDS(paste0(here::here(), "/quollr/data-raw/s_curve_noise_umap.rds"))
-#' training_data <- readRDS(paste0(here::here(), "/quollr/data-raw/s_curve_noise_training.rds"))
+#' nldr_df <- s_curve_noise_umap
+#' training_data <- s_curve_noise_training
 #' num_bins <- 8
 #' shape_val <- 2.031141
 #' hexbin_data_object <- extract_hexbin_mean(nldr_df, num_bins, shape_val)
@@ -30,21 +30,31 @@ avg_highD_data <- function(.data, column_start_text = "x") {
   return(df_b)
 }
 
-cal_2D_dist_umap <- function(.data){
 
-  .data$distance <- lapply(seq(nrow(.data)), function(x) {
-    start <- unlist(.data[x, c("avg_umap1","avg_umap2")])
-    end <- unlist(.data[x, c("umap1","umap2")])
-    sqrt(sum((start - end)^2))})
-
-  distance_df <- .data %>%
-    dplyr::select("hb_id", "avg_umap1","avg_umap2", "umap1","umap2", "distance")
-
-  distance_df$distance <- unlist(distance_df$distance)
-  return(distance_df)
-}
-
+#' Compute Weights for Hexagonal Binning
+#'
+#' This function computes weights for hexagonal binning based on the average values of each bin and the distances from these averages.
+#'
+#' @param nldr_df A data frame containing UMAP coordinates and a unique identifier column (ID).
+#' @param hb_object A hexbin object containing the hexagonal binning information.
+#'
+#' @return A data frame with weights calculated for each hexagonal bin.
+#'
+#' @examples
+#' nldr_df <- s_curve_noise_umap
+#' num_bins <- 8
+#' shape_val <- 2.031141
+#' result <- extract_hexbin_centroids(nldr_df, num_bins, shape_val)
+#' hexdf_data <- result$hexdf_data
+#' hb_obj <- result$hb_data
+#' compute_weights(nldr_df, hb_obj)
+#'
+#' @importFrom dplyr group_by summarise across
+#' @importFrom stats setNames
+#' @export
 compute_weights <- function(nldr_df, hb_object) {
+
+  hb_object <- hb_object
 
   ## To get the average of each bin
   bin_val_hexagons <- nldr_df |>
@@ -53,7 +63,9 @@ compute_weights <- function(nldr_df, hb_object) {
     dplyr::group_by(hb_id) |>
     dplyr::summarise(dplyr::across(tidyselect::everything(), mean))
 
-  names(bin_val_hexagons) <- c("hb_id", "avg_umap1", "avg_umap2")
+  new_col <- paste0("avg_", names(nldr_df)[1:2] |> tolower())
+
+  names(bin_val_hexagons) <- append("hb_id", new_col)
 
   ## To calculate distances from average point
 
@@ -66,13 +78,17 @@ compute_weights <- function(nldr_df, hb_object) {
     dplyr::group_by(hb_id) |>
     dplyr::group_split()
 
-  vec <- stats::setNames(1:6, c("hb_id", "avg_umap1", "avg_umap2", "UMAP1", "UMAP2", "distance"))
+  col_names1 <- append(names(bin_val_hexagons), (names(nldr_df)[-length(names(nldr_df))]))
+  col_names <- append(col_names1, "distance")
+
+  vec <- stats::setNames(1:6, col_names)
   weight_df <- dplyr::bind_rows(vec)[0, ]
 
   for(i in 1:length(umap_with_avg_all_split)){
 
     weighted_mean_df <- umap_with_avg_all_split[[i]] |> ## These are the weights for weighted mean
-      cal_2D_dist_umap()
+      cal_2D_dist(start_x = "avg_umap1", start_y = "avg_umap2", end_x = "UMAP1", end_y = "UMAP2", select_col_vec = c("hb_id", "avg_umap1","avg_umap2", "UMAP1","UMAP2", "distance")
+)
 
     weight_df <- dplyr::bind_rows(weight_df, weighted_mean_df)
 
@@ -81,6 +97,35 @@ compute_weights <- function(nldr_df, hb_object) {
   return(weight_df)
 
 }
+
+
+weighted_highD_data <- function(.data, weight_df, column_start_text = "x") {
+
+  weighted_mean_all <- dplyr::inner_join(.data, weight_df, by = c("hb_id" = "hb_id", "UMAP1" = "UMAP1", "UMAP2" = "UMAP2")) |>
+    mutate(distance_trans =  1/ (distance + 0.05))
+
+  weighted_mean_df_list <- list()
+
+  for (j in 1:(NCOL(weighted_mean_all) - 8)) {
+
+    weighted_mean_df_list[[j]] <- weighted_mean_all |>
+      dplyr::select(hb_id, names(weighted_mean_all)[-((length(weighted_mean_all)-7):length(weighted_mean_all))][j], distance_trans) |>
+      dplyr::group_by(hb_id) |>
+      dplyr::summarise(dplyr::across(names(weighted_mean_all)[-((length(weighted_mean_all)-7):length(weighted_mean_all))][j], ~ weighted.mean(., distance_trans)))
+
+  }
+
+  weighted_mean <- weighted_mean_df_list |>
+    Reduce(function(dtf1,dtf2) dplyr::full_join(dtf1,dtf2,by="hb_id"), .)
+
+
+  ## Column names starts with x
+  weighted_mean <- weighted_mean |>
+    dplyr::select(hb_id, tidyselect::starts_with(column_start_text))
+
+  return(weighted_mean)
+}
+
 
 #' Show LangeviTour Visualization
 #'
@@ -98,8 +143,8 @@ compute_weights <- function(nldr_df, hb_object) {
 #' @importFrom langevitour langevitour
 #'
 #' @examples
-#' nldr_df <- readRDS(paste0(here::here(), "/quollr/data-raw/s_curve_noise_umap.rds"))
-#' training_data <- readRDS(paste0(here::here(), "/quollr/data-raw/s_curve_noise_training.rds"))
+#' nldr_df <- s_curve_noise_umap
+#' training_data <- s_curve_noise_training
 #' num_bins <- 8
 #' shape_val <- 2.031141
 #' hexbin_data_object <- extract_hexbin_mean(nldr_df, num_bins, shape_val)
