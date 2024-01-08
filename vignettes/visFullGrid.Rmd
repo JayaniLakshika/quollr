@@ -1,0 +1,109 @@
+---
+title: "Visualise full hexagonal grid"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{visFullGrid}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  warning = FALSE, 
+  message = FALSE
+)
+options(rmarkdown.html_vignette.check_title = FALSE)
+```
+
+```{r setup, echo = FALSE}
+library(quollr)
+library(snedata)
+library(rsample)
+library(umap)
+library(ggplot2)
+library(dplyr)
+```
+
+```{r echo = FALSE}
+# Simulate some s_curve_noise
+
+sample_size <- 300
+data <- s_curve(n_samples = sample_size)
+data <- data |>
+  dplyr::select(-color)
+names(data) <- c("x1", "x2", "x3")
+
+data$x4 <- runif(sample_size, -0.02, 0.02)
+data$x5 <- runif(sample_size, -0.02, 0.02)
+data$x6 <- runif(sample_size, -0.1, 0.1)
+data$x7 <- runif(sample_size, -0.01, 0.01)
+
+## Add the ID to the s_curve_noise
+data <- data |>
+  dplyr::mutate(ID = dplyr::row_number()) |>
+  tibble::as_tibble()
+
+## Split the s_curve_noise as training and test
+data_split <- initial_split(data)
+training_data <- training(data_split) |>
+  dplyr::arrange(ID) |>
+  tibble::as_tibble()
+
+test_data <- testing(data_split) |>
+  dplyr::arrange(ID) |>
+  tibble::as_tibble()
+
+## Fit umap
+UMAP_fit <- umap(training_data |> dplyr::select(-ID), n_neighbors = 15, n_components =  2)
+
+UMAP_data <- UMAP_fit$layout |>
+  as.data.frame() |>
+  tibble::as_tibble()
+
+names(UMAP_data)[1:(ncol(UMAP_data))] <- paste0(rep("UMAP",(ncol(UMAP_data))), 1:(ncol(UMAP_data)))
+
+UMAP_data <- UMAP_data |>
+  dplyr::mutate(ID = training_data$ID)
+
+num_bins_x <- calculate_effective_x_bins(.data = UMAP_data, x = UMAP1,
+                                         cell_area = 1)
+
+shape_value <- calculate_effective_shape_value(.data = UMAP_data, 
+                                               x = UMAP1, y = UMAP2)
+
+hexbin_data_object <- extract_hexbin_centroids(nldr_df = UMAP_data, num_bins = num_bins_x, shape_val = shape_value)
+
+df_bin_centroids <- hexbin_data_object$hexdf_data
+```
+
+To generate the full hexagonal grid, you need to start from the bin centroid info that obtained from `extract_hexbin_centroids()`.
+
+```{r}
+
+## Data set with all possible centroids in the hexagonal grid
+
+full_centroid_df <- generate_full_grid_centroids(df_bin_centroids)
+full_centroid_df 
+
+## Generate all coordinates of hexagons
+hex_grid <- full_hex_grid(full_centroid_df)
+
+ggplot(data = hex_grid, aes(x = x, y = y)) + geom_polygon(fill = "white", color = "black", aes(group = id)) +
+  geom_point(data = hex_grid, aes(x = x, y = y), color = "black") +
+  geom_point(data = df_bin_centroids, aes(x = x, y = y), color = "red")
+
+ggplot(data = hex_grid, aes(x = x, y = y)) + geom_polygon(fill = "white", color = "black", aes(group = id)) +
+  geom_point(data = full_centroid_df, aes(x = x, y = y), color = "black") +
+  geom_point(data = df_bin_centroids, aes(x = x, y = y), color = "red")
+
+hex_full_count_df <- generate_full_grid_info(df_bin_centroids)
+
+ggplot(data = hex_full_count_df, aes(x = x, y = y)) +
+  geom_polygon(color = "black", aes(group = polygon_id, fill = std_counts)) +
+  geom_text(aes(x = c_x, y = c_y, label = hexID)) +
+  scale_fill_viridis_c(direction = -1, na.value = "#ffffff")
+
+
+```

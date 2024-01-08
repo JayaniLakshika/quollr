@@ -124,7 +124,7 @@ compute_weights <- function(nldr_df, hb_object) {
 #' \code{\link{compute_weights}}
 #'
 #' @importFrom dplyr bind_cols full_join group_by select summarize across
-#' @importFrom dplyr tidyselect
+#' @importFrom tidyselect starts_with
 #'
 #' @export
 weighted_highD_data <- function(training_data, nldr_df_with_id, hb_object, column_start_text = "x") {

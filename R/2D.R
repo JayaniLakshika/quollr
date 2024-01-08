@@ -559,7 +559,7 @@ generate_full_grid_info <- function(df_bin_centroids) {
   full_grid_with_polygon_id_df <- map_polygon_id(full_grid_with_hexbin_id, hex_grid)
 
   full_grid_with_hexbin_id_rep <- full_grid_with_polygon_id_df |>
-    dplyr::slice(rep(1:n(), each = 6)) |>
+    dplyr::slice(rep(1:dplyr::n(), each = 6)) |>
     dplyr::arrange(polygon_id)
 
   hex_full_count_df <- dplyr::bind_cols(hex_grid, full_grid_with_hexbin_id_rep)

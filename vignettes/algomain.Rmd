@@ -1,0 +1,136 @@
+---
+title: "Main steps"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{algomain}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  warning = FALSE, 
+  message = FALSE
+)
+options(rmarkdown.html_vignette.check_title = FALSE)
+```
+
+```{r setup, echo = FALSE}
+library(quollr)
+library(snedata)
+library(rsample)
+library(umap)
+```
+
+```{r echo = FALSE}
+# Simulate some s_curve_noise
+
+sample_size <- 300
+data <- snedata::s_curve(n_samples = sample_size)
+data <- data |>
+  dplyr::select(-color)
+names(data) <- c("x1", "x2", "x3")
+
+data$x4 <- runif(sample_size, -0.02, 0.02)
+data$x5 <- runif(sample_size, -0.02, 0.02)
+data$x6 <- runif(sample_size, -0.1, 0.1)
+data$x7 <- runif(sample_size, -0.01, 0.01)
+
+## Add the ID to the s_curve_noise
+data <- data |>
+  dplyr::mutate(ID = dplyr::row_number()) |>
+  tibble::as_tibble()
+
+## Split the s_curve_noise as training and test
+data_split <- initial_split(data)
+training_data <- training(data_split) |>
+  dplyr::arrange(ID) |>
+  tibble::as_tibble()
+
+test_data <- testing(data_split) |>
+  dplyr::arrange(ID) |>
+  tibble::as_tibble()
+
+## Fit umap
+UMAP_fit <- umap(training_data |> dplyr::select(-ID), n_neighbors = 15, n_components =  2)
+
+UMAP_data <- UMAP_fit$layout |>
+  as.data.frame() |>
+  tibble::as_tibble()
+
+names(UMAP_data)[1:(ncol(UMAP_data))] <- paste0(rep("UMAP",(ncol(UMAP_data))), 1:(ncol(UMAP_data)))
+
+UMAP_data <- UMAP_data |>
+  dplyr::mutate(ID = training_data$ID)
+```
+
+# Constructing the model in the 2D space
+
+## 1. Compute hexagonal grid configurations
+
+### Number of bins along the x-axis
+
+To begin the algorithm, you need to determine the number of bins along the x-axis for creating regular hexagons in the hexagonal grid.
+
+```{r}
+num_bins_x <- calculate_effective_x_bins(.data = UMAP_data, x = UMAP1,
+                                         cell_area = 1)
+
+num_bins_x
+```
+
+### Shape parameter
+
+Then, you need to determine the shape parameter, which control the shape and size of the hexagons in the hexagonal grid.
+
+```{r}
+shape_value <- calculate_effective_shape_value(.data = UMAP_data, 
+                                               x = UMAP1, y = UMAP2)
+
+shape_value
+```
+
+## 2. Obtain hexagonal bin centroids
+
+```{r}
+hexbin_data_object <- extract_hexbin_centroids(nldr_df = UMAP_data, num_bins = num_bins_x, shape_val = shape_value)
+
+hexbin_data_object
+
+df_bin_centroids <- hexbin_data_object$hexdf_data
+df_bin_centroids 
+
+hexbin_object <- hexbin_data_object$hb_data
+str(hexbin_object)
+```
+
+## 3. Triangulate hexagonal bin centroids
+
+Next, you need to perform triangulation on the bin centroids to construct a triangular mesh. Triangulation involves connecting the bin centroids with triangular edges to form a mesh that reveals the local structure of the data.
+
+```{r}
+tr1_object <- triangulate_bin_centroids(.data = df_bin_centroids, x = x, y = y)
+str(tr1_object)
+
+tr_from_to_df <- generate_edge_info(triangular_object = tr1_object)
+tr_from_to_df
+```
+
+# Lifting the model into high dimensions
+
+To extend the model created in the 2D space to higher dimensions, you need to take the average of the high-dimensional coordinates within hexagonal bins.
+
+```{r}
+UMAP_data_with_hb_id <- UMAP_data |> 
+  dplyr::mutate(hb_id = hexbin_data_object$hb_data@cID)
+UMAP_data_with_hb_id
+        
+## To generate a data set with high-D and 2D training data
+df_all <- dplyr::bind_cols(training_data |> dplyr::select(-ID), UMAP_data_with_hb_id)
+df_all
+
+df_bin <- avg_highD_data(.data = df_all)
+df_bin
+```
