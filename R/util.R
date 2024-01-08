@@ -16,11 +16,11 @@
 #' calculate_effective_x_bins(nldr_df, x = UMAP1, cell_area = 1)
 calculate_effective_x_bins <- function(.data, x = UMAP1, cell_area = 1){
 
-  if (any(is.na(.data$x))) {
+  if (any(is.na(.data |> dplyr::pull({{ x }})))) {
     stop("NAs present")
   }
 
-  if (any(is.infinite(.data$x))) {
+  if (any(is.infinite(.data |> dplyr::pull({{ x }})))) {
     stop("Inf present")
   }
 
@@ -29,8 +29,10 @@ calculate_effective_x_bins <- function(.data, x = UMAP1, cell_area = 1){
 
   }
 
+  ## To compute the diameter of the hexagon
   cell_diameter <- sqrt(2 * cell_area / sqrt(3))
 
+  ## To compute the range along x-axis
   xwidth <- diff(range(.data |>
                          dplyr::pull({{ x }})))
 
@@ -56,23 +58,25 @@ calculate_effective_x_bins <- function(.data, x = UMAP1, cell_area = 1){
 #' calculate_effective_shape_value(nldr_df, x = UMAP1, y = UMAP2)
 calculate_effective_shape_value <- function(.data, x = UMAP1, y = UMAP2){
 
-  if (any(is.na(.data$x)) || any(is.na(.data$y))) {
+  if (any(is.na(.data |> dplyr::pull({{ x }}))) || any(is.na(.data |> dplyr::pull({{ y }})))) {
     stop("NAs present")
   }
 
-  if (any(is.infinite(.data$x)) || any(is.infinite(.data$y))) {
+  if (any(is.infinite(.data |> dplyr::pull({{ x }}))) || any(is.infinite(.data |> dplyr::pull({{ y }})))) {
     stop("Inf present")
   }
 
-  if ((length(.data$x) == 1) || (length(.data$y) == 1)) {
+  if ((length(.data |> dplyr::pull({{ x }})) == 1) || (length(.data |> dplyr::pull({{ y }})) == 1)) {
     stop("Presence one observation only")
 
   }
 
+  ## To compute the range along x-axis
   xwidth <- diff(range(.data |> dplyr::pull({{ x }})))
+  ## To compute the range along y-axis
   yheight <- diff(range(.data |> dplyr::pull({{ y }})))
 
 
-  shape <- yheight/xwidth  # Here, yheight is the range of y and xwidth is the range of x
+  shape <- yheight/xwidth
   shape
 }

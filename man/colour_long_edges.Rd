@@ -23,13 +23,13 @@ This function colors the long edges in a triangular mesh plot based on a benchma
 }
 \examples{
 nldr_df <- s_curve_noise_umap
-num_bins <- 8
-shape_val <- 2.031141
+num_bins <- 7
+shape_val <- 1.833091
 hexbin_data_object <- extract_hexbin_mean(nldr_df, num_bins, shape_val)
 df_bin_centroids <- hexbin_data_object$hexdf_data
 tr1_object <- triangulate_bin_centroids(df_bin_centroids, x, y)
 tr_from_to_df <- generate_edge_info(triangular_object = tr1_object)
 distance_df <- cal_2D_dist(tr_from_to_df)
-colour_long_edges(distance_df, 0.6, tr1_object, "distance")
+colour_long_edges(distance_df, 1.4, tr1_object, "distance")
 
 }

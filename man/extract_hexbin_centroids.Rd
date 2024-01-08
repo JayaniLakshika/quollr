@@ -32,13 +32,13 @@ Extract hexagonal bin centroids and related information from non-linear dimensio
 \examples{
 # Example usage of extract_hexbin_centroids function
 nldr_df <- s_curve_noise_umap
-num_bins <- 8
-shape_val <- 2.031141
+num_bins <- 7
+shape_val <- 1.833091
 result <- extract_hexbin_centroids(nldr_df, num_bins, shape_val)
 hexdf_data <- result$hexdf_data
 hb_data <- result$hb_data
 print(hexdf_data)
-print(hb_data)
+print(str(hb_data))
 
 
 }

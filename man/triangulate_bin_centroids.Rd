@@ -21,8 +21,8 @@ This function triangulates the bin centroids using the x and y coordinates provi
 }
 \examples{
 nldr_df <- s_curve_noise_umap
-num_bins <- 8
-shape_val <- 2.031141
+num_bins <- 7
+shape_val <- 1.833091
 hexbin_data_object <- extract_hexbin_mean(nldr_df, num_bins, shape_val)
 df_bin_centroids <- hexbin_data_object$hexdf_data
 triangulate_bin_centroids(df_bin_centroids, x, y)
