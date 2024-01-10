@@ -24,7 +24,8 @@ Imports:
     rsample,
     class,
     tidyselect,
-    here
+    here,
+    rlang
 URL: https://github.com/JayaniLakshika/quollr
 BugReports: https://github.com/JayaniLakshika/quollr/issues
 Depends: 

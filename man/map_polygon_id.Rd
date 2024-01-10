@@ -21,13 +21,11 @@ This function maps polygon IDs to the corresponding hexagon coordinates in the f
 nldr_df <- s_curve_noise_umap
 num_bins <- 7
 shape_val <- 1.833091
-set.seed(123)
 hexbin_data_object <- extract_hexbin_mean(nldr_df, num_bins, shape_val)
 df_bin_centroids <- hexbin_data_object$hexdf_data
-df_bin_centroids_sample <- df_bin_centroids |> dplyr::slice_sample(n = 5)
-full_centroid_df <- generate_full_grid_centroids(df_bin_centroids_sample)
+full_centroid_df <- generate_full_grid_centroids(df_bin_centroids)
 hex_grid <- full_hex_grid(full_centroid_df)
-full_grid_with_hexbin_id <- map_hexbin_id(full_centroid_df, df_bin_centroids_sample)
+full_grid_with_hexbin_id <- map_hexbin_id(full_centroid_df, df_bin_centroids)
 map_polygon_id(full_grid_with_hexbin_id, hex_grid)
 
 }

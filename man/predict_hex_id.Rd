@@ -4,7 +4,16 @@
 \alias{predict_hex_id}
 \title{Predict Hexagonal IDs}
 \usage{
-predict_hex_id(training_data, nldr_df, nldr_df_test, num_bins, shape_val)
+predict_hex_id(
+  training_data,
+  nldr_df,
+  nldr_df_test,
+  num_bins,
+  shape_val,
+  x = "UMAP1",
+  y = "UMAP2",
+  col_start = "x"
+)
 }
 \arguments{
 \item{training_data}{The training dataset containing high-dimensional data with IDs.}
@@ -16,6 +25,12 @@ predict_hex_id(training_data, nldr_df, nldr_df_test, num_bins, shape_val)
 \item{num_bins}{Number of bins along the x-axis for hexagon binning.}
 
 \item{shape_val}{The value of the shape parameter for hexagon binning.}
+
+\item{x}{The name of the column that contains first embedding as a string.}
+
+\item{y}{The name of the column that contains second embedding as a string.}
+
+\item{col_start}{The text that begin the column name of the high-D data}
 }
 \value{
 A list containing the predicted data, hexagonal bin centroids, and averaged high-dimensional data.
@@ -31,6 +46,7 @@ num_bins <- 8
 shape_val <- 2.031141
 hexbin_data_object <- extract_hexbin_mean(nldr_df, num_bins, shape_val)
 df_bin_centroids <- hexbin_data_object$hexdf_data
-predict_hex_id(training_data, nldr_df, nldr_df_test, num_bins, shape_val)
+predict_hex_id(training_data, nldr_df, nldr_df_test, num_bins,
+shape_val, x = "UMAP1", y = "UMAP2", col_start = "x")
 
 }

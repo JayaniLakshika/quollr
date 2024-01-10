@@ -35,11 +35,15 @@ compute_aic <- function(p, total, num_bins, num_obs) {
 #' @param nldr_df_test The predicted non-linear dimensionality reductions for the test set.
 #' @param num_bins Number of bins along the x-axis for hexagon binning.
 #' @param shape_val The value of the shape parameter for hexagon binning.
+#' @param x The name of the column that contains first embedding as a string.
+#' @param y The name of the column that contains second embedding as a string.
+#' @param col_start The text that begin the column name of the high-D data
 #'
 #' @return A list containing the predicted data, hexagonal bin centroids, and averaged high-dimensional data.
 #'
 #' @importFrom dplyr bind_cols select mutate
 #' @importFrom class knn
+#'@importFrom rlang syms
 #'
 #' @examples
 #' nldr_df <- s_curve_noise_umap
@@ -49,13 +53,14 @@ compute_aic <- function(p, total, num_bins, num_obs) {
 #' shape_val <- 2.031141
 #' hexbin_data_object <- extract_hexbin_mean(nldr_df, num_bins, shape_val)
 #' df_bin_centroids <- hexbin_data_object$hexdf_data
-#' predict_hex_id(training_data, nldr_df, nldr_df_test, num_bins, shape_val)
+#' predict_hex_id(training_data, nldr_df, nldr_df_test, num_bins,
+#' shape_val, x = "UMAP1", y = "UMAP2", col_start = "x")
 #'
 #' @export
-predict_hex_id <- function(training_data, nldr_df, nldr_df_test, num_bins, shape_val) {
+predict_hex_id <- function(training_data, nldr_df, nldr_df_test, num_bins, shape_val, x = "UMAP1", y = "UMAP2", col_start = "x") {
 
   ## To extract bin centroids
-  hexbin_data_object <-extract_hexbin_centroids(nldr_df, num_bins, shape_val)
+  hexbin_data_object <- extract_hexbin_centroids(nldr_df, num_bins, shape_val, x = x, y = y)
 
   df_bin_centroids <- hexbin_data_object$hexdf_data
 
@@ -66,12 +71,12 @@ predict_hex_id <- function(training_data, nldr_df, nldr_df_test, num_bins, shape
   df_all <- dplyr::bind_cols(training_data |> dplyr::select(-ID), UMAP_data_with_hb_id)
 
   ## Averaged on high-D
-  df_bin <- avg_highD_data(.data = df_all)
+  df_bin <- avg_highD_data(.data = df_all, column_start_text = col_start)
 
   train_hb_df <- df_bin_centroids |>
     dplyr::select(x, y, hexID)
 
-  pred_hb_id <- class::knn(train_hb_df |> dplyr::select(-hexID), nldr_df_test |> dplyr::select(UMAP1, UMAP2), cl = train_hb_df$hexID)
+  pred_hb_id <- class::knn(train_hb_df |> dplyr::select(-hexID), nldr_df_test |> dplyr::select(!!! rlang::syms(c(x, y))), cl = train_hb_df$hexID)
 
   pred_data <- nldr_df_test |>
     dplyr::mutate(pred_hb_id = as.numeric(as.character(pred_hb_id)))
@@ -89,6 +94,7 @@ predict_hex_id <- function(training_data, nldr_df, nldr_df_test, num_bins, shape
 #' @param df_bin_centroids The data set with coordinates of hexagonal bin centroids.
 #' @param df_bin The data set with averaged/weighted high-dimensional data.
 #' @param num_bins Number of bins along the x-axis for hexagon binning.
+#' @param col_start The text that begin the column name of the high-D data
 #'
 #' @return A tibble containing evaluation metrics based on the provided inputs.
 #'
@@ -108,10 +114,10 @@ predict_hex_id <- function(training_data, nldr_df, nldr_df_test, num_bins, shape
 #' centroid_df_test <- pred_df_test_object$df_bin_centroids
 #' avg_df_test <- pred_df_test_object$df_bin
 #' generate_eval_df(data = data, prediction_df = pred_df_test,
-#' df_bin_centroids = centroid_df_test, df_bin = avg_df_test, num_bins = num_bins)
+#' df_bin_centroids = centroid_df_test, df_bin = avg_df_test, num_bins = num_bins, col_start = "x")
 #'
 #' @export
-generate_eval_df <- function(data, prediction_df, df_bin_centroids, df_bin, num_bins) {
+generate_eval_df <- function(data, prediction_df, df_bin_centroids, df_bin, num_bins, col_start = "x") {
 
 
   ## Generate all possible bin centroids in the full grid
@@ -134,12 +140,12 @@ generate_eval_df <- function(data, prediction_df, df_bin_centroids, df_bin, num_
 
   for (i in 1:(NCOL(df_bin_train) - 1)) {
 
-    prediction_df[ , paste0("error_square_x", i)] <- (prediction_df[ , paste0("x", i)] - prediction_df[ , paste0("avg_x", i)])^2
+    prediction_df[ , paste0("error_square_", col_start, i)] <- (prediction_df[ , paste0(col_start, i)] - prediction_df[ , paste0("avg_", col_start, i)])^2
 
   }
 
   prediction_df <- prediction_df |>
-    dplyr::mutate(total = rowSums(dplyr::pick(tidyselect::starts_with("error_square_x"))))
+    dplyr::mutate(total = rowSums(dplyr::pick(tidyselect::starts_with(paste0("error_square_", col_start)))))
 
 
   #number_of_bins: Total number of bins with empty bins

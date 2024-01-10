@@ -20,10 +20,8 @@ along with additional information like counts and polygon IDs.
 nldr_df <- s_curve_noise_umap
 num_bins <- 7
 shape_val <- 1.833091
-set.seed(123)
 hexbin_data_object <- extract_hexbin_mean(nldr_df, num_bins, shape_val)
 df_bin_centroids <- hexbin_data_object$hexdf_data
-df_bin_centroids_sample <- df_bin_centroids |> dplyr::slice_sample(n = 5)
-generate_full_grid_info(df_bin_centroids_sample)
+generate_full_grid_info(df_bin_centroids)
 
 }

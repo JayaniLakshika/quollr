@@ -4,7 +4,14 @@
 \alias{generate_eval_df}
 \title{Generate Evaluation Data Frame}
 \usage{
-generate_eval_df(data, prediction_df, df_bin_centroids, df_bin, num_bins)
+generate_eval_df(
+  data,
+  prediction_df,
+  df_bin_centroids,
+  df_bin,
+  num_bins,
+  col_start = "x"
+)
 }
 \arguments{
 \item{data}{The data set containing high-dimensional data along with IDs.}
@@ -16,6 +23,8 @@ generate_eval_df(data, prediction_df, df_bin_centroids, df_bin, num_bins)
 \item{df_bin}{The data set with averaged/weighted high-dimensional data.}
 
 \item{num_bins}{Number of bins along the x-axis for hexagon binning.}
+
+\item{col_start}{The text that begin the column name of the high-D data}
 }
 \value{
 A tibble containing evaluation metrics based on the provided inputs.
@@ -36,6 +45,6 @@ pred_df_test <- pred_df_test_object$pred_data
 centroid_df_test <- pred_df_test_object$df_bin_centroids
 avg_df_test <- pred_df_test_object$df_bin
 generate_eval_df(data = data, prediction_df = pred_df_test,
-df_bin_centroids = centroid_df_test, df_bin = avg_df_test, num_bins = num_bins)
+df_bin_centroids = centroid_df_test, df_bin = avg_df_test, num_bins = num_bins, col_start = "x")
 
 }
