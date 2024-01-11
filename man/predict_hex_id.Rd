@@ -33,7 +33,7 @@ predict_hex_id(
 \item{col_start}{The text that begin the column name of the high-D data}
 }
 \value{
-A list containing the predicted data, hexagonal bin centroids, and averaged high-dimensional data.
+A list containing the predicted data, hexagonal bin centroids, averaged high-dimensional data, and hexbin_data_object.
 }
 \description{
 This function predicts hexagonal IDs for a test set based on training data and non-linear dimensionality reduction (NLDR) coordinates.

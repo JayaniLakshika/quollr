@@ -39,7 +39,7 @@ compute_aic <- function(p, total, num_bins, num_obs) {
 #' @param y The name of the column that contains second embedding as a string.
 #' @param col_start The text that begin the column name of the high-D data
 #'
-#' @return A list containing the predicted data, hexagonal bin centroids, and averaged high-dimensional data.
+#' @return A list containing the predicted data, hexagonal bin centroids, averaged high-dimensional data, and hexbin_data_object.
 #'
 #' @importFrom dplyr bind_cols select mutate
 #' @importFrom class knn
@@ -81,7 +81,7 @@ predict_hex_id <- function(training_data, nldr_df, nldr_df_test, num_bins, shape
   pred_data <- nldr_df_test |>
     dplyr::mutate(pred_hb_id = as.numeric(as.character(pred_hb_id)))
 
-  return(list(pred_data = pred_data, df_bin_centroids = df_bin_centroids, df_bin = df_bin))
+  return(list(pred_data = pred_data, df_bin_centroids = df_bin_centroids, df_bin = df_bin, hexbin_data_object = hexbin_data_object))
 
 }
 
@@ -149,8 +149,104 @@ generate_eval_df <- function(data, prediction_df, df_bin_centroids, df_bin, num_
 
 
   #number_of_bins: Total number of bins with empty bins
-  eval_df <- tibble::tibble(number_of_bins = NROW(full_centroid_df), number_of_observations = NROW(prediction_df), total_error = compute_aic((NCOL(df_bin) - 1), prediction_df$total, NROW(full_centroid_df), NROW(prediction_df)), totol_error_method_2 = prediction_df$total * NROW(full_centroid_df)/NROW(prediction_df), totol_error_method_3 = prediction_df$total /NROW(full_centroid_df), total_mse = mean(prediction_df$total)/(NCOL(df_bin) - 1))
+  eval_df <- tibble::tibble(number_of_bins = NROW(full_centroid_df),
+                            number_of_observations = NROW(prediction_df),
+                            total_error = compute_aic((NCOL(df_bin) - 1), prediction_df$total, NROW(full_centroid_df), NROW(prediction_df)),
+                            total_mse = mean(prediction_df$total)/(NCOL(df_bin) - 1))
 
   return(eval_df)
 
 }
+
+#' Predict 2D Embeddings
+#'
+#' Given a test dataset, the centroid coordinates of hexagonal bins in  2D and high-dimensional space,
+#' predict the 2D embeddings for each data point in the test dataset.
+#'
+#' @param test_data The test dataset containing high-dimensional features and an ID column.
+#' @param df_bin_centroids Centroid coordinates of hexagonal bins in 2D space.
+#' @param df_bin Centroid coordinates of hexagonal bins in high dimensions.
+#' @param type_NLDR The type of non-linear dimensionality reduction (NLDR) used. Default is "UMAP".
+#'
+#' @return A data frame with predicted 2D embedding for each data point in the test dataset.
+#'
+#' @examples
+#' nldr_df <- s_curve_noise_umap
+#' training_data <- s_curve_noise_training
+#' test_data <- s_curve_noise_test
+#' num_bins <- 8
+#' shape_val <- 2.031141
+#' hexbin_data_object <- extract_hexbin_centroids(nldr_df, num_bins, shape_val)
+#' df_bin_centroids <- hexbin_data_object$hexdf_data
+#' nldr_df_with_hb_id <- nldr_df |>
+#' dplyr::mutate(hb_id = hexbin_data_object_s_curve$hb_data@cID)
+#' df_all <- dplyr::bind_cols(training_data |> dplyr::select(-ID), nldr_df_with_hb_id)
+#' df_bin <- avg_highD_data(.data = df_all, column_start_text = "x")
+#' predict_2d_embeddings(test_data = test_data, df_bin_centroids = df_bin_centroids,
+#' df_bin = df_bin, type_NLDR = "UMAP")
+#'
+#' @importFrom dplyr mutate_if bind_rows filter row_number arrange
+#' @importFrom stats dist
+#' @export
+predict_2d_embeddings <- function(test_data, df_bin_centroids, df_bin, type_NLDR = "UMAP") {
+
+  columns_df <- c(paste0("pred_", type_NLDR, "_", 1:2), "ID")
+  vec <- stats::setNames(rep("", length(columns_df)), columns_df)  ## Define column names
+
+  predict_coord_test <- dplyr::bind_rows(vec)[0, ]
+  predict_coord_test <- predict_coord_test |>
+    dplyr::mutate_if(is.character, as.numeric)
+
+  for (i in 1:NROW(test_data)) {
+
+    ### Filter the new data point
+    test_data_point <- test_data |>
+      dplyr::filter(dplyr::row_number() == i)
+
+    ## Obtain centroid coordinates in high-D
+    centroid_coord_high_D <- df_bin |>
+      dplyr::select(-hb_id)
+
+    ## Compute the distance between test point and the centroid points in high-D
+    d <- stats::dist(dplyr::bind_rows(test_data_point |> dplyr::select(-ID), centroid_coord_high_D)) |> as.matrix()
+
+    ## Obtain the distances
+    distance_vec <- d[2:dim(d)[1], 1] |> as.vector()
+
+    ## Add the distance vec as a column in high-D centroid coordinate data set
+    centroid_coord_high_D <- centroid_coord_high_D |>
+      dplyr::mutate(distance = distance_vec) |>
+      dplyr::mutate(hb_id = df_bin$hb_id)
+
+    ## Sort by distance and obtain the centroid which is nearest
+    predict_centroid_coord_high_D <- centroid_coord_high_D |>
+      dplyr::arrange(distance) |>
+      dplyr::filter(dplyr::row_number() == 1)
+
+    ## Rename columns
+    #names(predict_centroid_coord_high_D)[1:(NCOL(test_data_point) - 1)] <- paste0("C_", names(predict_centroid_coord_high_D)[1:(NCOL(test_data_point) - 1)])
+
+    ## Obtain 2D coordinate of the nearest high-D centroid
+    predict_centroid_coord_2D <- df_bin_centroids |>
+      dplyr::filter(hexID %in% predict_centroid_coord_high_D$hb_id) |>
+      dplyr::select(x, y) |>
+      dplyr::mutate(ID = test_data_point$ID)
+
+    ## Rename columns
+    names(predict_centroid_coord_2D) <- c(paste0("pred_", type_NLDR, "_", 1:2), "ID")
+
+    ## Combine high-D and 2D coordinate
+    #predict_centroid_coord_all <- dplyr::bind_cols(test_data_point, predict_centroid_coord_high_D, predict_centroid_coord_2D)
+
+    ## Combine all
+    predict_coord_test <- dplyr::bind_rows(predict_coord_test, predict_centroid_coord_2D)
+
+
+  }
+
+  return(predict_coord_test)
+
+
+}
+
+
