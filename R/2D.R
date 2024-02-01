@@ -142,7 +142,7 @@ triangulate_bin_centroids <- function(.data, x, y){
 #' generate_edge_info(triangular_object = tr1_object)
 #'
 #' @importFrom tibble tibble
-#' @importFrom dplyr mutate filter row_number pull nth bind_rows
+#' @importFrom dplyr mutate filter row_number pull nth bind_rows distinct
 #' @importFrom tripack triangles
 #' @export
 generate_edge_info <- function(triangular_object) {
@@ -159,6 +159,15 @@ generate_edge_info <- function(triangular_object) {
   tr_arcs_df2 <- tibble::tibble(from = trang$node1, to = trang$node3)
   tr_arcs_df3 <- tibble::tibble(from = trang$node2, to = trang$node3)
   tr_arcs_df <- dplyr::bind_rows(tr_arcs_df1, tr_arcs_df2, tr_arcs_df3)
+
+  tr_arcs_df <- tr_arcs_df |> ## To remove duplicates
+    dplyr::distinct()
+
+  ## To extract unique combinations
+  tr_arcs_df <- tr_arcs_df |>
+    dplyr::mutate(x = pmin(from, to), y = pmax(from, to)) |>
+    dplyr::distinct(x, y) |>
+    dplyr::rename(c("from" = "x", "to" = "y"))
 
   # Create an empty data frame to store the edge information
   vec <- stats::setNames(rep("", 6), c("from", "to", "x_from", "y_from", "x_to", "y_to"))  # Define column names
@@ -650,3 +659,56 @@ find_pts_in_hexbins <- function(full_grid_with_hexbin_id, UMAP_data_with_hb_id) 
   return(pts_df)
 
 }
+
+#' Find the Number of Non-Empty Bins Required
+#'
+#' This function determines the number of non-empty bins needed to satisfy a minimum requirement.
+
+#' @param nldr_df Non-linear dimensionality reduction data frame containing 2D coordinates.
+#' @param shape_val The value of the shape parameter for hexagon binning.
+#' @param x The name of the column that contains first embedding.
+#' @param y The name of the column that contains second embedding.
+#' @param non_empty_bins The desired number of non-empty bins.
+#'
+#' @return The number of bins along the x-axis needed to achieve the specified number of non-empty bins.
+#'
+#' @examples
+#' nldr_df <- s_curve_noise_umap
+#' shape_val <- 2.031141
+#' non_empty_bins <- 7
+#' find_non_empty_bins(nldr_df, x = "UMAP1", y = "UMAP2", shape_val, non_empty_bins)
+#'
+#' @export
+find_non_empty_bins <- function(nldr_df, x = "UMAP1", y = "UMAP2", shape_val, non_empty_bins) {
+
+  num_bins_x <- 1
+  ## To extract bin centroids
+  hexbin_data_object <- extract_hexbin_centroids(nldr_df = nldr_df,
+                                                 num_bins = num_bins_x,
+                                                 shape_val = shape_val, x = x, y = y)
+  df_bin_centroids <- hexbin_data_object$hexdf_data
+
+  num_of_non_empty_bins <- df_bin_centroids$hexID |> length()
+
+  while (num_of_non_empty_bins < non_empty_bins) {
+
+    num_bins_x <- num_bins_x + 1
+
+    ## To extract bin centroids
+    hexbin_data_object <- extract_hexbin_centroids(nldr_df = nldr_df,
+                                                   num_bins = num_bins_x,
+                                                   shape_val = shape_val, x = y, y = y)
+
+    df_bin_centroids <- hexbin_data_object$hexdf_data
+
+    num_of_non_empty_bins <- df_bin_centroids$hexID |> length()
+
+    if (num_of_non_empty_bins >= non_empty_bins) {
+      return(num_bins_x)
+      break
+    } else {
+      next
+    }
+  }
+}
+

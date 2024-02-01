@@ -37,6 +37,7 @@ calculate_effective_x_bins <- function(.data, x = UMAP1, cell_area = 1){
                          dplyr::pull({{ x }})))
 
   num_bins <- ceiling(xwidth/cell_diameter)
+  #num_bins <- floor(xwidth/cell_diameter + 1.5001)
   num_bins
 
 }

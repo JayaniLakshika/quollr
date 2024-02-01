@@ -43,7 +43,7 @@ compute_aic <- function(p, total, num_bins, num_obs) {
 #'
 #' @importFrom dplyr bind_cols select mutate
 #' @importFrom class knn
-#'@importFrom rlang syms
+#' @importFrom rlang syms
 #'
 #' @examples
 #' nldr_df <- s_curve_noise_umap

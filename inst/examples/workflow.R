@@ -95,6 +95,10 @@ shape_val <- calculate_effective_shape_value(.data = UMAP_data,
                                              x = UMAP1, y = UMAP2)
 shape_val
 
+num_bins_y <- 2 * floor((num_bins_x * shape_val)/sqrt(3) + 1.5001)
+
+total_num_bins <- (num_bins_x + 1) * num_bins_y
+
 ## To extract bin centroids
 
 hexbin_data_object <- extract_hexbin_centroids(UMAP_data, num_bins_x, shape_val)

@@ -59,7 +59,6 @@ compute_weights <- function(nldr_df, hb_object) {
   ## To get the average of each bin
   bin_val_hexagons <- nldr_df |>
     dplyr::mutate(hb_id = hb_object@cID) |>
-    dplyr::select(-ID) |>
     dplyr::group_by(hb_id) |>
     dplyr::summarise(dplyr::across(tidyselect::everything(), mean))
 
@@ -70,8 +69,8 @@ compute_weights <- function(nldr_df, hb_object) {
   ## To calculate distances from average point
 
   umap_with_avg_all <- dplyr::inner_join(bin_val_hexagons , nldr_df |>
-                                           dplyr::mutate(hb_id = hb_object@cID) |>
-                                           dplyr::select(-ID), by = c("hb_id" = "hb_id"))
+                                           dplyr::mutate(hb_id = hb_object@cID),
+                                         by = c("hb_id" = "hb_id"))
 
 
   umap_with_avg_all_split <- umap_with_avg_all |>
@@ -147,8 +146,8 @@ weighted_highD_data <- function(training_data, nldr_df_with_id, hb_object, colum
 
   }
 
-  weighted_mean <- weighted_mean_df_list |>
-    Reduce(function(dtf1,dtf2) dplyr::full_join(dtf1,dtf2,by="hb_id"), .)
+  weighted_mean <- Reduce(function(dtf1,dtf2) dplyr::full_join(dtf1,dtf2,by="hb_id"),
+                          weighted_mean_df_list)
 
 
   ## Column names start with x
