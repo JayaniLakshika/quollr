@@ -7,7 +7,7 @@
 
 <!-- badges: start -->
 
-[![R-CMD-check](https://github.com/JayaniLakshika/quollr/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/JayaniLakshika/quollr/workflows/R-CMD-check)
+[![R-CMD-check](https://github.com/JayaniLakshika/quollr/workflows/R-CMD-check/badge.svg)](https://github.com/JayaniLakshika/quollr/workflows/R-CMD-check)
 [![test](https://github.com/JayaniLakshika/quollr/workflows/test-coverage.yaml/badge.svg)](https://github.com/JayaniLakshika/quollr/workflows/test-coverage.yaml)
 <!-- badges: end -->
 
