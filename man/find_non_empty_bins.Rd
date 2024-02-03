@@ -30,9 +30,9 @@ The number of bins along the x-axis needed to achieve the specified number of no
 This function determines the number of non-empty bins needed to satisfy a minimum requirement.
 }
 \examples{
-nldr_df <- s_curve_noise_umap
-shape_val <- 2.031141
+shape_value <- 1.833091
 non_empty_bins <- 7
-find_non_empty_bins(nldr_df, x = "UMAP1", y = "UMAP2", shape_val, non_empty_bins)
+find_non_empty_bins(nldr_df = s_curve_noise_umap, x = "UMAP1", y = "UMAP2",
+shape_val = shape_value, non_empty_bins)
 
 }

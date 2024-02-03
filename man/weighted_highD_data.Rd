@@ -28,14 +28,14 @@ This function computes the weighted mean of the specified columns in the trainin
 based on the distances from the average points in the non-linear dimensionality reduction (NLDR) space.
 }
 \examples{
-training_data <- s_curve_noise_training
-nldr_df_with_id <- s_curve_noise_umap
-num_bins <- 8
-shape_val <- 2.031141
-result <- extract_hexbin_centroids(nldr_df, num_bins, shape_val)
-hexdf_data <- result$hexdf_data
-hb_object <- result$hb_data
-weighted_highD_data(training_data, nldr_df_with_id, hb_object)
+num_bins_x <- 4
+shape_value <- 1.833091
+hexbin_data_object <- extract_hexbin_centroids(nldr_df = s_curve_noise_umap,
+num_bins = num_bins_x, shape_val = shape_value)
+hexdf_data <- hexbin_data_object$hexdf_data
+hb_object <- hexbin_data_object$hb_data
+weighted_highD_data(training_data = s_curve_noise_training,
+nldr_df_with_id = s_curve_noise_umap, hb_object = hb_object, column_start_text = "x")
 
 }
 \seealso{

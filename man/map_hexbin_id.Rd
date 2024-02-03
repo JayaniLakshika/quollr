@@ -18,10 +18,10 @@ A data frame with columns 'x', 'y', 'hexID', and 'counts' representing hexagon c
 This function generates a data frame with hexagon IDs mapped to their centroids in the full grid.
 }
 \examples{
-nldr_df <- s_curve_noise_umap
-num_bins <- 7
-shape_val <- 1.833091
-hexbin_data_object <- extract_hexbin_mean(nldr_df, num_bins, shape_val)
+num_bins_x <- 4
+shape_value <- 1.833091
+hexbin_data_object <- extract_hexbin_centroids(nldr_df = s_curve_noise_umap,
+num_bins = num_bins_x, shape_val = shape_value)
 df_bin_centroids <- hexbin_data_object$hexdf_data
 full_centroid_df <- generate_full_grid_centroids(df_bin_centroids)
 map_hexbin_id(full_centroid_df, df_bin_centroids)

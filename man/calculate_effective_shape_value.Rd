@@ -20,6 +20,5 @@ A numeric value representing the effective shape parameter.
 This function calculates the effective shape parameter value for a scatter plot based on the ranges of the x-axis and y-axis.
 }
 \examples{
-nldr_df <- s_curve_noise_umap
-calculate_effective_shape_value(nldr_df, x = UMAP1, y = UMAP2)
+calculate_effective_shape_value(.data = s_curve_noise_umap, x = UMAP1, y = UMAP2)
 }

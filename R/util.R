@@ -12,8 +12,7 @@
 #' @export
 #'
 #' @examples
-#' nldr_df <- s_curve_noise_umap
-#' calculate_effective_x_bins(nldr_df, x = UMAP1, cell_area = 1)
+#' calculate_effective_x_bins(.data = s_curve_noise_umap, x = UMAP1, cell_area = 1)
 calculate_effective_x_bins <- function(.data, x = UMAP1, cell_area = 1){
 
   if (any(is.na(.data |> dplyr::pull({{ x }})))) {
@@ -55,8 +54,7 @@ calculate_effective_x_bins <- function(.data, x = UMAP1, cell_area = 1){
 #' @export
 #'
 #' @examples
-#' nldr_df <- s_curve_noise_umap
-#' calculate_effective_shape_value(nldr_df, x = UMAP1, y = UMAP2)
+#' calculate_effective_shape_value(.data = s_curve_noise_umap, x = UMAP1, y = UMAP2)
 calculate_effective_shape_value <- function(.data, x = UMAP1, y = UMAP2){
 
   if (any(is.na(.data |> dplyr::pull({{ x }}))) || any(is.na(.data |> dplyr::pull({{ y }})))) {

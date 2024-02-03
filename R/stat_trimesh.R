@@ -31,7 +31,7 @@ stat_trimesh <- function(mapping = NULL, data = NULL, geom = GeomTrimesh$default
   )
 }
 
-#' @rdname ggplot2-ggproto
+
 #' @importFrom ggplot2 Stat
 #' @importFrom ggplot2 aes
 #' @importFrom ggplot2 GeomPoint GeomSegment

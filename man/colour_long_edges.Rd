@@ -22,14 +22,15 @@ A ggplot object with the triangular mesh plot where long edges are colored diffe
 This function colors the long edges in a triangular mesh plot based on a benchmark value.
 }
 \examples{
-nldr_df <- s_curve_noise_umap
-num_bins <- 7
-shape_val <- 1.833091
-hexbin_data_object <- extract_hexbin_mean(nldr_df, num_bins, shape_val)
+num_bins_x <- 4
+shape_value <- 1.833091
+hexbin_data_object <- extract_hexbin_centroids(nldr_df = s_curve_noise_umap,
+num_bins = num_bins_x, shape_val = shape_value)
 df_bin_centroids <- hexbin_data_object$hexdf_data
 tr1_object <- triangulate_bin_centroids(df_bin_centroids, x, y)
 tr_from_to_df <- generate_edge_info(triangular_object = tr1_object)
-distance_df <- cal_2D_dist(tr_from_to_df)
-colour_long_edges(distance_df, 1.4, tr1_object, "distance")
+distance_df <- cal_2d_dist(tr_from_to_df)
+colour_long_edges(.data = distance_df, benchmark_value = 5.4,
+triangular_object = tr1_object, distance_col = distance)
 
 }

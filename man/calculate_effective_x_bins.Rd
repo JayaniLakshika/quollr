@@ -20,6 +20,5 @@ A numeric value representing the effective number of bins along x-axis.
 This function calculates the effective number of bins along the x-axis of a hexbin plot.
 }
 \examples{
-nldr_df <- s_curve_noise_umap
-calculate_effective_x_bins(nldr_df, x = UMAP1, cell_area = 1)
+calculate_effective_x_bins(.data = s_curve_noise_umap, x = UMAP1, cell_area = 1)
 }

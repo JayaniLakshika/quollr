@@ -7,7 +7,7 @@
 avg_highD_data(.data, column_start_text = "x")
 }
 \arguments{
-\item{.data}{The data frame containing the high-dimensional data.}
+\item{.data}{The data frame containing the high-dimensional data with 2D embedding.}
 
 \item{column_start_text}{The text that begin the column name of the high-D data}
 }
@@ -18,13 +18,13 @@ A data frame with the average values of the high-dimensional data within each he
 This function calculates the average values of high-dimensional data within each hexagonal bin.
 }
 \examples{
-nldr_df <- s_curve_noise_umap
 training_data <- s_curve_noise_training
-num_bins <- 8
-shape_val <- 2.031141
-hexbin_data_object <- extract_hexbin_mean(nldr_df, num_bins, shape_val)
+num_bins_x <- 4
+shape_value <- 1.833091
+hexbin_data_object <- extract_hexbin_centroids(nldr_df = s_curve_noise_umap,
+num_bins = num_bins_x, shape_val = shape_value)
 df_bin_centroids <- hexbin_data_object$hexdf_data
-UMAP_data_with_hb_id <- nldr_df |> dplyr::mutate(hb_id = hexbin_data_object$hb_data@cID)
+UMAP_data_with_hb_id <- s_curve_noise_umap |> dplyr::mutate(hb_id = hexbin_data_object$hb_data@cID)
 df_all <- dplyr::bind_cols(training_data |> dplyr::select(-ID), UMAP_data_with_hb_id)
 avg_highD_data(df_all)
 

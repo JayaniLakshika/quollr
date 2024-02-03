@@ -16,10 +16,10 @@
 #'
 #' @examples
 #' # Example usage of extract_hexbin_centroids function
-#' nldr_df <- s_curve_noise_umap
-#' num_bins <- 7
-#' shape_val <- 1.833091
-#' result <- extract_hexbin_centroids(nldr_df, num_bins, shape_val)
+#' num_bins_x <- 4
+#' shape_value <- 1.833091
+#' result <- extract_hexbin_centroids(nldr_df = s_curve_noise_umap,
+#' num_bins = num_bins_x, shape_val = shape_value, x = UMAP1, y = UMAP2)
 #' hexdf_data <- result$hexdf_data
 #' hb_data <- result$hb_data
 #' print(hexdf_data)
@@ -61,10 +61,10 @@ extract_hexbin_centroids <- function(nldr_df, num_bins, shape_val = 1, x = UMAP1
 #'
 #' @examples
 #' # Example usage of extract_hexbin_mean function
-#' nldr_df <- s_curve_noise_umap
-#' num_bins <- 7
-#' shape_val <- 1.833091
-#' result <- extract_hexbin_mean(nldr_df, num_bins, shape_val)
+#' num_bins_x <- 4
+#' shape_value <- 1.833091
+#' result <- extract_hexbin_mean(nldr_df = s_curve_noise_umap,
+#' num_bins = num_bins_x, shape_val = shape_value, x = UMAP1, y = UMAP2)
 #' hexdf_data <- result$hexdf_data
 #' hb_data <- result$hb_data
 #' print(hexdf_data)
@@ -108,10 +108,10 @@ extract_hexbin_mean <- function(nldr_df, num_bins, shape_val = 1, x = UMAP1, y =
 #' @return A triangular object representing the triangulated bin centroids.
 #'
 #' @examples
-#' nldr_df <- s_curve_noise_umap
-#' num_bins <- 7
-#' shape_val <- 1.833091
-#' hexbin_data_object <- extract_hexbin_mean(nldr_df, num_bins, shape_val)
+#' num_bins_x <- 4
+#' shape_value <- 1.833091
+#' hexbin_data_object <- extract_hexbin_centroids(nldr_df = s_curve_noise_umap,
+#' num_bins = num_bins_x, shape_val = shape_value)
 #' df_bin_centroids <- hexbin_data_object$hexdf_data
 #' triangulate_bin_centroids(df_bin_centroids, x, y)
 #'
@@ -133,10 +133,10 @@ triangulate_bin_centroids <- function(.data, x, y){
 #' @return A data frame containing the edge information, including the from-to relationships and the corresponding x and y coordinates.
 #'
 #' @examples
-#' nldr_df <- s_curve_noise_umap
-#' num_bins <- 7
-#' shape_val <- 1.833091
-#' hexbin_data_object <- extract_hexbin_mean(nldr_df, num_bins, shape_val)
+#' num_bins_x <- 4
+#' shape_value <- 1.833091
+#' hexbin_data_object <- extract_hexbin_centroids(nldr_df = s_curve_noise_umap,
+#' num_bins = num_bins_x, shape_val = shape_value)
 #' df_bin_centroids <- hexbin_data_object$hexdf_data
 #' tr1_object <- triangulate_bin_centroids(df_bin_centroids, x, y)
 #' generate_edge_info(triangular_object = tr1_object)
@@ -205,20 +205,21 @@ generate_edge_info <- function(triangular_object) {
 #' @return A data frame with columns for the starting point, ending point, and calculated distances.
 #'
 #' @examples
-#' nldr_df <- s_curve_noise_umap
-#' num_bins <- 7
-#' shape_val <- 1.833091
-#' hexbin_data_object <- extract_hexbin_mean(nldr_df, num_bins, shape_val)
+#' num_bins_x <- 4
+#' shape_value <- 1.833091
+#' hexbin_data_object <- extract_hexbin_centroids(nldr_df = s_curve_noise_umap,
+#' num_bins = num_bins_x, shape_val = shape_value)
 #' df_bin_centroids <- hexbin_data_object$hexdf_data
 #' tr1_object <- triangulate_bin_centroids(df_bin_centroids, x, y)
 #' tr_from_to_df <- generate_edge_info(triangular_object = tr1_object)
-#' cal_2D_dist(tr_from_to_df, start_x = "x_from", start_y = "y_from",
+#' cal_2d_dist(tr_from_to_df, start_x = "x_from", start_y = "y_from",
 #' end_x = "x_to", end_y = "y_to", select_col_vec = c("from", "to", "distance"))
 #'
 #' @importFrom dplyr select
 #'
 #' @export
-cal_2D_dist <- function(.data, start_x = "x_from", start_y = "y_from", end_x = "x_to", end_y = "y_to", select_col_vec = c("from", "to", "distance")) {
+cal_2d_dist <- function(.data, start_x = "x_from", start_y = "y_from", end_x = "x_to",
+                        end_y = "y_to", select_col_vec = c("from", "to", "distance")) {
   # Calculate the 2D distances
   .data$distance <- lapply(seq(nrow(.data)), function(x) {
     start <- unlist(.data[x, c(start_x, start_y)])
@@ -251,15 +252,16 @@ cal_2D_dist <- function(.data, start_x = "x_from", start_y = "y_from", end_x = "
 #' @importFrom tibble tibble as_tibble
 #'
 #' @examples
-#' nldr_df <- s_curve_noise_umap
-#' num_bins <- 7
-#' shape_val <- 1.833091
-#' hexbin_data_object <- extract_hexbin_mean(nldr_df, num_bins, shape_val)
+#' num_bins_x <- 4
+#' shape_value <- 1.833091
+#' hexbin_data_object <- extract_hexbin_centroids(nldr_df = s_curve_noise_umap,
+#' num_bins = num_bins_x, shape_val = shape_value)
 #' df_bin_centroids <- hexbin_data_object$hexdf_data
 #' tr1_object <- triangulate_bin_centroids(df_bin_centroids, x, y)
 #' tr_from_to_df <- generate_edge_info(triangular_object = tr1_object)
-#' distance_df <- cal_2D_dist(tr_from_to_df)
-#' colour_long_edges(distance_df, 1.4, tr1_object, "distance")
+#' distance_df <- cal_2d_dist(tr_from_to_df)
+#' colour_long_edges(.data = distance_df, benchmark_value = 5.4,
+#' triangular_object = tr1_object, distance_col = distance)
 #'
 #' @export
 colour_long_edges <- function(.data, benchmark_value, triangular_object, distance_col) {
@@ -314,15 +316,16 @@ colour_long_edges <- function(.data, benchmark_value, triangular_object, distanc
 #' @importFrom stats setNames
 #'
 #' @examples
-#' nldr_df <- s_curve_noise_umap
-#' num_bins <- 7
-#' shape_val <- 1.833091
-#' hexbin_data_object <- extract_hexbin_mean(nldr_df, num_bins, shape_val)
+#' num_bins_x <- 4
+#' shape_value <- 1.833091
+#' hexbin_data_object <- extract_hexbin_centroids(nldr_df = s_curve_noise_umap,
+#' num_bins = num_bins_x, shape_val = shape_value)
 #' df_bin_centroids <- hexbin_data_object$hexdf_data
 #' tr1_object <- triangulate_bin_centroids(df_bin_centroids, x, y)
 #' tr_from_to_df <- generate_edge_info(triangular_object = tr1_object)
-#' distance_df <- cal_2D_dist(tr_from_to_df)
-#' remove_long_edges(distance_df, 1.4, tr1_object, "distance")
+#' distance_df <- cal_2d_dist(tr_from_to_df)
+#' remove_long_edges(.data = distance_df, benchmark_value = 5.4,
+#' triangular_object = tr1_object, distance_col = distance)
 #'
 #' @export
 remove_long_edges <- function(.data, benchmark_value, triangular_object,
@@ -368,11 +371,10 @@ remove_long_edges <- function(.data, benchmark_value, triangular_object,
 #' @importFrom dplyr bind_rows
 #'
 #' @examples
-#' nldr_df <- s_curve_noise_umap
-#' num_bins <- 7
-#' shape_val <- 1.833091
-#' set.seed(123)
-#' hexbin_data_object <- extract_hexbin_mean(nldr_df, num_bins, shape_val)
+#' num_bins_x <- 4
+#' shape_value <- 1.833091
+#' hexbin_data_object <- extract_hexbin_centroids(nldr_df = s_curve_noise_umap,
+#' num_bins = num_bins_x, shape_val = shape_value)
 #' df_bin_centroids <- hexbin_data_object$hexdf_data
 #' generate_full_grid_centroids(df_bin_centroids)
 #'
@@ -406,11 +408,10 @@ generate_full_grid_centroids <- function(hexdf_data){
 #' @importFrom hexbin hexcoords
 #'
 #' @examples
-#' nldr_df <- s_curve_noise_umap
-#' num_bins <- 7
-#' shape_val <- 1.833091
-#' set.seed(123)
-#' hexbin_data_object <- extract_hexbin_mean(nldr_df, num_bins, shape_val)
+#' num_bins_x <- 4
+#' shape_value <- 1.833091
+#' hexbin_data_object <- extract_hexbin_centroids(nldr_df = s_curve_noise_umap,
+#' num_bins = num_bins_x, shape_val = shape_value)
 #' df_bin_centroids <- hexbin_data_object$hexdf_data
 #' full_centroid_df <- generate_full_grid_centroids(df_bin_centroids)
 #' full_hex_grid(full_centroid_df)
@@ -456,10 +457,10 @@ full_hex_grid <- function(hexdf_data){
 #' @return A data frame with columns 'x', 'y', 'hexID', and 'counts' representing hexagon centroids and counts.
 #'
 #' @examples
-#' nldr_df <- s_curve_noise_umap
-#' num_bins <- 7
-#' shape_val <- 1.833091
-#' hexbin_data_object <- extract_hexbin_mean(nldr_df, num_bins, shape_val)
+#' num_bins_x <- 4
+#' shape_value <- 1.833091
+#' hexbin_data_object <- extract_hexbin_centroids(nldr_df = s_curve_noise_umap,
+#' num_bins = num_bins_x, shape_val = shape_value)
 #' df_bin_centroids <- hexbin_data_object$hexdf_data
 #' full_centroid_df <- generate_full_grid_centroids(df_bin_centroids)
 #' map_hexbin_id(full_centroid_df, df_bin_centroids)
@@ -490,7 +491,7 @@ map_hexbin_id <- function(full_centroid_df, df_bin_centroids) {
 
   ## Add the column with hexagonal bin ID
   full_grid_with_hexbin_id <- full_grid_with_hexbin_id |>
-    dplyr::mutate(hexID = row_number())
+    dplyr::mutate(hexID = dplyr::row_number())
 
   ## Rename columns
   full_grid_with_hexbin_id <- full_grid_with_hexbin_id |>
@@ -523,10 +524,10 @@ map_hexbin_id <- function(full_centroid_df, df_bin_centroids) {
 #' @importFrom dplyr filter mutate bind_rows
 #'
 #' @examples
-#' nldr_df <- s_curve_noise_umap
-#' num_bins <- 7
-#' shape_val <- 1.833091
-#' hexbin_data_object <- extract_hexbin_mean(nldr_df, num_bins, shape_val)
+#' num_bins_x <- 4
+#' shape_value <- 1.833091
+#' hexbin_data_object <- extract_hexbin_centroids(nldr_df = s_curve_noise_umap,
+#' num_bins = num_bins_x, shape_val = shape_value)
 #' df_bin_centroids <- hexbin_data_object$hexdf_data
 #' full_centroid_df <- generate_full_grid_centroids(df_bin_centroids)
 #' hex_grid <- full_hex_grid(full_centroid_df)
@@ -581,10 +582,10 @@ map_polygon_id <- function(full_grid_with_hexbin_id, hex_grid) {
 #' @importFrom dplyr slice arrange bind_cols
 #'
 #' @examples
-#' nldr_df <- s_curve_noise_umap
-#' num_bins <- 7
-#' shape_val <- 1.833091
-#' hexbin_data_object <- extract_hexbin_mean(nldr_df, num_bins, shape_val)
+#' num_bins_x <- 4
+#' shape_value <- 1.833091
+#' hexbin_data_object <- extract_hexbin_centroids(nldr_df = s_curve_noise_umap,
+#' num_bins = num_bins_x, shape_val = shape_value)
 #' df_bin_centroids <- hexbin_data_object$hexdf_data
 #' generate_full_grid_info(df_bin_centroids)
 #'
@@ -620,37 +621,37 @@ generate_full_grid_info <- function(df_bin_centroids) {
 #' This function maps points to their corresponding hexagonal bins based on the provided data frames.
 #'
 #' @param full_grid_with_hexbin_id A data frame with hexagonal bin IDs and coordinates.
-#' @param UMAP_data_with_hb_id A data frame with UMAP data and hexagonal bin IDs.
+#' @param nldr_data_with_hb_id A data frame with 2D embedding data and hexagonal bin IDs.
 #'
 #' @return A data frame with hexagonal bin IDs and the corresponding points.
 #'
 #' @examples
-#' nldr_df <- s_curve_noise_umap
-#' num_bins <- 7
-#' shape_val <- 1.833091
-#' hexbin_data_object <- extract_hexbin_mean(nldr_df, num_bins, shape_val)
+#' num_bins_x <- 4
+#' shape_value <- 1.833091
+#' hexbin_data_object <- extract_hexbin_centroids(nldr_df = s_curve_noise_umap,
+#' num_bins = num_bins_x, shape_val = shape_value)
 #' df_bin_centroids <- hexbin_data_object$hexdf_data
 #' full_centroid_df <- generate_full_grid_centroids(df_bin_centroids)
 #' hex_grid <- full_hex_grid(full_centroid_df)
 #' full_grid_with_hexbin_id <- map_hexbin_id(full_centroid_df, df_bin_centroids)
-#' UMAP_data_with_hb_id <- nldr_df |> dplyr::mutate(hb_id = hexbin_data_object$hb_data@cID)
-#' find_pts_in_hexbins(full_grid_with_hexbin_id, UMAP_data_with_hb_id)
+#' UMAP_data_with_hb_id <- s_curve_noise_umap |> dplyr::mutate(hb_id = hexbin_data_object$hb_data@cID)
+#' find_pts_in_hexbins(full_grid_with_hexbin_id, nldr_data_with_hb_id = UMAP_data_with_hb_id)
 #'
 #' @export
-find_pts_in_hexbins <- function(full_grid_with_hexbin_id, UMAP_data_with_hb_id) {
+find_pts_in_hexbins <- function(full_grid_with_hexbin_id, nldr_data_with_hb_id) {
 
   ## Dataframe to store points info
   pts_df <- data.frame(matrix(ncol = 0, nrow = 0))
 
-  for (i in 1:length(UMAP_data_with_hb_id$hb_id)) {
+  for (i in 1:length(nldr_data_with_hb_id$hb_id)) {
 
     ## Filter a hexagon and find the point within that hexagon
-    pts_vec <- UMAP_data_with_hb_id |>
-      dplyr::filter(hb_id == UMAP_data_with_hb_id$hb_id[i]) |>
+    pts_vec <- nldr_data_with_hb_id |>
+      dplyr::filter(hb_id == nldr_data_with_hb_id$hb_id[i]) |>
       dplyr::pull(ID)
 
     ## Store the hexagon ID with the respective points
-    hb_pts <- tibble::tibble(hexID = UMAP_data_with_hb_id$hb_id[i], pts = list(pts_vec))
+    hb_pts <- tibble::tibble(hexID = nldr_data_with_hb_id$hb_id[i], pts = list(pts_vec))
 
     pts_df <- dplyr::bind_rows(pts_df, hb_pts)
 
@@ -673,10 +674,10 @@ find_pts_in_hexbins <- function(full_grid_with_hexbin_id, UMAP_data_with_hb_id) 
 #' @return The number of bins along the x-axis needed to achieve the specified number of non-empty bins.
 #'
 #' @examples
-#' nldr_df <- s_curve_noise_umap
-#' shape_val <- 2.031141
+#' shape_value <- 1.833091
 #' non_empty_bins <- 7
-#' find_non_empty_bins(nldr_df, x = "UMAP1", y = "UMAP2", shape_val, non_empty_bins)
+#' find_non_empty_bins(nldr_df = s_curve_noise_umap, x = "UMAP1", y = "UMAP2",
+#' shape_val = shape_value, non_empty_bins)
 #'
 #' @export
 find_non_empty_bins <- function(nldr_df, x = "UMAP1", y = "UMAP2", shape_val, non_empty_bins) {
@@ -727,15 +728,15 @@ find_non_empty_bins <- function(nldr_df, x = "UMAP1", y = "UMAP2", shape_val, no
 #' @return A data frame with updated hexagon coordinates, hexagon IDs, and counts within each hexagon.
 #'
 #' @examples
-#' nldr_df <- s_curve_noise_umap
-#' num_bins <- 7
-#' shape_val <- 1.833091
-#' hexbin_data_object <- extract_hexbin_mean(nldr_df, num_bins, shape_val)
+#' num_bins_x <- 4
+#' shape_value <- 1.833091
+#' hexbin_data_object <- extract_hexbin_centroids(nldr_df = s_curve_noise_umap,
+#' num_bins = num_bins_x, shape_val = shape_value)
 #' df_bin_centroids <- hexbin_data_object$hexdf_data
 #' hex_full_count_df <- generate_full_grid_info(df_bin_centroids)
-#' UMAP_data_with_hb_id <- nldr_df |> dplyr::mutate(hb_id = hexbin_data_object$hb_data@cID)
-#' result <- extract_coord_of_shifted_hex_grid(nldr_data_with_hb_id = UMAP_data_with_hb_id,
-#' num_bins_x = num_bins, hex_full_count_df)
+#' UMAP_data_with_hb_id <- s_curve_noise_umap |> dplyr::mutate(hb_id = hexbin_data_object$hb_data@cID)
+#' extract_coord_of_shifted_hex_grid(nldr_data_with_hb_id = UMAP_data_with_hb_id,
+#' num_bins_x = num_bins_x, hex_full_count_df)
 #'
 #' @export
 extract_coord_of_shifted_hex_grid <- function(nldr_data_with_hb_id, num_bins_x, hex_full_count_df, shift = NA) {

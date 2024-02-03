@@ -4,12 +4,12 @@
 \alias{find_pts_in_hexbins}
 \title{Find Points in Hexagonal Bins}
 \usage{
-find_pts_in_hexbins(full_grid_with_hexbin_id, UMAP_data_with_hb_id)
+find_pts_in_hexbins(full_grid_with_hexbin_id, nldr_data_with_hb_id)
 }
 \arguments{
 \item{full_grid_with_hexbin_id}{A data frame with hexagonal bin IDs and coordinates.}
 
-\item{UMAP_data_with_hb_id}{A data frame with UMAP data and hexagonal bin IDs.}
+\item{nldr_data_with_hb_id}{A data frame with 2D embedding data and hexagonal bin IDs.}
 }
 \value{
 A data frame with hexagonal bin IDs and the corresponding points.
@@ -18,15 +18,15 @@ A data frame with hexagonal bin IDs and the corresponding points.
 This function maps points to their corresponding hexagonal bins based on the provided data frames.
 }
 \examples{
-nldr_df <- s_curve_noise_umap
-num_bins <- 7
-shape_val <- 1.833091
-hexbin_data_object <- extract_hexbin_mean(nldr_df, num_bins, shape_val)
+num_bins_x <- 4
+shape_value <- 1.833091
+hexbin_data_object <- extract_hexbin_centroids(nldr_df = s_curve_noise_umap,
+num_bins = num_bins_x, shape_val = shape_value)
 df_bin_centroids <- hexbin_data_object$hexdf_data
 full_centroid_df <- generate_full_grid_centroids(df_bin_centroids)
 hex_grid <- full_hex_grid(full_centroid_df)
 full_grid_with_hexbin_id <- map_hexbin_id(full_centroid_df, df_bin_centroids)
-UMAP_data_with_hb_id <- nldr_df |> dplyr::mutate(hb_id = hexbin_data_object$hb_data@cID)
-find_pts_in_hexbins(full_grid_with_hexbin_id, UMAP_data_with_hb_id)
+UMAP_data_with_hb_id <- s_curve_noise_umap |> dplyr::mutate(hb_id = hexbin_data_object$hb_data@cID)
+find_pts_in_hexbins(full_grid_with_hexbin_id, nldr_data_with_hb_id = UMAP_data_with_hb_id)
 
 }

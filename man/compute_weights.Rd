@@ -18,12 +18,12 @@ A data frame with weights calculated for each hexagonal bin.
 This function computes weights for hexagonal binning based on the average values of each bin and the distances from these averages.
 }
 \examples{
-nldr_df <- s_curve_noise_umap
-num_bins <- 8
-shape_val <- 2.031141
-result <- extract_hexbin_centroids(nldr_df, num_bins, shape_val)
-hexdf_data <- result$hexdf_data
-hb_obj <- result$hb_data
-compute_weights(nldr_df, hb_obj)
+num_bins_x <- 4
+shape_value <- 1.833091
+hexbin_data_object <- extract_hexbin_centroids(nldr_df = s_curve_noise_umap,
+num_bins = num_bins_x, shape_val = shape_value)
+hexdf_data <- hexbin_data_object$hexdf_data
+hb_obj <- hexbin_data_object$hb_data
+compute_weights(nldr_df = s_curve_noise_umap |> dplyr::select(-ID), hb_object = hb_obj)
 
 }

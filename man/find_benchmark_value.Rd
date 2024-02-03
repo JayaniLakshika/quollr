@@ -18,14 +18,14 @@ The benchmark value, which is the first largest difference in the distance colum
 This function finds the benchmark value to remove long edges based on the differences in a distance column.
 }
 \examples{
-nldr_df <- s_curve_noise_umap
-num_bins <- 8
-shape_val <- 2.031141
-hexbin_data_object <- extract_hexbin_mean(nldr_df, num_bins, shape_val)
+num_bins_x <- 4
+shape_value <- 1.833091
+hexbin_data_object <- extract_hexbin_centroids(nldr_df = s_curve_noise_umap,
+num_bins = num_bins_x, shape_val = shape_value)
 df_bin_centroids <- hexbin_data_object$hexdf_data
 tr1_object <- triangulate_bin_centroids(df_bin_centroids, x, y)
 tr_from_to_df <- generate_edge_info(triangular_object = tr1_object)
 distance_df <- cal_2D_dist(tr_from_to_df)
-find_benchmark_value(distance_df, distance_col = "distance")
+find_benchmark_value(.data = distance_df, distance_col = "distance")
 
 }

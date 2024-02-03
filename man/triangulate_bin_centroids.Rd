@@ -20,10 +20,10 @@ A triangular object representing the triangulated bin centroids.
 This function triangulates the bin centroids using the x and y coordinates provided in the input data frame and returns the triangular object.
 }
 \examples{
-nldr_df <- s_curve_noise_umap
-num_bins <- 7
-shape_val <- 1.833091
-hexbin_data_object <- extract_hexbin_mean(nldr_df, num_bins, shape_val)
+num_bins_x <- 4
+shape_value <- 1.833091
+hexbin_data_object <- extract_hexbin_centroids(nldr_df = s_curve_noise_umap,
+num_bins = num_bins_x, shape_val = shape_value)
 df_bin_centroids <- hexbin_data_object$hexdf_data
 triangulate_bin_centroids(df_bin_centroids, x, y)
 

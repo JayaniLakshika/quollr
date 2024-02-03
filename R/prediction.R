@@ -2,7 +2,7 @@
 #'
 #' @param p Number of dimensions of the data set.
 #' @param total Total mean squared error (MSE) of the model.
-#' @param num_bins Total number of bins used in the model.
+#' @param num_bins Total number of bins without empty bins used in the model.
 #' @param num_obs Total number of observations in the training or test set.
 #'
 #' @return The AIC value for the specified model.

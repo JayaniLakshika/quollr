@@ -30,14 +30,14 @@ of a hexagonal grid with a specified shift. The resulting dataset includes hexag
 with updated coordinates and additional information such as counts within each hexagon.
 }
 \examples{
-nldr_df <- s_curve_noise_umap
-num_bins <- 7
-shape_val <- 1.833091
-hexbin_data_object <- extract_hexbin_mean(nldr_df, num_bins, shape_val)
+num_bins_x <- 4
+shape_value <- 1.833091
+hexbin_data_object <- extract_hexbin_centroids(nldr_df = s_curve_noise_umap,
+num_bins = num_bins_x, shape_val = shape_value)
 df_bin_centroids <- hexbin_data_object$hexdf_data
 hex_full_count_df <- generate_full_grid_info(df_bin_centroids)
-UMAP_data_with_hb_id <- nldr_df |> dplyr::mutate(hb_id = hexbin_data_object$hb_data@cID)
-result <- extract_coord_of_shifted_hex_grid(nldr_data_with_hb_id = UMAP_data_with_hb_id,
-num_bins_x = num_bins, hex_full_count_df)
+UMAP_data_with_hb_id <- s_curve_noise_umap |> dplyr::mutate(hb_id = hexbin_data_object$hb_data@cID)
+extract_coord_of_shifted_hex_grid(nldr_data_with_hb_id = UMAP_data_with_hb_id,
+num_bins_x = num_bins_x, hex_full_count_df)
 
 }

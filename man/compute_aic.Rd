@@ -11,7 +11,7 @@ compute_aic(p, total, num_bins, num_obs)
 
 \item{total}{Total mean squared error (MSE) of the model.}
 
-\item{num_bins}{Total number of bins used in the model.}
+\item{num_bins}{Total number of bins without empty bins used in the model.}
 
 \item{num_obs}{Total number of observations in the training or test set.}
 }

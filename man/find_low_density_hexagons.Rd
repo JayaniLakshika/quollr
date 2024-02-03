@@ -4,28 +4,35 @@
 \alias{find_low_density_hexagons}
 \title{Find Low-Density Hexagons}
 \usage{
-find_low_density_hexagons(df_bin_centroids, num_bins_x, benchmark_rm_hex = NA)
+find_low_density_hexagons(
+  df_bin_centroids_all,
+  num_bins_x,
+  df_bin_centroids_low
+)
 }
 \arguments{
-\item{df_bin_centroids}{The data frame containing hexagonal bin centroids with density information.}
-
 \item{num_bins_x}{Number of bins along the x-axis for hexagon binning.}
 
-\item{benchmark_rm_hex}{The benchmark mean density below which hexagons will be marked for removal.}
+\item{df_bin_centroids_low}{The data frame containing identified low-density hexagonal bin centroids.}
+
+\item{df_bin_centroids}{The data frame containing all hexagonal bin centroids.}
 }
 \value{
-A vector containing the IDs of hexagons to be removed.
+A vector containing the IDs of hexagons to be removed after investigating their neighbouring bins.
 }
 \description{
 This function identifies hexagons with low density based on the mean density of their neighboring hexagons.
 }
 \examples{
-nldr_df <- s_curve_noise_umap
-num_bins <- 8
-shape_val <- 2.031141
-hexbin_data_object <- extract_hexbin_mean(nldr_df, num_bins, shape_val)
+num_bins_x <- 4
+shape_value <- 1.833091
+hexbin_data_object <- extract_hexbin_centroids(nldr_df = s_curve_noise_umap,
+num_bins = num_bins_x, shape_val = shape_value)
 df_bin_centroids <- hexbin_data_object$hexdf_data
-find_low_density_hexagons(df_bin_centroids, num_bins)
+df_bin_centroids_low <- df_bin_centroids |>
+dplyr::filter(std_counts <= 0.2222222)
+find_low_density_hexagons(df_bin_centroids_all = df_bin_centroids, num_bins_x = num_bins_x,
+df_bin_centroids_low = df_bin_centroids_low)
 
 
 }

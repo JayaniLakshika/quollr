@@ -2,7 +2,7 @@
 #'
 #' This function calculates the average values of high-dimensional data within each hexagonal bin.
 #'
-#' @param .data The data frame containing the high-dimensional data.
+#' @param .data The data frame containing the high-dimensional data with 2D embedding.
 #' @param column_start_text The text that begin the column name of the high-D data
 #'
 #' @return A data frame with the average values of the high-dimensional data within each hexagonal bin.
@@ -10,13 +10,13 @@
 #' @importFrom dplyr group_by summarise across everything select starts_with
 #'
 #' @examples
-#' nldr_df <- s_curve_noise_umap
 #' training_data <- s_curve_noise_training
-#' num_bins <- 8
-#' shape_val <- 2.031141
-#' hexbin_data_object <- extract_hexbin_mean(nldr_df, num_bins, shape_val)
+#' num_bins_x <- 4
+#' shape_value <- 1.833091
+#' hexbin_data_object <- extract_hexbin_centroids(nldr_df = s_curve_noise_umap,
+#' num_bins = num_bins_x, shape_val = shape_value)
 #' df_bin_centroids <- hexbin_data_object$hexdf_data
-#' UMAP_data_with_hb_id <- nldr_df |> dplyr::mutate(hb_id = hexbin_data_object$hb_data@cID)
+#' UMAP_data_with_hb_id <- s_curve_noise_umap |> dplyr::mutate(hb_id = hexbin_data_object$hb_data@cID)
 #' df_all <- dplyr::bind_cols(training_data |> dplyr::select(-ID), UMAP_data_with_hb_id)
 #' avg_highD_data(df_all)
 #'
@@ -41,13 +41,13 @@ avg_highD_data <- function(.data, column_start_text = "x") {
 #' @return A data frame with weights calculated for each hexagonal bin.
 #'
 #' @examples
-#' nldr_df <- s_curve_noise_umap
-#' num_bins <- 8
-#' shape_val <- 2.031141
-#' result <- extract_hexbin_centroids(nldr_df, num_bins, shape_val)
-#' hexdf_data <- result$hexdf_data
-#' hb_obj <- result$hb_data
-#' compute_weights(nldr_df, hb_obj)
+#' num_bins_x <- 4
+#' shape_value <- 1.833091
+#' hexbin_data_object <- extract_hexbin_centroids(nldr_df = s_curve_noise_umap,
+#' num_bins = num_bins_x, shape_val = shape_value)
+#' hexdf_data <- hexbin_data_object$hexdf_data
+#' hb_obj <- hexbin_data_object$hb_data
+#' compute_weights(nldr_df = s_curve_noise_umap |> dplyr::select(-ID), hb_object = hb_obj)
 #'
 #' @importFrom dplyr group_by summarise across
 #' @importFrom stats setNames
@@ -68,24 +68,24 @@ compute_weights <- function(nldr_df, hb_object) {
 
   ## To calculate distances from average point
 
-  umap_with_avg_all <- dplyr::inner_join(bin_val_hexagons , nldr_df |>
+  nldr_with_avg_all <- dplyr::inner_join(bin_val_hexagons , nldr_df |>
                                            dplyr::mutate(hb_id = hb_object@cID),
                                          by = c("hb_id" = "hb_id"))
 
 
-  umap_with_avg_all_split <- umap_with_avg_all |>
+  nldr_with_avg_all_split <- nldr_with_avg_all |>
     dplyr::group_by(hb_id) |>
     dplyr::group_split()
 
-  col_names1 <- append(names(bin_val_hexagons), (names(nldr_df)[-length(names(nldr_df))]))
+  col_names1 <- append(names(bin_val_hexagons), names(nldr_df))
   col_names <- append(col_names1, "distance")
 
   vec <- stats::setNames(1:6, col_names)
   weight_df <- dplyr::bind_rows(vec)[0, ]
 
-  for(i in 1:length(umap_with_avg_all_split)){
+  for(i in 1:length(nldr_with_avg_all_split)){
 
-    weighted_mean_df <- umap_with_avg_all_split[[i]] |> ## These are the weights for weighted mean
+    weighted_mean_df <- nldr_with_avg_all_split[[i]] |> ## These are the weights for weighted mean
       cal_2D_dist(start_x = new_col[1], start_y = new_col[2], end_x = names(nldr_df)[1], end_y = names(nldr_df)[2], select_col_vec = col_names)
 
     weight_df <- dplyr::bind_rows(weight_df, weighted_mean_df)
@@ -110,14 +110,14 @@ compute_weights <- function(nldr_df, hb_object) {
 #' @return A data frame with the computed weighted mean for each specified column.
 #'
 #' @examples
-#' training_data <- s_curve_noise_training
-#' nldr_df_with_id <- s_curve_noise_umap
-#' num_bins <- 8
-#' shape_val <- 2.031141
-#' result <- extract_hexbin_centroids(nldr_df, num_bins, shape_val)
-#' hexdf_data <- result$hexdf_data
-#' hb_object <- result$hb_data
-#' weighted_highD_data(training_data, nldr_df_with_id, hb_object)
+#' num_bins_x <- 4
+#' shape_value <- 1.833091
+#' hexbin_data_object <- extract_hexbin_centroids(nldr_df = s_curve_noise_umap,
+#' num_bins = num_bins_x, shape_val = shape_value)
+#' hexdf_data <- hexbin_data_object$hexdf_data
+#' hb_object <- hexbin_data_object$hb_data
+#' weighted_highD_data(training_data = s_curve_noise_training,
+#' nldr_df_with_id = s_curve_noise_umap, hb_object = hb_object, column_start_text = "x")
 #'
 #' @seealso
 #' \code{\link{compute_weights}}
@@ -128,11 +128,15 @@ compute_weights <- function(nldr_df, hb_object) {
 #' @export
 weighted_highD_data <- function(training_data, nldr_df_with_id, hb_object, column_start_text = "x") {
 
+  nldr_df_with_id <- nldr_df_with_id |> dplyr::mutate(hb_id = hb_object@cID)
   df_all <- dplyr::bind_cols(training_data |> dplyr::select(-ID), nldr_df_with_id)
 
-  weight_df <- compute_weights(nldr_df_with_id |> dplyr::select(-ID), hb_object)
+  weight_df <- compute_weights(nldr_df_with_id |> dplyr::select(-c(ID, hb_id)), hb_object)
 
-  weighted_mean_all <- dplyr::inner_join(df_all, weight_df, by = c("hb_id" = "hb_id", "UMAP1" = "UMAP1", "UMAP2" = "UMAP2")) |>
+  joined_col_names <- names(nldr_df_with_id)[1:2]
+
+  weighted_mean_all <- dplyr::inner_join(df_all, weight_df, by = c("hb_id" = "hb_id",
+                                                                   stats::setNames(joined_col_names, joined_col_names))) |>
     mutate(distance_trans =  1/ (distance + 0.05))
 
   weighted_mean_df_list <- list()
@@ -175,13 +179,13 @@ weighted_highD_data <- function(training_data, nldr_df_with_id, hb_object, colum
 #' @importFrom langevitour langevitour
 #'
 #' @examples
-#' nldr_df <- s_curve_noise_umap
 #' training_data <- s_curve_noise_training
-#' num_bins <- 8
-#' shape_val <- 2.031141
-#' hexbin_data_object <- extract_hexbin_mean(nldr_df, num_bins, shape_val)
+#' num_bins_x <- 4
+#' shape_value <- 1.833091
+#' hexbin_data_object <- extract_hexbin_centroids(nldr_df = s_curve_noise_umap,
+#' num_bins = num_bins_x, shape_val = shape_value)
 #' df_bin_centroids <- hexbin_data_object$hexdf_data
-#' UMAP_data_with_hb_id <- nldr_df |> dplyr::mutate(hb_id = hexbin_data_object$hb_data@cID)
+#' UMAP_data_with_hb_id <- s_curve_noise_umap |> dplyr::mutate(hb_id = hexbin_data_object$hb_data@cID)
 #' df_all <- dplyr::bind_cols(training_data |> dplyr::select(-ID), UMAP_data_with_hb_id)
 #' df_bin <- avg_highD_data(df_all)
 #' tr1_object <- triangulate_bin_centroids(df_bin_centroids, x, y)
@@ -212,27 +216,27 @@ show_langevitour <- function(df, df_b, df_b_with_center_data, benchmark_value = 
     tr1 <- triangulate_bin_centroids(df_b_with_center_data, x, y)
     tr_from_to_df <- generate_edge_info(triangular_object = tr1)
 
-    langevitour::langevitour(df_exe[1:(length(df_exe)-1)], lineFrom = tr_from_to_df$from , lineTo = tr_from_to_df$to, group = df_exe$type)
+    langevitour::langevitour(df_exe[1:(length(df_exe)-1)], lineFrom = tr_from_to_df$from , lineTo = tr_from_to_df$to, group = df_exe$type, pointSize = 3, levelColors = c("#6a3d9a", "#33a02c"))
   } else if ((!(is.na(benchmark_value))) && (is.na(min_points_threshold))) {
     ## Set the maximum difference as the criteria
-    distance_df_small_edges <- distance_df %>%
+    distance_df_small_edges <- distance_df |>
       dplyr::filter({{ distance_col }} < benchmark_value)
     ## Since erase brushing is considerd.
 
-    langevitour::langevitour(df_exe[1:(length(df_exe)-1)], lineFrom = distance_df_small_edges$from, lineTo = distance_df_small_edges$to, group = df_exe$type)
+    langevitour::langevitour(df_exe[1:(length(df_exe)-1)], lineFrom = distance_df_small_edges$from, lineTo = distance_df_small_edges$to, group = df_exe$type, pointSize = 3, levelColors = c("#6a3d9a", "#33a02c"))
 
   } else if ((is.na(benchmark_value)) && (!(is.na(min_points_threshold)))) {
-    df_bin_centroids_filterd <- df_bin_centroids %>%
+    df_bin_centroids_filterd <- df_bin_centroids |>
       dplyr::filter(counts > min_points_threshold)
 
     tr1 <- triangulate_bin_centroids(df_bin_centroids_filterd, x, y)
     tr_from_to_df <- generate_edge_info(triangular_object = tr1)
 
-    langevitour::langevitour(df_exe[1:(length(df_exe)-1)], lineFrom = tr_from_to_df$from , lineTo = tr_from_to_df$to, group = df_exe$type)
+    langevitour::langevitour(df_exe[1:(length(df_exe)-1)], lineFrom = tr_from_to_df$from , lineTo = tr_from_to_df$to, group = df_exe$type, pointSize = 3, levelColors = c("#6a3d9a", "#33a02c"))
 
   }  else if ((!(is.na(benchmark_value))) && (!(is.na(min_points_threshold)))) {
 
-    df_bin_centroids_filterd <- df_bin_centroids %>%
+    df_bin_centroids_filterd <- df_bin_centroids |>
       dplyr::filter(Cell_count > min_points_threshold)
 
     tr1 <- triangulate_bin_centroids(df_bin_centroids_filterd)
@@ -240,11 +244,11 @@ show_langevitour <- function(df, df_b, df_b_with_center_data, benchmark_value = 
 
     distance_d <- cal_2D_dist(.data = tr_from_to_df)
     ## Set the maximum difference as the criteria
-    distance_df_small_edges <- distance_d %>%
+    distance_df_small_edges <- distance_d |>
       dplyr::filter(distance < benchmark_value)
     ## Since erase brushing is considerd.
 
-    langevitour::langevitour(df_exe[1:(length(df_exe)-1)], lineFrom = distance_df_small_edges$from, lineTo = distance_df_small_edges$to, group = df_exe$type)
+    langevitour::langevitour(df_exe[1:(length(df_exe)-1)], lineFrom = distance_df_small_edges$from, lineTo = distance_df_small_edges$to, group = df_exe$type, pointSize = 3, levelColors = c("#6a3d9a", "#33a02c"))
 
   } else {
 

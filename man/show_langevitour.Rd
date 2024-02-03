@@ -33,13 +33,13 @@ show_langevitour(
 This function generates a LangeviTour visualization based on different conditions and input parameters.
 }
 \examples{
-nldr_df <- s_curve_noise_umap
 training_data <- s_curve_noise_training
-num_bins <- 8
-shape_val <- 2.031141
-hexbin_data_object <- extract_hexbin_mean(nldr_df, num_bins, shape_val)
+num_bins_x <- 4
+shape_value <- 1.833091
+hexbin_data_object <- extract_hexbin_centroids(nldr_df = s_curve_noise_umap,
+num_bins = num_bins_x, shape_val = shape_value)
 df_bin_centroids <- hexbin_data_object$hexdf_data
-UMAP_data_with_hb_id <- nldr_df |> dplyr::mutate(hb_id = hexbin_data_object$hb_data@cID)
+UMAP_data_with_hb_id <- s_curve_noise_umap |> dplyr::mutate(hb_id = hexbin_data_object$hb_data@cID)
 df_all <- dplyr::bind_cols(training_data |> dplyr::select(-ID), UMAP_data_with_hb_id)
 df_bin <- avg_highD_data(df_all)
 tr1_object <- triangulate_bin_centroids(df_bin_centroids, x, y)

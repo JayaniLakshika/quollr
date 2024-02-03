@@ -6,7 +6,7 @@ set.seed(20230531)
 
 # Simulate some s_curve_noise
 
-sample_size <- 300
+sample_size <- 100
 s_curve_noise <- snedata::s_curve(n_samples = sample_size)
 s_curve_noise <- s_curve_noise |>
   dplyr::select(-color)
