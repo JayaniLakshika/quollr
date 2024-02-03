@@ -18,7 +18,7 @@
 #' df_bin_centroids <- hexbin_data_object$hexdf_data
 #' tr1_object <- triangulate_bin_centroids(df_bin_centroids, x, y)
 #' tr_from_to_df <- generate_edge_info(triangular_object = tr1_object)
-#' distance_df <- cal_2D_dist(tr_from_to_df)
+#' distance_df <- cal_2d_dist(tr_from_to_df)
 #' find_benchmark_value(.data = distance_df, distance_col = "distance")
 #'
 #' @export
@@ -136,7 +136,7 @@ compute_mean_density_hex <- function(df_bin_centroids, num_bins_x) {
 #'
 #' This function identifies hexagons with low density based on the mean density of their neighboring hexagons.
 #'
-#' @param df_bin_centroids The data frame containing all hexagonal bin centroids.
+#' @param df_bin_centroids_all The data frame containing all hexagonal bin centroids.
 #' @param num_bins_x Number of bins along the x-axis for hexagon binning.
 #' @param df_bin_centroids_low The data frame containing identified low-density hexagonal bin centroids.
 #'
@@ -161,6 +161,9 @@ find_low_density_hexagons <- function(df_bin_centroids_all, num_bins_x, df_bin_c
   ## To compute mean density of hexagons
   df_bin_centroids <- compute_mean_density_hex(df_bin_centroids_all, num_bins_x)
   mean_density_vec <- df_bin_centroids$mean_density
+
+  df_bin_centroids_low <- df_bin_centroids |>
+    dplyr::filter(hexID %in% df_bin_centroids_low$hexID)
 
   ## Take first quartile
   benchmark_mean_dens_rm_hex <- stats::quantile(mean_density_vec, probs = c(0,0.25,0.5,0.75,1))[2]

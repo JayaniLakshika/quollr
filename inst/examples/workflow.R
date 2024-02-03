@@ -149,10 +149,15 @@ ggplot(data = hex_full_count_df, aes(x = x, y = y)) +
 # ggplot(df_bin_centroids_coordinates, aes(x = group, y = mean_density)) +
 #   geom_quasirandom()
 
-## Identify bins
+## To identify low density hexagons
+df_bin_centroids_low <- df_bin_centroids |>
+  dplyr::filter(std_counts <= benchmark_to_rm_lwd_hex)
 
-identify_rm_bins <- find_low_density_hexagons(df_bin_centroids, num_bins_x, benchmark_rm_hex = NA)
+## To identify low-density hexagons needed to remove by investigating neighbouring mean density
+identify_rm_bins <- find_low_density_hexagons(df_bin_centroids_all = df_bin_centroids, num_bins_x = num_bins_x,
+                     df_bin_centroids_low = df_bin_centroids_low)
 
+## To remove low-density hexagons
 df_bin_centroids <- df_bin_centroids |>
   filter(!(hexID %in% identify_rm_bins))
 

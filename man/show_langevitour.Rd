@@ -44,7 +44,7 @@ df_all <- dplyr::bind_cols(training_data |> dplyr::select(-ID), UMAP_data_with_h
 df_bin <- avg_highD_data(df_all)
 tr1_object <- triangulate_bin_centroids(df_bin_centroids, x, y)
 tr_from_to_df <- generate_edge_info(triangular_object = tr1_object)
-distance_df <- cal_2D_dist(.data = tr_from_to_df)
+distance_df <- cal_2d_dist(.data = tr_from_to_df)
 show_langevitour(df_all, df_bin, df_bin_centroids, benchmark_value = 0.6,
 distance = distance_df, distance_col = distance)
 

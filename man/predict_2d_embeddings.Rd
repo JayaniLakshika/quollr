@@ -23,18 +23,11 @@ Given a test dataset, the centroid coordinates of hexagonal bins in  2D and high
 predict the 2D embeddings for each data point in the test dataset.
 }
 \examples{
-nldr_df <- s_curve_noise_umap
-training_data <- s_curve_noise_training
-test_data <- s_curve_noise_test
-num_bins <- 8
-shape_val <- 2.031141
-hexbin_data_object <- extract_hexbin_centroids(nldr_df, num_bins, shape_val)
-df_bin_centroids <- hexbin_data_object$hexdf_data
-nldr_df_with_hb_id <- nldr_df |>
-dplyr::mutate(hb_id = hexbin_data_object_s_curve$hb_data@cID)
-df_all <- dplyr::bind_cols(training_data |> dplyr::select(-ID), nldr_df_with_hb_id)
-df_bin <- avg_highD_data(.data = df_all, column_start_text = "x")
-predict_2d_embeddings(test_data = test_data, df_bin_centroids = df_bin_centroids,
+model <- fit_high_d_model(training_data = s_curve_noise_training,
+nldr_df_with_id = s_curve_noise_umap)
+df_bin_centroids <- model$df_bin_centroids
+df_bin <- model$df_bin
+predict_2d_embeddings(test_data = s_curve_noise_test, df_bin_centroids = df_bin_centroids,
 df_bin = df_bin, type_NLDR = "UMAP")
 
 }

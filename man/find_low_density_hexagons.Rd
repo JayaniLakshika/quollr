@@ -11,11 +11,11 @@ find_low_density_hexagons(
 )
 }
 \arguments{
+\item{df_bin_centroids_all}{The data frame containing all hexagonal bin centroids.}
+
 \item{num_bins_x}{Number of bins along the x-axis for hexagon binning.}
 
 \item{df_bin_centroids_low}{The data frame containing identified low-density hexagonal bin centroids.}
-
-\item{df_bin_centroids}{The data frame containing all hexagonal bin centroids.}
 }
 \value{
 A vector containing the IDs of hexagons to be removed after investigating their neighbouring bins.

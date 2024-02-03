@@ -4,49 +4,30 @@
 \alias{predict_hex_id}
 \title{Predict Hexagonal IDs}
 \usage{
-predict_hex_id(
-  training_data,
-  nldr_df,
-  nldr_df_test,
-  num_bins,
-  shape_val,
-  x = "UMAP1",
-  y = "UMAP2",
-  col_start = "x"
-)
+predict_hex_id(df_bin_centroids, nldr_df_test, x = "UMAP1", y = "UMAP2")
 }
 \arguments{
-\item{training_data}{The training dataset containing high-dimensional data with IDs.}
+\item{df_bin_centroids}{The training dataset containing high-dimensional data with IDs.}
 
-\item{nldr_df}{The non-linear dimensionality reduction data frame containing 2D coordinates of the training data.}
+\item{nldr_df_test}{The non-linear dimensionality reductions that need to find the prediction.}
 
-\item{nldr_df_test}{The predicted non-linear dimensionality reductions for the test set.}
+\item{x}{The name of the column that contains first embedding.}
 
-\item{num_bins}{Number of bins along the x-axis for hexagon binning.}
-
-\item{shape_val}{The value of the shape parameter for hexagon binning.}
-
-\item{x}{The name of the column that contains first embedding as a string.}
-
-\item{y}{The name of the column that contains second embedding as a string.}
-
-\item{col_start}{The text that begin the column name of the high-D data}
+\item{y}{The name of the column that contains second embedding.}
 }
 \value{
-A list containing the predicted data, hexagonal bin centroids, averaged high-dimensional data, and hexbin_data_object.
+A data frame containing prediced hexID for 2D embedding data
 }
 \description{
-This function predicts hexagonal IDs for a test set based on training data and non-linear dimensionality reduction (NLDR) coordinates.
+This function predicts hexagonal IDs for a test set based on existing bin centroids.
 }
 \examples{
-nldr_df <- s_curve_noise_umap
-nldr_df_test <- s_curve_noise_umap_predict
-training_data <- s_curve_noise_training
-num_bins <- 8
-shape_val <- 2.031141
-hexbin_data_object <- extract_hexbin_mean(nldr_df, num_bins, shape_val)
+num_bins_x <- 4
+shape_value <- 1.833091
+hexbin_data_object <- extract_hexbin_mean(nldr_df = s_curve_noise_umap, num_bins_x,
+shape_val = shape_value)
 df_bin_centroids <- hexbin_data_object$hexdf_data
-predict_hex_id(training_data, nldr_df, nldr_df_test, num_bins,
-shape_val, x = "UMAP1", y = "UMAP2", col_start = "x")
+predict_hex_id(df_bin_centroids = df_bin_centroids, nldr_df_test = s_curve_noise_umap,
+x = "UMAP1", y = "UMAP2")
 
 }

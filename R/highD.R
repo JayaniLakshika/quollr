@@ -86,7 +86,7 @@ compute_weights <- function(nldr_df, hb_object) {
   for(i in 1:length(nldr_with_avg_all_split)){
 
     weighted_mean_df <- nldr_with_avg_all_split[[i]] |> ## These are the weights for weighted mean
-      cal_2D_dist(start_x = new_col[1], start_y = new_col[2], end_x = names(nldr_df)[1], end_y = names(nldr_df)[2], select_col_vec = col_names)
+      cal_2d_dist(start_x = new_col[1], start_y = new_col[2], end_x = names(nldr_df)[1], end_y = names(nldr_df)[2], select_col_vec = col_names)
 
     weight_df <- dplyr::bind_rows(weight_df, weighted_mean_df)
 
@@ -190,7 +190,7 @@ weighted_highD_data <- function(training_data, nldr_df_with_id, hb_object, colum
 #' df_bin <- avg_highD_data(df_all)
 #' tr1_object <- triangulate_bin_centroids(df_bin_centroids, x, y)
 #' tr_from_to_df <- generate_edge_info(triangular_object = tr1_object)
-#' distance_df <- cal_2D_dist(.data = tr_from_to_df)
+#' distance_df <- cal_2d_dist(.data = tr_from_to_df)
 #' show_langevitour(df_all, df_bin, df_bin_centroids, benchmark_value = 0.6,
 #' distance = distance_df, distance_col = distance)
 #'
@@ -242,7 +242,7 @@ show_langevitour <- function(df, df_b, df_b_with_center_data, benchmark_value = 
     tr1 <- triangulate_bin_centroids(df_bin_centroids_filterd)
     tr_from_to_df <- generate_edge_info(triangular_object = tr1)
 
-    distance_d <- cal_2D_dist(.data = tr_from_to_df)
+    distance_d <- cal_2d_dist(.data = tr_from_to_df)
     ## Set the maximum difference as the criteria
     distance_df_small_edges <- distance_d |>
       dplyr::filter(distance < benchmark_value)

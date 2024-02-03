@@ -33,18 +33,18 @@ A tibble containing evaluation metrics based on the provided inputs.
 This function generates an evaluation data frame based on the provided data and predictions.
 }
 \examples{
-data <- s_curve_noise
-nldr_df <- s_curve_noise_umap
-nldr_df_test <- s_curve_noise_umap_predict
-training_data <- s_curve_noise_training
-num_bins <- 8
-shape_val <- 2.031141
-pred_df_test_object <- predict_hex_id(training_data = training_data,
-nldr_df = nldr_df, nldr_df_test = nldr_df_test, num_bins = num_bins, shape_val = shape_val)
-pred_df_test <- pred_df_test_object$pred_data
-centroid_df_test <- pred_df_test_object$df_bin_centroids
-avg_df_test <- pred_df_test_object$df_bin
-generate_eval_df(data = data, prediction_df = pred_df_test,
-df_bin_centroids = centroid_df_test, df_bin = avg_df_test, num_bins = num_bins, col_start = "x")
+num_bins_x <- 4
+shape_value <- 1.833091
+hexbin_data_object <- extract_hexbin_mean(nldr_df = s_curve_noise_umap, num_bins_x,
+shape_val = shape_value)
+df_bin_centroids <- hexbin_data_object$hexdf_data
+UMAP_data_with_hb_id <- s_curve_noise_umap |> dplyr::mutate(hb_id = hexbin_data_object$hb_data@cID)
+df_all <- dplyr::bind_cols(s_curve_noise_training |> dplyr::select(-ID), UMAP_data_with_hb_id)
+df_bin <- avg_highD_data(df_all)
+pred_df_test <- predict_2d_embeddings(test_data = s_curve_noise_training,
+df_bin_centroids = df_bin_centroids,
+df_bin = df_bin, type_NLDR = "UMAP")
+generate_eval_df(data = s_curve_noise, prediction_df = pred_df_test,
+df_bin_centroids = df_bin_centroids, df_bin = df_bin, num_bins = num_bins_x, col_start = "x")
 
 }

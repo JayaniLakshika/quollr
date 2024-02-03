@@ -28,60 +28,42 @@ compute_aic <- function(p, total, num_bins, num_obs) {
 
 #' Predict Hexagonal IDs
 #'
-#' This function predicts hexagonal IDs for a test set based on training data and non-linear dimensionality reduction (NLDR) coordinates.
+#' This function predicts hexagonal IDs for a test set based on existing bin centroids.
 #'
-#' @param training_data The training dataset containing high-dimensional data with IDs.
-#' @param nldr_df The non-linear dimensionality reduction data frame containing 2D coordinates of the training data.
-#' @param nldr_df_test The predicted non-linear dimensionality reductions for the test set.
-#' @param num_bins Number of bins along the x-axis for hexagon binning.
-#' @param shape_val The value of the shape parameter for hexagon binning.
-#' @param x The name of the column that contains first embedding as a string.
-#' @param y The name of the column that contains second embedding as a string.
-#' @param col_start The text that begin the column name of the high-D data
+#' @param df_bin_centroids The training dataset containing high-dimensional data with IDs.
+#' @param nldr_df_test The non-linear dimensionality reductions that need to find the prediction.
+#' @param x The name of the column that contains first embedding.
+#' @param y The name of the column that contains second embedding.
 #'
-#' @return A list containing the predicted data, hexagonal bin centroids, averaged high-dimensional data, and hexbin_data_object.
+#' @return A data frame containing prediced hexID for 2D embedding data
 #'
-#' @importFrom dplyr bind_cols select mutate
+#' @importFrom dplyr select mutate
 #' @importFrom class knn
 #' @importFrom rlang syms
 #'
 #' @examples
-#' nldr_df <- s_curve_noise_umap
-#' nldr_df_test <- s_curve_noise_umap_predict
-#' training_data <- s_curve_noise_training
-#' num_bins <- 8
-#' shape_val <- 2.031141
-#' hexbin_data_object <- extract_hexbin_mean(nldr_df, num_bins, shape_val)
+#' num_bins_x <- 4
+#' shape_value <- 1.833091
+#' hexbin_data_object <- extract_hexbin_mean(nldr_df = s_curve_noise_umap, num_bins_x,
+#' shape_val = shape_value)
 #' df_bin_centroids <- hexbin_data_object$hexdf_data
-#' predict_hex_id(training_data, nldr_df, nldr_df_test, num_bins,
-#' shape_val, x = "UMAP1", y = "UMAP2", col_start = "x")
+#' predict_hex_id(df_bin_centroids = df_bin_centroids, nldr_df_test = s_curve_noise_umap,
+#' x = "UMAP1", y = "UMAP2")
 #'
 #' @export
-predict_hex_id <- function(training_data, nldr_df, nldr_df_test, num_bins, shape_val, x = "UMAP1", y = "UMAP2", col_start = "x") {
+predict_hex_id <- function(df_bin_centroids, nldr_df_test, x = "UMAP1", y = "UMAP2") {
 
-  ## To extract bin centroids
-  hexbin_data_object <- extract_hexbin_centroids(nldr_df, num_bins, shape_val, x = x, y = y)
-
-  df_bin_centroids <- hexbin_data_object$hexdf_data
-
-  UMAP_data_with_hb_id <- nldr_df |>
-    dplyr::mutate(hb_id = hexbin_data_object$hb_data@cID)
-
-  ## To generate a data set with high-D and 2D training data
-  df_all <- dplyr::bind_cols(training_data |> dplyr::select(-ID), UMAP_data_with_hb_id)
-
-  ## Averaged on high-D
-  df_bin <- avg_highD_data(.data = df_all, column_start_text = col_start)
-
-  train_hb_df <- df_bin_centroids |>
+  df_bin_centroids <- df_bin_centroids |>
     dplyr::select(x, y, hexID)
 
-  pred_hb_id <- class::knn(train_hb_df |> dplyr::select(-hexID), nldr_df_test |> dplyr::select(!!! rlang::syms(c(x, y))), cl = train_hb_df$hexID)
+  pred_hb_id <- class::knn(df_bin_centroids |> dplyr::select(-hexID),
+                           nldr_df_test |> dplyr::select(!!! rlang::syms(c(x, y))),
+                           cl = df_bin_centroids$hexID)
 
   pred_data <- nldr_df_test |>
     dplyr::mutate(pred_hb_id = as.numeric(as.character(pred_hb_id)))
 
-  return(list(pred_data = pred_data, df_bin_centroids = df_bin_centroids, df_bin = df_bin, hexbin_data_object = hexbin_data_object))
+  return(pred_data)
 
 }
 
@@ -102,23 +84,23 @@ predict_hex_id <- function(training_data, nldr_df, nldr_df_test, num_bins, shape
 #' @importFrom tibble tibble
 #'
 #' @examples
-#' data <- s_curve_noise
-#' nldr_df <- s_curve_noise_umap
-#' nldr_df_test <- s_curve_noise_umap_predict
-#' training_data <- s_curve_noise_training
-#' num_bins <- 8
-#' shape_val <- 2.031141
-#' pred_df_test_object <- predict_hex_id(training_data = training_data,
-#' nldr_df = nldr_df, nldr_df_test = nldr_df_test, num_bins = num_bins, shape_val = shape_val)
-#' pred_df_test <- pred_df_test_object$pred_data
-#' centroid_df_test <- pred_df_test_object$df_bin_centroids
-#' avg_df_test <- pred_df_test_object$df_bin
-#' generate_eval_df(data = data, prediction_df = pred_df_test,
-#' df_bin_centroids = centroid_df_test, df_bin = avg_df_test, num_bins = num_bins, col_start = "x")
+#' num_bins_x <- 4
+#' shape_value <- 1.833091
+#' hexbin_data_object <- extract_hexbin_mean(nldr_df = s_curve_noise_umap, num_bins_x,
+#' shape_val = shape_value)
+#' df_bin_centroids <- hexbin_data_object$hexdf_data
+#' UMAP_data_with_hb_id <- s_curve_noise_umap |> dplyr::mutate(hb_id = hexbin_data_object$hb_data@cID)
+#' df_all <- dplyr::bind_cols(s_curve_noise_training |> dplyr::select(-ID), UMAP_data_with_hb_id)
+#' df_bin <- avg_highD_data(df_all)
+#' pred_df_test <- predict_2d_embeddings(test_data = s_curve_noise_training,
+#' df_bin_centroids = df_bin_centroids,
+#' df_bin = df_bin, type_NLDR = "UMAP")
+#' generate_eval_df(data = s_curve_noise, prediction_df = pred_df_test,
+#' df_bin_centroids = df_bin_centroids, df_bin = df_bin, num_bins = num_bins_x, col_start = "x")
 #'
 #' @export
-generate_eval_df <- function(data, prediction_df, df_bin_centroids, df_bin, num_bins, col_start = "x") {
-
+generate_eval_df <- function(data, prediction_df, df_bin_centroids, df_bin,
+                             num_bins, col_start = "x") {
 
   ## Generate all possible bin centroids in the full grid
   full_centroid_df <- generate_full_grid_centroids(df_bin_centroids)
@@ -127,7 +109,8 @@ generate_eval_df <- function(data, prediction_df, df_bin_centroids, df_bin, num_
     dplyr::select(hexID, x, y)
 
   ## To map centroid coordinates to predicted hexID
-  prediction_df <- dplyr::inner_join(prediction_df, df_bin_centroids_filtered, by = c("pred_hb_id" = "hexID"))
+  prediction_df <- dplyr::inner_join(prediction_df, df_bin_centroids_filtered,
+                                     by = c("pred_hb_id" = "hexID"))
 
   df_bin_train <- df_bin
   names(df_bin_train)[-1] <- paste0("avg_", names(df_bin_train)[-1])
@@ -151,8 +134,8 @@ generate_eval_df <- function(data, prediction_df, df_bin_centroids, df_bin, num_
   #number_of_bins: Total number of bins with empty bins
   eval_df <- tibble::tibble(number_of_bins = NROW(full_centroid_df),
                             number_of_observations = NROW(prediction_df),
-                            total_error = compute_aic((NCOL(df_bin) - 1), prediction_df$total, NROW(full_centroid_df), NROW(prediction_df)),
-                            total_mse = mean(prediction_df$total)/(NCOL(df_bin) - 1))
+                            total_error = compute_aic((NCOL(df_bin) - 1), prediction_df$total, NROW(df_bin_centroids), NROW(prediction_df)),
+                            total_mse = mean(prediction_df$total))
 
   return(eval_df)
 
@@ -171,18 +154,11 @@ generate_eval_df <- function(data, prediction_df, df_bin_centroids, df_bin, num_
 #' @return A data frame with predicted 2D embedding for each data point in the test dataset.
 #'
 #' @examples
-#' nldr_df <- s_curve_noise_umap
-#' training_data <- s_curve_noise_training
-#' test_data <- s_curve_noise_test
-#' num_bins <- 8
-#' shape_val <- 2.031141
-#' hexbin_data_object <- extract_hexbin_centroids(nldr_df, num_bins, shape_val)
-#' df_bin_centroids <- hexbin_data_object$hexdf_data
-#' nldr_df_with_hb_id <- nldr_df |>
-#' dplyr::mutate(hb_id = hexbin_data_object_s_curve$hb_data@cID)
-#' df_all <- dplyr::bind_cols(training_data |> dplyr::select(-ID), nldr_df_with_hb_id)
-#' df_bin <- avg_highD_data(.data = df_all, column_start_text = "x")
-#' predict_2d_embeddings(test_data = test_data, df_bin_centroids = df_bin_centroids,
+#' model <- fit_high_d_model(training_data = s_curve_noise_training,
+#' nldr_df_with_id = s_curve_noise_umap)
+#' df_bin_centroids <- model$df_bin_centroids
+#' df_bin <- model$df_bin
+#' predict_2d_embeddings(test_data = s_curve_noise_test, df_bin_centroids = df_bin_centroids,
 #' df_bin = df_bin, type_NLDR = "UMAP")
 #'
 #' @importFrom dplyr mutate_if bind_rows filter row_number arrange
@@ -190,7 +166,7 @@ generate_eval_df <- function(data, prediction_df, df_bin_centroids, df_bin, num_
 #' @export
 predict_2d_embeddings <- function(test_data, df_bin_centroids, df_bin, type_NLDR = "UMAP") {
 
-  columns_df <- c(paste0("pred_", type_NLDR, "_", 1:2), "ID")
+  columns_df <- c(paste0("pred_", type_NLDR, "_", 1:2), "ID", "pred_hb_id")
   vec <- stats::setNames(rep("", length(columns_df)), columns_df)  ## Define column names
 
   predict_coord_test <- dplyr::bind_rows(vec)[0, ]
@@ -230,10 +206,11 @@ predict_2d_embeddings <- function(test_data, df_bin_centroids, df_bin, type_NLDR
     predict_centroid_coord_2D <- df_bin_centroids |>
       dplyr::filter(hexID %in% predict_centroid_coord_high_D$hb_id) |>
       dplyr::select(x, y) |>
-      dplyr::mutate(ID = test_data_point$ID)
+      dplyr::mutate(ID = test_data_point$ID,
+                    pred_hb_id = predict_centroid_coord_high_D$hb_id)
 
     ## Rename columns
-    names(predict_centroid_coord_2D) <- c(paste0("pred_", type_NLDR, "_", 1:2), "ID")
+    names(predict_centroid_coord_2D) <- c(paste0("pred_", type_NLDR, "_", 1:2), "ID", "pred_hb_id")
 
     ## Combine high-D and 2D coordinate
     #predict_centroid_coord_all <- dplyr::bind_cols(test_data_point, predict_centroid_coord_high_D, predict_centroid_coord_2D)

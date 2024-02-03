@@ -18,7 +18,7 @@
 #' hexbin_data_object <- extract_hexbin_centroids(nldr_df = s_curve_noise_umap,
 #' num_bins = num_bins_x, shape_val = shape_value)
 #' df_bin_centroids <- hexbin_data_object$hexdf_data
-#' ggplot() + geom_trimesh(data = df_bin_centroids, mapping = ggplot2::aes(x = x, y = y))
+#' ggplot2::ggplot() + geom_trimesh(data = df_bin_centroids, mapping = ggplot2::aes(x = x, y = y))
 #'
 #' @importFrom ggplot2 layer
 #' @importFrom ggplot2 aes
