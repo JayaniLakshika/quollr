@@ -20,7 +20,7 @@ library(quollr)
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/JayaniLakshika/quollr/workflows/R-CMD-check/badge.svg)](https://github.com/JayaniLakshika/quollr/workflows/R-CMD-check)
-[![test](https://github.com/JayaniLakshika/quollr/workflows/test-coverage.yaml/badge.svg)](https://github.com/JayaniLakshika/quollr/workflows/test-coverage.yaml)
+[![test](https://github.com/JayaniLakshika/quollr/workflows/test-coverage/badge.svg)](https://github.com/JayaniLakshika/quollr/workflows/test-coverage.yaml)
 <!-- badges: end -->
 
 The `quollr` package provide functions to construct a model in the 2D space based on 2D embedding and then lifts to the high dimensional space. The package also provides a visualization that integrates this model with high dimensional data using the tour technique. For a thorough background and discussion on this work, please read our paper [link to the paper].
