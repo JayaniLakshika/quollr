@@ -7,7 +7,7 @@
 predict_2d_embeddings(test_data, df_bin_centroids, df_bin, type_NLDR = "UMAP")
 }
 \arguments{
-\item{test_data}{The test dataset containing high-dimensional features and an ID column.}
+\item{test_data}{The test dataset containing high-dimensional coordinates and an unique identifier.}
 
 \item{df_bin_centroids}{Centroid coordinates of hexagonal bins in 2D space.}
 

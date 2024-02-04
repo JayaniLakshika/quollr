@@ -7,7 +7,7 @@
 avg_highD_data(.data, column_start_text = "x")
 }
 \arguments{
-\item{.data}{The data frame containing the high-dimensional data with 2D embedding.}
+\item{.data}{A data frame containing the high-dimensional data and 2D embeddings.}
 
 \item{column_start_text}{The text that begin the column name of the high-D data}
 }

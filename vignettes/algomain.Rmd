@@ -8,62 +8,24 @@ vignette: >
 ---
 
 ```{r, include = FALSE}
+options(rmarkdown.html_vignette.check_title = FALSE)
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
   warning = FALSE, 
   message = FALSE
 )
-options(rmarkdown.html_vignette.check_title = FALSE)
 ```
 
 ```{r setup, echo = FALSE}
 library(quollr)
-library(snedata)
-library(rsample)
-library(umap)
+library(ggplot2)
 ```
 
 ```{r echo = FALSE}
-# Simulate some s_curve_noise
-
-sample_size <- 100
-data <- snedata::s_curve(n_samples = sample_size)
-data <- data |>
-  dplyr::select(-color)
-names(data) <- c("x1", "x2", "x3")
-
-data$x4 <- runif(sample_size, -0.02, 0.02)
-data$x5 <- runif(sample_size, -0.02, 0.02)
-data$x6 <- runif(sample_size, -0.1, 0.1)
-data$x7 <- runif(sample_size, -0.01, 0.01)
-
-## Add the ID to the s_curve_noise
-data <- data |>
-  dplyr::mutate(ID = dplyr::row_number()) |>
-  tibble::as_tibble()
-
-## Split the s_curve_noise as training and test
-data_split <- initial_split(data)
-training_data <- training(data_split) |>
-  dplyr::arrange(ID) |>
-  tibble::as_tibble()
-
-test_data <- testing(data_split) |>
-  dplyr::arrange(ID) |>
-  tibble::as_tibble()
-
-## Fit umap
-UMAP_fit <- umap(training_data |> dplyr::select(-ID), n_neighbors = 15, n_components =  2)
-
-UMAP_data <- UMAP_fit$layout |>
-  as.data.frame() |>
-  tibble::as_tibble()
-
-names(UMAP_data)[1:(ncol(UMAP_data))] <- paste0(rep("UMAP",(ncol(UMAP_data))), 1:(ncol(UMAP_data)))
-
-UMAP_data <- UMAP_data |>
-  dplyr::mutate(ID = training_data$ID)
+# import data
+training_data <- s_curve_noise_training
+UMAP_data <- s_curve_noise_umap
 ```
 
 # Constructing the model in the 2D space
@@ -95,9 +57,8 @@ shape_value
 ## 2. Obtain hexagonal bin centroids
 
 ```{r}
-hexbin_data_object <- extract_hexbin_centroids(nldr_df = UMAP_data, num_bins = num_bins_x, shape_val = shape_value)
-
-hexbin_data_object
+hexbin_data_object <- extract_hexbin_centroids(nldr_df = UMAP_data, 
+                                               num_bins = num_bins_x, shape_val = shape_value)
 
 df_bin_centroids <- hexbin_data_object$hexdf_data
 df_bin_centroids 
@@ -106,7 +67,22 @@ hexbin_object <- hexbin_data_object$hb_data
 str(hexbin_object)
 ```
 
-## 3. Triangulate hexagonal bin centroids
+## 3. Remove low-density hexagons
+
+```{r}
+## To identify low density hexagons
+df_bin_centroids_low <- df_bin_centroids |>
+  dplyr::filter(std_counts <= 0.1666667)
+
+## To identify low-density hexagons needed to remove by investigating neighbouring mean density
+identify_rm_bins <- find_low_density_hexagons(df_bin_centroids_all = df_bin_centroids, num_bins_x = num_bins_x, df_bin_centroids_low = df_bin_centroids_low)
+
+## To remove low-density hexagons
+df_bin_centroids <- df_bin_centroids |>
+  dplyr::filter(!(hexID %in% identify_rm_bins))
+```
+
+## 4. Triangulate hexagonal bin centroids
 
 Next, you need to perform triangulation on the bin centroids to construct a triangular mesh. Triangulation involves connecting the bin centroids with triangular edges to form a mesh that reveals the local structure of the data.
 
@@ -118,16 +94,53 @@ tr_from_to_df <- generate_edge_info(triangular_object = tr1_object)
 tr_from_to_df
 ```
 
+```{r}
+## To draw the traingular mesh
+
+trimesh <- ggplot(df_bin_centroids, aes(x = x, y = y)) +
+  geom_trimesh() +
+  coord_equal() +
+  xlab(expression(C[x]^{(2)})) + ylab(expression(C[y]^{(2)})) +
+  theme(axis.text = element_text(size = 5),
+        axis.title = element_text(size = 7))
+
+trimesh
+```
+
+## 5. Remove long edges
+
+```{r}
+## Compute 2D distances
+distance <- cal_2d_dist(.data = tr_from_to_df)
+
+## To find the benchmark value to remove long edges
+benchmark <- find_benchmark_value(.data = distance, distance_col = distance)
+benchmark
+```
+
+```{r}
+## To draw the traingular mesh after remove long edges in 2D
+
+trimesh_removed <- remove_long_edges(.data = distance, benchmark_value = benchmark,
+                                     triangular_object = tr1_object, distance_col = distance) +
+  xlab(expression(C[x]^{(2)})) + ylab(expression(C[y]^{(2)})) +
+  theme(axis.text = element_text(size = 5),
+        axis.title = element_text(size = 7))
+
+trimesh_removed
+```
+
 # Lifting the model into high dimensions
 
 To extend the model created in the 2D space to higher dimensions, you need to take the average of the high-dimensional coordinates within hexagonal bins.
 
 ```{r}
+## Add hexbin Ids for the 2D embeddings
 UMAP_data_with_hb_id <- UMAP_data |> 
   dplyr::mutate(hb_id = hexbin_data_object$hb_data@cID)
 UMAP_data_with_hb_id
         
-## To generate a data set with high-D and 2D training data
+## To generate a data set with high-dimensional training data and 2D embeddings with hexagonal IDs
 df_all <- dplyr::bind_cols(training_data |> dplyr::select(-ID), UMAP_data_with_hb_id)
 df_all
 
@@ -135,7 +148,12 @@ df_bin <- avg_highD_data(.data = df_all)
 df_bin
 ```
 
+# Visualize the model and high-dimensional data in the high-dimensional space
+
+To visualize the model and the high-dimensional data, tour technique is used. 
+
 ```{r}
-tour1 <- show_langevitour(df_all, df_bin, df_bin_centroids, benchmark_value = NA, distance = distance, distance_col = distance)
+tour1 <- show_langevitour(df_all, df_bin, df_bin_centroids, benchmark_value = benchmark, 
+                          distance = distance, distance_col = distance)
 tour1
 ```

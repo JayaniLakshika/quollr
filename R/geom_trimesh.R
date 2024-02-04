@@ -63,7 +63,7 @@ GeomTrimesh <- ggplot2::ggproto("GeomTrimesh",
                                   linewidth = 0.5,
                                   size = 0.5,
                                   alpha = NA,
-                                  colour = "black"
+                                  colour = "#33a02c"
                                 ),
                                 draw_key = ggplot2::draw_key_point,
                                 draw_panel = function(data, panel_scales, coord) {
@@ -74,7 +74,7 @@ GeomTrimesh <- ggplot2::ggproto("GeomTrimesh",
                                     colour = data$colour,
                                     shape = data$shape,
                                     size = rep(2, nrow(data)),
-                                    fill = rep("black", nrow(data)),
+                                    fill = rep("#33a02c", nrow(data)),
                                     alpha = data$alpha,
                                     stroke = 0.5,
                                     stringsAsFactors = FALSE

@@ -42,6 +42,8 @@ And the development version from [GitHub](https://github.com/) with:
 
 ## Example
 
+The usage is illustrated with the package's example data, **s_curve_noise**. 
+
 ## Copyright
 
 This package is licensed under the [MIT license](https://github.com/JayaniLakshika/quollr/LICENSE.md). 

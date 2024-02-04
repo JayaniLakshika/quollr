@@ -8,13 +8,13 @@ vignette: >
 ---
 
 ```{r, include = FALSE}
+options(rmarkdown.html_vignette.check_title = FALSE)
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
   warning = FALSE, 
   message = FALSE
 )
-options(rmarkdown.html_vignette.check_title = FALSE)
 ```
 
 ```{r setup, echo = FALSE}
@@ -27,55 +27,11 @@ library(dplyr)
 ```
 
 ```{r echo = FALSE}
-# Simulate some s_curve_noise
+model <- fit_high_d_model(training_data = s_curve_noise_training, 
+                 nldr_df_with_id = s_curve_noise_umap, num_bins_x = 4, 
+                 shape_val = 1.833091)
 
-sample_size <- 100
-data <- s_curve(n_samples = sample_size)
-data <- data |>
-  dplyr::select(-color)
-names(data) <- c("x1", "x2", "x3")
-
-data$x4 <- runif(sample_size, -0.02, 0.02)
-data$x5 <- runif(sample_size, -0.02, 0.02)
-data$x6 <- runif(sample_size, -0.1, 0.1)
-data$x7 <- runif(sample_size, -0.01, 0.01)
-
-## Add the ID to the s_curve_noise
-data <- data |>
-  dplyr::mutate(ID = dplyr::row_number()) |>
-  tibble::as_tibble()
-
-## Split the s_curve_noise as training and test
-data_split <- initial_split(data)
-training_data <- training(data_split) |>
-  dplyr::arrange(ID) |>
-  tibble::as_tibble()
-
-test_data <- testing(data_split) |>
-  dplyr::arrange(ID) |>
-  tibble::as_tibble()
-
-## Fit umap
-UMAP_fit <- umap(training_data |> dplyr::select(-ID), n_neighbors = 15, n_components =  2)
-
-UMAP_data <- UMAP_fit$layout |>
-  as.data.frame() |>
-  tibble::as_tibble()
-
-names(UMAP_data)[1:(ncol(UMAP_data))] <- paste0(rep("UMAP",(ncol(UMAP_data))), 1:(ncol(UMAP_data)))
-
-UMAP_data <- UMAP_data |>
-  dplyr::mutate(ID = training_data$ID)
-
-num_bins_x <- calculate_effective_x_bins(.data = UMAP_data, x = UMAP1,
-                                         cell_area = 1)
-
-shape_value <- calculate_effective_shape_value(.data = UMAP_data, 
-                                               x = UMAP1, y = UMAP2)
-
-hexbin_data_object <- extract_hexbin_centroids(nldr_df = UMAP_data, num_bins = num_bins_x, shape_val = shape_value)
-
-df_bin_centroids <- hexbin_data_object$hexdf_data
+df_bin_centroids <- model$df_bin_centroids
 ```
 
 To generate the full hexagonal grid, you need to start from the bin centroid info that obtained from `extract_hexbin_centroids()`.

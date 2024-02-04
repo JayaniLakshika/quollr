@@ -292,7 +292,7 @@ colour_long_edges <- function(.data, benchmark_value, triangular_object, distanc
       aes(x = x_from, y = y_from, xend = x_to, yend = y_to, color = type),
       data = tr_from_to_df_coord_with_group
     ) +
-    ggplot2::geom_point() +
+    ggplot2::geom_point(size = 1, colour = "#33a02c") +
     ggplot2::coord_equal() +
     ggplot2::scale_colour_manual(values = c("#de2d26", "#636363"))
 
@@ -352,7 +352,7 @@ remove_long_edges <- function(.data, benchmark_value, triangular_object,
   ## Create the triangular mesh plot after removing the long edges
   tri_mesh_plot <- ggplot2::ggplot(tr_df, aes(x = x, y = y)) + ggplot2::geom_segment(aes(x = x_from,
                                                                                          y = y_from, xend = x_to, yend = y_to), data = tr_from_to_df_coord_with_group) +
-    ggplot2::geom_point(size = 1) + ggplot2::coord_equal() + ggplot2::labs(color=NULL)
+    ggplot2::geom_point(size = 1, colour = "#33a02c") + ggplot2::coord_equal() + ggplot2::labs(color=NULL)
   return(tri_mesh_plot)
 
 }
@@ -712,128 +712,3 @@ find_non_empty_bins <- function(nldr_df, x = "UMAP1", y = "UMAP2", shape_val, no
     }
   }
 }
-
-#' Extract Coordinates of Shifted Hexagonal Grid
-#'
-#' This function takes input data, which includes a hexbin ID, and extracts the coordinates
-#' of a hexagonal grid with a specified shift. The resulting dataset includes hexagon centroids
-#' with updated coordinates and additional information such as counts within each hexagon.
-#'
-#' @param nldr_data_with_hb_id A containing 2D embeddings with a hexbin ID.
-#' @param num_bins_x The number of bins along the x-axis for the hexagonal grid.
-#' @param hex_full_count_df A data frame with information about all hexagonal grid cells.
-#' @param shift The value that centroids need to be shifted. If not provided, it is calculated
-#'   as half of the cell diameter of a hexagon.
-#'
-#' @return A data frame with updated hexagon coordinates, hexagon IDs, and counts within each hexagon.
-#'
-#' @examples
-#' num_bins_x <- 4
-#' shape_value <- 1.833091
-#' hexbin_data_object <- extract_hexbin_centroids(nldr_df = s_curve_noise_umap,
-#' num_bins = num_bins_x, shape_val = shape_value)
-#' df_bin_centroids <- hexbin_data_object$hexdf_data
-#' hex_full_count_df <- generate_full_grid_info(df_bin_centroids)
-#' UMAP_data_with_hb_id <- s_curve_noise_umap |> dplyr::mutate(hb_id = hexbin_data_object$hb_data@cID)
-#' extract_coord_of_shifted_hex_grid(nldr_data_with_hb_id = UMAP_data_with_hb_id,
-#' num_bins_x = num_bins_x, hex_full_count_df)
-#'
-#' @export
-extract_coord_of_shifted_hex_grid <- function(nldr_data_with_hb_id, num_bins_x, hex_full_count_df, shift = NA) {
-
-  if (is.na(shift)) {
-    cell_diameter <- sqrt(2 * 1 / sqrt(3))
-    shift <- cell_diameter/2
-
-  }
-
-  ## Filter centroids with their hexIDs
-  hexbin_coord_all <- hex_full_count_df |>
-    dplyr::select(c_x, c_y, hexID) |>
-    dplyr::distinct()
-
-  hexbin_coord_all_new <- hexbin_coord_all |>
-    dplyr::mutate(c_x = c_x - shift,
-                  c_y = c_y - shift) |>
-    dplyr::rename(c("x" = "c_x",
-                    "y" = "c_y"))
-
-  ## Generate all coordinates of hexagons
-  hex_grid_new <- full_hex_grid(hexbin_coord_all_new)
-
-  hexbin_coord_all_new <- hexbin_coord_all_new |>
-    dplyr::rename(c("c_x" = "x",
-                    "c_y" = "y"))
-
-  ## Map the polygon ID to the hexagon coordinates
-  full_grid_with_polygon_id_df <- map_polygon_id(hexbin_coord_all_new, hex_grid_new)
-
-  full_grid_with_hexbin_id_rep <- full_grid_with_polygon_id_df |>
-    dplyr::slice(rep(1:dplyr::n(), each = 6)) |>
-    dplyr::arrange(polygon_id)
-
-  ## Generate the dataset with polygon, and hexagon bin centroid coordinates
-  hex_full_count_df_new <- dplyr::bind_cols(hex_grid_new, full_grid_with_hexbin_id_rep)
-
-  ## Datafarme to store new hexIDs
-  nldr_df_with_new_hexID <- data.frame(matrix(ncol = 0, nrow = 0))
-
-  for (i in 1:NROW(nldr_data_with_hb_id)) {
-
-    ## Select the nldr point
-    nldr_data_with_hb_id_spec <- nldr_data_with_hb_id |>
-      dplyr::filter(dplyr::row_number() == i)
-
-    ## Find nearest hexIDs
-    df_bin_centroids_coordinates_spec_bin_near1 <- hexbin_coord_all_new |>
-      dplyr::filter((hexID == nldr_data_with_hb_id_spec$hb_id[1]) |(hexID == (nldr_data_with_hb_id_spec$hb_id[1] + (num_bins_x + 1))) | (hexID == (nldr_data_with_hb_id_spec$hb_id[1] + num_bins_x)) | (hexID == (nldr_data_with_hb_id_spec$hb_id[1] - (num_bins_x + 1))) | (hexID == (nldr_data_with_hb_id_spec$hb_id[1] - num_bins_x)))
-
-    nldr_data_with_hb_id_spec <- nldr_data_with_hb_id_spec |>
-      dplyr::select(-ID) |>
-      dplyr::rename("x" = names(nldr_data_with_hb_id_spec)[1],
-                    "y" = names(nldr_data_with_hb_id_spec)[2])
-
-    df_bin_centroids_coordinates_spec_bin_near1 <- df_bin_centroids_coordinates_spec_bin_near1 |>
-      dplyr::rename("x" = "c_x",
-                    "y" = "c_y",
-                    "hb_id" = "hexID")
-
-    near_df_1 <- dplyr::bind_rows(nldr_data_with_hb_id_spec, df_bin_centroids_coordinates_spec_bin_near1)
-
-    ## Compute the distance from selected point to neighbouring centroids
-    near_df_1$distance <- lapply(seq(nrow(near_df_1)), function(x) {
-      start <- unlist(near_df_1[1, c("x","y")])
-      end <- unlist(near_df_1[x, c("x","y")])
-      sqrt(sum((start - end)^2))})
-
-    near_df_1$distance <- unlist(near_df_1$distance)
-
-    near_df_1 <- near_df_1 |>
-      dplyr::filter(dplyr::row_number() != 1) |>
-      dplyr::arrange(distance)
-
-    ## Select the most nearest centroid and assign the hexID of that centroid
-    nldr_data_with_hb_id_spec <- nldr_data_with_hb_id_spec |>
-      dplyr::select(-hb_id) |>
-      dplyr::mutate(hb_id = near_df_1$hb_id[1])
-
-    nldr_df_with_new_hexID <- dplyr::bind_rows(nldr_df_with_new_hexID, nldr_data_with_hb_id_spec)
-
-  }
-
-
-  ## Find counts within each hexagon
-  hb_id_with_counts <- nldr_df_with_new_hexID |>
-    dplyr::count(hb_id) |>
-    dplyr::mutate(counts = n,
-                  std_counts = n/max(n)) |>
-    dplyr::select(-n)
-
-  hex_full_count_df_new <- dplyr::left_join(hex_full_count_df_new, hb_id_with_counts,
-                                            by = c("hexID" = "hb_id"))
-
-  return(hex_full_count_df_new)
-
-}
-
-

@@ -7,15 +7,15 @@
 extract_hexbin_mean(nldr_df, num_bins, shape_val = 1, x = UMAP1, y = UMAP2)
 }
 \arguments{
-\item{nldr_df}{Non-linear dimensionality reduction data frame containing 2D coordinates.}
+\item{nldr_df}{A data frame containing 2D embeddings.}
 
 \item{num_bins}{Number of bins along the x-axis for hexagon binning.}
 
 \item{shape_val}{The value of the shape parameter for hexagon binning.}
 
-\item{x}{The name of the column that contains first embedding.}
+\item{x}{The name of the column that contains first 2D embeddings component.}
 
-\item{y}{The name of the column that contains second embedding.}
+\item{y}{The name of the column that contains second 2D embeddings component.}
 }
 \value{
 A list containing the hexagonal bin mean data frame and the hexbin object.

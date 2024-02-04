@@ -7,17 +7,17 @@
 triangulate_bin_centroids(.data, x, y)
 }
 \arguments{
-\item{.data}{The data frame containing the bin centroids.}
+\item{.data}{The data frame containing the bin centroids/ means.}
 
-\item{x}{The name of the column that contains x coordinates of centroids.}
+\item{x}{The name of the column that contains x coordinates of bin centroids/ means.}
 
-\item{y}{The name of the column that contains y coordinates of centroids.}
+\item{y}{The name of the column that contains y coordinates of bin centroids/ means.}
 }
 \value{
-A triangular object representing the triangulated bin centroids.
+A triangular object representing the triangulated bin centroids/ means.
 }
 \description{
-This function triangulates the bin centroids using the x and y coordinates provided in the input data frame and returns the triangular object.
+This function triangulates the bin centroids/ means using the x and y coordinates provided in the input data frame and returns the triangular object.
 }
 \examples{
 num_bins_x <- 4

@@ -14,7 +14,7 @@ generate_eval_df(
 )
 }
 \arguments{
-\item{data}{The data set containing high-dimensional data along with IDs.}
+\item{data}{The data set containing high-dimensional data along with an unique identifier.}
 
 \item{prediction_df}{The data set with 2D embeddings, IDs, and predicted hexagonal IDs.}
 

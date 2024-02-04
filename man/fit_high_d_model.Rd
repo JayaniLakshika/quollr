@@ -20,13 +20,13 @@ fit_high_d_model(
 )
 }
 \arguments{
-\item{training_data}{A data frame containing the training data for the model.}
+\item{training_data}{A data frame containing the training high-dimensional data.}
 
-\item{nldr_df_with_id}{Non-linear dimensionality reduction data frame containing 2D coordinates with an identifier.}
+\item{nldr_df_with_id}{A data frame containing 2D embeddings with an unique identifier.}
 
-\item{x}{The name of the column that contains first embedding.}
+\item{x}{The name of the column that contains first 2D embeddings component.}
 
-\item{y}{The name of the column that contains second embedding.}
+\item{y}{The name of the column that contains second 2D embeddings component.}
 
 \item{cell_area}{The area of each hexagonal cell.}
 

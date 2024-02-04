@@ -18,7 +18,7 @@ find_low_density_hexagons(
 \item{df_bin_centroids_low}{The data frame containing identified low-density hexagonal bin centroids.}
 }
 \value{
-A vector containing the IDs of hexagons to be removed after investigating their neighbouring bins.
+A vector containing the IDs of hexagons to be removed after investigating their neighboring bins.
 }
 \description{
 This function identifies hexagons with low density based on the mean density of their neighboring hexagons.

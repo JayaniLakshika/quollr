@@ -1,0 +1,54 @@
+---
+title: "Predict 2D embeddings"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{prediction}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+options(rmarkdown.html_vignette.check_title = FALSE)
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  warning = FALSE, 
+  message = FALSE
+)
+```
+
+```{r setup, echo = FALSE}
+library(quollr)
+library(ggplot2)
+```
+
+Some Non-linear dimension reduction techniques (NLDR), such as t-distributed stochastic neighbor embedding (tSNE) do not provide mechanism to employ prediction like Uniform manifold approximation and projection (UMAP). In that case, the `predict_2d_embeddings` function serves as a valuable tool to predict 2D embeddings, regardless of the NLDR technique. 
+
+```{r}
+model <- fit_high_d_model(training_data = s_curve_noise_training, 
+                 nldr_df_with_id = s_curve_noise_umap)
+
+df_bin_centroids <- model$df_bin_centroids
+df_bin <- model$df_bin
+```
+
+```{r}
+predict_df <- predict_2d_embeddings(test_data = s_curve_noise_test, 
+                                    df_bin_centroids = df_bin_centroids, 
+                                    df_bin = df_bin, type_NLDR = "UMAP")
+
+predict_df
+```
+```{r}
+s_curve_noise_umap |>
+    ggplot(aes(x = UMAP1,
+               y = UMAP2,
+               label = ID))+
+    geom_point(alpha=0.5) +
+    geom_point(data = predict_df, aes(x = pred_UMAP_1, y = pred_UMAP_2), 
+               color = "red", alpha=0.5) +
+    coord_equal() +
+    theme(plot.title = element_text(hjust = 0.5, size = 18, face = "bold"),
+          axis.text = element_text(size = 5),
+          axis.title = element_text(size = 7))
+```

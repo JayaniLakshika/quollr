@@ -11,9 +11,9 @@ predict_hex_id(df_bin_centroids, nldr_df_test, x = "UMAP1", y = "UMAP2")
 
 \item{nldr_df_test}{The non-linear dimensionality reductions that need to find the prediction.}
 
-\item{x}{The name of the column that contains first embedding.}
+\item{x}{The name of the column that contains first 2D embeddings component.}
 
-\item{y}{The name of the column that contains second embedding.}
+\item{y}{The name of the column that contains second 2D embeddings component.}
 }
 \value{
 A data frame containing prediced hexID for 2D embedding data

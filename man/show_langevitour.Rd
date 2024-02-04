@@ -15,11 +15,11 @@ show_langevitour(
 )
 }
 \arguments{
-\item{df}{The original dataset.}
+\item{df}{A data frame containing the high-dimensional data.}
 
-\item{df_b}{The summarized mean dataset.}
+\item{df_b}{A data frame containing the high-dimensional coordinates of bin centroids/ means.}
 
-\item{df_b_with_center_data}{The dataset with hexbin centroids.}
+\item{df_b_with_center_data}{The dataset with hexbin centroids/ means.}
 
 \item{benchmark_value}{The benchmark value used to remove long edges (optional).}
 

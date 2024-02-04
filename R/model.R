@@ -4,10 +4,10 @@
 #' to customize the modeling process, including the choice of bin centroids or bin means,
 #' removal of low-density hexagons, and averaging of high-dimensional data.
 #'
-#' @param training_data A data frame containing the training data for the model.
-#' @param nldr_df_with_id Non-linear dimensionality reduction data frame containing 2D coordinates with an identifier.
-#' @param x The name of the column that contains first embedding.
-#' @param y The name of the column that contains second embedding.
+#' @param training_data A data frame containing the training high-dimensional data.
+#' @param nldr_df_with_id A data frame containing 2D embeddings with an unique identifier.
+#' @param x The name of the column that contains first 2D embeddings component.
+#' @param y The name of the column that contains second 2D embeddings component.
 #' @param cell_area The area of each hexagonal cell.
 #' @param num_bins_x The number of bins along the x-axis for the hexagonal grid.
 #' @param shape_val The shape parameter for the hexagons.

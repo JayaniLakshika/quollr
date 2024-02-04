@@ -14,7 +14,7 @@ weighted_highD_data(
 \arguments{
 \item{training_data}{A data frame containing the training data with an ID column.}
 
-\item{nldr_df_with_id}{A data frame containing the non-linear dimensionality reduction (NLDR) data with an ID column.}
+\item{nldr_df_with_id}{A data frame containing 2D embeddings with an unique identifier.}
 
 \item{hb_object}{An object containing information about hexbin IDs.}
 
