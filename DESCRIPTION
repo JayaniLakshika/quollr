@@ -2,11 +2,32 @@ Package: quollr
 Type: Package
 Title: Visualising How Nonlinear Dimension Reduction Warps Your Data
 Version: 0.1.0
-Author: person(given = "Jayani", 
-                  family = "P.G. Lakshika",
-                  role = c("aut", "cre", "cph"),
-                  email = "jayanilakshika76@gmail.com",
-                  comment = c(ORCID = "0000-0002-6265-6481"))
+Authors@R: 
+    c(person(given = "Jayani", 
+            family = "P.G. Lakshika",
+            role = c("aut", "cre"),
+            email = "jayanilakshika76@gmail.com",
+            comment = c(ORCID = "0000-0002-6265-6481")),
+      person(given = "Dianne", 
+             family = "Cook", 
+             email = "dicook@monash.edu", 
+             role = "aut", 
+             comment = c(ORCID = "0000-0002-3813-7155")),
+      person(given = "Paul", 
+             family = "Harrison", 
+             email = "paul.harrison@monash.edu", 
+             role = "aut", 
+             comment = c(ORCID = "0000-0002-3980-268X")),
+      person(given = "Michael", 
+             family = "Lydeamore", 
+             email = "michael.lydeamore@monash.edu", 
+             role = "aut", 
+             comment = c(ORCID = "0000-0001-6515-827X")),
+      person(given = "Thiyanga", 
+             family = "S. Talagala", 
+             email = "ttalagala@sjp.ac.lk", 
+             role = "aut", 
+             comment = c(ORCID = "0000-0002-0656-9789")))
 Maintainer: Jayani P.G. Lakshika <jayanilakshika76@gmail.com>
 Description: Questioning how a high-dimensional object looks in low-dimensions. With 'quollr', you can create linked interactive graphics that facilitate the exploration and analysis of high-dimensional datasets. This powerful tool allows you to diagnose the quality of dimension reduction techniques and gain insights into the global structure of your data through interactive tours. A complete description of the method is discussed in paper.
 License: MIT + file LICENSE
