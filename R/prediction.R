@@ -32,8 +32,8 @@ compute_aic <- function(p, total, num_bins, num_obs) {
 #'
 #' @param df_bin_centroids The training dataset containing high-dimensional data with IDs.
 #' @param nldr_df_test The non-linear dimensionality reductions that need to find the prediction.
-#' @param x The name of the column that contains first embedding.
-#' @param y The name of the column that contains second embedding.
+#' @param x The name of the column that contains first 2D embeddings component.
+#' @param y The name of the column that contains second 2D embeddings component.
 #'
 #' @return A data frame containing prediced hexID for 2D embedding data
 #'
@@ -71,7 +71,7 @@ predict_hex_id <- function(df_bin_centroids, nldr_df_test, x = "UMAP1", y = "UMA
 #'
 #' This function generates an evaluation data frame based on the provided data and predictions.
 #'
-#' @param data The data set containing high-dimensional data along with IDs.
+#' @param data The data set containing high-dimensional data along with an unique identifier.
 #' @param prediction_df The data set with 2D embeddings, IDs, and predicted hexagonal IDs.
 #' @param df_bin_centroids The data set with coordinates of hexagonal bin centroids.
 #' @param df_bin The data set with averaged/weighted high-dimensional data.
@@ -146,7 +146,7 @@ generate_eval_df <- function(data, prediction_df, df_bin_centroids, df_bin,
 #' Given a test dataset, the centroid coordinates of hexagonal bins in  2D and high-dimensional space,
 #' predict the 2D embeddings for each data point in the test dataset.
 #'
-#' @param test_data The test dataset containing high-dimensional features and an ID column.
+#' @param test_data The test dataset containing high-dimensional coordinates and an unique identifier.
 #' @param df_bin_centroids Centroid coordinates of hexagonal bins in 2D space.
 #' @param df_bin Centroid coordinates of hexagonal bins in high dimensions.
 #' @param type_NLDR The type of non-linear dimensionality reduction (NLDR) used. Default is "UMAP".

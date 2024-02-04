@@ -1,10 +1,10 @@
 #' Extract hexagonal bin centroids and related information from non-linear dimensionality reduction data.
 #'
-#' @param nldr_df Non-linear dimensionality reduction data frame containing 2D coordinates.
+#' @param nldr_df A data frame containing 2D embeddings.
 #' @param num_bins Number of bins along the x-axis for hexagon binning.
 #' @param shape_val The value of the shape parameter for hexagon binning.
-#' @param x The name of the column that contains first embedding.
-#' @param y The name of the column that contains second embedding.
+#' @param x The name of the column that contains first 2D embeddings component.
+#' @param y The name of the column that contains second 2D embeddings component.
 #'
 #' @return A list containing the hexagonal bin centroids data frame and the hexbin object.
 #' @export
@@ -44,11 +44,11 @@ extract_hexbin_centroids <- function(nldr_df, num_bins, shape_val = 1, x = UMAP1
 
 #' Extract hexagonal bin mean and related information from non-linear dimensionality reduction data.
 #'
-#' @param nldr_df Non-linear dimensionality reduction data frame containing 2D coordinates.
+#' @param nldr_df A data frame containing 2D embeddings.
 #' @param num_bins Number of bins along the x-axis for hexagon binning.
 #' @param shape_val The value of the shape parameter for hexagon binning.
-#' @param x The name of the column that contains first embedding.
-#' @param y The name of the column that contains second embedding.
+#' @param x The name of the column that contains first 2D embeddings component.
+#' @param y The name of the column that contains second 2D embeddings component.
 #'
 #' @return A list containing the hexagonal bin mean data frame and the hexbin object.
 #' @export
@@ -99,13 +99,13 @@ extract_hexbin_mean <- function(nldr_df, num_bins, shape_val = 1, x = UMAP1, y =
 
 #' Triangulate Bin Centroids
 #'
-#' This function triangulates the bin centroids using the x and y coordinates provided in the input data frame and returns the triangular object.
+#' This function triangulates the bin centroids/ means using the x and y coordinates provided in the input data frame and returns the triangular object.
 #'
-#' @param .data The data frame containing the bin centroids.
-#' @param x The name of the column that contains x coordinates of centroids.
-#' @param y The name of the column that contains y coordinates of centroids.
+#' @param .data The data frame containing the bin centroids/ means.
+#' @param x The name of the column that contains x coordinates of bin centroids/ means.
+#' @param y The name of the column that contains y coordinates of bin centroids/ means.
 #'
-#' @return A triangular object representing the triangulated bin centroids.
+#' @return A triangular object representing the triangulated bin centroids/ means.
 #'
 #' @examples
 #' num_bins_x <- 4
@@ -665,10 +665,10 @@ find_pts_in_hexbins <- function(full_grid_with_hexbin_id, nldr_data_with_hb_id) 
 #'
 #' This function determines the number of non-empty bins needed to satisfy a minimum requirement.
 
-#' @param nldr_df Non-linear dimensionality reduction data frame containing 2D coordinates.
+#' @param nldr_df A data frame containing 2D embeddings.
 #' @param shape_val The value of the shape parameter for hexagon binning.
-#' @param x The name of the column that contains first embedding.
-#' @param y The name of the column that contains second embedding.
+#' @param x The name of the column that contains first 2D embeddings component.
+#' @param y The name of the column that contains second 2D embeddings component.
 #' @param non_empty_bins The desired number of non-empty bins.
 #'
 #' @return The number of bins along the x-axis needed to achieve the specified number of non-empty bins.
@@ -719,7 +719,7 @@ find_non_empty_bins <- function(nldr_df, x = "UMAP1", y = "UMAP2", shape_val, no
 #' of a hexagonal grid with a specified shift. The resulting dataset includes hexagon centroids
 #' with updated coordinates and additional information such as counts within each hexagon.
 #'
-#' @param nldr_data_with_hb_id Non-linear dimensionality reduction data frame containing 2D coordinates with a hexbin ID.
+#' @param nldr_data_with_hb_id A containing 2D embeddings with a hexbin ID.
 #' @param num_bins_x The number of bins along the x-axis for the hexagonal grid.
 #' @param hex_full_count_df A data frame with information about all hexagonal grid cells.
 #' @param shift The value that centroids need to be shifted. If not provided, it is calculated

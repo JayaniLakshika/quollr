@@ -140,7 +140,7 @@ compute_mean_density_hex <- function(df_bin_centroids, num_bins_x) {
 #' @param num_bins_x Number of bins along the x-axis for hexagon binning.
 #' @param df_bin_centroids_low The data frame containing identified low-density hexagonal bin centroids.
 #'
-#' @return A vector containing the IDs of hexagons to be removed after investigating their neighbouring bins.
+#' @return A vector containing the IDs of hexagons to be removed after investigating their neighboring bins.
 #'
 #' @examples
 #' num_bins_x <- 4

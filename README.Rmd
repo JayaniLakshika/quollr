@@ -40,6 +40,8 @@ And the development version from [GitHub](https://github.com/) with:
 # remotes::install_github("JayaniLakshika/quollr")
 ```
 
+## Example
+
 ## Copyright
 
 This package is licensed under the [MIT license](https://github.com/JayaniLakshika/quollr/LICENSE.md). 

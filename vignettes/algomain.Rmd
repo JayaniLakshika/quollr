@@ -27,7 +27,7 @@ library(umap)
 ```{r echo = FALSE}
 # Simulate some s_curve_noise
 
-sample_size <- 300
+sample_size <- 100
 data <- snedata::s_curve(n_samples = sample_size)
 data <- data |>
   dplyr::select(-color)
@@ -133,4 +133,9 @@ df_all
 
 df_bin <- avg_highD_data(.data = df_all)
 df_bin
+```
+
+```{r}
+tour1 <- show_langevitour(df_all, df_bin, df_bin_centroids, benchmark_value = NA, distance = distance, distance_col = distance)
+tour1
 ```

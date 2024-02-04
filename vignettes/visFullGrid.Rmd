@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 )
 options(rmarkdown.html_vignette.check_title = FALSE)
 ```
-<!--
+
 ```{r setup, echo = FALSE}
 library(quollr)
 library(snedata)
@@ -29,7 +29,7 @@ library(dplyr)
 ```{r echo = FALSE}
 # Simulate some s_curve_noise
 
-sample_size <- 300
+sample_size <- 100
 data <- s_curve(n_samples = sample_size)
 data <- data |>
   dplyr::select(-color)
@@ -81,7 +81,6 @@ df_bin_centroids <- hexbin_data_object$hexdf_data
 To generate the full hexagonal grid, you need to start from the bin centroid info that obtained from `extract_hexbin_centroids()`.
 
 ```{r}
-
 ## Data set with all possible centroids in the hexagonal grid
 
 full_centroid_df <- generate_full_grid_centroids(df_bin_centroids)
@@ -107,4 +106,3 @@ ggplot(data = hex_full_count_df, aes(x = x, y = y)) +
 
 
 ```
--->

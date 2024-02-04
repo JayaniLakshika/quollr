@@ -2,7 +2,7 @@
 #'
 #' This function calculates the average values of high-dimensional data within each hexagonal bin.
 #'
-#' @param .data The data frame containing the high-dimensional data with 2D embedding.
+#' @param .data A data frame containing the high-dimensional data and 2D embeddings.
 #' @param column_start_text The text that begin the column name of the high-D data
 #'
 #' @return A data frame with the average values of the high-dimensional data within each hexagonal bin.
@@ -35,7 +35,7 @@ avg_highD_data <- function(.data, column_start_text = "x") {
 #'
 #' This function computes weights for hexagonal binning based on the average values of each bin and the distances from these averages.
 #'
-#' @param nldr_df A data frame containing UMAP coordinates and a unique identifier column (ID).
+#' @param nldr_df A data frame containing 2D embeddings and a unique identifier column (ID).
 #' @param hb_object A hexbin object containing the hexagonal binning information.
 #'
 #' @return A data frame with weights calculated for each hexagonal bin.
@@ -103,7 +103,7 @@ compute_weights <- function(nldr_df, hb_object) {
 #' based on the distances from the average points in the non-linear dimensionality reduction (NLDR) space.
 #'
 #' @param training_data A data frame containing the training data with an ID column.
-#' @param nldr_df_with_id A data frame containing the non-linear dimensionality reduction (NLDR) data with an ID column.
+#' @param nldr_df_with_id A data frame containing 2D embeddings with an unique identifier.
 #' @param hb_object An object containing information about hexbin IDs.
 #' @param column_start_text The starting text of the column names in the training_data that should be considered for the weighted mean. Default is "x".
 #'
@@ -167,9 +167,9 @@ weighted_highD_data <- function(training_data, nldr_df_with_id, hb_object, colum
 #'
 #' This function generates a LangeviTour visualization based on different conditions and input parameters.
 #'
-#' @param df The original dataset.
-#' @param df_b The summarized mean dataset.
-#' @param df_b_with_center_data The dataset with hexbin centroids.
+#' @param df A data frame containing the high-dimensional data.
+#' @param df_b A data frame containing the high-dimensional coordinates of bin centroids/ means.
+#' @param df_b_with_center_data The dataset with hexbin centroids/ means.
 #' @param benchmark_value The benchmark value used to remove long edges (optional).
 #' @param distance_df The distance dataframe.
 #' @param distance_col The name of the distance column.
