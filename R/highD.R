@@ -173,7 +173,6 @@ weighted_highD_data <- function(training_data, nldr_df_with_id, hb_object, colum
 #' @param benchmark_value The benchmark value used to remove long edges (optional).
 #' @param distance_df The distance dataframe.
 #' @param distance_col The name of the distance column.
-#' @param min_points_threshold The minimum number of points threshold for filtering bin centroids (optional).
 #'
 #' @importFrom dplyr mutate bind_rows filter
 #' @importFrom langevitour langevitour
@@ -191,12 +190,12 @@ weighted_highD_data <- function(training_data, nldr_df_with_id, hb_object, colum
 #' tr1_object <- triangulate_bin_centroids(df_bin_centroids, x, y)
 #' tr_from_to_df <- generate_edge_info(triangular_object = tr1_object)
 #' distance_df <- cal_2d_dist(.data = tr_from_to_df)
-#' show_langevitour(df_all, df_bin, df_bin_centroids, benchmark_value = 0.6,
+#' show_langevitour(df_all, df_bin, df_bin_centroids, benchmark_value = 5.44,
 #' distance = distance_df, distance_col = distance)
 #'
 #' @export
 show_langevitour <- function(df, df_b, df_b_with_center_data, benchmark_value = NA,
-                             distance_df, distance_col, min_points_threshold = NA) {
+                             distance_df, distance_col) {
 
   ### Define type column
   df <- df |>
@@ -211,46 +210,24 @@ show_langevitour <- function(df, df_b, df_b_with_center_data, benchmark_value = 
   df_exe <- dplyr::bind_rows(df_b, df)
 
 
-  if((is.na(benchmark_value)) && (is.na(min_points_threshold))){
+  if(is.na(benchmark_value)){
 
     tr1 <- triangulate_bin_centroids(df_b_with_center_data, x, y)
     tr_from_to_df <- generate_edge_info(triangular_object = tr1)
 
-    langevitour::langevitour(df_exe[1:(length(df_exe)-1)], lineFrom = tr_from_to_df$from , lineTo = tr_from_to_df$to, group = df_exe$type, pointSize = 3, levelColors = c("#6a3d9a", "#33a02c"))
-  } else if ((!(is.na(benchmark_value))) && (is.na(min_points_threshold))) {
+    langevitour::langevitour(df_exe[1:(length(df_exe)-1)], lineFrom = tr_from_to_df$from,
+                             lineTo = tr_from_to_df$to, group = df_exe$type, pointSize = 3,
+                             levelColors = c("#6a3d9a", "#33a02c"))
+  } else {
+
     ## Set the maximum difference as the criteria
     distance_df_small_edges <- distance_df |>
-      dplyr::filter({{ distance_col }} < benchmark_value)
-    ## Since erase brushing is considerd.
-
-    langevitour::langevitour(df_exe[1:(length(df_exe)-1)], lineFrom = distance_df_small_edges$from, lineTo = distance_df_small_edges$to, group = df_exe$type, pointSize = 3, levelColors = c("#6a3d9a", "#33a02c"))
-
-  } else if ((is.na(benchmark_value)) && (!(is.na(min_points_threshold)))) {
-    df_bin_centroids_filterd <- df_bin_centroids |>
-      dplyr::filter(counts > min_points_threshold)
-
-    tr1 <- triangulate_bin_centroids(df_bin_centroids_filterd, x, y)
-    tr_from_to_df <- generate_edge_info(triangular_object = tr1)
-
-    langevitour::langevitour(df_exe[1:(length(df_exe)-1)], lineFrom = tr_from_to_df$from , lineTo = tr_from_to_df$to, group = df_exe$type, pointSize = 3, levelColors = c("#6a3d9a", "#33a02c"))
-
-  }  else if ((!(is.na(benchmark_value))) && (!(is.na(min_points_threshold)))) {
-
-    df_bin_centroids_filterd <- df_bin_centroids |>
-      dplyr::filter(Cell_count > min_points_threshold)
-
-    tr1 <- triangulate_bin_centroids(df_bin_centroids_filterd)
-    tr_from_to_df <- generate_edge_info(triangular_object = tr1)
-
-    distance_d <- cal_2d_dist(.data = tr_from_to_df)
-    ## Set the maximum difference as the criteria
-    distance_df_small_edges <- distance_d |>
       dplyr::filter(distance < benchmark_value)
     ## Since erase brushing is considerd.
 
-    langevitour::langevitour(df_exe[1:(length(df_exe)-1)], lineFrom = distance_df_small_edges$from, lineTo = distance_df_small_edges$to, group = df_exe$type, pointSize = 3, levelColors = c("#6a3d9a", "#33a02c"))
-
-  } else {
+    langevitour::langevitour(df_exe[1:(length(df_exe)-1)], lineFrom = distance_df_small_edges$from,
+                             lineTo = distance_df_small_edges$to, group = df_exe$type, pointSize = 3,
+                             levelColors = c("#6a3d9a", "#33a02c"))
 
   }
 

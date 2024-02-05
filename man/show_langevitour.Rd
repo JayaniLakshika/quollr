@@ -10,8 +10,7 @@ show_langevitour(
   df_b_with_center_data,
   benchmark_value = NA,
   distance_df,
-  distance_col,
-  min_points_threshold = NA
+  distance_col
 )
 }
 \arguments{
@@ -26,8 +25,6 @@ show_langevitour(
 \item{distance_df}{The distance dataframe.}
 
 \item{distance_col}{The name of the distance column.}
-
-\item{min_points_threshold}{The minimum number of points threshold for filtering bin centroids (optional).}
 }
 \description{
 This function generates a LangeviTour visualization based on different conditions and input parameters.
@@ -45,7 +42,7 @@ df_bin <- avg_highD_data(df_all)
 tr1_object <- triangulate_bin_centroids(df_bin_centroids, x, y)
 tr_from_to_df <- generate_edge_info(triangular_object = tr1_object)
 distance_df <- cal_2d_dist(.data = tr_from_to_df)
-show_langevitour(df_all, df_bin, df_bin_centroids, benchmark_value = 0.6,
+show_langevitour(df_all, df_bin, df_bin_centroids, benchmark_value = 5.44,
 distance = distance_df, distance_col = distance)
 
 }

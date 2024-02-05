@@ -30,7 +30,7 @@ To shift in the negative direction along the y-axis, set shift_y to a positive v
 otherwise, for a shift in the positive direction, use a negative value (shift_y < 0).
 If not provided, it is calculated as half of the cell diameter of a hexagon.}
 
-\item{cell_area}{A numeric value that initialise the area of the hexagon.}
+\item{cell_area}{A numeric value that initialise the area of the hexagon. The default is 1.}
 }
 \value{
 A data frame with updated hexagon coordinates, hexagon IDs, and counts within each hexagon.

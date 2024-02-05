@@ -206,7 +206,7 @@ find_low_density_hexagons <- function(df_bin_centroids_all, num_bins_x, df_bin_c
 #' To shift in the negative direction along the y-axis, set shift_y to a positive value (shift_y > 0);
 #' otherwise, for a shift in the positive direction, use a negative value (shift_y < 0).
 #' If not provided, it is calculated as half of the cell diameter of a hexagon.
-#' @param cell_area A numeric value that initialise the area of the hexagon.
+#' @param cell_area A numeric value that initialise the area of the hexagon. The default is 1.
 #'
 #' @return A data frame with updated hexagon coordinates, hexagon IDs, and counts within each hexagon.
 #'
