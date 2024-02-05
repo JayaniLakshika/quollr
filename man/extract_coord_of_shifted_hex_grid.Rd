@@ -9,7 +9,8 @@ extract_coord_of_shifted_hex_grid(
   num_bins_x,
   hex_full_count_df,
   shift_x = NA,
-  shift_y = NA
+  shift_y = NA,
+  cell_area = 1
 )
 }
 \arguments{
@@ -24,6 +25,8 @@ as half of the cell diameter of a hexagon.}
 
 \item{shift_y}{The value that centroids need to be shifted in y-axis. If not provided, it is calculated
 as half of the cell diameter of a hexagon.}
+
+\item{cell_area}{A numeric value that initialise the area of the hexagon.}
 }
 \value{
 A data frame with updated hexagon coordinates, hexagon IDs, and counts within each hexagon.
