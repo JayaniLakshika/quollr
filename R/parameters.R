@@ -198,10 +198,16 @@ find_low_density_hexagons <- function(df_bin_centroids_all, num_bins_x, df_bin_c
 #' @param nldr_data_with_hb_id A containing 2D embeddings with a hexbin ID.
 #' @param num_bins_x The number of bins along the x-axis for the hexagonal grid.
 #' @param hex_full_count_df A data frame with information about all hexagonal grid cells.
-#' @param shift The value that centroids need to be shifted. If not provided, it is calculated
+#' @param shift_x The value that centroids need to be shifted in x-axis. If not provided, it is calculated
+#'   as half of the cell diameter of a hexagon.
+#' @param shift_y The value that centroids need to be shifted in y-axis. If not provided, it is calculated
 #'   as half of the cell diameter of a hexagon.
 #'
 #' @return A data frame with updated hexagon coordinates, hexagon IDs, and counts within each hexagon.
+#'
+#' @return A list containing:
+#'   \item{hex_full_count_df_new}{Data frame with updated hexagonal grid information, including counts and standardized counts.}
+#'   \item{nldr_df_with_new_hexID}{Data frame with new hexagonal bin IDs assigned to 2D embeddings.}
 #'
 #' @examples
 #' num_bins_x <- 4
@@ -215,11 +221,13 @@ find_low_density_hexagons <- function(df_bin_centroids_all, num_bins_x, df_bin_c
 #' num_bins_x = num_bins_x, hex_full_count_df)
 #'
 #' @export
-extract_coord_of_shifted_hex_grid <- function(nldr_data_with_hb_id, num_bins_x, hex_full_count_df, shift = NA) {
+extract_coord_of_shifted_hex_grid <- function(nldr_data_with_hb_id, num_bins_x,
+                                              hex_full_count_df, shift_x = NA, shift_y = NA) {
 
-  if (is.na(shift)) {
+  if (is.na(shift_x) | is.na(shift_y)) {
     cell_diameter <- sqrt(2 * 1 / sqrt(3))
-    shift <- cell_diameter/2
+    shift_x <- cell_diameter/2
+    shift_y <- cell_diameter/2
 
   }
 
@@ -229,8 +237,8 @@ extract_coord_of_shifted_hex_grid <- function(nldr_data_with_hb_id, num_bins_x, 
     dplyr::distinct()
 
   hexbin_coord_all_new <- hexbin_coord_all |>
-    dplyr::mutate(c_x = c_x - shift,
-                  c_y = c_y - shift) |>
+    dplyr::mutate(c_x = c_x - shift_x,
+                  c_y = c_y - shift_y) |>
     dplyr::rename(c("x" = "c_x",
                     "y" = "c_y"))
 
@@ -308,7 +316,13 @@ extract_coord_of_shifted_hex_grid <- function(nldr_data_with_hb_id, num_bins_x, 
   hex_full_count_df_new <- dplyr::left_join(hex_full_count_df_new, hb_id_with_counts,
                                             by = c("hexID" = "hb_id"))
 
-  return(hex_full_count_df_new)
+  nldr_data_with_hb_id <- nldr_data_with_hb_id |>
+    dplyr::select(-ID)
+
+  names(nldr_df_with_new_hexID) <- names(nldr_data_with_hb_id)
+
+  return(list(hex_full_count_df_new = hex_full_count_df_new,
+              nldr_df_with_new_hexID = nldr_df_with_new_hexID))
 
 }
 

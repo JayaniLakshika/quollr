@@ -52,13 +52,15 @@ fit_high_d_model <- function(training_data, nldr_df_with_id, x = "UMAP1",
     ## For bin centroids
     hexbin_data_object <- extract_hexbin_centroids(nldr_df = nldr_df_with_id,
                                                    num_bins = num_bins_x,
-                                                   shape_val = shape_val)
+                                                   shape_val = shape_val,
+                                                   x = x, y = y)
 
   } else {
     ## For bin means
     hexbin_data_object <- extract_hexbin_mean(nldr_df = nldr_df_with_id,
                                                    num_bins = num_bins_x,
-                                                   shape_val = shape_val)
+                                                   shape_val = shape_val,
+                                              x = x, y = y)
 
   }
 

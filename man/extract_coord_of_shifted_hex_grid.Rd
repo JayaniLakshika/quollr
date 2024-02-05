@@ -8,7 +8,8 @@ extract_coord_of_shifted_hex_grid(
   nldr_data_with_hb_id,
   num_bins_x,
   hex_full_count_df,
-  shift = NA
+  shift_x = NA,
+  shift_y = NA
 )
 }
 \arguments{
@@ -18,11 +19,18 @@ extract_coord_of_shifted_hex_grid(
 
 \item{hex_full_count_df}{A data frame with information about all hexagonal grid cells.}
 
-\item{shift}{The value that centroids need to be shifted. If not provided, it is calculated
+\item{shift_x}{The value that centroids need to be shifted in x-axis. If not provided, it is calculated
+as half of the cell diameter of a hexagon.}
+
+\item{shift_y}{The value that centroids need to be shifted in y-axis. If not provided, it is calculated
 as half of the cell diameter of a hexagon.}
 }
 \value{
 A data frame with updated hexagon coordinates, hexagon IDs, and counts within each hexagon.
+
+A list containing:
+  \item{hex_full_count_df_new}{Data frame with updated hexagonal grid information, including counts and standardized counts.}
+  \item{nldr_df_with_new_hexID}{Data frame with new hexagonal bin IDs assigned to 2D embeddings.}
 }
 \description{
 This function takes input data, which includes a hexbin ID, and extracts the coordinates
