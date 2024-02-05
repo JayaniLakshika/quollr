@@ -198,10 +198,14 @@ find_low_density_hexagons <- function(df_bin_centroids_all, num_bins_x, df_bin_c
 #' @param nldr_data_with_hb_id A containing 2D embeddings with a hexbin ID.
 #' @param num_bins_x The number of bins along the x-axis for the hexagonal grid.
 #' @param hex_full_count_df A data frame with information about all hexagonal grid cells.
-#' @param shift_x The value that centroids need to be shifted in x-axis. If not provided, it is calculated
-#'   as half of the cell diameter of a hexagon.
-#' @param shift_y The value that centroids need to be shifted in y-axis. If not provided, it is calculated
-#'   as half of the cell diameter of a hexagon.
+#' @param shift_x The value that centroids need to be shifted in x-axis.
+#' To shift in the negative direction along the x-axis, set shift_x to a positive value (shift_x > 0);
+#' otherwise, for a shift in the positive direction, use a negative value (shift_x < 0).
+#' If not provided, it is calculated as half of the cell diameter of a hexagon.
+#' @param shift_y The value that centroids need to be shifted in y-axis.
+#' To shift in the negative direction along the y-axis, set shift_y to a positive value (shift_y > 0);
+#' otherwise, for a shift in the positive direction, use a negative value (shift_y < 0).
+#' If not provided, it is calculated as half of the cell diameter of a hexagon.
 #' @param cell_area A numeric value that initialise the area of the hexagon.
 #'
 #' @return A data frame with updated hexagon coordinates, hexagon IDs, and counts within each hexagon.
@@ -223,7 +227,8 @@ find_low_density_hexagons <- function(df_bin_centroids_all, num_bins_x, df_bin_c
 #'
 #' @export
 extract_coord_of_shifted_hex_grid <- function(nldr_data_with_hb_id, num_bins_x,
-                                              hex_full_count_df, shift_x = NA, shift_y = NA, cell_area = 1) {
+                                              hex_full_count_df, shift_x = NA,
+                                              shift_y = NA, cell_area = 1) {
 
   cell_diameter <- sqrt(2 * cell_area / sqrt(3))
   if (is.na(shift_x) | is.na(shift_y)) {
