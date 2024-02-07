@@ -146,6 +146,10 @@ compute_mean_density_hex <- function(df_bin_centroids, num_bins_x, col_std_count
 
   }
 
+  if (any(is.na(mean_density_vec))) {
+    warning("There are hexagonal bins that don't have any neighbouring bins.")
+  }
+
   df_bin_centroids <- df_bin_centroids |>
     dplyr::mutate(mean_density = mean_density_vec)
 
@@ -210,7 +214,7 @@ find_low_density_hexagons <- function(df_bin_centroids_all, num_bins_x, df_bin_c
     dplyr::filter((!!as.name(col_hb_id)) %in% df_bin_centroids_low[[col_hb_id_low]])
 
   ## Take first quartile
-  benchmark_mean_dens_rm_hex <- stats::quantile(mean_density_vec, probs = c(0,0.25,0.5,0.75,1))[2]
+  benchmark_mean_dens_rm_hex <- stats::quantile(mean_density_vec, probs = c(0,0.25,0.5,0.75,1), na.rm = TRUE)[2]
 
   remove_bins <- c()
 

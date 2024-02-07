@@ -54,8 +54,6 @@ avg_highD_data <- function(.data, column_start_text = "x") {
 #' @export
 compute_weights <- function(nldr_df, hb_object) {
 
-  hb_object <- hb_object
-
   ## To get the average of each bin
   bin_val_hexagons <- nldr_df |>
     dplyr::mutate(hb_id = hb_object@cID) |>

@@ -64,6 +64,12 @@ fit_high_d_model <- function(training_data, nldr_df_with_id, x = "UMAP1",
 
   }
 
+  if (isFALSE(is_rm_lwd_hex)) {
+    if (!is.na(benchmark_to_rm_lwd_hex)) {
+      stop("Need to initialise `is_rm_lwd_hex = TRUE`.")
+    }
+
+  }
 
 
   ## Do you need to remove low density hexagons?
@@ -85,7 +91,8 @@ fit_high_d_model <- function(training_data, nldr_df_with_id, x = "UMAP1",
     ## To identify low-density hexagons needed to remove by investigating neighbouring mean density
     identify_rm_bins <- find_low_density_hexagons(df_bin_centroids_all = df_bin_centroids,
                                                   num_bins_x = num_bins_x,
-                                                  df_bin_centroids_low = df_bin_centroids_low)
+                                                  df_bin_centroids_low = df_bin_centroids_low,
+                                                  col_std_counts = "std_counts")
 
     ## To remove low-density hexagons
     df_bin_centroids <- df_bin_centroids |>
@@ -119,7 +126,7 @@ fit_high_d_model <- function(training_data, nldr_df_with_id, x = "UMAP1",
     ## weighted averaged high-D data
     df_bin <- weighted_highD_data(training_data = training_data,
                         nldr_df_with_id = nldr_df_with_id,
-                        hb_object = hexbin_data_object, column_start_text = column_start_text)
+                        hb_object = hexbin_data_object$hb_data, column_start_text = column_start_text)
 
   }
 
