@@ -20,6 +20,34 @@
 #'
 #' @rdname compute_aic
 compute_aic <- function(p, total, num_bins, num_obs) {
+  if (is.infinite(p)) {
+    stop("Inf present.")
+  }
+
+  if (p == 0) {
+    stop("No high_D diensions.")
+  }
+
+  if (is.na(p)) {
+    stop("Should assign number of dimensions in high-D data.")
+  }
+
+  if (is.na(num_bins)) {
+    stop("Should assign number of non-emty bins.")
+  }
+
+  if (is.na(num_obs)) {
+    stop("Should assign number of observations in high-D data.")
+  }
+
+  if (length(total) == 0) {
+    stop("Total error is missing.")
+  }
+
+  if (any(is.na(total))) {
+    stop("Total error vector presence NAs.")
+  }
+
   mse <- mean(total) / p
   aic <- 2*num_bins*p + num_obs*p*log(mse)
   return(aic)
@@ -75,7 +103,6 @@ predict_hex_id <- function(df_bin_centroids, nldr_df_test, x = "UMAP1", y = "UMA
 #' @param prediction_df The data set with 2D embeddings, IDs, and predicted hexagonal IDs.
 #' @param df_bin_centroids The data set with coordinates of hexagonal bin centroids.
 #' @param df_bin The data set with averaged/weighted high-dimensional data.
-#' @param num_bins Number of bins along the x-axis for hexagon binning.
 #' @param col_start The text that begin the column name of the high-D data
 #'
 #' @return A tibble containing evaluation metrics based on the provided inputs.
@@ -96,11 +123,10 @@ predict_hex_id <- function(df_bin_centroids, nldr_df_test, x = "UMAP1", y = "UMA
 #' df_bin_centroids = df_bin_centroids,
 #' df_bin = df_bin, type_NLDR = "UMAP")
 #' generate_eval_df(data = s_curve_noise, prediction_df = pred_df_test,
-#' df_bin_centroids = df_bin_centroids, df_bin = df_bin, num_bins = num_bins_x, col_start = "x")
+#' df_bin_centroids = df_bin_centroids, df_bin = df_bin, col_start = "x")
 #'
 #' @export
-generate_eval_df <- function(data, prediction_df, df_bin_centroids, df_bin,
-                             num_bins, col_start = "x") {
+generate_eval_df <- function(data, prediction_df, df_bin_centroids, df_bin, col_start = "x") {
 
   ## Generate all possible bin centroids in the full grid
   full_centroid_df <- generate_full_grid_centroids(df_bin_centroids)
@@ -134,7 +160,8 @@ generate_eval_df <- function(data, prediction_df, df_bin_centroids, df_bin,
   #number_of_bins: Total number of bins with empty bins
   eval_df <- tibble::tibble(number_of_bins = NROW(full_centroid_df),
                             number_of_observations = NROW(prediction_df),
-                            total_error = compute_aic((NCOL(df_bin) - 1), prediction_df$total, NROW(df_bin_centroids), NROW(prediction_df)),
+                            total_error = compute_aic((NCOL(df_bin) - 1), prediction_df$total,
+                                                      NROW(df_bin_centroids), NROW(prediction_df)),
                             total_mse = mean(prediction_df$total))
 
   return(eval_df)

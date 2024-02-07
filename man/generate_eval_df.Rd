@@ -9,7 +9,6 @@ generate_eval_df(
   prediction_df,
   df_bin_centroids,
   df_bin,
-  num_bins,
   col_start = "x"
 )
 }
@@ -21,8 +20,6 @@ generate_eval_df(
 \item{df_bin_centroids}{The data set with coordinates of hexagonal bin centroids.}
 
 \item{df_bin}{The data set with averaged/weighted high-dimensional data.}
-
-\item{num_bins}{Number of bins along the x-axis for hexagon binning.}
 
 \item{col_start}{The text that begin the column name of the high-D data}
 }
@@ -45,6 +42,6 @@ pred_df_test <- predict_2d_embeddings(test_data = s_curve_noise_training,
 df_bin_centroids = df_bin_centroids,
 df_bin = df_bin, type_NLDR = "UMAP")
 generate_eval_df(data = s_curve_noise, prediction_df = pred_df_test,
-df_bin_centroids = df_bin_centroids, df_bin = df_bin, num_bins = num_bins_x, col_start = "x")
+df_bin_centroids = df_bin_centroids, df_bin = df_bin, col_start = "x")
 
 }
