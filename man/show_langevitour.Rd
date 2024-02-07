@@ -47,6 +47,6 @@ tr1_object <- triangulate_bin_centroids(df_bin_centroids, x, y)
 tr_from_to_df <- generate_edge_info(triangular_object = tr1_object)
 distance_df <- cal_2d_dist(.data = tr_from_to_df)
 show_langevitour(df_all, df_bin, df_bin_centroids, benchmark_value = 5.44,
-distance = distance_df, distance_col = distance)
+distance = distance_df, distance_col = "distance")
 
 }
