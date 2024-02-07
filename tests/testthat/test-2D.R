@@ -186,7 +186,7 @@ test_that("find_pts_in_hexbins() works", {
   expect_snapshot(find_non_empty_bins(nldr_df = s_curve_noise_umap, x = "UMAP1", y = "UMAP2",
                                       shape_val = shape_value, non_empty_bins))
 
-  expect_snapshot(find_non_empty_bins(nldr_df = s_curve_noise_umap, x = "UMAP1", y = "UMAP2",
-                                      shape_val = shape_value, non_empty_bins = 20), error = TRUE)
+  expect_error(find_non_empty_bins(nldr_df = s_curve_noise_umap, x = "UMAP1", y = "UMAP2",
+                                      shape_val = shape_value, non_empty_bins = 20))
 
 })

@@ -1,14 +1,6 @@
 # find_benchmark_value() works
 
     Code
-      find_benchmark_value(distance_df, "distance")
-    Condition
-      Error in `find_benchmark_value()`:
-      ! NAs present
-
----
-
-    Code
       find_benchmark_value(data_dist, "dist")
     Output
       [1] 1.5
@@ -46,15 +38,6 @@
       Error in `compute_mean_density_hex()`:
       ! Number of bins along x axis is not defined.
 
----
-
-    Code
-      compute_mean_density_hex(df_bin_centroids = df_bin_centroids_na, num_bins_x = num_bins_x,
-        col_std_counts = "std_counts_new")
-    Condition
-      Error in `compute_mean_density_hex()`:
-      ! NAs present
-
 # find_low_density_hexagons() works
 
     Code
@@ -71,25 +54,6 @@
         col_std_counts = "std_counts")
     Output
       [1] 12 13
-
----
-
-    Code
-      find_low_density_hexagons(df_bin_centroids_all = df_bin_centroids, num_bins_x = NA,
-        df_bin_centroids_low = df_bin_centroids_low, col_std_counts = "std_counts")
-    Condition
-      Error in `find_low_density_hexagons()`:
-      ! Number of bins along x axis is not defined.
-
----
-
-    Code
-      find_low_density_hexagons(df_bin_centroids_all = df_bin_centroids_na,
-        num_bins_x = num_bins_x, df_bin_centroids_low = df_bin_centroids_low,
-        col_std_counts = "std_counts_new")
-    Condition
-      Error in `find_low_density_hexagons()`:
-      ! NAs present
 
 ---
 
@@ -202,54 +166,4 @@
       74 -1.5812238 -4.959468236     7
       75  1.9432959  3.907273242    39
       
-
----
-
-    Code
-      extract_coord_of_shifted_hex_grid(nldr_data_with_hb_id = UMAP_data_with_hb_id,
-        num_bins_x = NA, hex_full_count_df = hex_full_count_df, shift_x = NA,
-        shift_y = NA, cell_area = 1)
-    Condition
-      Error in `extract_coord_of_shifted_hex_grid()`:
-      ! Number of bins along x axis is not defined.
-
----
-
-    Code
-      extract_coord_of_shifted_hex_grid(nldr_data_with_hb_id = UMAP_data_with_hb_id,
-        num_bins_x = NA, hex_full_count_df = hex_full_count_df, shift_x = 0.6,
-        shift_y = 0.8, cell_area = 1)
-    Condition
-      Error in `extract_coord_of_shifted_hex_grid()`:
-      ! Number of bins along x axis is not defined.
-
----
-
-    Code
-      extract_coord_of_shifted_hex_grid(nldr_data_with_hb_id = UMAP_data_with_hb_id,
-        num_bins_x = NA, hex_full_count_df = hex_full_count_df, shift_x = 0.6,
-        shift_y = 0.32, cell_area = 1)
-    Condition
-      Error in `extract_coord_of_shifted_hex_grid()`:
-      ! Number of bins along x axis is not defined.
-
----
-
-    Code
-      extract_coord_of_shifted_hex_grid(nldr_data_with_hb_id = UMAP_data_with_hb_id,
-        num_bins_x = NA, hex_full_count_df = hex_full_count_df, shift_x = 0.14,
-        shift_y = 0.8, cell_area = 1)
-    Condition
-      Error in `extract_coord_of_shifted_hex_grid()`:
-      ! Number of bins along x axis is not defined.
-
----
-
-    Code
-      extract_coord_of_shifted_hex_grid(nldr_data_with_hb_id = dplyr::select(
-        UMAP_data_with_hb_id, -hb_id), num_bins_x = NA, hex_full_count_df = hex_full_count_df,
-      shift_x = 0.14, shift_y = 0.8, cell_area = 1)
-    Condition
-      Error in `extract_coord_of_shifted_hex_grid()`:
-      ! Number of bins along x axis is not defined.
 

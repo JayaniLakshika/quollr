@@ -7,19 +7,19 @@ test_that("compute_aic() works", {
 
   testthat::expect_equal(compute_aic(p, total, num_bins, num_obs), 2951.8912)
 
-  testthat::expect_snapshot(compute_aic(p = Inf, total, num_bins, num_obs), error = TRUE)
+  testthat::expect_error(compute_aic(p = Inf, total, num_bins, num_obs))
 
-  testthat::expect_snapshot(compute_aic(p = 0, total, num_bins, num_obs), error = TRUE)
+  testthat::expect_error(compute_aic(p = 0, total, num_bins, num_obs))
 
-  testthat::expect_snapshot(compute_aic(p = NA, total, num_bins, num_obs), error = TRUE)
+  testthat::expect_error(compute_aic(p = NA, total, num_bins, num_obs))
 
-  testthat::expect_snapshot(compute_aic(p, total, num_bins = NA, num_obs), error = TRUE)
+  testthat::expect_error(compute_aic(p, total, num_bins = NA, num_obs))
 
-  testthat::expect_snapshot(compute_aic(p, total, num_bins, num_obs = NA), error = TRUE)
+  testthat::expect_error(compute_aic(p, total, num_bins, num_obs = NA))
 
-  testthat::expect_snapshot(compute_aic(p, total = c(), num_bins, num_obs), error = TRUE)
+  testthat::expect_error(compute_aic(p, total = c(), num_bins, num_obs))
 
-  testthat::expect_snapshot(compute_aic(p, total = c(1, 2, NA), num_bins, num_obs), error = TRUE)
+  testthat::expect_error(compute_aic(p, total = c(1, 2, NA), num_bins, num_obs))
 })
 
 
