@@ -22,7 +22,7 @@ fit_high_d_model(
 \arguments{
 \item{training_data}{A data frame containing the training high-dimensional data.}
 
-\item{nldr_df_with_id}{A data frame containing 2D embeddings with an unique identifier.}
+\item{nldr_df_with_id}{A data frame containing 2D embeddings with a unique identifier.}
 
 \item{x}{The name of the column that contains first 2D embeddings component.}
 

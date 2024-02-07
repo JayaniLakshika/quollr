@@ -8,8 +8,8 @@ extract_hexbin_centroids(
   nldr_df,
   num_bins,
   shape_val = 1,
-  x = UMAP1,
-  y = UMAP2
+  x = "UMAP1",
+  y = "UMAP2"
 )
 }
 \arguments{
@@ -34,7 +34,7 @@ Extract hexagonal bin centroids and related information from non-linear dimensio
 num_bins_x <- 4
 shape_value <- 1.833091
 result <- extract_hexbin_centroids(nldr_df = s_curve_noise_umap,
-num_bins = num_bins_x, shape_val = shape_value, x = UMAP1, y = UMAP2)
+num_bins = num_bins_x, shape_val = shape_value, x = "UMAP1", y = "UMAP2")
 hexdf_data <- result$hexdf_data
 hb_data <- result$hb_data
 print(hexdf_data)

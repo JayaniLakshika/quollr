@@ -4,14 +4,14 @@
 \alias{calculate_effective_shape_value}
 \title{Calculate effective shape parameter value}
 \usage{
-calculate_effective_shape_value(.data, x = UMAP1, y = UMAP2)
+calculate_effective_shape_value(.data, x = "UMAP1", y = "UMAP2")
 }
 \arguments{
 \item{.data}{A data frame, data frame extension (e.g., a tibble), or a lazy data frame (e.g., from dbplyr or dtplyr).}
 
-\item{x}{A literal variable name representing the x-axis.}
+\item{x}{A character variable name representing the x-axis.}
 
-\item{y}{A literal variable name representing the y-axis.}
+\item{y}{A character variable name representing the y-axis.}
 }
 \value{
 A numeric value representing the effective shape parameter.
@@ -20,5 +20,5 @@ A numeric value representing the effective shape parameter.
 This function calculates the effective shape parameter value for a scatter plot based on the ranges of the x-axis and y-axis.
 }
 \examples{
-calculate_effective_shape_value(.data = s_curve_noise_umap, x = UMAP1, y = UMAP2)
+calculate_effective_shape_value(.data = s_curve_noise_umap, x = "UMAP1", y = "UMAP2")
 }

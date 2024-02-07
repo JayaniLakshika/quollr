@@ -10,10 +10,12 @@ generate_edge_info(triangular_object)
 \item{triangular_object}{The triangular object from which to generate edge information.}
 }
 \value{
-A data frame containing the edge information, including the from-to relationships and the corresponding x and y coordinates.
+A data frame containing the edge information, including the from-to
+relationships and the corresponding x and y coordinates.
 }
 \description{
-This function generates edge information from a given triangular object, including the coordinates of the vertices and the from-to relationships between the vertices.
+This function generates edge information from a given triangular object,
+including the coordinates of the vertices and the from-to relationships between the vertices.
 }
 \examples{
 num_bins_x <- 4

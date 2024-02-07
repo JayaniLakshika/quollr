@@ -17,7 +17,8 @@ triangulate_bin_centroids(.data, x, y)
 A triangular object representing the triangulated bin centroids/ means.
 }
 \description{
-This function triangulates the bin centroids/ means using the x and y coordinates provided in the input data frame and returns the triangular object.
+This function triangulates the bin centroids/ means using the x and y coordinates
+provided in the input data frame and returns the triangular object.
 }
 \examples{
 num_bins_x <- 4

@@ -19,7 +19,7 @@
 #' num_bins_x <- 4
 #' shape_value <- 1.833091
 #' result <- extract_hexbin_centroids(nldr_df = s_curve_noise_umap,
-#' num_bins = num_bins_x, shape_val = shape_value, x = UMAP1, y = UMAP2)
+#' num_bins = num_bins_x, shape_val = shape_value, x = "UMAP1", y = "UMAP2")
 #' hexdf_data <- result$hexdf_data
 #' hb_data <- result$hb_data
 #' print(hexdf_data)
@@ -27,7 +27,7 @@
 #'
 #'
 #' @rdname extract_hexbin_centroids
-extract_hexbin_centroids <- function(nldr_df, num_bins, shape_val = 1, x = UMAP1, y = UMAP2) {
+extract_hexbin_centroids <- function(nldr_df, num_bins, shape_val = 1, x = "UMAP1", y = "UMAP2") {
 
   ## To create the hexbin object
   hb_data <- hexbin::hexbin(x = nldr_df |> dplyr::pull({{ x }}),
@@ -36,7 +36,9 @@ extract_hexbin_centroids <- function(nldr_df, num_bins, shape_val = 1, x = UMAP1
                             shape = shape_val)
 
   ## To create the hexbin centroid info dataset
-  hexdf_data <- tibble::tibble(tibble::as_tibble(hexbin::hcell2xy(hb_data)),  hexID = hb_data@cell, counts = hb_data@count, std_counts = hb_data@count/max(hb_data@count))
+  hexdf_data <- tibble::tibble(tibble::as_tibble(hexbin::hcell2xy(hb_data)),
+                               hexID = hb_data@cell, counts = hb_data@count,
+                               std_counts = hb_data@count/max(hb_data@count))
 
   return(list(hexdf_data = hexdf_data, hb_data = hb_data))
 }
@@ -64,7 +66,7 @@ extract_hexbin_centroids <- function(nldr_df, num_bins, shape_val = 1, x = UMAP1
 #' num_bins_x <- 4
 #' shape_value <- 1.833091
 #' result <- extract_hexbin_mean(nldr_df = s_curve_noise_umap,
-#' num_bins = num_bins_x, shape_val = shape_value, x = UMAP1, y = UMAP2)
+#' num_bins = num_bins_x, shape_val = shape_value, x = "UMAP1", y = "UMAP2")
 #' hexdf_data <- result$hexdf_data
 #' hb_data <- result$hb_data
 #' print(hexdf_data)
@@ -72,7 +74,7 @@ extract_hexbin_centroids <- function(nldr_df, num_bins, shape_val = 1, x = UMAP1
 #'
 #'
 #' @rdname extract_hexbin_mean
-extract_hexbin_mean <- function(nldr_df, num_bins, shape_val = 1, x = UMAP1, y = UMAP2) {
+extract_hexbin_mean <- function(nldr_df, num_bins, shape_val = 1, x = "UMAP1", y = "UMAP2") {
 
   ## To create the hexbin object
   hb_data <- hexbin::hexbin(x = nldr_df |> dplyr::pull({{ x }}),
@@ -91,7 +93,8 @@ extract_hexbin_mean <- function(nldr_df, num_bins, shape_val = 1, x = UMAP1, y =
   names(df_cell_data) <- c("hexID", "x", "y")
 
   ## To create the hexbin means info dataset
-  hexdf_data <- tibble::tibble(df_cell_data, counts = hb_data@count, std_counts = hb_data@count/max(hb_data@count))
+  hexdf_data <- tibble::tibble(df_cell_data, counts = hb_data@count,
+                               std_counts = hb_data@count/max(hb_data@count))
 
   return(list(hexdf_data = hexdf_data, hb_data = hb_data))
 }
@@ -99,7 +102,8 @@ extract_hexbin_mean <- function(nldr_df, num_bins, shape_val = 1, x = UMAP1, y =
 
 #' Triangulate Bin Centroids
 #'
-#' This function triangulates the bin centroids/ means using the x and y coordinates provided in the input data frame and returns the triangular object.
+#' This function triangulates the bin centroids/ means using the x and y coordinates
+#' provided in the input data frame and returns the triangular object.
 #'
 #' @param .data The data frame containing the bin centroids/ means.
 #' @param x The name of the column that contains x coordinates of bin centroids/ means.
@@ -126,11 +130,13 @@ triangulate_bin_centroids <- function(.data, x, y){
 
 #' Generate Edge Information
 #'
-#' This function generates edge information from a given triangular object, including the coordinates of the vertices and the from-to relationships between the vertices.
+#' This function generates edge information from a given triangular object,
+#' including the coordinates of the vertices and the from-to relationships between the vertices.
 #'
 #' @param triangular_object The triangular object from which to generate edge information.
 #'
-#' @return A data frame containing the edge information, including the from-to relationships and the corresponding x and y coordinates.
+#' @return A data frame containing the edge information, including the from-to
+#' relationships and the corresponding x and y coordinates.
 #'
 #' @examples
 #' num_bins_x <- 4
@@ -261,7 +267,7 @@ cal_2d_dist <- function(.data, start_x = "x_from", start_y = "y_from", end_x = "
 #' tr_from_to_df <- generate_edge_info(triangular_object = tr1_object)
 #' distance_df <- cal_2d_dist(tr_from_to_df)
 #' colour_long_edges(.data = distance_df, benchmark_value = 5.4,
-#' triangular_object = tr1_object, distance_col = distance)
+#' triangular_object = tr1_object, distance_col = "distance")
 #'
 #' @export
 colour_long_edges <- function(.data, benchmark_value, triangular_object, distance_col) {
@@ -304,7 +310,8 @@ colour_long_edges <- function(.data, benchmark_value, triangular_object, distanc
 #' This function removes long edges from a triangular mesh plot based on a benchmark value.
 #'
 #' @param .data The data frame containing the edge information.
-#' @param benchmark_value The threshold value to determine long edges. Edges with a distance greater than or equal to this value will be removed.
+#' @param benchmark_value The threshold value to determine long edges.
+#' Edges with a distance greater than or equal to this value will be removed.
 #' @param triangular_object The triangular object containing the mesh information.
 #' @param distance_col The column name in `.data` representing the distances.
 #'
@@ -325,7 +332,7 @@ colour_long_edges <- function(.data, benchmark_value, triangular_object, distanc
 #' tr_from_to_df <- generate_edge_info(triangular_object = tr1_object)
 #' distance_df <- cal_2d_dist(tr_from_to_df)
 #' remove_long_edges(.data = distance_df, benchmark_value = 5.4,
-#' triangular_object = tr1_object, distance_col = distance)
+#' triangular_object = tr1_object, distance_col = "distance")
 #'
 #' @export
 remove_long_edges <- function(.data, benchmark_value, triangular_object,
@@ -350,9 +357,11 @@ remove_long_edges <- function(.data, benchmark_value, triangular_object,
 
 
   ## Create the triangular mesh plot after removing the long edges
-  tri_mesh_plot <- ggplot2::ggplot(tr_df, aes(x = x, y = y)) + ggplot2::geom_segment(aes(x = x_from,
-                                                                                         y = y_from, xend = x_to, yend = y_to), data = tr_from_to_df_coord_with_group) +
-    ggplot2::geom_point(size = 1, colour = "#33a02c") + ggplot2::coord_equal() + ggplot2::labs(color=NULL)
+  tri_mesh_plot <- ggplot2::ggplot(tr_df, aes(x = x, y = y)) +
+    ggplot2::geom_segment(aes(x = x_from, y = y_from, xend = x_to, yend = y_to),
+                          data = tr_from_to_df_coord_with_group) +
+    ggplot2::geom_point(size = 1, colour = "#33a02c") + ggplot2::coord_equal() +
+    ggplot2::labs(color=NULL)
   return(tri_mesh_plot)
 
 }
@@ -382,10 +391,14 @@ remove_long_edges <- function(.data, benchmark_value, triangular_object,
 generate_full_grid_centroids <- function(hexdf_data){
 
   ## Generate initial grid
-  full_centroids1 <- tibble::as_tibble(expand.grid(x = seq(min(hexdf_data$x),max(hexdf_data$x), ggplot2::resolution(hexdf_data$x, FALSE) * 2), y = seq(min(hexdf_data$y),max(hexdf_data$y), ggplot2::resolution(hexdf_data$y, FALSE) * 2)))
+  full_centroids1 <- tibble::as_tibble(expand.grid(x = seq(min(hexdf_data$x),max(hexdf_data$x),
+                                                           ggplot2::resolution(hexdf_data$x, FALSE) * 2),
+                                                   y = seq(min(hexdf_data$y),max(hexdf_data$y),
+                                                           ggplot2::resolution(hexdf_data$y, FALSE) * 2)))
 
   ## Generate shifted grid
-  full_centroids2 <- tibble::tibble(x = full_centroids1$x + ggplot2::resolution(hexdf_data$x, FALSE), y = full_centroids1$y + ggplot2::resolution(hexdf_data$y, FALSE))
+  full_centroids2 <- tibble::tibble(x = full_centroids1$x + ggplot2::resolution(hexdf_data$x, FALSE),
+                                    y = full_centroids1$y + ggplot2::resolution(hexdf_data$y, FALSE))
 
   ## Combine all
   full_centroids <- dplyr::bind_rows(full_centroids1, full_centroids2)
@@ -553,15 +566,18 @@ map_polygon_id <- function(full_grid_with_hexbin_id, hex_grid) {
         dplyr::filter(id == unique(hex_grid$id)[j])
 
       ## Check the centroid exists within the polygon
-      status_in_x_range <- dplyr::between(full_grid_with_hexbin_id_filtered$c_x, min(hex_grid_filtered$x), max(hex_grid_filtered$x))
-      status_in_y_range <- dplyr::between(full_grid_with_hexbin_id_filtered$c_y, min(hex_grid_filtered$y), max(hex_grid_filtered$y))
+      status_in_x_range <- dplyr::between(full_grid_with_hexbin_id_filtered$c_x,
+                                          min(hex_grid_filtered$x), max(hex_grid_filtered$x))
+      status_in_y_range <- dplyr::between(full_grid_with_hexbin_id_filtered$c_y,
+                                          min(hex_grid_filtered$y), max(hex_grid_filtered$y))
 
       if (any(status_in_x_range) & any(status_in_y_range)) {
 
         full_grid_with_hexbin_id_filtered <- full_grid_with_hexbin_id_filtered |>
           dplyr::mutate(polygon_id = j)
 
-        full_grid_with_polygon_id <- dplyr::bind_rows(full_grid_with_polygon_id, full_grid_with_hexbin_id_filtered)
+        full_grid_with_polygon_id <- dplyr::bind_rows(full_grid_with_polygon_id,
+                                                      full_grid_with_hexbin_id_filtered)
       }
     }
   }
@@ -675,7 +691,7 @@ find_pts_in_hexbins <- function(full_grid_with_hexbin_id, nldr_data_with_hb_id) 
 #'
 #' @examples
 #' shape_value <- 1.833091
-#' non_empty_bins <- 7
+#' non_empty_bins <- 3
 #' find_non_empty_bins(nldr_df = s_curve_noise_umap, x = "UMAP1", y = "UMAP2",
 #' shape_val = shape_value, non_empty_bins)
 #'
@@ -690,6 +706,11 @@ find_non_empty_bins <- function(nldr_df, x = "UMAP1", y = "UMAP2", shape_val, no
   df_bin_centroids <- hexbin_data_object$hexdf_data
 
   num_of_non_empty_bins <- df_bin_centroids$hexID |> length()
+
+  if (non_empty_bins > num_of_non_empty_bins) {
+    stop("Number of needed non-empty bins ahould be less than the existing non-empty bins.")
+
+  }
 
   while (num_of_non_empty_bins < non_empty_bins) {
 

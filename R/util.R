@@ -3,7 +3,7 @@
 #' This function calculates the effective number of bins along the x-axis of a hexbin plot.
 #'
 #' @param .data A data frame, data frame extension (e.g., a tibble), or a lazy data frame (e.g., from dbplyr or dtplyr).
-#' @param x A literal variable name representing the x-axis.
+#' @param x A character variable name representing the x-axis.
 #' @param cell_area A numeric value that initialise the area of the hexagon.
 #'
 #' @return A numeric value representing the effective number of bins along x-axis.
@@ -12,8 +12,8 @@
 #' @export
 #'
 #' @examples
-#' calculate_effective_x_bins(.data = s_curve_noise_umap, x = UMAP1, cell_area = 1)
-calculate_effective_x_bins <- function(.data, x = UMAP1, cell_area = 1){
+#' calculate_effective_x_bins(.data = s_curve_noise_umap, x = "UMAP1", cell_area = 1)
+calculate_effective_x_bins <- function(.data, x = "UMAP1", cell_area = 1){
 
   if (any(is.na(.data |> dplyr::pull({{ x }})))) {
     stop("NAs present")
@@ -46,16 +46,16 @@ calculate_effective_x_bins <- function(.data, x = UMAP1, cell_area = 1){
 #' This function calculates the effective shape parameter value for a scatter plot based on the ranges of the x-axis and y-axis.
 #'
 #' @param .data A data frame, data frame extension (e.g., a tibble), or a lazy data frame (e.g., from dbplyr or dtplyr).
-#' @param x A literal variable name representing the x-axis.
-#' @param y A literal variable name representing the y-axis.
+#' @param x A character variable name representing the x-axis.
+#' @param y A character variable name representing the y-axis.
 #'
 #' @return A numeric value representing the effective shape parameter.
 #'
 #' @export
 #'
 #' @examples
-#' calculate_effective_shape_value(.data = s_curve_noise_umap, x = UMAP1, y = UMAP2)
-calculate_effective_shape_value <- function(.data, x = UMAP1, y = UMAP2){
+#' calculate_effective_shape_value(.data = s_curve_noise_umap, x = "UMAP1", y = "UMAP2")
+calculate_effective_shape_value <- function(.data, x = "UMAP1", y = "UMAP2"){
 
   if (any(is.na(.data |> dplyr::pull({{ x }}))) || any(is.na(.data |> dplyr::pull({{ y }})))) {
     stop("NAs present")

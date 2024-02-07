@@ -3,7 +3,7 @@ test_that("extract_hexbin_centroids() works", {
   num_bins_x <- 4
   shape_value <- 1.833091
   result <- extract_hexbin_centroids(nldr_df = s_curve_noise_umap,
-  num_bins = num_bins_x, shape_val = shape_value, x = UMAP1, y = UMAP2)
+  num_bins = num_bins_x, shape_val = shape_value, x = "UMAP1", y = "UMAP2")
   hexdf_data <- result$hexdf_data
   hb_data <- result$hb_data
   expect_snapshot(hexdf_data)
@@ -16,7 +16,7 @@ test_that("extract_hexbin_mean() works", {
   num_bins_x <- 4
   shape_value <- 1.833091
   result <- extract_hexbin_mean(nldr_df = s_curve_noise_umap,
-  num_bins = num_bins_x, shape_val = shape_value, x = UMAP1, y = UMAP2)
+  num_bins = num_bins_x, shape_val = shape_value, x = "UMAP1", y = "UMAP2")
   hexdf_data <- result$hexdf_data
   hb_data <- result$hb_data
   expect_snapshot(hexdf_data)
@@ -75,7 +75,7 @@ test_that("colour_long_edges() works", {
   vdiffr::expect_doppelganger("color_long_edges basic", colour_long_edges(.data = distance_df,
                                                                           benchmark_value = 5.4,
                                                                           triangular_object = tr1_object,
-                                                                          distance_col = distance))
+                                                                          distance_col = "distance"))
 
 })
 
@@ -93,7 +93,7 @@ test_that("remove_long_edges() works", {
   vdiffr::expect_doppelganger("remove_long_edges basic", remove_long_edges(.data = distance_df,
                                                                            benchmark_value = 5.4,
                                                                            triangular_object = tr1_object,
-                                                                           distance_col = distance))
+                                                                           distance_col = "distance"))
 
 })
 
@@ -181,9 +181,12 @@ test_that("find_pts_in_hexbins() works", {
 test_that("find_pts_in_hexbins() works", {
 
   shape_value <- 1.833091
-  non_empty_bins <- 7
+  non_empty_bins <- 3
 
   expect_snapshot(find_non_empty_bins(nldr_df = s_curve_noise_umap, x = "UMAP1", y = "UMAP2",
                                       shape_val = shape_value, non_empty_bins))
+
+  expect_snapshot(find_non_empty_bins(nldr_df = s_curve_noise_umap, x = "UMAP1", y = "UMAP2",
+                                      shape_val = shape_value, non_empty_bins = 20), error = TRUE)
 
 })

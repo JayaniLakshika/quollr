@@ -31,6 +31,6 @@ tr1_object <- triangulate_bin_centroids(df_bin_centroids, x, y)
 tr_from_to_df <- generate_edge_info(triangular_object = tr1_object)
 distance_df <- cal_2d_dist(tr_from_to_df)
 colour_long_edges(.data = distance_df, benchmark_value = 5.4,
-triangular_object = tr1_object, distance_col = distance)
+triangular_object = tr1_object, distance_col = "distance")
 
 }

@@ -1,7 +1,7 @@
 # find_benchmark_value() works
 
     Code
-      find_benchmark_value(distance_df, distance)
+      find_benchmark_value(distance_df, "distance")
     Condition
       Error in `find_benchmark_value()`:
       ! NAs present
@@ -9,12 +9,9 @@
 ---
 
     Code
-      find_benchmark_value(data_dist, dist)
-    Condition
-      Warning in `find_benchmark_value()`:
-      Difference between unique distances are increasing. Please use a suitable value for benchmark.
+      find_benchmark_value(data_dist, "dist")
     Output
-      [1] NA
+      [1] 1.5
 
 # compute_mean_density_hex() works
 
@@ -53,7 +50,7 @@
 
     Code
       compute_mean_density_hex(df_bin_centroids = df_bin_centroids_na, num_bins_x = num_bins_x,
-        col_std_counts = std_counts_new)
+        col_std_counts = "std_counts_new")
     Condition
       Error in `compute_mean_density_hex()`:
       ! NAs present

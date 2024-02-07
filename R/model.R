@@ -5,7 +5,7 @@
 #' removal of low-density hexagons, and averaging of high-dimensional data.
 #'
 #' @param training_data A data frame containing the training high-dimensional data.
-#' @param nldr_df_with_id A data frame containing 2D embeddings with an unique identifier.
+#' @param nldr_df_with_id A data frame containing 2D embeddings with a unique identifier.
 #' @param x The name of the column that contains first 2D embeddings component.
 #' @param y The name of the column that contains second 2D embeddings component.
 #' @param cell_area The area of each hexagonal cell.

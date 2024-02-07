@@ -31,7 +31,7 @@ This function determines the number of non-empty bins needed to satisfy a minimu
 }
 \examples{
 shape_value <- 1.833091
-non_empty_bins <- 7
+non_empty_bins <- 3
 find_non_empty_bins(nldr_df = s_curve_noise_umap, x = "UMAP1", y = "UMAP2",
 shape_val = shape_value, non_empty_bins)
 

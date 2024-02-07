@@ -4,7 +4,7 @@
 \alias{extract_hexbin_mean}
 \title{Extract hexagonal bin mean and related information from non-linear dimensionality reduction data.}
 \usage{
-extract_hexbin_mean(nldr_df, num_bins, shape_val = 1, x = UMAP1, y = UMAP2)
+extract_hexbin_mean(nldr_df, num_bins, shape_val = 1, x = "UMAP1", y = "UMAP2")
 }
 \arguments{
 \item{nldr_df}{A data frame containing 2D embeddings.}
@@ -28,7 +28,7 @@ Extract hexagonal bin mean and related information from non-linear dimensionalit
 num_bins_x <- 4
 shape_value <- 1.833091
 result <- extract_hexbin_mean(nldr_df = s_curve_noise_umap,
-num_bins = num_bins_x, shape_val = shape_value, x = UMAP1, y = UMAP2)
+num_bins = num_bins_x, shape_val = shape_value, x = "UMAP1", y = "UMAP2")
 hexdf_data <- result$hexdf_data
 hb_data <- result$hb_data
 print(hexdf_data)

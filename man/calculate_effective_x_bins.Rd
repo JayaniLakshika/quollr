@@ -4,12 +4,12 @@
 \alias{calculate_effective_x_bins}
 \title{Calculate the effective number of bins along x-axis}
 \usage{
-calculate_effective_x_bins(.data, x = UMAP1, cell_area = 1)
+calculate_effective_x_bins(.data, x = "UMAP1", cell_area = 1)
 }
 \arguments{
 \item{.data}{A data frame, data frame extension (e.g., a tibble), or a lazy data frame (e.g., from dbplyr or dtplyr).}
 
-\item{x}{A literal variable name representing the x-axis.}
+\item{x}{A character variable name representing the x-axis.}
 
 \item{cell_area}{A numeric value that initialise the area of the hexagon.}
 }
@@ -20,5 +20,5 @@ A numeric value representing the effective number of bins along x-axis.
 This function calculates the effective number of bins along the x-axis of a hexbin plot.
 }
 \examples{
-calculate_effective_x_bins(.data = s_curve_noise_umap, x = UMAP1, cell_area = 1)
+calculate_effective_x_bins(.data = s_curve_noise_umap, x = "UMAP1", cell_area = 1)
 }
