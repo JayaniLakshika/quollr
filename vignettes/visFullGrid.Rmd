@@ -1,5 +1,5 @@
 ---
-title: "3. Visualise full hexagonal grid"
+title: "2. Visualise full hexagonal grid"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{visFullGrid}
