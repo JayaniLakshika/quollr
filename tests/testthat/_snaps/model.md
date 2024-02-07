@@ -165,6 +165,28 @@
     Code
       fit_high_d_model(training_data = s_curve_noise_training, nldr_df_with_id = s_curve_noise_umap,
         x = "UMAP1", y = "UMAP1", cell_area = 1, num_bins_x = 4, shape_val = 1.833091,
+        is_bin_centroid = TRUE, is_rm_lwd_hex = TRUE, benchmark_to_rm_lwd_hex = 1.5,
+        is_avg_high_d = TRUE, column_start_text = "x")
+    Condition
+      Error in `fit_high_d_model()`:
+      ! Benchmark value to remove low density hexagons is too large.
+
+---
+
+    Code
+      fit_high_d_model(training_data = s_curve_noise_training, nldr_df_with_id = s_curve_noise_umap,
+        x = "UMAP1", y = "UMAP1", cell_area = 1, num_bins_x = 4, shape_val = 1.833091,
+        is_bin_centroid = TRUE, is_rm_lwd_hex = TRUE, benchmark_to_rm_lwd_hex = 0,
+        is_avg_high_d = TRUE, column_start_text = "x")
+    Condition
+      Error in `fit_high_d_model()`:
+      ! Benchmark value to remove low density hexagons is too small.
+
+---
+
+    Code
+      fit_high_d_model(training_data = s_curve_noise_training, nldr_df_with_id = s_curve_noise_umap,
+        x = "UMAP1", y = "UMAP1", cell_area = 1, num_bins_x = 4, shape_val = 1.833091,
         is_bin_centroid = TRUE, is_rm_lwd_hex = FALSE, benchmark_to_rm_lwd_hex = 0.2,
         is_avg_high_d = TRUE, column_start_text = "x")
     Condition

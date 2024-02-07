@@ -82,7 +82,16 @@ fit_high_d_model <- function(training_data, nldr_df_with_id, x = "UMAP1",
       ## first quartile used as the default
       benchmark_to_rm_lwd_hex <- stats::quantile(df_bin_centroids$std_counts,
                                                  probs = c(0,0.25,0.5,0.75,1))[2]
-      }
+    }
+
+    ## Check the benchmark value pass by the function is an acceptable one
+    if (benchmark_to_rm_lwd_hex < min(df_bin_centroids$std_counts)) {
+      stop("Benchmark value to remove low density hexagons is too small.")
+    }
+
+    if (benchmark_to_rm_lwd_hex > max(df_bin_centroids$std_counts)) {
+      stop("Benchmark value to remove low density hexagons is too large.")
+    }
 
     ## To identify low density hexagons
     df_bin_centroids_low <- df_bin_centroids |>
