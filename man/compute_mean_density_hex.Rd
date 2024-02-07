@@ -7,7 +7,7 @@
 compute_mean_density_hex(
   df_bin_centroids,
   num_bins_x,
-  col_std_counts = std_counts,
+  col_std_counts = "std_counts",
   col_hb_id = "hexID"
 )
 }

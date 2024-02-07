@@ -114,7 +114,7 @@ find_benchmark_value <- function(.data, distance_col) {
 #' compute_mean_density_hex(df_bin_centroids, num_bins_x)
 #'
 #' @export
-compute_mean_density_hex <- function(df_bin_centroids, num_bins_x, col_std_counts = std_counts, col_hb_id = "hexID") {
+compute_mean_density_hex <- function(df_bin_centroids, num_bins_x, col_std_counts = "std_counts", col_hb_id = "hexID") {
 
   if (is.na(num_bins_x)) {
     stop("Number of bins along x axis is not defined.")
@@ -183,7 +183,7 @@ compute_mean_density_hex <- function(df_bin_centroids, num_bins_x, col_std_count
 #'
 #' @export
 find_low_density_hexagons <- function(df_bin_centroids_all, num_bins_x, df_bin_centroids_low,
-                                      col_std_counts = std_counts, col_hb_id = "hexID", col_hb_id_low = "hexID") {
+                                      col_std_counts = "std_counts", col_hb_id = "hexID", col_hb_id_low = "hexID") {
 
   if (is.na(num_bins_x)) {
     stop("Number of bins along x axis is not defined.")

@@ -8,7 +8,7 @@ find_low_density_hexagons(
   df_bin_centroids_all,
   num_bins_x,
   df_bin_centroids_low,
-  col_std_counts = std_counts,
+  col_std_counts = "std_counts",
   col_hb_id = "hexID",
   col_hb_id_low = "hexID"
 )
