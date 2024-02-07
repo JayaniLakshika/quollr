@@ -7,7 +7,7 @@
 compute_weights(nldr_df, hb_object)
 }
 \arguments{
-\item{nldr_df}{A data frame containing 2D embeddings and a unique identifier column (ID).}
+\item{nldr_df}{A data frame containing 2D embeddings without a unique identifier column (ID).}
 
 \item{hb_object}{A hexbin object containing the hexagonal binning information.}
 }

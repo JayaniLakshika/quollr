@@ -35,7 +35,7 @@ avg_highD_data <- function(.data, column_start_text = "x") {
 #'
 #' This function computes weights for hexagonal binning based on the average values of each bin and the distances from these averages.
 #'
-#' @param nldr_df A data frame containing 2D embeddings and a unique identifier column (ID).
+#' @param nldr_df A data frame containing 2D embeddings without a unique identifier column (ID).
 #' @param hb_object A hexbin object containing the hexagonal binning information.
 #'
 #' @return A data frame with weights calculated for each hexagonal bin.
@@ -84,7 +84,8 @@ compute_weights <- function(nldr_df, hb_object) {
   for(i in 1:length(nldr_with_avg_all_split)){
 
     weighted_mean_df <- nldr_with_avg_all_split[[i]] |> ## These are the weights for weighted mean
-      cal_2d_dist(start_x = new_col[1], start_y = new_col[2], end_x = names(nldr_df)[1], end_y = names(nldr_df)[2], select_col_vec = col_names)
+      cal_2d_dist(start_x = new_col[1], start_y = new_col[2], end_x = names(nldr_df)[1],
+                  end_y = names(nldr_df)[2], select_col_vec = col_names)
 
     weight_df <- dplyr::bind_rows(weight_df, weighted_mean_df)
 
@@ -103,7 +104,8 @@ compute_weights <- function(nldr_df, hb_object) {
 #' @param training_data A data frame containing the training data with an ID column.
 #' @param nldr_df_with_id A data frame containing 2D embeddings with an unique identifier.
 #' @param hb_object An object containing information about hexbin IDs.
-#' @param column_start_text The starting text of the column names in the training_data that should be considered for the weighted mean. Default is "x".
+#' @param column_start_text The starting text of the column names in the training_data
+#' that should be considered for the weighted mean. Default is "x".
 #'
 #' @return A data frame with the computed weighted mean for each specified column.
 #'
@@ -171,6 +173,8 @@ weighted_highD_data <- function(training_data, nldr_df_with_id, hb_object, colum
 #' @param benchmark_value The benchmark value used to remove long edges (optional).
 #' @param distance_df The distance dataframe.
 #' @param distance_col The name of the distance column.
+#' @param use_default_benchmark_val Logical, indicating whether to use default
+#' benchmark value  to remove long edges(default is FALSE).
 #'
 #' @importFrom dplyr mutate bind_rows filter
 #' @importFrom langevitour langevitour
@@ -189,11 +193,11 @@ weighted_highD_data <- function(training_data, nldr_df_with_id, hb_object, colum
 #' tr_from_to_df <- generate_edge_info(triangular_object = tr1_object)
 #' distance_df <- cal_2d_dist(.data = tr_from_to_df)
 #' show_langevitour(df_all, df_bin, df_bin_centroids, benchmark_value = 5.44,
-#' distance = distance_df, distance_col = distance)
+#' distance = distance_df, distance_col = "distance")
 #'
 #' @export
 show_langevitour <- function(df, df_b, df_b_with_center_data, benchmark_value = NA,
-                             distance_df, distance_col) {
+                             distance_df, distance_col, use_default_benchmark_val = FALSE) {
 
   ### Define type column
   df <- df |>
@@ -210,17 +214,50 @@ show_langevitour <- function(df, df_b, df_b_with_center_data, benchmark_value = 
 
   if(is.na(benchmark_value)){
 
-    tr1 <- triangulate_bin_centroids(df_b_with_center_data, x, y)
-    tr_from_to_df <- generate_edge_info(triangular_object = tr1)
+    if (isFALSE(use_default_benchmark_val)) {
 
-    langevitour::langevitour(df_exe[1:(length(df_exe)-1)], lineFrom = tr_from_to_df$from,
-                             lineTo = tr_from_to_df$to, group = df_exe$type, pointSize = 3,
-                             levelColors = c("#6a3d9a", "#33a02c"))
+      tr1 <- triangulate_bin_centroids(df_b_with_center_data, x, y)
+      tr_from_to_df <- generate_edge_info(triangular_object = tr1)
+
+      langevitour::langevitour(df_exe[1:(length(df_exe)-1)], lineFrom = tr_from_to_df$from,
+                               lineTo = tr_from_to_df$to, group = df_exe$type, pointSize = 3,
+                               levelColors = c("#6a3d9a", "#33a02c"))
+
+    } else {
+
+      benchmark_value <- find_benchmark_value(.data = distance_df, distance_col = distance_col)
+
+      ## Set the maximum difference as the criteria
+      distance_df_small_edges <- distance_df |>
+        dplyr::filter((!!as.name(distance_col)) < benchmark_value)
+      ## Since erase brushing is considerd.
+
+      langevitour::langevitour(df_exe[1:(length(df_exe)-1)], lineFrom = distance_df_small_edges$from,
+                               lineTo = distance_df_small_edges$to, group = df_exe$type, pointSize = 3,
+                               levelColors = c("#6a3d9a", "#33a02c"))
+
+    }
+
   } else {
+
+    ## Check benchmark value is an accepted one
+    if (benchmark_value < min(distance_df[[distance_col]])) {
+      stop("Benchmark value to remove long edges is too small.")
+
+    }
+
+    if (benchmark_value > max(distance_df[[distance_col]])) {
+      stop("Benchmark value to remove long edges is too large.")
+
+    }
+
+    if (isTRUE(use_default_benchmark_val)) {
+      stop("Need to set `benchmark_value = NA`.")
+    }
 
     ## Set the maximum difference as the criteria
     distance_df_small_edges <- distance_df |>
-      dplyr::filter(distance < benchmark_value)
+      dplyr::filter((!!as.name(distance_col)) < benchmark_value)
     ## Since erase brushing is considerd.
 
     langevitour::langevitour(df_exe[1:(length(df_exe)-1)], lineFrom = distance_df_small_edges$from,

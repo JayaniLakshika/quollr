@@ -18,7 +18,8 @@ weighted_highD_data(
 
 \item{hb_object}{An object containing information about hexbin IDs.}
 
-\item{column_start_text}{The starting text of the column names in the training_data that should be considered for the weighted mean. Default is "x".}
+\item{column_start_text}{The starting text of the column names in the training_data
+that should be considered for the weighted mean. Default is "x".}
 }
 \value{
 A data frame with the computed weighted mean for each specified column.

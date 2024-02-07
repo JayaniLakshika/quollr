@@ -10,7 +10,8 @@ show_langevitour(
   df_b_with_center_data,
   benchmark_value = NA,
   distance_df,
-  distance_col
+  distance_col,
+  use_default_benchmark_val = FALSE
 )
 }
 \arguments{
@@ -25,6 +26,9 @@ show_langevitour(
 \item{distance_df}{The distance dataframe.}
 
 \item{distance_col}{The name of the distance column.}
+
+\item{use_default_benchmark_val}{Logical, indicating whether to use default
+benchmark value  to remove long edges(default is FALSE).}
 }
 \description{
 This function generates a LangeviTour visualization based on different conditions and input parameters.
