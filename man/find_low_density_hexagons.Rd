@@ -7,7 +7,10 @@
 find_low_density_hexagons(
   df_bin_centroids_all,
   num_bins_x,
-  df_bin_centroids_low
+  df_bin_centroids_low,
+  col_std_counts = std_counts,
+  col_hb_id = "hexID",
+  col_hb_id_low = "hexID"
 )
 }
 \arguments{
@@ -16,6 +19,12 @@ find_low_density_hexagons(
 \item{num_bins_x}{Number of bins along the x-axis for hexagon binning.}
 
 \item{df_bin_centroids_low}{The data frame containing identified low-density hexagonal bin centroids.}
+
+\item{col_std_counts}{The name of the column containing the standardized counts.}
+
+\item{col_hb_id}{The name of the column containing the hexagonal bin IDs in \code{df_bin_centroids_all}.}
+
+\item{col_hb_id_low}{The name of the column containing the hexagonal bin IDs in \code{df_bin_centroids_low}.}
 }
 \value{
 A vector containing the IDs of hexagons to be removed after investigating their neighboring bins.

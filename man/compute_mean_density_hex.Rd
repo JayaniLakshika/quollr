@@ -4,13 +4,22 @@
 \alias{compute_mean_density_hex}
 \title{Compute Mean Density of Hexagonal Bins}
 \usage{
-compute_mean_density_hex(df_bin_centroids, num_bins_x)
+compute_mean_density_hex(
+  df_bin_centroids,
+  num_bins_x,
+  col_std_counts = std_counts,
+  col_hb_id = "hexID"
+)
 }
 \arguments{
 \item{df_bin_centroids}{A data frame containing information about hexagonal bin centroids,
 including the hexagon ID and the standard normalized counts (\code{std_counts}).}
 
 \item{num_bins_x}{The number of bins along the x-axis for the hexagonal grid.}
+
+\item{col_std_counts}{The name of the column containing the standardized counts.}
+
+\item{col_hb_id}{The name of the column containing the hexagonal bin IDs.}
 }
 \value{
 A data frame with an additional column, \code{mean_density}, representing the mean

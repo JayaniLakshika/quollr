@@ -19,10 +19,15 @@
 #' tr1_object <- triangulate_bin_centroids(df_bin_centroids, x, y)
 #' tr_from_to_df <- generate_edge_info(triangular_object = tr1_object)
 #' distance_df <- cal_2d_dist(tr_from_to_df)
-#' find_benchmark_value(.data = distance_df, distance_col = "distance")
+#' find_benchmark_value(.data = distance_df, distance_col = distance)
 #'
 #' @export
 find_benchmark_value <- function(.data, distance_col) {
+
+  if (any(is.na(.data |> dplyr::pull({{ distance_col }})))) {
+    stop("NAs present")
+  }
+
 
   .data <- .data |>
     dplyr::mutate(dplyr::across({
@@ -48,7 +53,8 @@ find_benchmark_value <- function(.data, distance_col) {
     unique()  ## Get the unique distances
 
   dist_u <- tibble::tibble(unique_dist = unique_dist)
-  dist_u <- dplyr::bind_cols(dist_u, rbind(NA, apply(dist_u, 2, diff)), .name_repair = "unique_quiet")  ## Calculate differences between unique distance
+  ## Calculate differences between unique distance
+  dist_u <- dplyr::bind_cols(dist_u, rbind(NA, apply(dist_u, 2, diff)), .name_repair = "unique_quiet")
   names(dist_u)[2] <- "difference"
 
   dist_u <- dist_u |>
@@ -77,6 +83,11 @@ find_benchmark_value <- function(.data, distance_col) {
   benchmark_value <- benchmark_value_df |>
     dplyr::pull(unique_dist) |>
     dplyr::nth(1)
+
+  if (is.na(benchmark_value)) {
+    warning("Difference between unique distances are increasing. Please use a suitable value for benchmark.")
+  }
+
   benchmark_value
 
 }
@@ -88,6 +99,8 @@ find_benchmark_value <- function(.data, distance_col) {
 #' @param df_bin_centroids A data frame containing information about hexagonal bin centroids,
 #' including the hexagon ID and the standard normalized counts (\code{std_counts}).
 #' @param num_bins_x The number of bins along the x-axis for the hexagonal grid.
+#' @param col_std_counts The name of the column containing the standardized counts.
+#' @param col_hb_id The name of the column containing the hexagonal bin IDs.
 #'
 #' @return A data frame with an additional column, \code{mean_density}, representing the mean
 #' density of each hexagonal bin based on its neighboring bins.
@@ -101,23 +114,32 @@ find_benchmark_value <- function(.data, distance_col) {
 #' compute_mean_density_hex(df_bin_centroids, num_bins_x)
 #'
 #' @export
-compute_mean_density_hex <- function(df_bin_centroids, num_bins_x) {
+compute_mean_density_hex <- function(df_bin_centroids, num_bins_x, col_std_counts = std_counts, col_hb_id = "hexID") {
+
+  if (is.na(num_bins_x)) {
+    stop("Number of bins along x axis is not defined.")
+  }
+
+  if (any(is.na(df_bin_centroids |> dplyr::pull({{ col_std_counts }})))) {
+    stop("NAs present")
+  }
 
   # To store mean densities of hexagons
   mean_density_vec <- c()
 
-  for (i in 1:length(df_bin_centroids$hexID)) {
+  for (i in 1:length(df_bin_centroids[[col_hb_id]])) {
 
     ## Identify neighbors of a specific hex bin
     neighbor_df <- df_bin_centroids |>
-      dplyr::filter((hexID == (df_bin_centroids$hexID[i] + 1)) | (hexID == (df_bin_centroids$hexID[i] - 1)) |
-                      (hexID == (df_bin_centroids$hexID[i] + (num_bins_x + 1))) |
-                      (hexID == (df_bin_centroids$hexID[i] + num_bins_x)) |
-                      (hexID == (df_bin_centroids$hexID[i] - (num_bins_x + 1))) |
-                      (hexID == (df_bin_centroids$hexID[i] - num_bins_x)))
+      dplyr::filter(((!!as.name(col_hb_id)) == (df_bin_centroids[[col_hb_id]][i] + 1)) |
+                      ((!!as.name(col_hb_id)) == (df_bin_centroids[[col_hb_id]][i] - 1)) |
+                      ((!!as.name(col_hb_id)) == (df_bin_centroids[[col_hb_id]][i] + (num_bins_x + 1))) |
+                      ((!!as.name(col_hb_id)) == (df_bin_centroids[[col_hb_id]][i] + num_bins_x)) |
+                      ((!!as.name(col_hb_id)) == (df_bin_centroids[[col_hb_id]][i] - (num_bins_x + 1))) |
+                      ((!!as.name(col_hb_id)) == (df_bin_centroids[[col_hb_id]][i] - num_bins_x)))
 
     mean_density <- neighbor_df |>
-      dplyr::pull(std_counts) |>
+      dplyr::pull({{ col_std_counts }}) |>
       sum()/NROW(neighbor_df) ## The reason to take the mean is to check the density in a considerable amount
 
     mean_density_vec <- append(mean_density_vec, mean_density)
@@ -139,6 +161,9 @@ compute_mean_density_hex <- function(df_bin_centroids, num_bins_x) {
 #' @param df_bin_centroids_all The data frame containing all hexagonal bin centroids.
 #' @param num_bins_x Number of bins along the x-axis for hexagon binning.
 #' @param df_bin_centroids_low The data frame containing identified low-density hexagonal bin centroids.
+#' @param col_std_counts The name of the column containing the standardized counts.
+#' @param col_hb_id The name of the column containing the hexagonal bin IDs in \code{df_bin_centroids_all}.
+#' @param col_hb_id_low The name of the column containing the hexagonal bin IDs in \code{df_bin_centroids_low}.
 #'
 #' @return A vector containing the IDs of hexagons to be removed after investigating their neighboring bins.
 #'
@@ -157,13 +182,32 @@ compute_mean_density_hex <- function(df_bin_centroids, num_bins_x) {
 #' @importFrom stats quantile
 #'
 #' @export
-find_low_density_hexagons <- function(df_bin_centroids_all, num_bins_x, df_bin_centroids_low) {
+find_low_density_hexagons <- function(df_bin_centroids_all, num_bins_x, df_bin_centroids_low,
+                                      col_std_counts = std_counts, col_hb_id = "hexID", col_hb_id_low = "hexID") {
+
+  if (is.na(num_bins_x)) {
+    stop("Number of bins along x axis is not defined.")
+  }
+
+  if (any(is.na(df_bin_centroids_all |> dplyr::pull({{ col_std_counts }})))) {
+    stop("NAs present")
+  }
+
   ## To compute mean density of hexagons
-  df_bin_centroids <- compute_mean_density_hex(df_bin_centroids_all, num_bins_x)
+  df_bin_centroids <- compute_mean_density_hex(df_bin_centroids = df_bin_centroids_all, num_bins_x,
+                                               col_std_counts = col_std_counts, col_hb_id = col_hb_id)
   mean_density_vec <- df_bin_centroids$mean_density
 
+  ## If df_bin_centroids_low is not defined
+  if (NROW(df_bin_centroids_low) == 0) {
+
+    df_bin_centroids_low <- df_bin_centroids |>
+      dplyr::filter((!!as.name(col_std_counts)) <= stats::quantile(df_bin_centroids |> dplyr::pull({{ col_std_counts }}),
+                                                            probs = c(0,0.25,0.5,0.75,1))[2])
+  }
+
   df_bin_centroids_low <- df_bin_centroids |>
-    dplyr::filter(hexID %in% df_bin_centroids_low$hexID)
+    dplyr::filter((!!as.name(col_hb_id)) %in% df_bin_centroids_low[[col_hb_id_low]])
 
   ## Take first quartile
   benchmark_mean_dens_rm_hex <- stats::quantile(mean_density_vec, probs = c(0,0.25,0.5,0.75,1))[2]
@@ -171,10 +215,10 @@ find_low_density_hexagons <- function(df_bin_centroids_all, num_bins_x, df_bin_c
   remove_bins <- c()
 
   ## Check only already identified low-density hexagons
-  for (i in 1:length(df_bin_centroids_low$hexID)) {
+  for (i in 1:length(df_bin_centroids_low[[col_hb_id_low]])) {
 
     df_bin_centroids_coordinates_spec_bin <- df_bin_centroids_low |>
-      dplyr::filter(hexID == df_bin_centroids_low$hexID[i])
+      dplyr::filter((!!as.name(col_hb_id_low)) == df_bin_centroids_low[[col_hb_id_low]][i])
 
     bin_ID <- df_bin_centroids_coordinates_spec_bin |>
       dplyr::pull(hexID)
@@ -183,6 +227,11 @@ find_low_density_hexagons <- function(df_bin_centroids_all, num_bins_x, df_bin_c
     if(df_bin_centroids_coordinates_spec_bin$mean_density < benchmark_mean_dens_rm_hex){
       remove_bins <- append(remove_bins, bin_ID)
     }
+  }
+
+  if (is.null(remove_bins)) {
+    message("Don't need to remove low-density hexagonal bins.")
+
   }
 
   return(remove_bins)
