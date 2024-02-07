@@ -1,5 +1,5 @@
 ---
-title: "Main steps"
+title: "1. Main steps"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{algomain}

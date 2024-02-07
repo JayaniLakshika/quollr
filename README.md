@@ -1,14 +1,14 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# quollr: questioning how a high-dimensional object looks in low-dimensions using r
+# quollr
 
 <img src="man/figures/logo.png" align="right" height="139" alt="" />
 
 <!-- badges: start -->
 
 [![R-CMD-check](https://github.com/JayaniLakshika/quollr/workflows/R-CMD-check/badge.svg)](https://github.com/JayaniLakshika/quollr/workflows/R-CMD-check)
-[![test](https://github.com/JayaniLakshika/quollr/workflows/test-coverage.yaml/badge.svg)](https://github.com/JayaniLakshika/quollr/workflows/test-coverage.yaml)
+[![test](https://github.com/JayaniLakshika/quollr/workflows/test-coverage/badge.svg)](https://github.com/JayaniLakshika/quollr/actions/workflows/test-coverage.yaml)
 <!-- badges: end -->
 
 The `quollr` package provide functions to construct a model in the 2D
@@ -33,6 +33,24 @@ And the development version from [GitHub](https://github.com/) with:
 # install.packages("remotes")
 # remotes::install_github("JayaniLakshika/quollr")
 ```
+
+## Usage
+
+<img src="man/figures/quollr-methodology.png" width="80%" style="display: block; margin: auto;" />
+
+## About the name
+
+**qu**estioning how a high-dimensional **o**bject **l**ooks in
+**l**ow-dimensions using **r**
+
+## Roadmap
+
+- To learn more about the basic steps of the algorithm: [1. Main
+  steps](https://quollr.netlify.app/articles/algomain)
+- To create the full hexagonal grid: [2. Visualise full hexagonal
+  grid](https://quollr.netlify.app/articles/visfullgrid)
+- To generate 2D embeddings for test data: [3. Predict 2D
+  embeddings](https://quollr.netlify.app/articles/prediction)
 
 ## Copyright
 
