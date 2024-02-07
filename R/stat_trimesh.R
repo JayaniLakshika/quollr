@@ -108,7 +108,7 @@ StatTrimesh <- ggplot2::ggproto(
                               linetype = rep(1, nrow(tr_from_to_df_coord)),
                               linewidth = rep(0.5, nrow(tr_from_to_df_coord)),
                               alpha = rep(NA, nrow(tr_from_to_df_coord)),
-                              colour = rep("black", nrow(tr_from_to_df_coord)))
+                              colour = rep("#636363", nrow(tr_from_to_df_coord)))
     trimesh
   },
   required_aes = c("x", "y")

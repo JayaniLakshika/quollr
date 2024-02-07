@@ -71,7 +71,7 @@ GeomTrimesh <- ggplot2::ggproto("GeomTrimesh",
                                   vertices <- tibble::tibble(
                                     x = data$x,
                                     y = data$y,
-                                    colour = data$colour,
+                                    colour = rep("#33a02c", nrow(data)),
                                     shape = data$shape,
                                     size = rep(2, nrow(data)),
                                     fill = rep("#33a02c", nrow(data)),
@@ -97,8 +97,8 @@ GeomTrimesh <- ggplot2::ggproto("GeomTrimesh",
                                   ggplot2:::ggname(
                                     "geom_trimesh",
                                     grid::grobTree(
-                                      ggplot2::GeomPoint$draw_panel(vertices, panel_scales, coord),
-                                      ggplot2::GeomSegment$draw_panel(trimesh, panel_scales, coord)
+                                      ggplot2::GeomSegment$draw_panel(trimesh, panel_scales, coord),
+                                      ggplot2::GeomPoint$draw_panel(vertices, panel_scales, coord)
                                     )
                                   )
                                 }
