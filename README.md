@@ -36,6 +36,15 @@ And the development version from [GitHub](https://github.com/) with:
 
 ## Usage
 
+Our approach involves dividing the high dimensional data set into two
+parts: a training set to construct the model and a test set to generate
+predictive values and residuals. To implement our approach, first we use
+a 2D embedding data set as the initial point. The output of our
+algorithm is a tour that displays the model and original high
+dimensional data in the high-dimensional space. Our algorithm comprises
+two main phases:(1) generate the model in the 2D space, and (2) generate
+the model in the high-D space.
+
 <img src="man/figures/quollr-methodology.png" width="80%" style="display: block; margin: auto;" />
 
 ## About the name
