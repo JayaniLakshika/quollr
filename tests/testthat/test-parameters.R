@@ -79,5 +79,38 @@ test_that("find_low_density_hexagons() works", {
 
 test_that("extract_coord_of_shifted_hex_grid() works", {
 
+  num_bins_x <- 4
+  shape_value <- 1.833091
+  hexbin_data_object <- extract_hexbin_centroids(nldr_df = s_curve_noise_umap,
+  num_bins = num_bins_x, shape_val = shape_value)
+  df_bin_centroids <- hexbin_data_object$hexdf_data
+  hex_full_count_df <- generate_full_grid_info(df_bin_centroids)
+  UMAP_data_with_hb_id <- s_curve_noise_umap |> dplyr::mutate(hb_id = hexbin_data_object$hb_data@cID)
+
+  testthat::expect_snapshot(extract_coord_of_shifted_hex_grid(nldr_data_with_hb_id = UMAP_data_with_hb_id,
+                                                              num_bins_x = num_bins_x, hex_full_count_df = hex_full_count_df,
+                                                              shift_x = NA, shift_y = NA, cell_area = 1))
+  testthat::expect_length(extract_coord_of_shifted_hex_grid(nldr_data_with_hb_id = UMAP_data_with_hb_id,
+                                                                   num_bins_x = num_bins_x, hex_full_count_df = hex_full_count_df,
+                                                                   shift_x = NA, shift_y = NA, cell_area = 1), 2)
+  testthat::expect_snapshot(extract_coord_of_shifted_hex_grid(nldr_data_with_hb_id = UMAP_data_with_hb_id,
+                                                              num_bins_x = NA, hex_full_count_df = hex_full_count_df,
+                                                              shift_x = NA, shift_y = NA, cell_area = 1), error = TRUE)
+
+  testthat::expect_snapshot(extract_coord_of_shifted_hex_grid(nldr_data_with_hb_id = UMAP_data_with_hb_id,
+                                                              num_bins_x = NA, hex_full_count_df = hex_full_count_df,
+                                                              shift_x = 0.6, shift_y = 0.8, cell_area = 1), error = TRUE)
+
+  testthat::expect_snapshot(extract_coord_of_shifted_hex_grid(nldr_data_with_hb_id = UMAP_data_with_hb_id,
+                                                              num_bins_x = NA, hex_full_count_df = hex_full_count_df,
+                                                              shift_x = 0.6, shift_y = 0.32, cell_area = 1), error = TRUE)
+
+  testthat::expect_snapshot(extract_coord_of_shifted_hex_grid(nldr_data_with_hb_id = UMAP_data_with_hb_id,
+                                                              num_bins_x = NA, hex_full_count_df = hex_full_count_df,
+                                                              shift_x = 0.14, shift_y = 0.8, cell_area = 1), error = TRUE)
+
+  testthat::expect_snapshot(extract_coord_of_shifted_hex_grid(nldr_data_with_hb_id = UMAP_data_with_hb_id |> dplyr::select(-hb_id),
+                                                              num_bins_x = NA, hex_full_count_df = hex_full_count_df,
+                                                              shift_x = 0.14, shift_y = 0.8, cell_area = 1), error = TRUE)
 
 })

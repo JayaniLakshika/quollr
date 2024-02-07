@@ -279,6 +279,14 @@ extract_coord_of_shifted_hex_grid <- function(nldr_data_with_hb_id, num_bins_x,
                                               hex_full_count_df, shift_x = NA,
                                               shift_y = NA, cell_area = 1) {
 
+  if (is.na(num_bins_x)) {
+    stop("Number of bins along x axis is not defined.")
+  }
+
+  if (!("hb_id" %in% names(nldr_data_with_hb_id))) {
+    stop("NLDR dataset doesn't contain the hexagonal bin IDs.")
+  }
+
   cell_diameter <- sqrt(2 * cell_area / sqrt(3))
   if (is.na(shift_x) | is.na(shift_y)) {
     shift_x <- cell_diameter/2
@@ -287,7 +295,7 @@ extract_coord_of_shifted_hex_grid <- function(nldr_data_with_hb_id, num_bins_x,
   }
 
   if ((abs(shift_x) > (cell_diameter/2)) | (abs(shift_y) > (cell_diameter/2))) {
-    stop("Shifted amount is not compatibel. Need to use a value less than or equal 0.537285.")
+    stop(paste0("Shifted amount is not compatibel. Need to use a value less than or equal ", cell_diameter/2))
   }
 
   ## Filter centroids with their hexIDs
@@ -329,7 +337,11 @@ extract_coord_of_shifted_hex_grid <- function(nldr_data_with_hb_id, num_bins_x,
 
     ## Find nearest hexIDs
     df_bin_centroids_coordinates_spec_bin_near1 <- hexbin_coord_all_new |>
-      dplyr::filter((hexID == nldr_data_with_hb_id_spec$hb_id[1]) |(hexID == (nldr_data_with_hb_id_spec$hb_id[1] + (num_bins_x + 1))) | (hexID == (nldr_data_with_hb_id_spec$hb_id[1] + num_bins_x)) | (hexID == (nldr_data_with_hb_id_spec$hb_id[1] - (num_bins_x + 1))) | (hexID == (nldr_data_with_hb_id_spec$hb_id[1] - num_bins_x)))
+      dplyr::filter((hexID == nldr_data_with_hb_id_spec$hb_id[1]) |
+                      (hexID == (nldr_data_with_hb_id_spec$hb_id[1] + (num_bins_x + 1))) |
+                      (hexID == (nldr_data_with_hb_id_spec$hb_id[1] + num_bins_x)) |
+                      (hexID == (nldr_data_with_hb_id_spec$hb_id[1] - (num_bins_x + 1))) |
+                      (hexID == (nldr_data_with_hb_id_spec$hb_id[1] - num_bins_x)))
 
     nldr_data_with_hb_id_spec <- nldr_data_with_hb_id_spec |>
       dplyr::select(-ID) |>
