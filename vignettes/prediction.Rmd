@@ -39,6 +39,7 @@ predict_df <- predict_2d_embeddings(test_data = s_curve_noise_test,
 
 predict_df
 ```
+
 ```{r}
 s_curve_noise_umap |>
     ggplot(aes(x = UMAP1,

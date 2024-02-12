@@ -22,20 +22,6 @@ test_that("compute_aic() works", {
   testthat::expect_error(compute_aic(p, total = c(1, 2, NA), num_bins, num_obs))
 })
 
-
-test_that("predict_hex_id() works", {
-
-  num_bins_x <- 4
-  shape_value <- 1.833091
-  hexbin_data_object <- extract_hexbin_mean(nldr_df = s_curve_noise_umap, num_bins_x,
-                                            shape_val = shape_value)
-  df_bin_centroids <- hexbin_data_object$hexdf_data
-  testthat::expect_snapshot(predict_hex_id(df_bin_centroids = df_bin_centroids,
-                                           nldr_df_test = s_curve_noise_umap,
-                                           x = "UMAP1", y = "UMAP2"))
-
-})
-
 test_that("generate_eval_df() works", {
 
   num_bins_x <- 4

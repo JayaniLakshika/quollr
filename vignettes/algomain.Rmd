@@ -114,7 +114,7 @@ trimesh
 distance <- cal_2d_dist(.data = tr_from_to_df)
 
 ## To find the benchmark value to remove long edges
-benchmark <- find_benchmark_value(.data = distance, distance_col = distance)
+benchmark <- find_benchmark_value(.data = distance, distance_col = "distance")
 benchmark
 ```
 

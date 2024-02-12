@@ -44,10 +44,8 @@ Imports:
     tibble,
     tripack,
     rsample,
-    class,
     tidyselect,
-    here,
-    rlang
+    here
 URL: https://github.com/JayaniLakshika/quollr
 BugReports: https://github.com/JayaniLakshika/quollr/issues
 Depends: 

@@ -53,48 +53,6 @@ compute_aic <- function(p, total, num_bins, num_obs) {
   return(aic)
 }
 
-
-#' Predict Hexagonal IDs
-#'
-#' This function predicts hexagonal IDs for a test set based on existing bin centroids.
-#'
-#' @param df_bin_centroids The training dataset containing high-dimensional data with IDs.
-#' @param nldr_df_test The non-linear dimensionality reductions that need to find the prediction.
-#' @param x The name of the column that contains first 2D embeddings component.
-#' @param y The name of the column that contains second 2D embeddings component.
-#'
-#' @return A data frame containing prediced hexID for 2D embedding data
-#'
-#' @importFrom dplyr select mutate
-#' @importFrom class knn
-#' @importFrom rlang syms
-#'
-#' @examples
-#' num_bins_x <- 4
-#' shape_value <- 1.833091
-#' hexbin_data_object <- extract_hexbin_mean(nldr_df = s_curve_noise_umap, num_bins_x,
-#' shape_val = shape_value)
-#' df_bin_centroids <- hexbin_data_object$hexdf_data
-#' predict_hex_id(df_bin_centroids = df_bin_centroids, nldr_df_test = s_curve_noise_umap,
-#' x = "UMAP1", y = "UMAP2")
-#'
-#' @export
-predict_hex_id <- function(df_bin_centroids, nldr_df_test, x = "UMAP1", y = "UMAP2") {
-
-  df_bin_centroids <- df_bin_centroids |>
-    dplyr::select(x, y, hexID)
-
-  pred_hb_id <- class::knn(df_bin_centroids |> dplyr::select(-hexID),
-                           nldr_df_test |> dplyr::select(!!! rlang::syms(c(x, y))),
-                           cl = df_bin_centroids$hexID)
-
-  pred_data <- nldr_df_test |>
-    dplyr::mutate(pred_hb_id = as.numeric(as.character(pred_hb_id)))
-
-  return(pred_data)
-
-}
-
 #' Generate Evaluation Data Frame
 #'
 #' This function generates an evaluation data frame based on the provided data and predictions.
