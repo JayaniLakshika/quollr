@@ -169,7 +169,8 @@ predict_2d_embeddings <- function(test_data, df_bin_centroids, df_bin, type_NLDR
       dplyr::select(-hb_id)
 
     ## Compute the distance between test point and the centroid points in high-D
-    d <- stats::dist(dplyr::bind_rows(test_data_point |> dplyr::select(-ID), centroid_coord_high_D)) |> as.matrix()
+    dist_df <- dplyr::bind_rows(test_data_point |> dplyr::select(-ID), centroid_coord_high_D)
+    d <- stats::dist(dist_df) |> as.matrix()
 
     ## Obtain the distances
     distance_vec <- d[2:dim(d)[1], 1] |> as.vector()
