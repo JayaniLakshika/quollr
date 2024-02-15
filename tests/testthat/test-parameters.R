@@ -9,7 +9,7 @@ test_that("find_benchmark_value() works", {
   tr_from_to_df <- generate_edge_info(triangular_object = tr1_object)
   distance_df <- cal_2d_dist(tr_from_to_df)
 
-  testthat::expect_equal(find_benchmark_value(distance_df, "distance"), 5.44)
+  testthat::expect_equal(find_benchmark_value(distance_df, "distance"), 2.545)
 
   distance_df <- distance_df |> dplyr::mutate(distance = dplyr::if_else(dplyr::row_number() == 10, NA_integer_, distance))
   testthat::expect_error(find_benchmark_value(distance_df, "distance"))

@@ -24,33 +24,19 @@
 #' @export
 find_benchmark_value <- function(.data, distance_col) {
 
-  if (any(is.na(.data |> dplyr::pull({{ distance_col }})))) {
+  if (any(is.na(.data[[distance_col]]))) {
     stop("NAs present")
   }
 
 
   .data <- .data |>
-    dplyr::mutate(dplyr::across({
-      {
-        distance_col
-      }
-    }, \(x) round(x, 3)))
+    dplyr::mutate({{ distance_col }} := round(!!rlang::sym(distance_col), 3))
 
 
   sorted_distance_df <- .data |>
-    dplyr::arrange({
-      {
-        distance_col
-      }
-    })  ## Sort the distances
+    dplyr::arrange(!!rlang::sym(distance_col))  ## Sort the distances
 
-  unique_dist <- sorted_distance_df |>
-    dplyr::pull({
-      {
-        distance_col
-      }
-    }) |>
-    unique()  ## Get the unique distances
+  unique_dist <- unique(sorted_distance_df[[distance_col]]) ## Get the unique distances
 
   dist_u <- tibble::tibble(unique_dist = unique_dist)
   ## Calculate differences between unique distance
@@ -58,7 +44,7 @@ find_benchmark_value <- function(.data, distance_col) {
   names(dist_u)[2] <- "difference"
 
   dist_u <- dist_u |>
-    dplyr::mutate(dplyr::across(difference, \(x) round(x, 4)))  ## For simplicity
+    dplyr::mutate(dplyr::across(difference, ~ round(., 4)))  ## For simplicity
 
   dist_u[is.na(dist_u)] <- 0  ## To replace missing values with zero
 

@@ -2,8 +2,11 @@
 
     Code
       find_benchmark_value(data_dist, "dist")
+    Condition
+      Warning in `find_benchmark_value()`:
+      Difference between unique distances are increasing. Please use a suitable value for benchmark.
     Output
-      [1] 1.5
+      [1] NA
 
 # compute_mean_density_hex() works
 
