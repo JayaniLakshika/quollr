@@ -147,68 +147,32 @@ generate_eval_df <- function(data, prediction_df, df_bin_centroids, df_bin, col_
 #' df_bin = df_bin, type_NLDR = "UMAP")
 #'
 #' @importFrom dplyr mutate_if bind_rows filter row_number arrange
-#' @importFrom stats dist
+#' @importFrom proxy dist
 #' @export
 predict_2d_embeddings <- function(test_data, df_bin_centroids, df_bin, type_NLDR = "UMAP") {
 
-  columns_df <- c(paste0("pred_", type_NLDR, "_", 1:2), "ID", "pred_hb_id")
-  vec <- stats::setNames(rep("", length(columns_df)), columns_df)  ## Define column names
+  ## Compute distances between nldr coordinates and hex bin centroids
+  dist_df <- proxy::dist(as.matrix(test_data |> dplyr::select(-ID)),
+                         as.matrix(df_bin |> dplyr::select(-hb_id)), method = "Euclidean")
 
-  predict_coord_test <- dplyr::bind_rows(vec)[0, ]
-  predict_coord_test <- predict_coord_test |>
-    dplyr::mutate_if(is.character, as.numeric)
+  ## Columns that gives minimum distances
+  min_column <- apply(dist_df, 1, which.min)
 
-  for (i in 1:NROW(test_data)) {
+  test_data <- test_data |>
+    dplyr::mutate(pred_hb_id = df_bin$hb_id[min_column])
 
-    ### Filter the new data point
-    test_data_point <- test_data |>
-      dplyr::filter(dplyr::row_number() == i)
+  ## Obtain 2D coordinate of the nearest high-D centroid
+  match_indices <- match(test_data$pred_hb_id, df_bin_centroids$hexID)
+  predict_centroid_coord_2D <- dplyr::bind_cols(test_data, emb_1 = df_bin_centroids$x[match_indices],
+                                                emb_2 = df_bin_centroids$y[match_indices])
 
-    ## Obtain centroid coordinates in high-D
-    centroid_coord_high_D <- df_bin |>
-      dplyr::select(-hb_id)
+  predict_centroid_coord_2D <- predict_centroid_coord_2D |>
+    dplyr::select(emb_1, emb_2, ID, pred_hb_id)
 
-    ## Compute the distance between test point and the centroid points in high-D
-    dist_df <- dplyr::bind_rows(test_data_point |> dplyr::select(-ID), centroid_coord_high_D)
-    d <- stats::dist(dist_df) |> as.matrix()
+  ## Rename columns
+  names(predict_centroid_coord_2D) <- c(paste0("pred_", type_NLDR, "_", 1:2), "ID", "pred_hb_id")
 
-    ## Obtain the distances
-    distance_vec <- d[2:dim(d)[1], 1] |> as.vector()
-
-    ## Add the distance vec as a column in high-D centroid coordinate data set
-    centroid_coord_high_D <- centroid_coord_high_D |>
-      dplyr::mutate(distance = distance_vec) |>
-      dplyr::mutate(hb_id = df_bin$hb_id)
-
-    ## Sort by distance and obtain the centroid which is nearest
-    predict_centroid_coord_high_D <- centroid_coord_high_D |>
-      dplyr::arrange(distance) |>
-      dplyr::filter(dplyr::row_number() == 1)
-
-    ## Rename columns
-    #names(predict_centroid_coord_high_D)[1:(NCOL(test_data_point) - 1)] <- paste0("C_", names(predict_centroid_coord_high_D)[1:(NCOL(test_data_point) - 1)])
-
-    ## Obtain 2D coordinate of the nearest high-D centroid
-    predict_centroid_coord_2D <- df_bin_centroids |>
-      dplyr::filter(hexID %in% predict_centroid_coord_high_D$hb_id) |>
-      dplyr::select(x, y) |>
-      dplyr::mutate(ID = test_data_point$ID,
-                    pred_hb_id = predict_centroid_coord_high_D$hb_id)
-
-    ## Rename columns
-    names(predict_centroid_coord_2D) <- c(paste0("pred_", type_NLDR, "_", 1:2), "ID", "pred_hb_id")
-
-    ## Combine high-D and 2D coordinate
-    #predict_centroid_coord_all <- dplyr::bind_cols(test_data_point, predict_centroid_coord_high_D, predict_centroid_coord_2D)
-
-    ## Combine all
-    predict_coord_test <- dplyr::bind_rows(predict_coord_test, predict_centroid_coord_2D)
-
-
-  }
-
-  return(predict_coord_test)
-
+  return(predict_centroid_coord_2D)
 
 }
 

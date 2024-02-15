@@ -17,7 +17,7 @@
     Output
       # A tibble: 25 x 4
          pred_UMAP_1 pred_UMAP_2    ID pred_hb_id
-               <dbl>       <dbl> <dbl>      <dbl>
+               <dbl>       <dbl> <int>      <int>
        1      -1.84      -2.44       5          9
        2       1.02       0.862     10         40
        3       1.02       0.862     13         40

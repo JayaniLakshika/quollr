@@ -45,7 +45,8 @@ Imports:
     tripack,
     rsample,
     tidyselect,
-    here
+    here,
+    proxy
 URL: https://github.com/JayaniLakshika/quollr
 BugReports: https://github.com/JayaniLakshika/quollr/issues
 Depends: 
