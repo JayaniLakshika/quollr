@@ -11,7 +11,8 @@ show_langevitour(
   benchmark_value = NA,
   distance_df,
   distance_col,
-  use_default_benchmark_val = FALSE
+  use_default_benchmark_val = FALSE,
+  column_start_text = "x"
 )
 }
 \arguments{
@@ -29,6 +30,8 @@ show_langevitour(
 
 \item{use_default_benchmark_val}{Logical, indicating whether to use default
 benchmark value  to remove long edges(default is FALSE).}
+
+\item{column_start_text}{The text that begin the column name of the high-D data}
 }
 \description{
 This function generates a LangeviTour visualization based on different conditions and input parameters.

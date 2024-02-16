@@ -175,6 +175,7 @@ weighted_highD_data <- function(training_data, nldr_df_with_id, hb_object, colum
 #' @param distance_col The name of the distance column.
 #' @param use_default_benchmark_val Logical, indicating whether to use default
 #' benchmark value  to remove long edges(default is FALSE).
+#' @param column_start_text The text that begin the column name of the high-D data
 #'
 #' @importFrom dplyr mutate bind_rows filter
 #' @importFrom langevitour langevitour
@@ -197,11 +198,11 @@ weighted_highD_data <- function(training_data, nldr_df_with_id, hb_object, colum
 #'
 #' @export
 show_langevitour <- function(df, df_b, df_b_with_center_data, benchmark_value = NA,
-                             distance_df, distance_col, use_default_benchmark_val = FALSE) {
+                             distance_df, distance_col, use_default_benchmark_val = FALSE, column_start_text = "x") {
 
   ### Define type column
   df <- df |>
-    dplyr::select(tidyselect::starts_with("x")) |>
+    dplyr::select(tidyselect::starts_with(column_start_text)) |>
     dplyr::mutate(type = "data") ## original dataset
 
   df_b <- df_b |>
