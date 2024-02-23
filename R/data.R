@@ -30,7 +30,7 @@
 #' The `s_curve_noise_training` dataset contains training data with dimensions x1,
 #' x2, x3, x4, x5, x6, and x7. Each data point is identified by an ID.
 #'
-#' @format A data frame with 225 rows and 8 columns:
+#' @format A data frame with 75 rows and 8 columns:
 #' \describe{
 #'   \item{ID}{Identification number}
 #'   \item{x1, x2, x3, x4, x5, x6, x7}{High-dimensional coordinates}
@@ -56,7 +56,7 @@
 #' The `s_curve_noise_test` dataset contains test data with dimensions x1,
 #' x2, x3, x4, x5, x6, and x7. Each data point is identified by an ID.
 #'
-#' @format A data frame with 75 rows and 8 columns:
+#' @format A data frame with 25 rows and 8 columns:
 #' \describe{
 #'   \item{ID}{Identification number}
 #'   \item{x1, x2, x3, x4, x5, x6, x7}{High-dimensional coordinates}
@@ -86,10 +86,10 @@
 #' and UMAP2) and an ID.
 #'
 #' @format ## `s_curve_noise_umap`
-#' A data frame with 225 rows and 3 columns:
+#' A data frame with 75 rows and 3 columns:
 #' \describe{
-#'   \item{UMAP1}{Numeric, UMAP coordinate 1.}
-#'   \item{UMAP2}{Numeric, UMAP coordinate 2.}
+#'   \item{UMAP1}{Numeric, first UMAP 2D embeddings.}
+#'   \item{UMAP2}{Numeric, second UMAP 2D embeddings.}
 #'   \item{ID}{Numeric, identifier for each data point.}
 #' }
 #' @examples
@@ -119,8 +119,8 @@
 #' @format ## `s_curve_noise_umap_predict`
 #' A data frame with 75 rows and 3 columns:
 #' \describe{
-#'   \item{UMAP1}{Numeric, UMAP coordinate 1.}
-#'   \item{UMAP2}{Numeric, UMAP coordinate 2.}
+#'   \item{UMAP1}{Numeric, predicted first UMAP 2D embeddings.}
+#'   \item{UMAP2}{Numeric, predicted second UMAP 2D embeddings.}
 #'   \item{ID}{Numeric, identifier for each data point.}
 #' }
 #' @examples
@@ -140,4 +140,30 @@
 "s_curve_noise_umap_predict"
 
 
-
+#' Scaled UMAP embedding for S-curve dataset which with noise dimensions
+#'
+#' The `s_curve_noise_umap_scaled` dataset contains the scaled UMAP (Uniform Manifold
+#' Approximation and Projection) embeddings.
+#'
+#' @format ## `s_curve_noise_umap_scaled`
+#' A data frame with 25 rows and 3 columns:
+#' \describe{
+#'   \item{UMAP1}{Numeric, Scaled first UMAP 2D embeddings.}
+#'   \item{UMAP2}{Numeric, Scaled second UMAP 2D embedding.}
+#'   \item{ID}{Numeric, identifier for each data point.}
+#' }
+#' @examples
+#' # Load the s_curve_noise_umap_scaled dataset
+#' data(s_curve_noise_umap_scaled)
+#'
+#' # Display the first few rows of the dataset
+#' head(s_curve_noise_umap_scaled)
+#'
+#' @keywords datasets
+#'
+#' @rdname s_curve_noise_umap_scaled
+#' @docType data
+#' @usage data(s_curve_noise_umap_scaled)
+#'
+#' @source This dataset is generated for illustrative purposes.
+"s_curve_noise_umap_scaled"

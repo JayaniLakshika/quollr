@@ -31,7 +31,7 @@ test_that("triangulate_bin_centroids() works", {
   hexbin_data_object <- extract_hexbin_centroids(nldr_df = s_curve_noise_umap,
   num_bins = num_bins_x, shape_val = shape_value)
   df_bin_centroids <- hexbin_data_object$hexdf_data
-  expect_snapshot(suppressWarnings(triangulate_bin_centroids(df_bin_centroids, x, y)))
+  expect_snapshot(suppressWarnings(triangulate_bin_centroids(df_bin_centroids, "x", "y")))
 
 })
 
@@ -42,7 +42,7 @@ test_that("generate_edge_info() works", {
   hexbin_data_object <- extract_hexbin_centroids(nldr_df = s_curve_noise_umap,
   num_bins = num_bins_x, shape_val = shape_value)
   df_bin_centroids <- hexbin_data_object$hexdf_data
-  suppressWarnings(tr1_object <- triangulate_bin_centroids(df_bin_centroids, x, y))
+  suppressWarnings(tr1_object <- triangulate_bin_centroids(df_bin_centroids, "x", "y"))
 
   expect_snapshot(generate_edge_info(triangular_object = tr1_object))
 })
@@ -54,7 +54,7 @@ test_that("cal_2d_dist() works", {
   hexbin_data_object <- extract_hexbin_centroids(nldr_df = s_curve_noise_umap,
   num_bins = num_bins_x, shape_val = shape_value)
   df_bin_centroids <- hexbin_data_object$hexdf_data
-  suppressWarnings(tr1_object <- triangulate_bin_centroids(df_bin_centroids, x, y))
+  suppressWarnings(tr1_object <- triangulate_bin_centroids(df_bin_centroids, "x", "y"))
   tr_from_to_df <- generate_edge_info(triangular_object = tr1_object)
 
   expect_snapshot(cal_2d_dist(tr_from_to_df, start_x = "x_from", start_y = "y_from",
@@ -68,12 +68,12 @@ test_that("colour_long_edges() works", {
   hexbin_data_object <- extract_hexbin_centroids(nldr_df = s_curve_noise_umap,
   num_bins = num_bins_x, shape_val = shape_value)
   df_bin_centroids <- hexbin_data_object$hexdf_data
-  tr1_object <- triangulate_bin_centroids(df_bin_centroids, x, y)
+  tr1_object <- triangulate_bin_centroids(df_bin_centroids, "x", "y")
   tr_from_to_df <- generate_edge_info(triangular_object = tr1_object)
   distance_df <- cal_2d_dist(tr_from_to_df)
 
   vdiffr::expect_doppelganger("color_long_edges basic", colour_long_edges(.data = distance_df,
-                                                                          benchmark_value = 5.4,
+                                                                          benchmark_value = 2.5,
                                                                           triangular_object = tr1_object,
                                                                           distance_col = "distance"))
 
@@ -86,12 +86,12 @@ test_that("remove_long_edges() works", {
   hexbin_data_object <- extract_hexbin_centroids(nldr_df = s_curve_noise_umap,
                                                  num_bins = num_bins_x, shape_val = shape_value)
   df_bin_centroids <- hexbin_data_object$hexdf_data
-  tr1_object <- triangulate_bin_centroids(df_bin_centroids, x, y)
+  tr1_object <- triangulate_bin_centroids(df_bin_centroids, "x", "y")
   tr_from_to_df <- generate_edge_info(triangular_object = tr1_object)
   distance_df <- cal_2d_dist(tr_from_to_df)
 
   vdiffr::expect_doppelganger("remove_long_edges basic", remove_long_edges(.data = distance_df,
-                                                                           benchmark_value = 5.4,
+                                                                           benchmark_value = 2.5,
                                                                            triangular_object = tr1_object,
                                                                            distance_col = "distance"))
 

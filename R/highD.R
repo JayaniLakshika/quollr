@@ -117,7 +117,8 @@ compute_weights <- function(nldr_df, hb_object) {
 #' hexdf_data <- hexbin_data_object$hexdf_data
 #' hb_object <- hexbin_data_object$hb_data
 #' weighted_highD_data(training_data = s_curve_noise_training,
-#' nldr_df_with_id = s_curve_noise_umap, hb_object = hb_object, column_start_text = "x")
+#' nldr_df_
+#' with_id = s_curve_noise_umap, hb_object = hb_object, column_start_text = "x")
 #'
 #' @seealso
 #' \code{\link{compute_weights}}
@@ -190,7 +191,7 @@ weighted_highD_data <- function(training_data, nldr_df_with_id, hb_object, colum
 #' UMAP_data_with_hb_id <- s_curve_noise_umap |> dplyr::mutate(hb_id = hexbin_data_object$hb_data@cID)
 #' df_all <- dplyr::bind_cols(training_data |> dplyr::select(-ID), UMAP_data_with_hb_id)
 #' df_bin <- avg_highD_data(df_all)
-#' tr1_object <- triangulate_bin_centroids(df_bin_centroids, x, y)
+#' tr1_object <- triangulate_bin_centroids(df_bin_centroids, "x", "y")
 #' tr_from_to_df <- generate_edge_info(triangular_object = tr1_object)
 #' distance_df <- cal_2d_dist(.data = tr_from_to_df)
 #' show_langevitour(df_all, df_bin, df_bin_centroids, benchmark_value = 5.44,
@@ -198,7 +199,10 @@ weighted_highD_data <- function(training_data, nldr_df_with_id, hb_object, colum
 #'
 #' @export
 show_langevitour <- function(df, df_b, df_b_with_center_data, benchmark_value = NA,
-                             distance_df, distance_col, use_default_benchmark_val = FALSE, column_start_text = "x") {
+                             distance_df, distance_col, use_default_benchmark_val = FALSE,
+                             column_start_text = "x") {
+
+
 
   ### Define type column
   df <- df |>
@@ -207,8 +211,11 @@ show_langevitour <- function(df, df_b, df_b_with_center_data, benchmark_value = 
 
   df_b <- df_b |>
     dplyr::filter(hb_id %in% df_b_with_center_data$hexID) |>
-    dplyr::select(-hb_id) |>
     dplyr::mutate(type = "model") ## Data with summarized mean
+
+  ## Reorder the rows of df_b according to the hexID order in df_b_with_center_data
+  df_b <- df_b[match(df_b_with_center_data$hexID, df_b$hb_id),] |>
+    dplyr::select(-hb_id)
 
   df_exe <- dplyr::bind_rows(df_b, df)
 
@@ -217,7 +224,7 @@ show_langevitour <- function(df, df_b, df_b_with_center_data, benchmark_value = 
 
     if (isFALSE(use_default_benchmark_val)) {
 
-      tr1 <- triangulate_bin_centroids(df_b_with_center_data, x, y)
+      tr1 <- triangulate_bin_centroids(df_b_with_center_data, x = "x", y = "y")
       tr_from_to_df <- generate_edge_info(triangular_object = tr1)
 
       langevitour::langevitour(df_exe[1:(length(df_exe)-1)], lineFrom = tr_from_to_df$from,
@@ -226,11 +233,11 @@ show_langevitour <- function(df, df_b, df_b_with_center_data, benchmark_value = 
 
     } else {
 
-      benchmark_value <- find_benchmark_value(.data = distance_df, distance_col = distance_col)
+      benchmark_value <- find_benchmark_value(distance_edges = distance_df, distance_col = distance_col)
 
       ## Set the maximum difference as the criteria
       distance_df_small_edges <- distance_df |>
-        dplyr::filter((!!as.name(distance_col)) < benchmark_value)
+        dplyr::filter(!!as.name(distance_col) < benchmark_value)
       ## Since erase brushing is considerd.
 
       langevitour::langevitour(df_exe[1:(length(df_exe)-1)], lineFrom = distance_df_small_edges$from,

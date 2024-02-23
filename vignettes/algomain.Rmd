@@ -37,7 +37,7 @@ UMAP_data <- s_curve_noise_umap
 To begin the algorithm, you need to determine the number of bins along the x-axis for creating regular hexagons in the hexagonal grid.
 
 ```{r}
-num_bins_x <- calculate_effective_x_bins(.data = UMAP_data, x = UMAP1,
+num_bins_x <- calculate_effective_x_bins(.data = UMAP_data, x = "UMAP1",
                                          cell_area = 1)
 
 num_bins_x
@@ -49,7 +49,7 @@ Then, you need to determine the shape parameter, which control the shape and siz
 
 ```{r}
 shape_value <- calculate_effective_shape_value(.data = UMAP_data, 
-                                               x = UMAP1, y = UMAP2)
+                                               x = "UMAP1", y = "UMAP2")
 
 shape_value
 ```
@@ -87,7 +87,7 @@ df_bin_centroids <- df_bin_centroids |>
 Next, you need to perform triangulation on the bin centroids to construct a triangular mesh. Triangulation involves connecting the bin centroids with triangular edges to form a mesh that reveals the local structure of the data.
 
 ```{r}
-tr1_object <- triangulate_bin_centroids(.data = df_bin_centroids, x = x, y = y)
+tr1_object <- triangulate_bin_centroids(.data = df_bin_centroids, x = "x", y = "y")
 str(tr1_object)
 
 tr_from_to_df <- generate_edge_info(triangular_object = tr1_object)
@@ -122,7 +122,7 @@ benchmark
 ## To draw the traingular mesh after remove long edges in 2D
 
 trimesh_removed <- remove_long_edges(.data = distance, benchmark_value = benchmark,
-                                     triangular_object = tr1_object, distance_col = distance) +
+                                     triangular_object = tr1_object, distance_col = "distance") +
   xlab(expression(C[x]^{(2)})) + ylab(expression(C[y]^{(2)})) +
   theme(axis.text = element_text(size = 5),
         axis.title = element_text(size = 7))

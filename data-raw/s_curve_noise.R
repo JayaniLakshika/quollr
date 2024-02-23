@@ -1,6 +1,7 @@
 library(snedata)
 library(umap)
 library(rsample)
+library(scales)
 
 set.seed(20230531)
 
@@ -65,4 +66,16 @@ s_curve_noise_umap_predict <- s_curve_noise_umap_predict |>
   dplyr::mutate(ID = s_curve_noise_test$ID)
 
 usethis::use_data(s_curve_noise_umap_predict, overwrite = TRUE)
+
+## scaled 2D embeddings
+
+s_curve_noise_umap_scaled <- s_curve_noise_umap
+
+s_curve_noise_umap_scaled$UMAP1 <- rescale(s_curve_noise_umap_scaled$UMAP1)
+y_min <- -sqrt(3)/2
+y_max <- sqrt(3)/2
+s_curve_noise_umap_scaled$UMAP2 <- ((s_curve_noise_umap_scaled$UMAP2 - min(s_curve_noise_umap_scaled$UMAP2))/
+(max(s_curve_noise_umap_scaled$UMAP2) - min(s_curve_noise_umap_scaled$UMAP2))) * (y_max - y_min)
+
+usethis::use_data(s_curve_noise_umap_scaled, overwrite = TRUE)
 

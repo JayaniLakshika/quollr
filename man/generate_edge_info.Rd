@@ -23,7 +23,7 @@ shape_value <- 1.833091
 hexbin_data_object <- extract_hexbin_centroids(nldr_df = s_curve_noise_umap,
 num_bins = num_bins_x, shape_val = shape_value)
 df_bin_centroids <- hexbin_data_object$hexdf_data
-tr1_object <- triangulate_bin_centroids(df_bin_centroids, x, y)
+tr1_object <- triangulate_bin_centroids(df_bin_centroids, "x", "y")
 generate_edge_info(triangular_object = tr1_object)
 
 }

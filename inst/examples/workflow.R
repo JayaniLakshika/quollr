@@ -258,13 +258,13 @@ trimesh
 
 ## To find the benchmark value to remove long edges
 
-benchmark <- find_benchmark_value(.data = distance, distance_col = distance)
+benchmark <- find_benchmark_value(.data = distance, distance_col = "distance")
 benchmark <- 2.5
 
 ## To draw the colored long edges in 2D
 
 trimesh_gr <- colour_long_edges(.data = distance, benchmark_value = benchmark,
-                                triangular_object = tr1_object, distance_col = distance)
+                                triangular_object = tr1_object, distance_col = "distance")
 
 trimesh_gr <- trimesh_gr +
   xlab(expression(C[x]^{(2)})) + ylab(expression(C[y]^{(2)})) +
@@ -276,7 +276,7 @@ trimesh_gr
 ## To draw after removing long edges in 2D
 
 trimesh_removed <- remove_long_edges(.data = distance, benchmark_value = benchmark,
-                                     triangular_object = tr1_object, distance_col = distance)
+                                     triangular_object = tr1_object, distance_col = "distance")
 
 trimesh_removed <- trimesh_removed +
   xlab(expression(C[x]^{(2)})) + ylab(expression(C[y]^{(2)})) +
