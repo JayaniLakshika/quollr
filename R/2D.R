@@ -14,7 +14,7 @@
 #' @param hex_size A numeric value that initializes the radius of the outer circle surrounding the hexagon.
 #'
 #' @return A list contains hexIDs, x and y coordinates (hexID, c_x, c_y respectively) of all hexagon bin centroids.
-#'
+#' @importFrom rlang sym as_string
 #'
 #' @examples
 #' num_bins_x <- calculate_effective_x_bins(nldr_df = s_curve_noise_umap_scaled,
@@ -115,15 +115,16 @@ generate_full_grid_centroids <- function(nldr_df, x = "UMAP1", y = "UMAP2",
     for (j in 1:num_bins_x) {
 
       if (i == 1) {
-
+        ## For the first hexbin along the y-axis
         y <- y_start
 
         if (j == 1) {
-
+          ## For the first hexbin along the x-axis
           x <- x_start
 
         } else {
 
+          ## For the bins along the x-axis except the first one
           x <- x_start + (j - 1) * horizontal_spacing
           if (i %% 2 == 0) {  # Adjust for even rows
             x <- x + horizontal_spacing / 2
@@ -133,6 +134,7 @@ generate_full_grid_centroids <- function(nldr_df, x = "UMAP1", y = "UMAP2",
 
       } else {
 
+        ## For the bins along the x and y axes except the first ones
         x <- x_start + (j - 1) * horizontal_spacing
         y <- y_start + (i - 1) * vertical_spacing
         if (i %% 2 == 0) {  # Adjust for even rows
@@ -147,6 +149,7 @@ generate_full_grid_centroids <- function(nldr_df, x = "UMAP1", y = "UMAP2",
     }
   }
 
+  ## To generate hexIDs
   hexID <- 1:length(c_x)
 
   return(list(hexID = hexID, c_x = c_x, c_y = c_y))
@@ -186,6 +189,7 @@ gen_hex_coordinates <- function(all_centroids_df, hex_size = NA){
 
   }
 
+  ## Obtain centroid info
   hex_ids <- all_centroids_df$hexID
   c_x_vec <- all_centroids_df$c_x
   c_y_vec <- all_centroids_df$c_y
@@ -193,11 +197,13 @@ gen_hex_coordinates <- function(all_centroids_df, hex_size = NA){
   ## Compute the distance for hexagonal coordinates from the centroids
   if ((length(unique(c_x_vec)) == 1) || (length(unique(c_y_vec)) == 1)) {
 
+    ## If there is only one hexagon along the x and y axis
     dx <- 2 * hex_size
     dy <- sqrt(3) * hex_size
 
   } else {
 
+    ## If there is only more than one hexagon along the x and y axis
     dx <- (c_x_vec[2] - c_x_vec[1])/2
     dy <- (unique(c_y_vec)[2] - unique(c_y_vec)[1])/ sqrt(3) / 2 * 1.15
 
@@ -215,13 +221,16 @@ gen_hex_coordinates <- function(all_centroids_df, hex_size = NA){
 
   for (hb_id in hex_ids) {
 
+    ## Since each hexagon has 6 coordinates
     hexID_rep <- rep(hex_ids[hb_id], each = 6)
     c_x_rep <- rep(c_x_vec[hb_id], each = 6)
     c_y_rep <- rep(c_y_vec[hb_id], each = 6)
 
+    ## Generate the 6 coordinates
     x_spec <- c_x_rep + x_add_factor
     y_spec <- c_y_rep + y_add_factor
 
+    ## Append to existing vectors
     x <- append(x, x_spec)
     y <- append(x, y_spec)
     hex_poly_id <- append(hex_poly_id, hexID_rep)
@@ -278,7 +287,53 @@ assign_data <- function(nldr_df, centroid_df, type_NLDR = "UMAP") {
   emd_2 <- nldr_df[[embed_names[2]]]
   hb_id <- centroid_df$hexID[min_column]
 
-  return(list(emd_1 = emd_1, emd_2 = emd_2, hb_id = hb_id))
+  ## Create a list
+  assign_data_obj <- list(emd_1 = emd_1, emd_2 = emd_2, hb_id = hb_id)
+
+  ## Rename elements in the list
+  names(assign_data_obj) <- c(paste0(type_NLDR, 1:2), "hb_id")
+
+  return(assign_data_obj)
+
+}
+
+#' Compute Standardize Counts in Hexagons
+#'
+#' This function computes the standardize number of points within each hexagon.
+#'
+#' @param nldr_df_with_hex_id A data frame with 2D embeddings and hexagonal bin IDs.
+#'
+#' @return A list that contains hexagon IDs and the corresponding standardize counts.
+#' @importFrom dplyr count
+#'
+#' @examples
+#' num_bins_x <- calculate_effective_x_bins(nldr_df = s_curve_noise_umap_scaled,
+#'                                         x = "UMAP1", hex_size = NA, buffer_x = NA)
+#' num_bins_y <- calculate_effective_y_bins(nldr_df = s_curve_noise_umap_scaled,
+#'                                         y = "UMAP2", hex_size = NA, buffer_y = NA)
+#' centroid_list <- generate_full_grid_centroids(nldr_df = s_curve_noise_umap_scaled,
+#'                                              x = "UMAP1", y = "UMAP2",
+#'                                              num_bins_x = num_bins_x,
+#'                                              num_bins_y = num_bins_y,
+#'                                              x_start = NA, y_start = NA,
+#'                                              buffer_x = NA,
+#'                                              buffer_y = NA, hex_size = NA)
+#' all_centroids_df <- as.data.frame(do.call(cbind, centroid_list))
+#' s_curve_noise_umap_scaled_rm_id <- s_curve_noise_umap_scaled |> dplyr::select(-ID)
+#' nldr_with_hb_id_list <- assign_data(nldr_df = s_curve_noise_umap_scaled_rm_id,
+#' centroid_df = all_centroids_df)
+#' umap_with_hb_id <- as.data.frame(do.call(cbind, nldr_with_hb_id_list))
+#' compute_std_counts(nldr_df_with_hex_id = umap_with_hb_id)
+compute_std_counts <- function(nldr_df_with_hex_id) {
+
+  ## Group by hexagon IDs
+  df_with_std_counts <- nldr_df_with_hex_id |>
+    dplyr::count(hb_id)
+
+  ## To compute standardize counts
+  std_counts <- df_with_std_counts$n/max(df_with_std_counts$n)
+
+  return(list(hb_id = df_with_std_counts$hb_id, std_counts = std_counts))
 
 }
 
@@ -290,6 +345,7 @@ assign_data <- function(nldr_df, centroid_df, type_NLDR = "UMAP") {
 #' @param nldr_data_with_hb_id A data frame with 2D embedding data, ID and hexagonal bin IDs.
 #'
 #' @return A data frame with hexagonal bin IDs and the corresponding points.
+#' @importFrom dplyr filter pull
 #'
 #' @examples
 #' num_bins_x <- calculate_effective_x_bins(nldr_df = s_curve_noise_umap_scaled,
@@ -324,6 +380,9 @@ find_pts_in_hexbins <- function(nldr_data_with_hb_id) {
       dplyr::pull(ID) |>
       list()
 
+    ## Rename the list
+    names(pts_vec) <- paste0("Points in hexID: ", hb_id)
+
     ## Store the hexagon ID with the respective points
     pts_list <- append(pts_list, pts_vec)
     hexID <- append(hexID, hb_id)
@@ -335,7 +394,188 @@ find_pts_in_hexbins <- function(nldr_data_with_hb_id) {
 }
 
 
-#' Triangulate Bin Centroids
+#' Generate Hexagonal Binning Info
+#'
+#' This function generates a list which contains hexagonal binning information.
+#'
+#' @param nldr_df A data frame containing 2D embeddings.
+#' @param x The name of the column that contains first 2D embeddings component.
+#' @param y The name of the column that contains second 2D embeddings component.
+#' @param num_bins_x Number of bins along the x-axis.
+#' @param num_bins_y Number of bins along the y-axis.
+#' @param x_start Starting point along the x-axis for hexagonal binning.
+#' @param y_start Starting point along the y-axis for hexagonal binning.
+#' @param buffer_x The buffer size along the x-axis.
+#' @param buffer_y The buffer size along the y-axis.
+#' @param hex_size A numeric value that initializes the radius of the outer circle surrounding the hexagon.
+#'
+#' @return A list contains all hexagonal bin centroids (full_grid_hex_centroids),
+#' hexagonal coordinates of the full grid(full_grid_hex_poly_coordinates),
+#' 2D embeddings with corresponding hexagon IDs (nldr_data_with_hex_id),
+#' hex bins with their corresponding standardise counts (hex_id_with_std_counts),
+#' total number of hex bins(total_hex_bins"), number of non-empty hex bins (num_non_empty_bins)
+#' and points within each hexagon (points_in_hex_bins).
+#'
+#' @importFrom dplyr select mutate
+#'
+#' @examples
+#' num_bins_x <- calculate_effective_x_bins(nldr_df = s_curve_noise_umap_scaled,
+#' x = "UMAP1", hex_size = NA, buffer_x = NA)
+#' num_bins_y <- calculate_effective_y_bins(nldr_df = s_curve_noise_umap_scaled,
+#'  y = "UMAP2", hex_size = NA, buffer_y = NA)
+#' generate_hex_binning_info(nldr_df = s_curve_noise_umap_scaled,
+#' x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
+#' num_bins_y = num_bins_y, x_start = NA, y_start = NA, buffer_x = NA,
+#' buffer_y = NA, hex_size = NA)
+#'
+#' @export
+generate_hex_binning_info <- function(nldr_df, x = "UMAP1", y = "UMAP2",
+                                    num_bins_x, num_bins_y, x_start = NA,
+                                    y_start = NA, buffer_x = NA,
+                                    buffer_y = NA, hex_size = NA) {
+
+  ## To generate all the centroids of the grid
+  centroid_list <- generate_full_grid_centroids(nldr_df = nldr_df,
+                               x = x, y = y, num_bins_x = num_bins_x,
+                               num_bins_y = num_bins_y, x_start = x_start,
+                               y_start = y_start, buffer_x = buffer_x,
+                               buffer_y = buffer_y, hex_size = hex_size)
+
+  all_centroids_df <- as.data.frame(do.call(cbind, centroid_list))
+
+  ## To generate the hexagon coordinates
+  all_hex_coordinates_list <- gen_hex_coordinates(all_centroids_df, hex_size = hex_size)
+
+  nldr_df_without_id <- nldr_df |>
+    dplyr::select(-ID)
+
+  ## To find which 2D embedding assigned to which hexagon
+  nldr_with_hb_id_list <- assign_data(nldr_df = nldr_df_without_id,
+                                      centroid_df = all_centroids_df)
+
+  nldr_with_hex_id <- as.data.frame(do.call(cbind, nldr_with_hb_id_list))
+
+  ## To generate standardize counts of each hexagon
+  std_counts_list <- compute_std_counts(nldr_df_with_hex_id = nldr_with_hex_id)
+
+  nldr_with_hex_id <- nldr_with_hex_id |>
+    dplyr::mutate(ID = nldr_df$ID)
+
+  ## To find which points are within each hexagon
+  pints_hex_list <- find_pts_in_hexbins(nldr_data_with_hb_id = nldr_with_hex_id)
+
+  ## To generate the object of hexagon info
+  hex_bin_obj <- list(centroid_list = centroid_list,
+                      all_hex_coordinates_list = all_hex_coordinates_list,
+                      nldr_with_hb_id_list = nldr_with_hb_id_list,
+                      std_counts_list = std_counts_list,
+                      total_num_bins = NROW(all_centroids_df),
+                      non_empty_bins = length(std_counts_list$hb_id),
+                      pints_hex_list = pints_hex_list)
+
+  ## Rename the list elements
+  names(hex_bin_obj) <- c("full_grid_hex_centroids", "full_grid_hex_poly_coordinates",
+                          "nldr_data_with_hex_id", "hex_id_with_std_counts", "total_hex_bins",
+                          "num_non_empty_bins", "points_in_hex_bins")
+
+  return(hex_bin_obj)
+
+}
+
+
+#' Extract hexagonal bin centroids coordinates and the corresponding standardize counts.
+#'
+#' @param centroids_df A data frame contains all hexagonal bin centroid coordinates with hexagon IDs.
+#' @param counts_df A data frame contains hexagon IDs with the standardize number of points within each hexagon.
+#'
+#' @return A data frame contains hexagon ID, centroid coordinates, and standardize counts.
+#' @importFrom dplyr arrange mutate filter
+#'
+#' @examples
+#' num_bins_x <- calculate_effective_x_bins(nldr_df = s_curve_noise_umap_scaled,
+#'                                         x = "UMAP1", hex_size = NA, buffer_x = NA)
+#' num_bins_y <- calculate_effective_y_bins(nldr_df = s_curve_noise_umap_scaled,
+#'                                         y = "UMAP2", hex_size = NA, buffer_y = NA)
+#' centroid_list <- generate_full_grid_centroids(nldr_df = s_curve_noise_umap_scaled,
+#'                                              x = "UMAP1", y = "UMAP2",
+#'                                              num_bins_x = num_bins_x,
+#'                                              num_bins_y = num_bins_y,
+#'                                              x_start = NA, y_start = NA,
+#'                                              buffer_x = NA,
+#'                                              buffer_y = NA, hex_size = NA)
+#' all_centroids_df <- as.data.frame(do.call(cbind, centroid_list))
+#' s_curve_noise_umap_scaled_rm_id <- s_curve_noise_umap_scaled |> dplyr::select(-ID)
+#' nldr_with_hb_id_list <- assign_data(nldr_df = s_curve_noise_umap_scaled_rm_id,
+#' centroid_df = all_centroids_df)
+#' umap_with_hb_id <- as.data.frame(do.call(cbind, nldr_with_hb_id_list))
+#' std_counts_list <- compute_std_counts(nldr_df_with_hex_id = umap_with_hb_id)
+#' counts_df <- as.data.frame(do.call(cbind, std_counts_list))
+#' extract_hexbin_centroids(centroids_df = all_centroids_df, counts_df = counts_df)
+extract_hexbin_centroids <- function(centroids_df, counts_df) {
+
+  ## To arrange the hexagon IDs
+  counts_df <- counts_df |>
+    dplyr::arrange(hb_id)
+
+  ## Map the standardize counts
+  centroids_df <- centroids_df |>
+    dplyr::filter(hexID %in% counts_df$hb_id) |>
+    dplyr::mutate(std_counts = counts_df$std_counts)
+
+  return(centroids_df)
+}
+
+#' Extract hexagonal bin mean coordinates and the corresponding standardize counts.
+#'
+#' @param nldr_df_with_hex_id A data frame with 2D embeddings and hexagonal bin IDs.
+#' @param counts_df A data frame contains hexagon IDs with the standardize number of points within each hexagon.
+#'
+#' @return A data frame contains hexagon ID, bin mean coordinates, and standardize counts.
+#' @importFrom dplyr arrange group_by summarise filter mutate
+#' @importFrom tidyselect everything
+#'
+#' @examples
+#' num_bins_x <- calculate_effective_x_bins(nldr_df = s_curve_noise_umap_scaled,
+#'                                         x = "UMAP1", hex_size = NA, buffer_x = NA)
+#' num_bins_y <- calculate_effective_y_bins(nldr_df = s_curve_noise_umap_scaled,
+#'                                         y = "UMAP2", hex_size = NA, buffer_y = NA)
+#' centroid_list <- generate_full_grid_centroids(nldr_df = s_curve_noise_umap_scaled,
+#'                                              x = "UMAP1", y = "UMAP2",
+#'                                              num_bins_x = num_bins_x,
+#'                                              num_bins_y = num_bins_y,
+#'                                              x_start = NA, y_start = NA,
+#'                                              buffer_x = NA,
+#'                                              buffer_y = NA, hex_size = NA)
+#' all_centroids_df <- as.data.frame(do.call(cbind, centroid_list))
+#' s_curve_noise_umap_scaled_rm_id <- s_curve_noise_umap_scaled |> dplyr::select(-ID)
+#' nldr_with_hb_id_list <- assign_data(nldr_df = s_curve_noise_umap_scaled_rm_id,
+#' centroid_df = all_centroids_df)
+#' umap_with_hb_id <- as.data.frame(do.call(cbind, nldr_with_hb_id_list))
+#' std_counts_list <- compute_std_counts(nldr_df_with_hex_id = umap_with_hb_id)
+#' counts_df <- as.data.frame(do.call(cbind, std_counts_list))
+#' extract_hexbin_mean(nldr_df_with_hex_id = umap_with_hb_id, counts_df = counts_df)
+extract_hexbin_mean <- function(nldr_df_with_hex_id, counts_df) {
+
+  ## To arrange the hexagon IDs
+  counts_df <- counts_df |>
+    dplyr::arrange(hb_id)
+
+  ## To compute hexagonal bin means
+  hex_mean_df <- nldr_df_with_hex_id |>
+    dplyr::group_by(hb_id) |>
+    dplyr::summarise(dplyr::across(tidyselect::everything(), mean)) |>
+    dplyr::arrange(hb_id) |>
+    dplyr::filter(hb_id %in% counts_df$hb_id) |>
+    dplyr::mutate(std_counts = counts_df$std_counts)
+
+  ## Rename columns
+  names(hex_mean_df) <- c("hexID", "c_x", "c_y", "std_counts")
+
+  return(hex_mean_df)
+}
+
+
+#' Triangulate Bin Centroids/ Bin means
 #'
 #' This function triangulates the bin centroids/ means using the x and y coordinates
 #' provided in the input data frame and returns the triangular object.
@@ -345,19 +585,296 @@ find_pts_in_hexbins <- function(nldr_data_with_hb_id) {
 #' @param y The name of the column that contains y coordinates of bin centroids/ means.
 #'
 #' @return A triangular object representing the triangulated bin centroids/ means.
+#' @importFrom tripack tri.mesh
+#' @importFrom rlang sym as_string
 #'
 #' @examples
-#' num_bins_x <- 4
-#' shape_value <- 1.833091
-#' hexbin_data_object <- extract_hexbin_centroids(nldr_df = s_curve_noise_umap,
-#' num_bins = num_bins_x, shape_val = shape_value)
-#' df_bin_centroids <- hexbin_data_object$hexdf_data
-#' triangulate_bin_centroids(df_bin_centroids, "x", "y")
-#'
-#' @importFrom tripack tri.mesh
-#' @export
-triangulate_bin_centroids <- function(hex_bin_df, x = "x", y = "y"){
-  tr1 <- tripack::tri.mesh(hex_bin_df[[rlang::as_string(rlang::ensym(x))]],
-                           hex_bin_df[[rlang::as_string(rlang::ensym(y))]])
+#' num_bins_x <- calculate_effective_x_bins(nldr_df = s_curve_noise_umap_scaled,
+#'                                         x = "UMAP1", hex_size = NA, buffer_x = NA)
+#' num_bins_y <- calculate_effective_y_bins(nldr_df = s_curve_noise_umap_scaled,
+#'                                         y = "UMAP2", hex_size = NA, buffer_y = NA)
+#' centroid_list <- generate_full_grid_centroids(nldr_df = s_curve_noise_umap_scaled,
+#'                                              x = "UMAP1", y = "UMAP2",
+#'                                              num_bins_x = num_bins_x,
+#'                                              num_bins_y = num_bins_y,
+#'                                              x_start = NA, y_start = NA,
+#'                                              buffer_x = NA,
+#'                                              buffer_y = NA, hex_size = NA)
+#' all_centroids_df <- as.data.frame(do.call(cbind, centroid_list))
+#' s_curve_noise_umap_scaled_rm_id <- s_curve_noise_umap_scaled |> dplyr::select(-ID)
+#' nldr_with_hb_id_list <- assign_data(nldr_df = s_curve_noise_umap_scaled_rm_id,
+#' centroid_df = all_centroids_df)
+#' umap_with_hb_id <- as.data.frame(do.call(cbind, nldr_with_hb_id_list))
+#' std_counts_list <- compute_std_counts(nldr_df_with_hex_id = umap_with_hb_id)
+#' counts_df <- as.data.frame(do.call(cbind, std_counts_list))
+#' df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df, counts_df = counts_df)
+#' triangulate_bin_centroids(hex_bin_df = df_bin_centroids, x = "c_x", y = "c_y")
+triangulate_bin_centroids <- function(hex_bin_df, x = "c_x", y = "c_y"){
+  tr1 <- tripack::tri.mesh(hex_bin_df[[rlang::as_string(rlang::sym(x))]],
+                           hex_bin_df[[rlang::as_string(rlang::sym(y))]])
   return(tr1)
+}
+
+
+#' Generate Edge Information
+#'
+#' This function generates edge information from a given triangular object,
+#' including the coordinates of the vertices and the from-to relationships between the vertices.
+#'
+#' @param triangular_object The triangular object from which to generate edge information.
+#'
+#' @return A data frame containing the edge information, including the from-to
+#' relationships and the corresponding x and y coordinates.
+#' @importFrom tibble tibble as_tibble
+#' @importFrom dplyr mutate filter rename distinct left_join
+#' @importFrom tripack triangles
+#'
+#' @examples
+#' num_bins_x <- calculate_effective_x_bins(nldr_df = s_curve_noise_umap_scaled,
+#'                                         x = "UMAP1", hex_size = NA, buffer_x = NA)
+#' num_bins_y <- calculate_effective_y_bins(nldr_df = s_curve_noise_umap_scaled,
+#'                                         y = "UMAP2", hex_size = NA, buffer_y = NA)
+#' centroid_list <- generate_full_grid_centroids(nldr_df = s_curve_noise_umap_scaled,
+#'                                              x = "UMAP1", y = "UMAP2",
+#'                                              num_bins_x = num_bins_x,
+#'                                              num_bins_y = num_bins_y,
+#'                                              x_start = NA, y_start = NA,
+#'                                              buffer_x = NA,
+#'                                              buffer_y = NA, hex_size = NA)
+#' all_centroids_df <- as.data.frame(do.call(cbind, centroid_list))
+#' s_curve_noise_umap_scaled_rm_id <- s_curve_noise_umap_scaled |> dplyr::select(-ID)
+#' nldr_with_hb_id_list <- assign_data(nldr_df = s_curve_noise_umap_scaled_rm_id,
+#' centroid_df = all_centroids_df)
+#' umap_with_hb_id <- as.data.frame(do.call(cbind, nldr_with_hb_id_list))
+#' std_counts_list <- compute_std_counts(nldr_df_with_hex_id = umap_with_hb_id)
+#' counts_df <- as.data.frame(do.call(cbind, std_counts_list))
+#' df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df, counts_df = counts_df)
+#' tr1_object <- triangulate_bin_centroids(hex_bin_df = df_bin_centroids, x = "c_x", y = "c_y")
+#' generate_edge_info(triangular_object = tr1_object)
+generate_edge_info <- function(triangular_object) {
+
+  # Create a data frame with x and y coordinate values from the triangular object
+  tr_df <- tibble::tibble(x = triangular_object$x, y = triangular_object$y,
+                          ID = 1:length(triangular_object$x))  # Add ID numbers for joining with from and to points in tr_arcs
+
+  # Extract the triangles from the triangular object
+  trang <- tripack::triangles(triangular_object)
+  trang <- tibble::as_tibble(trang)
+
+  # Create data frames with from-to edges
+  tr_arcs_df <- tibble::tibble(from = c(trang$node1, trang$node1, trang$node2),
+                               to = c(trang$node2, trang$node3, trang$node3))
+
+  ## To extract unique combinations
+  tr_arcs_df <- tr_arcs_df |>
+    dplyr::mutate(x = pmin(from, to), y = pmax(from, to)) |>
+    dplyr::distinct(x, y) |>
+    dplyr::rename(c("from" = "x", "to" = "y"))
+
+  ## Extract from and to values a vectors
+  from_vec <- tr_arcs_df$from
+  to_vec <- tr_arcs_df$to
+
+  ## Map from and to coordinates
+  tr_from_to_df_coord <- dplyr::left_join(tr_arcs_df, tr_df, by = c("from" = "ID")) |>
+    dplyr::rename(c("x_from" = "x", "y_from" = "y"))
+  tr_from_to_df_coord <- dplyr::left_join(tr_from_to_df_coord, tr_df, by = c("to" = "ID"))|>
+    dplyr::rename(c("x_to" = "x", "y_to" = "y"))
+
+  return(tr_from_to_df_coord)
+
+
+}
+
+#' Calculate 2D Distances Between Points
+#'
+#' This function calculates the 2D distances between pairs of points in a data frame.
+#'
+#' @param tr_from_to_df_coord A data frame containing columns for the x and y coordinates of start and end points.
+#' @param start_x Column name for the x-coordinate of the starting point.
+#' @param start_y Column name for the y-coordinate of the starting point.
+#' @param end_x Column name for the x-coordinate of the ending point.
+#' @param end_y Column name for the y-coordinate of the ending point.
+#' @param select_col_vec A character vector specifying the columns to be selected in the resulting data frame.
+#'
+#' @return A data frame with columns for the starting point, ending point, and calculated distances.
+#' @importFrom dplyr select
+#' @importFrom tidyselect all_of
+#'
+#' @examples
+#' num_bins_x <- calculate_effective_x_bins(nldr_df = s_curve_noise_umap_scaled,
+#'                                         x = "UMAP1", hex_size = NA, buffer_x = NA)
+#' num_bins_y <- calculate_effective_y_bins(nldr_df = s_curve_noise_umap_scaled,
+#'                                         y = "UMAP2", hex_size = NA, buffer_y = NA)
+#' centroid_list <- generate_full_grid_centroids(nldr_df = s_curve_noise_umap_scaled,
+#'                                              x = "UMAP1", y = "UMAP2",
+#'                                              num_bins_x = num_bins_x,
+#'                                              num_bins_y = num_bins_y,
+#'                                              x_start = NA, y_start = NA,
+#'                                              buffer_x = NA,
+#'                                              buffer_y = NA, hex_size = NA)
+#' all_centroids_df <- as.data.frame(do.call(cbind, centroid_list))
+#' s_curve_noise_umap_scaled_rm_id <- s_curve_noise_umap_scaled |> dplyr::select(-ID)
+#' nldr_with_hb_id_list <- assign_data(nldr_df = s_curve_noise_umap_scaled_rm_id,
+#' centroid_df = all_centroids_df)
+#' umap_with_hb_id <- as.data.frame(do.call(cbind, nldr_with_hb_id_list))
+#' std_counts_list <- compute_std_counts(nldr_df_with_hex_id = umap_with_hb_id)
+#' counts_df <- as.data.frame(do.call(cbind, std_counts_list))
+#' df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df, counts_df = counts_df)
+#' tr1_object <- triangulate_bin_centroids(hex_bin_df = df_bin_centroids, x = "c_x", y = "c_y")
+#' tr_from_to_df <- generate_edge_info(triangular_object = tr1_object)
+#' cal_2d_dist(tr_from_to_df_coord = tr_from_to_df, start_x = "x_from", start_y = "y_from",
+#' end_x = "x_to", end_y = "y_to", select_col_vec = c("from", "to", "distance"))
+cal_2d_dist <- function(tr_from_to_df_coord, start_x = "x_from", start_y = "y_from", end_x = "x_to",
+                        end_y = "y_to", select_col_vec = c("from", "to", "distance")) {
+  # Calculate the 2D distances
+  tr_from_to_df_coord$distance <- lapply(seq(nrow(tr_from_to_df_coord)), function(x) {
+    start <- unlist(tr_from_to_df_coord[x, c(start_x, start_y)], use.names = FALSE)
+    end <- unlist(tr_from_to_df_coord[x, c(end_x, end_y)], use.names = FALSE)
+    sqrt(sum((start - end)^2))
+  })
+
+  # Create a data frame with the from-to relationships and distances
+  tr_from_to_df_coord <- tr_from_to_df_coord |>
+    dplyr::select(tidyselect::all_of(select_col_vec))
+
+  # Convert the distances to a vector and return the data frame
+  tr_from_to_df_coord$distance <- unlist(tr_from_to_df_coord$distance, use.names = FALSE)
+  return(tr_from_to_df_coord)
+}
+
+
+#' Color Long Edges
+#'
+#' This function colors the long edges in a triangular mesh plot based on a benchmark value.
+#'
+#' @param distance_edges The data frame containing the edge information.
+#' @param benchmark_value The threshold value to determine long edges.
+#' @param tr_from_to_df_coord A data frame containing columns for the x and y coordinates of start and end points.
+#' @param distance_col The column name in `distance_edges` representing the distances.
+#'
+#' @return A ggplot object with the triangular mesh plot where long edges are colored differently.
+#'
+#' @importFrom dplyr distinct if_else mutate inner_join
+#' @importFrom ggplot2 ggplot geom_segment geom_point coord_equal scale_colour_manual aes
+#' @importFrom tibble tibble
+#'
+#' @examples
+#' num_bins_x <- calculate_effective_x_bins(nldr_df = s_curve_noise_umap_scaled,
+#'                                         x = "UMAP1", hex_size = NA, buffer_x = NA)
+#' num_bins_y <- calculate_effective_y_bins(nldr_df = s_curve_noise_umap_scaled,
+#'                                         y = "UMAP2", hex_size = NA, buffer_y = NA)
+#' centroid_list <- generate_full_grid_centroids(nldr_df = s_curve_noise_umap_scaled,
+#'                                              x = "UMAP1", y = "UMAP2",
+#'                                              num_bins_x = num_bins_x,
+#'                                              num_bins_y = num_bins_y,
+#'                                              x_start = NA, y_start = NA,
+#'                                              buffer_x = NA,
+#'                                              buffer_y = NA, hex_size = NA)
+#' all_centroids_df <- as.data.frame(do.call(cbind, centroid_list))
+#' s_curve_noise_umap_scaled_rm_id <- s_curve_noise_umap_scaled |> dplyr::select(-ID)
+#' nldr_with_hb_id_list <- assign_data(nldr_df = s_curve_noise_umap_scaled_rm_id,
+#' centroid_df = all_centroids_df)
+#' umap_with_hb_id <- as.data.frame(do.call(cbind, nldr_with_hb_id_list))
+#' std_counts_list <- compute_std_counts(nldr_df_with_hex_id = umap_with_hb_id)
+#' counts_df <- as.data.frame(do.call(cbind, std_counts_list))
+#' df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df, counts_df = counts_df)
+#' tr1_object <- triangulate_bin_centroids(hex_bin_df = df_bin_centroids, x = "c_x", y = "c_y")
+#' tr_from_to_df <- generate_edge_info(triangular_object = tr1_object)
+#' distance_df <- cal_2d_dist(tr_from_to_df_coord = tr_from_to_df, start_x = "x_from", start_y = "y_from",
+#' end_x = "x_to", end_y = "y_to", select_col_vec = c("from", "to", "distance"))
+#' colour_long_edges(distance_edges = distance_df, benchmark_value = 0.75,
+#' tr_from_to_df_coord = tr_from_to_df, distance_col = "distance")
+colour_long_edges <- function(distance_edges, benchmark_value, tr_from_to_df_coord, distance_col) {
+
+  # Create the tibble with x and y coordinates
+  tr_df <- tibble::tibble(x = c(tr_from_to_df[["x_from"]], tr_from_to_df[["x_to"]]),
+                          y = c(tr_from_to_df[["y_from"]], tr_from_to_df[["y_to"]])) |>
+    dplyr::distinct()
+
+  # label small and long edges
+  distance_edges <- distance_edges |>
+    dplyr::mutate(type = dplyr::if_else(!!as.name(distance_col) < benchmark_value, "small_edges", "long_edges"))
+
+  # Merge edge information with distance data
+  tr_from_to_df_coord <- dplyr::inner_join(tr_from_to_df_coord, distance_edges, by = c("from", "to"))
+
+  # Create the triangular mesh plot with colored long edges
+  tri_mesh_plot <- ggplot2::ggplot(tr_df, ggplot2::aes(x = x, y = y)) +
+    ggplot2::geom_segment(
+      ggplot2::aes(x = x_from, y = y_from, xend = x_to, yend = y_to, color = type),
+      data = tr_from_to_df_coord
+    ) +
+    ggplot2::geom_point(size = 1, colour = "#33a02c") +
+    ggplot2::coord_equal() +
+    ggplot2::scale_colour_manual(values = c("#de2d26", "#636363"))
+
+  return(tri_mesh_plot)
+}
+
+#' Remove Long Edges from a Triangular Mesh Plot
+#'
+#' This function removes long edges from a triangular mesh plot based on a benchmark value.
+#'
+#' @param distance_edges The data frame containing the edge information.
+#' @param benchmark_value The threshold value to determine long edges.
+#' @param tr_from_to_df_coord A data frame containing columns for the x and y coordinates of start and end points.
+#' @param distance_col The column name in `distance_edges` representing the distances.
+#'
+#' @return A ggplot object with the triangular mesh plot where long edges are removed.
+#'
+#' @importFrom dplyr distinct if_else mutate inner_join
+#' @importFrom ggplot2 ggplot geom_segment geom_point coord_equal scale_colour_manual aes
+#' @importFrom tibble tibble
+#'
+#' @examples
+#' num_bins_x <- calculate_effective_x_bins(nldr_df = s_curve_noise_umap_scaled,
+#'                                         x = "UMAP1", hex_size = NA, buffer_x = NA)
+#' num_bins_y <- calculate_effective_y_bins(nldr_df = s_curve_noise_umap_scaled,
+#'                                         y = "UMAP2", hex_size = NA, buffer_y = NA)
+#' centroid_list <- generate_full_grid_centroids(nldr_df = s_curve_noise_umap_scaled,
+#'                                              x = "UMAP1", y = "UMAP2",
+#'                                              num_bins_x = num_bins_x,
+#'                                              num_bins_y = num_bins_y,
+#'                                              x_start = NA, y_start = NA,
+#'                                              buffer_x = NA,
+#'                                              buffer_y = NA, hex_size = NA)
+#' all_centroids_df <- as.data.frame(do.call(cbind, centroid_list))
+#' s_curve_noise_umap_scaled_rm_id <- s_curve_noise_umap_scaled |> dplyr::select(-ID)
+#' nldr_with_hb_id_list <- assign_data(nldr_df = s_curve_noise_umap_scaled_rm_id,
+#' centroid_df = all_centroids_df)
+#' umap_with_hb_id <- as.data.frame(do.call(cbind, nldr_with_hb_id_list))
+#' std_counts_list <- compute_std_counts(nldr_df_with_hex_id = umap_with_hb_id)
+#' counts_df <- as.data.frame(do.call(cbind, std_counts_list))
+#' df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df, counts_df = counts_df)
+#' tr1_object <- triangulate_bin_centroids(hex_bin_df = df_bin_centroids, x = "c_x", y = "c_y")
+#' tr_from_to_df <- generate_edge_info(triangular_object = tr1_object)
+#' distance_df <- cal_2d_dist(tr_from_to_df_coord = tr_from_to_df, start_x = "x_from", start_y = "y_from",
+#' end_x = "x_to", end_y = "y_to", select_col_vec = c("from", "to", "distance"))
+#' remove_long_edges(distance_edges = distance_df, benchmark_value = 0.75,
+#' tr_from_to_df_coord = tr_from_to_df, distance_col = "distance")
+remove_long_edges <- function(distance_edges, benchmark_value, tr_from_to_df_coord,
+                              distance_col) {
+  # Create the tibble with x and y coordinates
+  tr_df <- tibble::tibble(x = c(tr_from_to_df[["x_from"]], tr_from_to_df[["x_to"]]),
+                          y = c(tr_from_to_df[["y_from"]], tr_from_to_df[["y_to"]])) |>
+    dplyr::distinct()
+
+  # Filter small edges
+  distance_df_small_edges <- distance_edges |>
+    dplyr::filter(!!as.name(distance_col) < benchmark_value)
+
+  # Merge edge information with distance data
+  tr_from_to_df_coord <- dplyr::inner_join(tr_from_to_df_coord, distance_df_small_edges,
+                                           by = c("from", "to"))
+
+  ## Create the triangular mesh plot after removing the long edges
+  tri_mesh_plot <- ggplot2::ggplot(tr_df, ggplot2::aes(x = x, y = y)) +
+    ggplot2::geom_segment(ggplot2::aes(x = x_from, y = y_from, xend = x_to, yend = y_to),
+                          data = tr_from_to_df_coord) +
+    ggplot2::geom_point(size = 1, colour = "#33a02c") +
+    ggplot2::coord_equal() +
+    ggplot2::labs(color=NULL)
+  return(tri_mesh_plot)
+
 }

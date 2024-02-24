@@ -15,7 +15,7 @@
 # calculate_effective_x_bins(nldr_df = s_curve_noise_umap_scaled, x = "UMAP1", hex_size = NA, buffer_x = NA)
 calculate_effective_x_bins <- function(nldr_df, x = "UMAP1", hex_size = NA, buffer_x = NA){
 
-  x_values <- nldr_df[[rlang::as_string(rlang::ensym(x))]]
+  x_values <- nldr_df[[rlang::as_string(rlang::sym(x))]]
 
   if (anyNA(x_values)) {
     stop("NAs present")
@@ -78,7 +78,7 @@ calculate_effective_x_bins <- function(nldr_df, x = "UMAP1", hex_size = NA, buff
 #' calculate_effective_y_bins(nldr_df = s_curve_noise_umap_scaled, y = "UMAP2", hex_size = NA, buffer_y = NA)
 calculate_effective_y_bins <- function(nldr_df, y = "UMAP2", hex_size = NA, buffer_y = NA){
 
-  y_values <- nldr_df[[rlang::as_string(rlang::ensym(y))]]
+  y_values <- nldr_df[[rlang::as_string(rlang::sym(y))]]
 
   if (anyNA(y_values)) {
     stop("NAs present")
