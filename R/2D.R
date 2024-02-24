@@ -878,3 +878,78 @@ remove_long_edges <- function(distance_edges, benchmark_value, tr_from_to_df_coo
   return(tri_mesh_plot)
 
 }
+
+#' Find the Number of Bins Required
+#'
+#' This function determines the number of bins along the x and y axes
+#' to obtain a specific number of non-empty bins.
+#'
+#' @param nldr_df_with_id A data frame containing 2D embeddings and unique ID column.
+#' @param x The name of the column that contains first 2D embeddings component.
+#' @param y The name of the column that contains second 2D embeddings component.
+#' @param non_empty_bins The desired number of non-empty bins.
+#' @param x_start Starting point along the x-axis for hexagonal binning.
+#' @param y_start Starting point along the y-axis for hexagonal binning.
+#' @param buffer_x The buffer size along the x-axis.
+#' @param buffer_y The buffer size along the y-axis.
+#' @param hex_size A numeric value that initializes the radius of the outer circle surrounding the hexagon.
+#'
+#' @return The number of bins along the x and y axes
+#' needed to achieve a specific number of non-empty bins.
+#'
+#' @examples
+#' find_non_empty_bins(nldr_df = s_curve_noise_umap_scaled,
+#' x = "UMAP1", y = "UMAP2", non_empty_bins = 10, x_start = NA,
+#' y_start = NA, buffer_x = NA, buffer_y = NA, hex_size = NA)
+find_non_empty_bins <- function(nldr_df_with_id, x = "UMAP1", y = "UMAP2",
+                                non_empty_bins, x_start = NA, y_start = NA,
+                                buffer_x = NA, buffer_y = NA, hex_size = NA) {
+
+  max_bins_along_axis <- ceiling(sqrt(NROW(nldr_df_with_id)))
+
+  ## Since having 1 bin along x or y-axis is not obvious therefore started from 2
+  num_bins_comb_df <- expand.grid(num_bins_x_vec = 2:max_bins_along_axis,
+                                  num_bins_y_vec = 2:max_bins_along_axis) |>
+    dplyr::mutate(num_x = pmin(num_bins_x_vec, num_bins_y_vec), num_y = pmax(num_bins_x_vec, num_bins_y_vec)) |>
+    dplyr::distinct(num_x, num_y)
+
+  num_bins_x <- num_bins_comb_df$num_x[1]
+  num_bins_y <- num_bins_comb_df$num_y[1]
+
+  ### Generate the full grid
+  hb_obj <- generate_hex_binning_info(nldr_df = nldr_df_with_id,
+                            x = x, y = y, num_bins_x = num_bins_x,
+                            num_bins_y = num_bins_y, x_start = x_start,
+                            y_start = y_start, buffer_x = buffer_x,
+                            buffer_y = buffer_y, hex_size = hex_size)
+
+
+  num_of_non_empty_bins <- hb_obj$num_non_empty_bins
+
+  i <- 1
+
+  while (num_of_non_empty_bins < non_empty_bins) {
+    i <- i + 1
+
+    num_bins_x <- num_bins_comb_df$num_x[i]
+    num_bins_y <- num_bins_comb_df$num_y[i]
+
+    ### Generate the full grid
+    ### Generate the full grid
+    hb_obj <- generate_hex_binning_info(nldr_df = nldr_df_with_id,
+                                        x = x, y = y, num_bins_x = num_bins_x,
+                                        num_bins_y = num_bins_y, x_start = x_start,
+                                        y_start = y_start, buffer_x = buffer_x,
+                                        buffer_y = buffer_y, hex_size = hex_size)
+
+
+    num_of_non_empty_bins <- hb_obj$num_non_empty_bins
+
+    if (num_of_non_empty_bins >= non_empty_bins) {
+      return(list(num_bins_x = num_bins_x, num_bins_y = num_bins_y))
+      break
+    } else {
+      next
+    }
+  }
+}

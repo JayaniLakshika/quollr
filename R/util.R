@@ -9,8 +9,6 @@
 #'
 #' @return A numeric value representing the effective number of bins along x-axis.
 #'
-#' @export
-#'
 #' @examples
 # calculate_effective_x_bins(nldr_df = s_curve_noise_umap_scaled, x = "UMAP1", hex_size = NA, buffer_x = NA)
 calculate_effective_x_bins <- function(nldr_df, x = "UMAP1", hex_size = NA, buffer_x = NA){
@@ -71,8 +69,6 @@ calculate_effective_x_bins <- function(nldr_df, x = "UMAP1", hex_size = NA, buff
 #' @param buffer_y The buffer size along the y-axis.
 #'
 #' @return A numeric value representing the effective number of bins along x-axis.
-#'
-#' @export
 #'
 #' @examples
 #' calculate_effective_y_bins(nldr_df = s_curve_noise_umap_scaled, y = "UMAP2", hex_size = NA, buffer_y = NA)
