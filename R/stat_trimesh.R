@@ -52,51 +52,37 @@ StatTrimesh <- ggplot2::ggproto(
   "StatTrimesh",
   ggplot2::Stat,
   compute_group = function(data, scales, outliers = TRUE) {
-    tr1 <- tripack::tri.mesh(data$x, data$y, duplicate = "remove")
-    tr_df <- tibble::tibble(x = tr1$x, y = tr1$y)  ## Create a dataframe with tri.mesh x and y coordinate values
-    tr_df <- tr_df |>
-      dplyr::mutate(ID = dplyr::row_number())  ## To add ID numbers, because to join with from and to points in tri$arcs
 
-    trang <- tripack::triangles(tr1)
+    # Create triangular object
+    triangular_object <- tripack::tri.mesh(data$x, data$y, duplicate = "remove")
+
+    # Create a data frame with x and y coordinate values from the triangular object
+    tr_df <- tibble::tibble(x = triangular_object$x, y = triangular_object$y,
+                            ID = 1:length(triangular_object$x))  # Add ID numbers for joining with from and to points in tr_arcs
+
+    # Extract the triangles from the triangular object
+    trang <- tripack::triangles(triangular_object)
     trang <- tibble::as_tibble(trang)
 
-    tr_arcs_df1 <- tibble::tibble(from = trang$node1, to = trang$node2)  ## Create dataframe with from and to edges
-    tr_arcs_df2 <- tibble::tibble(from = trang$node1, to = trang$node3)
-    tr_arcs_df3 <- tibble::tibble(from = trang$node2, to = trang$node3)
-    tr_arcs_df <- dplyr::bind_rows(tr_arcs_df1, tr_arcs_df2, tr_arcs_df3)  ## Create dataframe with from and to edges
+    # Create data frames with from-to edges
+    tr_arcs_df <- tibble::tibble(from = c(trang$node1, trang$node1, trang$node2),
+                                 to = c(trang$node2, trang$node3, trang$node3))
 
-    ## To obtain x and values of from to in a dataframe
-    vec <- stats::setNames(rep("", 6), c("from", "to", "x_from", "y_from",
-                                         "x_to", "y_to"))  ## Define column names
-    # Initialize an empty dataframe to store data in a specific
-    # format
-    tr_from_to_df_coord <- dplyr::bind_rows(vec)[0, ]
-    tr_from_to_df_coord <- tr_from_to_df_coord |>
-      dplyr::mutate_if(is.character, as.numeric)
+    ## To extract unique combinations
+    tr_arcs_df <- tr_arcs_df |>
+      dplyr::mutate(x = pmin(from, to), y = pmax(from, to)) |>
+      dplyr::distinct(x, y) |>
+      dplyr::rename(c("from" = "x", "to" = "y"))
 
-    for (i in 1:NROW(tr_arcs_df)) {
-      from_row <- tr_df |>
-        dplyr::filter(dplyr::row_number() == (tr_arcs_df |>
-                                                dplyr::pull(from) |>
-                                                dplyr::nth(i)))
-      to_row <- tr_df |>
-        dplyr::filter(dplyr::row_number() == (tr_arcs_df |>
-                                                dplyr::pull(to) |>
-                                                dplyr::nth(i)))
-      tr_from_to_df_coord <- tr_from_to_df_coord |>
-        tibble::add_row(from = from_row |>
-                          dplyr::pull(ID),
-                        to = to_row |>
-                          dplyr::pull(ID),
-                        x_from = from_row |>
-                          dplyr::pull(x),
-                        y_from = from_row |>
-                          dplyr::pull(y),
-                        x_to = to_row |>
-                          dplyr::pull(x),
-                        y_to = to_row |>
-                          dplyr::pull(y))  ## Add vector as an appending row to the dataframe
-    }
+    ## Extract from and to values a vectors
+    from_vec <- tr_arcs_df$from
+    to_vec <- tr_arcs_df$to
+
+    ## Map from and to coordinates
+    tr_from_to_df_coord <- dplyr::left_join(tr_arcs_df, tr_df, by = c("from" = "ID")) |>
+      dplyr::rename(c("x_from" = "x", "y_from" = "y"))
+    tr_from_to_df_coord <- dplyr::left_join(tr_from_to_df_coord, tr_df, by = c("to" = "ID"))|>
+      dplyr::rename(c("x_to" = "x", "y_to" = "y"))
 
     trimesh <- tibble::tibble(x = tr_from_to_df_coord$x_from,
                               y = tr_from_to_df_coord$y_from,

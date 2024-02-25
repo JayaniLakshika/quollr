@@ -8,9 +8,13 @@
 #' @param nldr_df_with_id A data frame containing 2D embeddings with a unique identifier.
 #' @param x The name of the column that contains first 2D embeddings component.
 #' @param y The name of the column that contains second 2D embeddings component.
-#' @param cell_area The area of each hexagonal cell.
-#' @param num_bins_x The number of bins along the x-axis for the hexagonal grid.
-#' @param shape_val The shape parameter for the hexagons.
+#' @param num_bins_x Number of bins along the x-axis.
+#' @param num_bins_y Number of bins along the y-axis.
+#' @param x_start Starting point along the x-axis for hexagonal binning.
+#' @param y_start Starting point along the y-axis for hexagonal binning.
+#' @param buffer_x The buffer size along the x-axis.
+#' @param buffer_y The buffer size along the y-axis.
+#' @param hex_size A numeric value that initializes the radius of the outer circle surrounding the hexagon.
 #' @param is_bin_centroid Logical, indicating whether to use bin centroids (default is TRUE).
 #' @param is_rm_lwd_hex Logical, indicating whether to remove low-density hexagons (default is FALSE).
 #' @param benchmark_to_rm_lwd_hex The benchmark value to remove low-density hexagons.
@@ -21,46 +25,57 @@
 #' and the data frame containing information about hexagonal bin centroids (\code{df_bin_centroids}) in 2D.
 #'
 #' @examples
-#' fit_high_d_model(training_data = s_curve_noise_training, nldr_df_with_id = s_curve_noise_umap)
+#' fit_high_d_model(training_data = s_curve_noise_training, nldr_df_with_id = s_curve_noise_umap_scaled)
 #'
 #' @export
 fit_high_d_model <- function(training_data, nldr_df_with_id, x = "UMAP1",
-                             y = "UMAP1", cell_area = 1, num_bins_x = NA, shape_val = NA,
-                             is_bin_centroid = TRUE,
-                             is_rm_lwd_hex = FALSE,
+                             y = "UMAP1", num_bins_x = NA, num_bins_y = NA,
+                             x_start = NA, y_start = NA,
+                             buffer_x = NA, buffer_y = NA,  hex_size = NA,
+                             is_bin_centroid = TRUE, is_rm_lwd_hex = FALSE,
                              benchmark_to_rm_lwd_hex = NA,
                              is_avg_high_d = TRUE, column_start_text = "x") {
 
   ## If number of bins along the x-axis is not given
   if (is.na(num_bins_x)) {
     ## compute the number of bins along the x-axis
-    num_bins_x <- calculate_effective_x_bins(.data = nldr_df_with_id, x = x,
-                                             cell_area = cell_area)
+    num_bins_x <- calculate_effective_x_bins(nldr_df = nldr_df_with_id, x = x,
+                                             hex_size = hex_size,
+                                             buffer_x = buffer_x)
 
 
   }
 
-  ## If shape parameter is not given
-  if (is.na(shape_val)) {
-    ## compute shape parameter
-    shape_val <- calculate_effective_shape_value(.data = nldr_df_with_id, x = x, y = y)
+  ## If number of bins along the y-axis is not given
+  if (is.na(num_bins_y)) {
+    ## compute the number of bins along the x-axis
+    num_bins_y <- calculate_effective_y_bins(nldr_df = nldr_df_with_id, y = y,
+                                             hex_size = hex_size,
+                                             buffer_y = buffer_y)
 
   }
+
+  ## Obtain the hexbin object
+  hb_obj <- generate_hex_binning_info(nldr_df = nldr_df_with_id,
+                            x = x, y = y, num_bins_x = num_bins_x,
+                            num_bins_y = num_bins_y, x_start = x_start,
+                            y_start = y_start, buffer_x = buffer_x,
+                            buffer_y = buffer_y, hex_size = hex_size)
+
+  all_centroids_df <- as.data.frame(do.call(cbind, hb_obj$full_grid_hex_centroids))
+  counts_df <- as.data.frame(do.call(cbind, hb_obj$hex_id_with_std_counts))
+  nldr_df_with_hex_id <- as.data.frame(do.call(cbind, hb_obj$nldr_data_with_hex_id))
 
   ## Do you need to use bin centroids or bin means?
   if (isTRUE(is_bin_centroid)) {
     ## For bin centroids
-    hexbin_data_object <- extract_hexbin_centroids(nldr_df = nldr_df_with_id,
-                                                   num_bins = num_bins_x,
-                                                   shape_val = shape_val,
-                                                   x = x, y = y)
+    df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df,
+                                                 counts_df = counts_df)
 
   } else {
     ## For bin means
-    hexbin_data_object <- extract_hexbin_mean(nldr_df = nldr_df_with_id,
-                                                   num_bins = num_bins_x,
-                                                   shape_val = shape_val,
-                                              x = x, y = y)
+    df_bin_centroids <- extract_hexbin_mean(nldr_df_with_hex_id = nldr_df_with_hex_id,
+                                            counts_df = counts_df)
 
   }
 
@@ -74,8 +89,6 @@ fit_high_d_model <- function(training_data, nldr_df_with_id, x = "UMAP1",
 
   ## Do you need to remove low density hexagons?
   if (isTRUE(is_rm_lwd_hex)) {
-    ## extract bin centroid/bin mean info
-    df_bin_centroids <- hexbin_data_object$hexdf_data
 
     ## if the benchmark value to remove low density hexagons is not provided
     if (is.na(benchmark_to_rm_lwd_hex)) {
@@ -100,28 +113,16 @@ fit_high_d_model <- function(training_data, nldr_df_with_id, x = "UMAP1",
     ## To identify low-density hexagons needed to remove by investigating neighbouring mean density
     identify_rm_bins <- find_low_density_hexagons(df_bin_centroids_all = df_bin_centroids,
                                                   num_bins_x = num_bins_x,
-                                                  df_bin_centroids_low = df_bin_centroids_low,
-                                                  col_std_counts = "std_counts")
+                                                  df_bin_centroids_low = df_bin_centroids_low)
 
     ## To remove low-density hexagons
     df_bin_centroids <- df_bin_centroids |>
       filter(!(hexID %in% identify_rm_bins))
 
-
-
-  } else {
-    ### Witout removing low density hexagons
-    ## extract bin centroid/bin mean info
-    df_bin_centroids <- hexbin_data_object$hexdf_data
-
-    }
-
-
-  nldr_df_with_hb_id <- nldr_df_with_id |>
-    dplyr::mutate(hb_id = hexbin_data_object$hb_data@cID)
+  }
 
   ## To generate a data set with high-D and 2D training data
-  df_all <- dplyr::bind_cols(training_data |> dplyr::select(-ID), nldr_df_with_hb_id)
+  df_all <- dplyr::bind_cols(training_data |> dplyr::select(-ID), nldr_df_with_hex_id)
 
   ## Do you need to use bin centroids or bin means?
   if (isTRUE(is_avg_high_d)) {
@@ -134,8 +135,8 @@ fit_high_d_model <- function(training_data, nldr_df_with_id, x = "UMAP1",
 
     ## weighted averaged high-D data
     df_bin <- weighted_highD_data(training_data = training_data,
-                        nldr_df_with_id = nldr_df_with_id,
-                        hb_object = hexbin_data_object$hb_data, column_start_text = column_start_text)
+                        nldr_df_with_id = nldr_df_with_hex_id,
+                        column_start_text = column_start_text)
 
   }
 
