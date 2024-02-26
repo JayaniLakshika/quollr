@@ -4,12 +4,10 @@
 \alias{compute_weights}
 \title{Compute Weights for Hexagonal Binning}
 \usage{
-compute_weights(nldr_df, hb_object)
+compute_weights(nldr_df_with_hex_id)
 }
 \arguments{
-\item{nldr_df}{A data frame containing 2D embeddings without a unique identifier column (ID).}
-
-\item{hb_object}{A hexbin object containing the hexagonal binning information.}
+\item{nldr_df_with_hex_id}{A data frame with 2D embeddings and hexagonal bin IDs.}
 }
 \value{
 A data frame with weights calculated for each hexagonal bin.
@@ -18,12 +16,15 @@ A data frame with weights calculated for each hexagonal bin.
 This function computes weights for hexagonal binning based on the average values of each bin and the distances from these averages.
 }
 \examples{
-num_bins_x <- 4
-shape_value <- 1.833091
-hexbin_data_object <- extract_hexbin_centroids(nldr_df = s_curve_noise_umap,
-num_bins = num_bins_x, shape_val = shape_value)
-hexdf_data <- hexbin_data_object$hexdf_data
-hb_obj <- hexbin_data_object$hb_data
-compute_weights(nldr_df = s_curve_noise_umap |> dplyr::select(-ID), hb_object = hb_obj)
+num_bins_x <- calculate_effective_x_bins(nldr_df = s_curve_noise_umap_scaled,
+x = "UMAP1", hex_size = NA, buffer_x = NA)
+num_bins_y <- calculate_effective_y_bins(nldr_df = s_curve_noise_umap_scaled,
+ y = "UMAP2", hex_size = NA, buffer_y = NA)
+hex_bin_obj <- generate_hex_binning_info(nldr_df = s_curve_noise_umap_scaled,
+x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
+num_bins_y = num_bins_y, x_start = NA, y_start = NA, buffer_x = NA,
+buffer_y = NA, hex_size = NA)
+UMAP_data_with_hb_id <- as.data.frame(do.call(cbind, hex_bin_obj$nldr_data_with_hex_id))
+compute_weights(nldr_df_with_hex_id = UMAP_data_with_hb_id)
 
 }

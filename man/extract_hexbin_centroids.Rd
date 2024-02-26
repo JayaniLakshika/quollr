@@ -2,43 +2,40 @@
 % Please edit documentation in R/2D.R
 \name{extract_hexbin_centroids}
 \alias{extract_hexbin_centroids}
-\title{Extract hexagonal bin centroids and related information from non-linear dimensionality reduction data.}
+\title{Extract hexagonal bin centroids coordinates and the corresponding standardize counts.}
 \usage{
-extract_hexbin_centroids(
-  nldr_df,
-  num_bins,
-  shape_val = 1,
-  x = "UMAP1",
-  y = "UMAP2"
-)
+extract_hexbin_centroids(centroids_df, counts_df)
 }
 \arguments{
-\item{nldr_df}{A data frame containing 2D embeddings.}
+\item{centroids_df}{A data frame contains all hexagonal bin centroid coordinates with hexagon IDs.}
 
-\item{num_bins}{Number of bins along the x-axis for hexagon binning.}
-
-\item{shape_val}{The value of the shape parameter for hexagon binning.}
-
-\item{x}{The name of the column that contains first 2D embeddings component.}
-
-\item{y}{The name of the column that contains second 2D embeddings component.}
+\item{counts_df}{A data frame contains hexagon IDs with the standardize number of points within each hexagon.}
 }
 \value{
-A list containing the hexagonal bin centroids data frame and the hexbin object.
+A data frame contains hexagon ID, centroid coordinates, and standardize counts.
 }
 \description{
-Extract hexagonal bin centroids and related information from non-linear dimensionality reduction data.
+Extract hexagonal bin centroids coordinates and the corresponding standardize counts.
 }
 \examples{
-# Example usage of extract_hexbin_centroids function
-num_bins_x <- 4
-shape_value <- 1.833091
-result <- extract_hexbin_centroids(nldr_df = s_curve_noise_umap,
-num_bins = num_bins_x, shape_val = shape_value, x = "UMAP1", y = "UMAP2")
-hexdf_data <- result$hexdf_data
-hb_data <- result$hb_data
-print(hexdf_data)
-print(str(hb_data))
-
+num_bins_x <- calculate_effective_x_bins(nldr_df = s_curve_noise_umap_scaled,
+                                        x = "UMAP1", hex_size = NA, buffer_x = NA)
+num_bins_y <- calculate_effective_y_bins(nldr_df = s_curve_noise_umap_scaled,
+                                        y = "UMAP2", hex_size = NA, buffer_y = NA)
+centroid_list <- generate_full_grid_centroids(nldr_df = s_curve_noise_umap_scaled,
+                                             x = "UMAP1", y = "UMAP2",
+                                             num_bins_x = num_bins_x,
+                                             num_bins_y = num_bins_y,
+                                             x_start = NA, y_start = NA,
+                                             buffer_x = NA,
+                                             buffer_y = NA, hex_size = NA)
+all_centroids_df <- as.data.frame(do.call(cbind, centroid_list))
+s_curve_noise_umap_scaled_rm_id <- s_curve_noise_umap_scaled |> dplyr::select(-ID)
+nldr_with_hb_id_list <- assign_data(nldr_df = s_curve_noise_umap_scaled_rm_id,
+centroid_df = all_centroids_df)
+umap_with_hb_id <- as.data.frame(do.call(cbind, nldr_with_hb_id_list))
+std_counts_list <- compute_std_counts(nldr_df_with_hex_id = umap_with_hb_id)
+counts_df <- as.data.frame(do.call(cbind, std_counts_list))
+extract_hexbin_centroids(centroids_df = all_centroids_df, counts_df = counts_df)
 
 }

@@ -18,12 +18,26 @@ This function generates edge information from a given triangular object,
 including the coordinates of the vertices and the from-to relationships between the vertices.
 }
 \examples{
-num_bins_x <- 4
-shape_value <- 1.833091
-hexbin_data_object <- extract_hexbin_centroids(nldr_df = s_curve_noise_umap,
-num_bins = num_bins_x, shape_val = shape_value)
-df_bin_centroids <- hexbin_data_object$hexdf_data
-tr1_object <- triangulate_bin_centroids(df_bin_centroids, "x", "y")
+num_bins_x <- calculate_effective_x_bins(nldr_df = s_curve_noise_umap_scaled,
+                                        x = "UMAP1", hex_size = NA, buffer_x = NA)
+num_bins_y <- calculate_effective_y_bins(nldr_df = s_curve_noise_umap_scaled,
+                                        y = "UMAP2", hex_size = NA, buffer_y = NA)
+centroid_list <- generate_full_grid_centroids(nldr_df = s_curve_noise_umap_scaled,
+                                             x = "UMAP1", y = "UMAP2",
+                                             num_bins_x = num_bins_x,
+                                             num_bins_y = num_bins_y,
+                                             x_start = NA, y_start = NA,
+                                             buffer_x = NA,
+                                             buffer_y = NA, hex_size = NA)
+all_centroids_df <- as.data.frame(do.call(cbind, centroid_list))
+s_curve_noise_umap_scaled_rm_id <- s_curve_noise_umap_scaled |> dplyr::select(-ID)
+nldr_with_hb_id_list <- assign_data(nldr_df = s_curve_noise_umap_scaled_rm_id,
+centroid_df = all_centroids_df)
+umap_with_hb_id <- as.data.frame(do.call(cbind, nldr_with_hb_id_list))
+std_counts_list <- compute_std_counts(nldr_df_with_hex_id = umap_with_hb_id)
+counts_df <- as.data.frame(do.call(cbind, std_counts_list))
+df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df, counts_df = counts_df)
+tr1_object <- triangulate_bin_centroids(hex_bin_df = df_bin_centroids, x = "c_x", y = "c_y")
 generate_edge_info(triangular_object = tr1_object)
 
 }

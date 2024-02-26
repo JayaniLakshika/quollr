@@ -5,7 +5,7 @@
 \alias{s_curve_noise_training}
 \title{S-curve dataset with noise dimensions for training}
 \format{
-A data frame with 225 rows and 8 columns:
+A data frame with 75 rows and 8 columns:
 \describe{
   \item{ID}{Identification number}
   \item{x1, x2, x3, x4, x5, x6, x7}{High-dimensional coordinates}

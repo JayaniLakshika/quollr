@@ -1,192 +1,353 @@
+test_that("generate_full_grid_centroids() works", {
+
+  num_bins_x <- calculate_effective_x_bins(nldr_df = s_curve_noise_umap_scaled,
+  x = "UMAP1", hex_size = NA, buffer_x = NA)
+  num_bins_y <- calculate_effective_y_bins(nldr_df = s_curve_noise_umap_scaled,
+   y = "UMAP2", hex_size = NA, buffer_y = NA)
+  centroid_list <- generate_full_grid_centroids(nldr_df = s_curve_noise_umap_scaled,
+  x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
+  num_bins_y = num_bins_y, x_start = NA, y_start = NA, buffer_x = NA,
+  buffer_y = NA, hex_size = NA)
+  testthat::expect_snapshot(centroid_list)
+
+})
+
+test_that("gen_hex_coordinates() works", {
+
+  num_bins_x <- calculate_effective_x_bins(nldr_df = s_curve_noise_umap_scaled,
+                                           x = "UMAP1", hex_size = NA, buffer_x = NA)
+  num_bins_y <- calculate_effective_y_bins(nldr_df = s_curve_noise_umap_scaled,
+                                           y = "UMAP2", hex_size = NA, buffer_y = NA)
+  centroid_list <- generate_full_grid_centroids(nldr_df = s_curve_noise_umap_scaled,
+                                                x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
+                                                num_bins_y = num_bins_y, x_start = NA, y_start = NA, buffer_x = NA,
+                                                buffer_y = NA, hex_size = NA)
+  all_centroids_df <- as.data.frame(do.call(cbind, centroid_list))
+  all_hex_coordinates_list <- gen_hex_coordinates(all_centroids_df, hex_size = NA)
+  testthat::expect_snapshot(all_hex_coordinates_list)
+
+})
+
+test_that("assign_data() works", {
+
+  num_bins_x <- calculate_effective_x_bins(nldr_df = s_curve_noise_umap_scaled,
+                                           x = "UMAP1", hex_size = NA, buffer_x = NA)
+  num_bins_y <- calculate_effective_y_bins(nldr_df = s_curve_noise_umap_scaled,
+                                           y = "UMAP2", hex_size = NA, buffer_y = NA)
+  centroid_list <- generate_full_grid_centroids(nldr_df = s_curve_noise_umap_scaled,
+                                                x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
+                                                num_bins_y = num_bins_y, x_start = NA, y_start = NA, buffer_x = NA,
+                                                buffer_y = NA, hex_size = NA)
+  all_centroids_df <- as.data.frame(do.call(cbind, centroid_list))
+  s_curve_noise_umap_scaled_rm_id <- s_curve_noise_umap_scaled |> dplyr::select(-ID)
+  nldr_with_hb_id_list <- assign_data(nldr_df = s_curve_noise_umap_scaled_rm_id, centroid_df = all_centroids_df)
+  testthat::expect_snapshot(nldr_with_hb_id_list)
+
+})
+
+test_that("compute_std_counts() works", {
+
+  num_bins_x <- calculate_effective_x_bins(nldr_df = s_curve_noise_umap_scaled,
+                                           x = "UMAP1", hex_size = NA, buffer_x = NA)
+  num_bins_y <- calculate_effective_y_bins(nldr_df = s_curve_noise_umap_scaled,
+                                           y = "UMAP2", hex_size = NA, buffer_y = NA)
+  centroid_list <- generate_full_grid_centroids(nldr_df = s_curve_noise_umap_scaled,
+                                                x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
+                                                num_bins_y = num_bins_y, x_start = NA, y_start = NA, buffer_x = NA,
+                                                buffer_y = NA, hex_size = NA)
+  all_centroids_df <- as.data.frame(do.call(cbind, centroid_list))
+  s_curve_noise_umap_scaled_rm_id <- s_curve_noise_umap_scaled |> dplyr::select(-ID)
+  nldr_with_hb_id_list <- assign_data(nldr_df = s_curve_noise_umap_scaled_rm_id, centroid_df = all_centroids_df)
+  umap_with_hb_id <- as.data.frame(do.call(cbind, nldr_with_hb_id_list))
+  std_counst_list <- compute_std_counts(nldr_df_with_hex_id = umap_with_hb_id)
+  testthat::expect_snapshot(std_counst_list)
+
+})
+
+test_that("find_pts_in_hexbins() works", {
+
+  num_bins_x <- calculate_effective_x_bins(nldr_df = s_curve_noise_umap_scaled,
+                                          x = "UMAP1", hex_size = NA, buffer_x = NA)
+  num_bins_y <- calculate_effective_y_bins(nldr_df = s_curve_noise_umap_scaled,
+                                          y = "UMAP2", hex_size = NA, buffer_y = NA)
+  centroid_list <- generate_full_grid_centroids(nldr_df = s_curve_noise_umap_scaled,
+                                               x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
+                                               num_bins_y = num_bins_y, x_start = NA, y_start = NA, buffer_x = NA,
+                                               buffer_y = NA, hex_size = NA)
+  all_centroids_df <- as.data.frame(do.call(cbind, centroid_list))
+  s_curve_noise_umap_scaled_rm_id <- s_curve_noise_umap_scaled |> dplyr::select(-ID)
+  nldr_with_hb_id_list <- assign_data(nldr_df = s_curve_noise_umap_scaled_rm_id, centroid_df = all_centroids_df)
+  umap_with_hb_id <- as.data.frame(do.call(cbind, nldr_with_hb_id_list))
+  umap_with_hb_id <- umap_with_hb_id |> dplyr::mutate(ID = s_curve_noise_umap_scaled$ID)
+
+  testthat::expect_snapshot(find_pts_in_hexbins(nldr_data_with_hb_id = umap_with_hb_id))
+
+})
+
+test_that("find_non_empty_bins() works", {
+
+  testthat::expect_snapshot(find_non_empty_bins(nldr_df = s_curve_noise_umap_scaled,
+                                      x = "UMAP1", y = "UMAP2", non_empty_bins = 10,
+                                      x_start = NA, y_start = NA, buffer_x = NA,
+                                      buffer_y = NA, hex_size = NA))
+
+  testthat::expect_error(find_non_empty_bins(nldr_df = s_curve_noise_umap_scaled,
+                                   x = "UMAP1", y = "UMAP2", non_empty_bins = NA,
+                                   x_start = NA, y_start = NA, buffer_x = NA,
+                                   buffer_y = NA, hex_size = NA))
+
+})
+
+test_that("generate_hex_binning_info() works", {
+
+  num_bins_x <- calculate_effective_x_bins(nldr_df = s_curve_noise_umap_scaled,
+                                           x = "UMAP1", hex_size = NA, buffer_x = NA)
+  num_bins_y <- calculate_effective_y_bins(nldr_df = s_curve_noise_umap_scaled,
+                                           y = "UMAP2", hex_size = NA, buffer_y = NA)
+
+  testthat::expect_snapshot(generate_hex_binning_info(nldr_df = s_curve_noise_umap_scaled,
+                                            x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
+                                            num_bins_y = num_bins_y, x_start = NA,
+                                            y_start = NA, buffer_x = NA,
+                                            buffer_y = NA, hex_size = NA))
+
+})
+
+
 test_that("extract_hexbin_centroids() works", {
 
-  num_bins_x <- 4
-  shape_value <- 1.833091
-  result <- extract_hexbin_centroids(nldr_df = s_curve_noise_umap,
-  num_bins = num_bins_x, shape_val = shape_value, x = "UMAP1", y = "UMAP2")
-  hexdf_data <- result$hexdf_data
-  hb_data <- result$hb_data
-  expect_snapshot(hexdf_data)
-  expect_snapshot(hb_data)
+  num_bins_x <- calculate_effective_x_bins(nldr_df = s_curve_noise_umap_scaled,
+                                           x = "UMAP1", hex_size = NA, buffer_x = NA)
+  num_bins_y <- calculate_effective_y_bins(nldr_df = s_curve_noise_umap_scaled,
+                                           y = "UMAP2", hex_size = NA, buffer_y = NA)
+
+  ## Obtain the hexbin object
+  hb_obj <- generate_hex_binning_info(nldr_df = s_curve_noise_umap_scaled,
+                                      x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
+                                      num_bins_y = num_bins_y, x_start = NA,
+                                      y_start = NA, buffer_x = NA,
+                                      buffer_y = NA, hex_size = NA)
+
+  all_centroids_df <- as.data.frame(do.call(cbind, hb_obj$full_grid_hex_centroids))
+  counts_df <- as.data.frame(do.call(cbind, hb_obj$hex_id_with_std_counts))
+
+  testthat::expect_snapshot(extract_hexbin_centroids(centroids_df = all_centroids_df,
+                                                     counts_df = counts_df))
 
 })
 
 test_that("extract_hexbin_mean() works", {
 
-  num_bins_x <- 4
-  shape_value <- 1.833091
-  result <- extract_hexbin_mean(nldr_df = s_curve_noise_umap,
-  num_bins = num_bins_x, shape_val = shape_value, x = "UMAP1", y = "UMAP2")
-  hexdf_data <- result$hexdf_data
-  hb_data <- result$hb_data
-  expect_snapshot(hexdf_data)
-  expect_snapshot(hb_data)
+  num_bins_x <- calculate_effective_x_bins(nldr_df = s_curve_noise_umap_scaled,
+                                           x = "UMAP1", hex_size = NA, buffer_x = NA)
+  num_bins_y <- calculate_effective_y_bins(nldr_df = s_curve_noise_umap_scaled,
+                                           y = "UMAP2", hex_size = NA, buffer_y = NA)
+
+  ## Obtain the hexbin object
+  hb_obj <- generate_hex_binning_info(nldr_df = s_curve_noise_umap_scaled,
+                                      x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
+                                      num_bins_y = num_bins_y, x_start = NA,
+                                      y_start = NA, buffer_x = NA,
+                                      buffer_y = NA, hex_size = NA)
+
+  umap_with_hb_id <- as.data.frame(do.call(cbind, hb_obj$nldr_data_with_hex_id))
+  counts_df <- as.data.frame(do.call(cbind, hb_obj$hex_id_with_std_counts))
+
+  testthat::expect_snapshot(extract_hexbin_mean(nldr_df_with_hex_id = umap_with_hb_id,
+                                                counts_df = counts_df))
 
 })
 
 test_that("triangulate_bin_centroids() works", {
 
-  num_bins_x <- 4
-  shape_value <- 1.833091
-  hexbin_data_object <- extract_hexbin_centroids(nldr_df = s_curve_noise_umap,
-  num_bins = num_bins_x, shape_val = shape_value)
-  df_bin_centroids <- hexbin_data_object$hexdf_data
-  expect_snapshot(suppressWarnings(triangulate_bin_centroids(df_bin_centroids, "x", "y")))
+  num_bins_x <- calculate_effective_x_bins(nldr_df = s_curve_noise_umap_scaled,
+                                           x = "UMAP1", hex_size = NA, buffer_x = NA)
+  num_bins_y <- calculate_effective_y_bins(nldr_df = s_curve_noise_umap_scaled,
+                                           y = "UMAP2", hex_size = NA, buffer_y = NA)
+
+  ## Obtain the hexbin object
+  hb_obj <- generate_hex_binning_info(nldr_df = s_curve_noise_umap_scaled,
+                                      x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
+                                      num_bins_y = num_bins_y, x_start = NA,
+                                      y_start = NA, buffer_x = NA,
+                                      buffer_y = NA, hex_size = NA)
+
+  all_centroids_df <- as.data.frame(do.call(cbind, hb_obj$full_grid_hex_centroids))
+  counts_df <- as.data.frame(do.call(cbind, hb_obj$hex_id_with_std_counts))
+  df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df,
+                                               counts_df = counts_df)
+  testthat::expect_snapshot(suppressWarnings(triangulate_bin_centroids(hex_bin_df = df_bin_centroids,
+                                                             x = "c_x", y = "c_y")))
+
+  umap_with_hb_id <- as.data.frame(do.call(cbind, hb_obj$nldr_data_with_hex_id))
+  df_bin_mean <- extract_hexbin_mean(nldr_df_with_hex_id = umap_with_hb_id,  counts_df = counts_df)
+  testthat::expect_snapshot(suppressWarnings(triangulate_bin_centroids(hex_bin_df = df_bin_mean,
+                                                             x = "c_x", y = "c_y")))
 
 })
 
 test_that("generate_edge_info() works", {
 
-  num_bins_x <- 4
-  shape_value <- 1.833091
-  hexbin_data_object <- extract_hexbin_centroids(nldr_df = s_curve_noise_umap,
-  num_bins = num_bins_x, shape_val = shape_value)
-  df_bin_centroids <- hexbin_data_object$hexdf_data
-  suppressWarnings(tr1_object <- triangulate_bin_centroids(df_bin_centroids, "x", "y"))
+  num_bins_x <- calculate_effective_x_bins(nldr_df = s_curve_noise_umap_scaled,
+                                           x = "UMAP1", hex_size = NA, buffer_x = NA)
+  num_bins_y <- calculate_effective_y_bins(nldr_df = s_curve_noise_umap_scaled,
+                                           y = "UMAP2", hex_size = NA, buffer_y = NA)
 
-  expect_snapshot(generate_edge_info(triangular_object = tr1_object))
+  ## Obtain the hexbin object
+  hb_obj <- generate_hex_binning_info(nldr_df = s_curve_noise_umap_scaled,
+                                      x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
+                                      num_bins_y = num_bins_y, x_start = NA,
+                                      y_start = NA, buffer_x = NA,
+                                      buffer_y = NA, hex_size = NA)
+
+  all_centroids_df <- as.data.frame(do.call(cbind, hb_obj$full_grid_hex_centroids))
+  counts_df <- as.data.frame(do.call(cbind, hb_obj$hex_id_with_std_counts))
+  df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df,
+                                               counts_df = counts_df)
+  suppressWarnings(tr1_object <- triangulate_bin_centroids(hex_bin_df = df_bin_centroids, x = "c_x", y = "c_y"))
+  testthat::expect_snapshot(generate_edge_info(triangular_object = tr1_object))
+
+  umap_with_hb_id <- as.data.frame(do.call(cbind, hb_obj$nldr_data_with_hex_id))
+  df_bin_mean <- extract_hexbin_mean(nldr_df_with_hex_id = umap_with_hb_id,  counts_df = counts_df)
+
+  suppressWarnings(tr1_object_n <- triangulate_bin_centroids(hex_bin_df = df_bin_mean, x = "c_x", y = "c_y"))
+  testthat::expect_snapshot(generate_edge_info(triangular_object = tr1_object_n))
 })
 
 test_that("cal_2d_dist() works", {
 
-  num_bins_x <- 4
-  shape_value <- 1.833091
-  hexbin_data_object <- extract_hexbin_centroids(nldr_df = s_curve_noise_umap,
-  num_bins = num_bins_x, shape_val = shape_value)
-  df_bin_centroids <- hexbin_data_object$hexdf_data
-  suppressWarnings(tr1_object <- triangulate_bin_centroids(df_bin_centroids, "x", "y"))
+  num_bins_x <- calculate_effective_x_bins(nldr_df = s_curve_noise_umap_scaled,
+                                           x = "UMAP1", hex_size = NA, buffer_x = NA)
+  num_bins_y <- calculate_effective_y_bins(nldr_df = s_curve_noise_umap_scaled,
+                                           y = "UMAP2", hex_size = NA, buffer_y = NA)
+
+  ## Obtain the hexbin object
+  hb_obj <- generate_hex_binning_info(nldr_df = s_curve_noise_umap_scaled,
+                                      x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
+                                      num_bins_y = num_bins_y, x_start = NA,
+                                      y_start = NA, buffer_x = NA,
+                                      buffer_y = NA, hex_size = NA)
+
+  all_centroids_df <- as.data.frame(do.call(cbind, hb_obj$full_grid_hex_centroids))
+  counts_df <- as.data.frame(do.call(cbind, hb_obj$hex_id_with_std_counts))
+  df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df,
+                                               counts_df = counts_df)
+  suppressWarnings(tr1_object <- triangulate_bin_centroids(hex_bin_df = df_bin_centroids, x = "c_x", y = "c_y"))
   tr_from_to_df <- generate_edge_info(triangular_object = tr1_object)
 
-  expect_snapshot(cal_2d_dist(tr_from_to_df, start_x = "x_from", start_y = "y_from",
-                              end_x = "x_to", end_y = "y_to", select_col_vec = c("from", "to", "distance")))
+  testthat::expect_snapshot(cal_2d_dist(tr_from_to_df_coord = tr_from_to_df, start_x = "x_from",
+                              start_y = "y_from", end_x = "x_to", end_y = "y_to",
+                              select_col_vec = c("from", "to", "distance")))
+
+  umap_with_hb_id <- as.data.frame(do.call(cbind, hb_obj$nldr_data_with_hex_id))
+  df_bin_mean <- extract_hexbin_mean(nldr_df_with_hex_id = umap_with_hb_id,  counts_df = counts_df)
+
+  suppressWarnings(tr1_object_n <- triangulate_bin_centroids(hex_bin_df = df_bin_mean, x = "c_x", y = "c_y"))
+  tr_from_to_df_n <- generate_edge_info(triangular_object = tr1_object_n)
+
+  testthat::expect_snapshot(cal_2d_dist(tr_from_to_df_coord = tr_from_to_df_n, start_x = "x_from",
+                                        start_y = "y_from", end_x = "x_to", end_y = "y_to",
+                                        select_col_vec = c("from", "to", "distance")))
+
 })
 
 test_that("colour_long_edges() works", {
 
-  num_bins_x <- 4
-  shape_value <- 1.833091
-  hexbin_data_object <- extract_hexbin_centroids(nldr_df = s_curve_noise_umap,
-  num_bins = num_bins_x, shape_val = shape_value)
-  df_bin_centroids <- hexbin_data_object$hexdf_data
-  tr1_object <- triangulate_bin_centroids(df_bin_centroids, "x", "y")
-  tr_from_to_df <- generate_edge_info(triangular_object = tr1_object)
-  distance_df <- cal_2d_dist(tr_from_to_df)
+  num_bins_x <- calculate_effective_x_bins(nldr_df = s_curve_noise_umap_scaled,
+                                           x = "UMAP1", hex_size = NA, buffer_x = NA)
+  num_bins_y <- calculate_effective_y_bins(nldr_df = s_curve_noise_umap_scaled,
+                                           y = "UMAP2", hex_size = NA, buffer_y = NA)
 
-  vdiffr::expect_doppelganger("color_long_edges basic", colour_long_edges(.data = distance_df,
-                                                                          benchmark_value = 2.5,
-                                                                          triangular_object = tr1_object,
-                                                                          distance_col = "distance"))
+  ## Obtain the hexbin object
+  hb_obj <- generate_hex_binning_info(nldr_df = s_curve_noise_umap_scaled,
+                                      x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
+                                      num_bins_y = num_bins_y, x_start = NA,
+                                      y_start = NA, buffer_x = NA,
+                                      buffer_y = NA, hex_size = NA)
+
+  all_centroids_df <- as.data.frame(do.call(cbind, hb_obj$full_grid_hex_centroids))
+  counts_df <- as.data.frame(do.call(cbind, hb_obj$hex_id_with_std_counts))
+  df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df,
+                                               counts_df = counts_df)
+  suppressWarnings(tr1_object <- triangulate_bin_centroids(hex_bin_df = df_bin_centroids,
+                                                           x = "c_x", y = "c_y"))
+  tr_from_to_df <- generate_edge_info(triangular_object = tr1_object)
+
+  distance_df <- cal_2d_dist(tr_from_to_df_coord = tr_from_to_df, start_x = "x_from",
+                             start_y = "y_from", end_x = "x_to", end_y = "y_to",
+                             select_col_vec = c("from", "to", "distance"))
+
+  vdiffr::expect_doppelganger("color-long-edges-basic with bin centroids",
+                              colour_long_edges(distance_edges = distance_df,
+                                                benchmark_value = 0.75,
+                                                tr_from_to_df_coord = tr_from_to_df,
+                                                distance_col = "distance"))
+
+  umap_with_hb_id <- as.data.frame(do.call(cbind, hb_obj$nldr_data_with_hex_id))
+  df_bin_mean <- extract_hexbin_mean(nldr_df_with_hex_id = umap_with_hb_id,  counts_df = counts_df)
+
+  suppressWarnings(tr1_object_n <- triangulate_bin_centroids(hex_bin_df = df_bin_mean, x = "c_x", y = "c_y"))
+  tr_from_to_df_n <- generate_edge_info(triangular_object = tr1_object_n)
+
+  distance_df_n <- cal_2d_dist(tr_from_to_df_coord = tr_from_to_df_n, start_x = "x_from",
+                             start_y = "y_from", end_x = "x_to", end_y = "y_to",
+                             select_col_vec = c("from", "to", "distance"))
+
+  vdiffr::expect_doppelganger("color_long_edges basic with bin means",
+                              colour_long_edges(distance_edges = distance_df_n,
+                                                benchmark_value = 0.75,
+                                                tr_from_to_df_coord = tr_from_to_df_n,
+                                                distance_col = "distance"))
 
 })
 
 test_that("remove_long_edges() works", {
 
-  num_bins_x <- 4
-  shape_value <- 1.833091
-  hexbin_data_object <- extract_hexbin_centroids(nldr_df = s_curve_noise_umap,
-                                                 num_bins = num_bins_x, shape_val = shape_value)
-  df_bin_centroids <- hexbin_data_object$hexdf_data
-  tr1_object <- triangulate_bin_centroids(df_bin_centroids, "x", "y")
+  num_bins_x <- calculate_effective_x_bins(nldr_df = s_curve_noise_umap_scaled,
+                                           x = "UMAP1", hex_size = NA, buffer_x = NA)
+  num_bins_y <- calculate_effective_y_bins(nldr_df = s_curve_noise_umap_scaled,
+                                           y = "UMAP2", hex_size = NA, buffer_y = NA)
+
+  ## Obtain the hexbin object
+  hb_obj <- generate_hex_binning_info(nldr_df = s_curve_noise_umap_scaled,
+                                      x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
+                                      num_bins_y = num_bins_y, x_start = NA,
+                                      y_start = NA, buffer_x = NA,
+                                      buffer_y = NA, hex_size = NA)
+
+  all_centroids_df <- as.data.frame(do.call(cbind, hb_obj$full_grid_hex_centroids))
+  counts_df <- as.data.frame(do.call(cbind, hb_obj$hex_id_with_std_counts))
+  df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df,
+                                               counts_df = counts_df)
+  suppressWarnings(tr1_object <- triangulate_bin_centroids(hex_bin_df = df_bin_centroids,
+                                                           x = "c_x", y = "c_y"))
   tr_from_to_df <- generate_edge_info(triangular_object = tr1_object)
-  distance_df <- cal_2d_dist(tr_from_to_df)
 
-  vdiffr::expect_doppelganger("remove_long_edges basic", remove_long_edges(.data = distance_df,
-                                                                           benchmark_value = 2.5,
-                                                                           triangular_object = tr1_object,
-                                                                           distance_col = "distance"))
+  distance_df <- cal_2d_dist(tr_from_to_df_coord = tr_from_to_df, start_x = "x_from",
+                             start_y = "y_from", end_x = "x_to", end_y = "y_to",
+                             select_col_vec = c("from", "to", "distance"))
 
-})
 
-test_that("generate_full_grid_centroids() works", {
+  vdiffr::expect_doppelganger("remove_long_edges basic with bin centroids",
+                              remove_long_edges(distance_edges = distance_df,
+                                                benchmark_value = 0.75,
+                                                tr_from_to_df_coord = tr_from_to_df,
+                                                distance_col = "distance"))
 
-  num_bins_x <- 4
-  shape_value <- 1.833091
-  hexbin_data_object <- extract_hexbin_centroids(nldr_df = s_curve_noise_umap,
-  num_bins = num_bins_x, shape_val = shape_value)
-  df_bin_centroids <- hexbin_data_object$hexdf_data
+  umap_with_hb_id <- as.data.frame(do.call(cbind, hb_obj$nldr_data_with_hex_id))
+  df_bin_mean <- extract_hexbin_mean(nldr_df_with_hex_id = umap_with_hb_id,  counts_df = counts_df)
 
-  expect_snapshot(generate_full_grid_centroids(df_bin_centroids))
+  suppressWarnings(tr1_object_n <- triangulate_bin_centroids(hex_bin_df = df_bin_mean, x = "c_x", y = "c_y"))
+  tr_from_to_df_n <- generate_edge_info(triangular_object = tr1_object_n)
 
-})
+  distance_df_n <- cal_2d_dist(tr_from_to_df_coord = tr_from_to_df_n, start_x = "x_from",
+                               start_y = "y_from", end_x = "x_to", end_y = "y_to",
+                               select_col_vec = c("from", "to", "distance"))
 
-test_that("full_hex_grid() works", {
-
-  num_bins_x <- 4
-  shape_value <- 1.833091
-  hexbin_data_object <- extract_hexbin_centroids(nldr_df = s_curve_noise_umap,
-  num_bins = num_bins_x, shape_val = shape_value)
-  df_bin_centroids <- hexbin_data_object$hexdf_data
-  full_centroid_df <- generate_full_grid_centroids(df_bin_centroids)
-
-  expect_snapshot(full_hex_grid(full_centroid_df))
-
-})
-
-test_that("map_hexbin_id() works", {
-
-  num_bins_x <- 4
-  shape_value <- 1.833091
-  hexbin_data_object <- extract_hexbin_centroids(nldr_df = s_curve_noise_umap,
-  num_bins = num_bins_x, shape_val = shape_value)
-  df_bin_centroids <- hexbin_data_object$hexdf_data
-  full_centroid_df <- generate_full_grid_centroids(df_bin_centroids)
-
-  expect_snapshot(map_hexbin_id(full_centroid_df, df_bin_centroids))
-
-})
-
-test_that("map_polygon_id() works", {
-
-  num_bins_x <- 4
-  shape_value <- 1.833091
-  hexbin_data_object <- extract_hexbin_centroids(nldr_df = s_curve_noise_umap,
-  num_bins = num_bins_x, shape_val = shape_value)
-  df_bin_centroids <- hexbin_data_object$hexdf_data
-  full_centroid_df <- generate_full_grid_centroids(df_bin_centroids)
-  hex_grid <- full_hex_grid(full_centroid_df)
-  full_grid_with_hexbin_id <- map_hexbin_id(full_centroid_df, df_bin_centroids)
-
-  expect_snapshot(map_polygon_id(full_grid_with_hexbin_id, hex_grid))
-
-})
-
-test_that("generate_full_grid_info() works", {
-
-  num_bins_x <- 4
-  shape_value <- 1.833091
-  hexbin_data_object <- extract_hexbin_centroids(nldr_df = s_curve_noise_umap,
-  num_bins = num_bins_x, shape_val = shape_value)
-  df_bin_centroids <- hexbin_data_object$hexdf_data
-
-  expect_snapshot(generate_full_grid_info(df_bin_centroids))
-
-})
-
-test_that("find_pts_in_hexbins() works", {
-
-  num_bins_x <- 4
-  shape_value <- 1.833091
-  hexbin_data_object <- extract_hexbin_centroids(nldr_df = s_curve_noise_umap,
-  num_bins = num_bins_x, shape_val = shape_value)
-  df_bin_centroids <- hexbin_data_object$hexdf_data
-  full_centroid_df <- generate_full_grid_centroids(df_bin_centroids)
-  hex_grid <- full_hex_grid(full_centroid_df)
-  full_grid_with_hexbin_id <- map_hexbin_id(full_centroid_df, df_bin_centroids)
-  UMAP_data_with_hb_id <- s_curve_noise_umap |> dplyr::mutate(hb_id = hexbin_data_object$hb_data@cID)
-
-  expect_snapshot(find_pts_in_hexbins(full_grid_with_hexbin_id, nldr_data_with_hb_id = UMAP_data_with_hb_id))
-
-})
-
-test_that("find_pts_in_hexbins() works", {
-
-  shape_value <- 1.833091
-  non_empty_bins <- 3
-
-  expect_snapshot(find_non_empty_bins(nldr_df = s_curve_noise_umap, x = "UMAP1", y = "UMAP2",
-                                      shape_val = shape_value, non_empty_bins))
-
-  expect_error(find_non_empty_bins(nldr_df = s_curve_noise_umap, x = "UMAP1", y = "UMAP2",
-                                      shape_val = shape_value, non_empty_bins = 20))
+  vdiffr::expect_doppelganger("remove_long_edges basic with bin means",
+                              remove_long_edges(distance_edges = distance_df_n,
+                                                benchmark_value = 0.75,
+                                                tr_from_to_df_coord = tr_from_to_df_n,
+                                                distance_col = "distance"))
 
 })

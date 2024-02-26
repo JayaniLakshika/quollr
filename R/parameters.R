@@ -29,9 +29,12 @@
 #' df_bin <- avg_highD_data(df_all, column_start_text = "x")
 #' tr1_object <- triangulate_bin_centroids(hex_bin_df = df_bin_centroids, x = "c_x", y = "c_y")
 #' tr_from_to_df <- generate_edge_info(triangular_object = tr1_object)
-#' distance_df <- cal_2d_dist(tr_from_to_df_coord = tr_from_to_df, start_x = "x_from", start_y = "y_from",
-#' end_x = "x_to", end_y = "y_to", select_col_vec = c("from", "to", "distance"))
+#' distance_df <- cal_2d_dist(tr_from_to_df_coord = tr_from_to_df,
+#' start_x = "x_from", start_y = "y_from", end_x = "x_to", end_y = "y_to",
+#' select_col_vec = c("from", "to", "distance"))
 #' find_benchmark_value(distance_edges = distance_df, distance_col = "distance")
+#'
+#' @export
 find_benchmark_value <- function(distance_edges, distance_col) {
 
   if (any(is.na(distance_edges[[rlang::as_string(rlang::sym(distance_col))]]))) {
@@ -113,6 +116,8 @@ find_benchmark_value <- function(distance_edges, distance_col) {
 #' counts_df <- as.data.frame(do.call(cbind, hex_bin_obj$hex_id_with_std_counts))
 #' df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df, counts_df = counts_df)
 #' compute_mean_density_hex(df_bin_centroids, num_bins_x = num_bins_x)
+#'
+#' @export
 compute_mean_density_hex <- function(df_bin_centroids, num_bins_x = NA) {
 
   if (is.na(num_bins_x)) {
@@ -183,6 +188,8 @@ compute_mean_density_hex <- function(df_bin_centroids, num_bins_x = NA) {
 #' dplyr::filter(std_counts <= 0.43)
 #' find_low_density_hexagons(df_bin_centroids_all = df_bin_centroids, num_bins_x = num_bins_x,
 #' df_bin_centroids_low = df_bin_centroids_low)
+#'
+#' @export
 find_low_density_hexagons <- function(df_bin_centroids_all, num_bins_x,
                                       df_bin_centroids_low) {
 

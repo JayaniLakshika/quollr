@@ -4,44 +4,43 @@
 \alias{generate_eval_df}
 \title{Generate Evaluation Data Frame}
 \usage{
-generate_eval_df(
-  data,
-  prediction_df,
-  df_bin_centroids,
-  df_bin,
-  col_start = "x"
-)
+generate_eval_df(test_data, prediction_df, df_bin, col_start = "x")
 }
 \arguments{
-\item{data}{The data set containing high-dimensional data along with an unique identifier.}
+\item{test_data}{The data set containing high-dimensional data along with an unique identifier.}
 
 \item{prediction_df}{The data set with 2D embeddings, IDs, and predicted hexagonal IDs.}
-
-\item{df_bin_centroids}{The data set with coordinates of hexagonal bin centroids.}
 
 \item{df_bin}{The data set with averaged/weighted high-dimensional data.}
 
 \item{col_start}{The text that begin the column name of the high-D data}
 }
 \value{
-A tibble containing evaluation metrics based on the provided inputs.
+A list contains MSE and AIC values.
 }
 \description{
 This function generates an evaluation data frame based on the provided data and predictions.
 }
 \examples{
-num_bins_x <- 4
-shape_value <- 1.833091
-hexbin_data_object <- extract_hexbin_mean(nldr_df = s_curve_noise_umap, num_bins_x,
-shape_val = shape_value)
-df_bin_centroids <- hexbin_data_object$hexdf_data
-UMAP_data_with_hb_id <- s_curve_noise_umap |> dplyr::mutate(hb_id = hexbin_data_object$hb_data@cID)
-df_all <- dplyr::bind_cols(s_curve_noise_training |> dplyr::select(-ID), UMAP_data_with_hb_id)
-df_bin <- avg_highD_data(df_all)
-pred_df_test <- predict_2d_embeddings(test_data = s_curve_noise_training,
-df_bin_centroids = df_bin_centroids,
-df_bin = df_bin, type_NLDR = "UMAP")
-generate_eval_df(data = s_curve_noise, prediction_df = pred_df_test,
-df_bin_centroids = df_bin_centroids, df_bin = df_bin, col_start = "x")
+training_data <- s_curve_noise_training
+num_bins_x <- calculate_effective_x_bins(nldr_df = s_curve_noise_umap_scaled,
+x = "UMAP1", hex_size = NA, buffer_x = NA)
+num_bins_y <- calculate_effective_y_bins(nldr_df = s_curve_noise_umap_scaled,
+ y = "UMAP2", hex_size = NA, buffer_y = NA)
+hex_bin_obj <- generate_hex_binning_info(nldr_df = s_curve_noise_umap_scaled,
+x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
+num_bins_y = num_bins_y, x_start = NA, y_start = NA, buffer_x = NA,
+buffer_y = NA, hex_size = NA)
+all_centroids_df <- as.data.frame(do.call(cbind, hex_bin_obj$full_grid_hex_centroids))
+counts_df <- as.data.frame(do.call(cbind, hex_bin_obj$hex_id_with_std_counts))
+df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df, counts_df = counts_df)
+UMAP_data_with_hb_id <- hex_bin_obj$nldr_data_with_hex_id
+df_all <- dplyr::bind_cols(training_data |> dplyr::select(-ID), UMAP_data_with_hb_id)
+df_bin <- avg_highD_data(df_all, column_start_text = "x")
+pred_emb_list <- predict_2d_embeddings(test_data = s_curve_noise_training,
+df_bin_centroids = df_bin_centroids, df_bin = df_bin, type_NLDR = "UMAP")
+pred_df_test <- as.data.frame(do.call(cbind, pred_emb_list))
+generate_eval_df(test_data = s_curve_noise_training, prediction_df = pred_df_test,
+df_bin = df_bin, col_start = "x")
 
 }

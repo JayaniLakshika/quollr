@@ -8,10 +8,14 @@ fit_high_d_model(
   training_data,
   nldr_df_with_id,
   x = "UMAP1",
-  y = "UMAP1",
-  cell_area = 1,
+  y = "UMAP2",
   num_bins_x = NA,
-  shape_val = NA,
+  num_bins_y = NA,
+  x_start = NA,
+  y_start = NA,
+  buffer_x = NA,
+  buffer_y = NA,
+  hex_size = NA,
   is_bin_centroid = TRUE,
   is_rm_lwd_hex = FALSE,
   benchmark_to_rm_lwd_hex = NA,
@@ -28,11 +32,19 @@ fit_high_d_model(
 
 \item{y}{The name of the column that contains second 2D embeddings component.}
 
-\item{cell_area}{The area of each hexagonal cell.}
+\item{num_bins_x}{Number of bins along the x-axis.}
 
-\item{num_bins_x}{The number of bins along the x-axis for the hexagonal grid.}
+\item{num_bins_y}{Number of bins along the y-axis.}
 
-\item{shape_val}{The shape parameter for the hexagons.}
+\item{x_start}{Starting point along the x-axis for hexagonal binning.}
+
+\item{y_start}{Starting point along the y-axis for hexagonal binning.}
+
+\item{buffer_x}{The buffer size along the x-axis.}
+
+\item{buffer_y}{The buffer size along the y-axis.}
+
+\item{hex_size}{A numeric value that initializes the radius of the outer circle surrounding the hexagon.}
 
 \item{is_bin_centroid}{Logical, indicating whether to use bin centroids (default is TRUE).}
 
@@ -54,6 +66,7 @@ to customize the modeling process, including the choice of bin centroids or bin 
 removal of low-density hexagons, and averaging of high-dimensional data.
 }
 \examples{
-fit_high_d_model(training_data = s_curve_noise_training, nldr_df_with_id = s_curve_noise_umap)
+fit_high_d_model(training_data = s_curve_noise_training,
+nldr_df_with_id = s_curve_noise_umap_scaled)
 
 }

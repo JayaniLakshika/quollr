@@ -30,6 +30,8 @@
 #' df_bin <- avg_highD_data(df_all, column_start_text = "x")
 #' predict_2d_embeddings(test_data = s_curve_noise_training, df_bin_centroids = df_bin_centroids,
 #' df_bin = df_bin, type_NLDR = "UMAP")
+#'
+#' @export
 predict_2d_embeddings <- function(test_data, df_bin_centroids, df_bin, type_NLDR = "UMAP") {
 
   test_data_matrix <- test_data |>
@@ -77,11 +79,13 @@ predict_2d_embeddings <- function(test_data, df_bin_centroids, df_bin, type_NLDR
 #' @examples
 #' # Example usage of compute_aic function
 #' p <- 5
-#' total <- 1500
+#' mse <- 1500
 #' num_bins <- 10
 #' num_obs <- 100
-#' aic_value <- compute_aic(p, total, num_bins, num_obs)
+#' aic_value <- compute_aic(p, mse, num_bins, num_obs)
 #' cat("AIC Value:", aic_value, "\n")
+#'
+#' @export
 compute_aic <- function(p, mse, num_bins, num_obs) {
   if (is.infinite(p)) {
     stop("Inf present.")
@@ -145,6 +149,8 @@ compute_aic <- function(p, mse, num_bins, num_obs) {
 #' pred_df_test <- as.data.frame(do.call(cbind, pred_emb_list))
 #' generate_eval_df(test_data = s_curve_noise_training, prediction_df = pred_df_test,
 #' df_bin = df_bin, col_start = "x")
+#'
+#' @export
 generate_eval_df <- function(test_data, prediction_df, df_bin, col_start = "x") {
 
   ## Rename columns to avoid conflicts

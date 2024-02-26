@@ -1,64 +1,67 @@
 test_that("calculate_effective_x_bins() works", {
 
-  testthat::expect_equal(calculate_effective_x_bins(.data = s_curve_noise_umap, x = "UMAP1",
-                                                    cell_area = 1), 6)
+  testthat::expect_equal(calculate_effective_x_bins(nldr_df = s_curve_noise_umap_scaled,
+                                                    x = "UMAP1", hex_size = NA, buffer_x = NA), 5)
 
-  testthat::expect_error(calculate_effective_x_bins(.data = s_curve_noise_umap, x = "UMAP1",
-                                                       cell_area = 0))
-  testthat::expect_error(calculate_effective_x_bins(.data = s_curve_noise_umap, x = "UMAP1",
-                                                       cell_area = Inf))
-  testthat::expect_error(calculate_effective_x_bins(.data = s_curve_noise_umap, x = "UMAP1",
-                                                       cell_area = -3))
+  testthat::expect_error(calculate_effective_x_bins(nldr_df = s_curve_noise_umap_scaled,
+                                                    x = "UMAP1", hex_size = -0.1, buffer_x = NA))
+  testthat::expect_error(calculate_effective_x_bins(nldr_df = s_curve_noise_umap_scaled,
+                                                    x = "UMAP1", hex_size = 0, buffer_x = NA))
+  testthat::expect_error(calculate_effective_x_bins(nldr_df = s_curve_noise_umap_scaled,
+                                                    x = "UMAP1", hex_size = Inf, buffer_x = NA))
+  testthat::expect_error(calculate_effective_x_bins(nldr_df = s_curve_noise_umap_scaled,
+                                                    x = "UMAP1", hex_size = -Inf, buffer_x = NA))
 
-  s_curve_noise_umap <- s_curve_noise_umap |> dplyr::bind_rows(data.frame(UMAP1 = NA, UMAP2 = 2.5, ID = 76))
-  testthat::expect_error(calculate_effective_x_bins(.data = s_curve_noise_umap, x = "UMAP1",
-                                                       cell_area = 1))
+  testthat::expect_error(calculate_effective_x_bins(nldr_df = s_curve_noise_umap_scaled,
+                                                    x = "UMAP1", hex_size = NA, buffer_x = 0.5))
+  testthat::expect_error(calculate_effective_x_bins(nldr_df = s_curve_noise_umap_scaled,
+                                                    x = "UMAP1", hex_size = NA, buffer_x = -0.3))
 
-  s_curve_noise_umap <- s_curve_noise_umap |> dplyr::filter(dplyr::row_number() != NROW(s_curve_noise_umap)) |>
+  umap_df <- s_curve_noise_umap_scaled |> dplyr::bind_rows(data.frame(UMAP1 = NA,
+                                                                      UMAP2 = 2.5, ID = 76))
+  testthat::expect_error(calculate_effective_x_bins(nldr_df = umap_df, x = "UMAP1",
+                                                    hex_size = NA, buffer_x = NA))
+
+  umap_df <- s_curve_noise_umap_scaled |>
+    dplyr::filter(dplyr::row_number() != NROW(s_curve_noise_umap_scaled)) |>
     dplyr::bind_rows(data.frame(UMAP1 = Inf, UMAP2 = 2.5, ID = 76))
-  testthat::expect_error(calculate_effective_x_bins(.data = s_curve_noise_umap, x = "UMAP1",
-                                                       cell_area = 1))
+  testthat::expect_error(calculate_effective_x_bins(nldr_df = umap_df, x = "UMAP1",
+                                                    hex_size = NA, buffer_x = NA))
 
 
 })
 
 
-test_that("calculate_effective_shape_value() works", {
+test_that("calculate_effective_y_bins() works", {
 
-  testthat::expect_equal(calculate_effective_shape_value(.data = s_curve_noise_umap,
-                                                         x = "UMAP1", y = "UMAP2"), 2.0194144)
+  testthat::expect_equal(calculate_effective_y_bins(nldr_df = s_curve_noise_umap_scaled,
+                                                    y = "UMAP2", hex_size = NA, buffer_y = NA), 8)
 
-  s_curve_noise_umap_na <- s_curve_noise_umap |> dplyr::bind_rows(data.frame(UMAP1 = NA,
-                                                                          UMAP2 = 2.5, ID = 76))
-  #expect_error(calculate_effective_shape_value(data, x, y))
-  testthat::expect_error(calculate_effective_shape_value(.data = s_curve_noise_umap_na,
-                                                            x = "UMAP1", y = "UMAP2"))
+  testthat::expect_error(calculate_effective_y_bins(nldr_df = s_curve_noise_umap_scaled,
+                                                    y = "UMAP2", hex_size = -0.1, buffer_y = NA))
+  testthat::expect_error(calculate_effective_y_bins(nldr_df = s_curve_noise_umap_scaled,
+                                                    y = "UMAP2", hex_size = 0, buffer_y = NA))
+  testthat::expect_error(calculate_effective_y_bins(nldr_df = s_curve_noise_umap_scaled,
+                                                    y = "UMAP2", hex_size = Inf, buffer_y = NA))
+  testthat::expect_error(calculate_effective_y_bins(nldr_df = s_curve_noise_umap_scaled,
+                                                    y = "UMAP2", hex_size = -Inf, buffer_y = NA))
 
-  s_curve_noise_umap_na <- s_curve_noise_umap |> dplyr::bind_rows(data.frame(UMAP1 = NA,
-                                                                             UMAP2 = 2.5, ID = 76))
-  #expect_error(calculate_effective_shape_value(data, x, y))
-  testthat::expect_error(calculate_effective_shape_value(.data = s_curve_noise_umap_na,
-                                                            x = "UMAP1", y = "UMAP2"))
+  testthat::expect_error(calculate_effective_y_bins(nldr_df = s_curve_noise_umap_scaled,
+                                                    y = "UMAP2", hex_size = NA, buffer_y = 0.5))
+  testthat::expect_error(calculate_effective_y_bins(nldr_df = s_curve_noise_umap_scaled,
+                                                    y = "UMAP2", hex_size = NA, buffer_y = -0.3))
 
-  s_curve_noise_umap_na <- s_curve_noise_umap |> dplyr::bind_rows(data.frame(UMAP1 = NA,
-                                                                             UMAP2 = NA, ID = 76))
-  #expect_error(calculate_effective_shape_value(data, x, y))
-  testthat::expect_error(calculate_effective_shape_value(.data = s_curve_noise_umap_na,
-                                                            x = "UMAP1", y = "UMAP2"))
+  umap_df <- s_curve_noise_umap_scaled |> dplyr::bind_rows(data.frame(UMAP1 = 2.5,
+                                                                      UMAP2 = NA, ID = 76))
+  testthat::expect_error(calculate_effective_y_bins(nldr_df = umap_df, y = "UMAP2",
+                                                    hex_size = NA, buffer_y = NA))
 
-  s_curve_noise_umap_inf <- s_curve_noise_umap |> dplyr::bind_rows(data.frame(UMAP1 = Inf,
-                                                                              UMAP2 = 2.5, ID = 76))
-  testthat::expect_error(calculate_effective_shape_value(.data = s_curve_noise_umap_inf,
-                                                            x = "UMAP1", y = "UMAP2"))
+  umap_df <- s_curve_noise_umap_scaled |>
+    dplyr::filter(dplyr::row_number() != NROW(s_curve_noise_umap_scaled)) |>
+    dplyr::bind_rows(data.frame(UMAP1 = 2.5, UMAP2 = Inf, ID = 76))
+  testthat::expect_error(calculate_effective_y_bins(nldr_df = umap_df, y = "UMAP2",
+                                                    hex_size = NA, buffer_y = NA))
 
-  s_curve_noise_umap_inf <- s_curve_noise_umap |> dplyr::bind_rows(data.frame(UMAP1 = 1.4,
-                                                                              UMAP2 = Inf, ID = 76))
-  testthat::expect_error(calculate_effective_shape_value(.data = s_curve_noise_umap_inf,
-                                                            x = "UMAP1", y = "UMAP2"))
-
-  s_curve_noise_umap_1 <- s_curve_noise_umap |> dplyr::filter(dplyr::row_number() == 1)
-  testthat::expect_error(calculate_effective_shape_value(.data = s_curve_noise_umap_1,
-                                                            x = "UMAP1", y = "UMAP2"))
 
 })
 

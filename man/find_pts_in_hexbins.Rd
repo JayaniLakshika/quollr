@@ -4,12 +4,10 @@
 \alias{find_pts_in_hexbins}
 \title{Find Points in Hexagonal Bins}
 \usage{
-find_pts_in_hexbins(full_grid_with_hexbin_id, nldr_data_with_hb_id)
+find_pts_in_hexbins(nldr_data_with_hb_id)
 }
 \arguments{
-\item{full_grid_with_hexbin_id}{A data frame with hexagonal bin IDs and coordinates.}
-
-\item{nldr_data_with_hb_id}{A data frame with 2D embedding data and hexagonal bin IDs.}
+\item{nldr_data_with_hb_id}{A data frame with 2D embedding data, ID and hexagonal bin IDs.}
 }
 \value{
 A data frame with hexagonal bin IDs and the corresponding points.
@@ -18,15 +16,21 @@ A data frame with hexagonal bin IDs and the corresponding points.
 This function maps points to their corresponding hexagonal bins based on the provided data frames.
 }
 \examples{
-num_bins_x <- 4
-shape_value <- 1.833091
-hexbin_data_object <- extract_hexbin_centroids(nldr_df = s_curve_noise_umap,
-num_bins = num_bins_x, shape_val = shape_value)
-df_bin_centroids <- hexbin_data_object$hexdf_data
-full_centroid_df <- generate_full_grid_centroids(df_bin_centroids)
-hex_grid <- full_hex_grid(full_centroid_df)
-full_grid_with_hexbin_id <- map_hexbin_id(full_centroid_df, df_bin_centroids)
-UMAP_data_with_hb_id <- s_curve_noise_umap |> dplyr::mutate(hb_id = hexbin_data_object$hb_data@cID)
-find_pts_in_hexbins(full_grid_with_hexbin_id, nldr_data_with_hb_id = UMAP_data_with_hb_id)
+num_bins_x <- calculate_effective_x_bins(nldr_df = s_curve_noise_umap_scaled,
+                                        x = "UMAP1", hex_size = NA, buffer_x = NA)
+num_bins_y <- calculate_effective_y_bins(nldr_df = s_curve_noise_umap_scaled,
+                                        y = "UMAP2", hex_size = NA, buffer_y = NA)
+centroid_list <- generate_full_grid_centroids(nldr_df = s_curve_noise_umap_scaled,
+                                             x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
+                                             num_bins_y = num_bins_y, x_start = NA,
+                                             y_start = NA, buffer_x = NA,
+                                             buffer_y = NA, hex_size = NA)
+all_centroids_df <- as.data.frame(do.call(cbind, centroid_list))
+s_curve_noise_umap_scaled_rm_id <- s_curve_noise_umap_scaled |> dplyr::select(-ID)
+nldr_with_hb_id_list <- assign_data(nldr_df = s_curve_noise_umap_scaled_rm_id,
+centroid_df = all_centroids_df)
+umap_with_hb_id <- as.data.frame(do.call(cbind, nldr_with_hb_id_list))
+umap_with_hb_id <- umap_with_hb_id |> dplyr::mutate(ID = s_curve_noise_umap_scaled$ID)
+find_pts_in_hexbins(nldr_data_with_hb_id = umap_with_hb_id)
 
 }

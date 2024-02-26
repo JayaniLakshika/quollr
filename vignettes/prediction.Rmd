@@ -26,22 +26,23 @@ Some Non-linear dimension reduction techniques (NLDR), such as t-distributed sto
 
 ```{r}
 model <- fit_high_d_model(training_data = s_curve_noise_training, 
-                 nldr_df_with_id = s_curve_noise_umap)
+                 nldr_df_with_id = s_curve_noise_umap_scaled)
 
 df_bin_centroids <- model$df_bin_centroids
 df_bin <- model$df_bin
 ```
 
 ```{r}
-predict_df <- predict_2d_embeddings(test_data = s_curve_noise_test, 
+predict_emb_list <- predict_2d_embeddings(test_data = s_curve_noise_test, 
                                     df_bin_centroids = df_bin_centroids, 
                                     df_bin = df_bin, type_NLDR = "UMAP")
 
+predict_df <- as.data.frame(do.call(cbind, predict_emb_list))
 predict_df
 ```
 
 ```{r}
-s_curve_noise_umap |>
+s_curve_noise_umap_scaled |>
     ggplot(aes(x = UMAP1,
                y = UMAP2,
                label = ID))+

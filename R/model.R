@@ -25,11 +25,12 @@
 #' and the data frame containing information about hexagonal bin centroids (\code{df_bin_centroids}) in 2D.
 #'
 #' @examples
-#' fit_high_d_model(training_data = s_curve_noise_training, nldr_df_with_id = s_curve_noise_umap_scaled)
+#' fit_high_d_model(training_data = s_curve_noise_training,
+#' nldr_df_with_id = s_curve_noise_umap_scaled)
 #'
 #' @export
 fit_high_d_model <- function(training_data, nldr_df_with_id, x = "UMAP1",
-                             y = "UMAP1", num_bins_x = NA, num_bins_y = NA,
+                             y = "UMAP2", num_bins_x = NA, num_bins_y = NA,
                              x_start = NA, y_start = NA,
                              buffer_x = NA, buffer_y = NA,  hex_size = NA,
                              is_bin_centroid = TRUE, is_rm_lwd_hex = FALSE,
@@ -135,8 +136,8 @@ fit_high_d_model <- function(training_data, nldr_df_with_id, x = "UMAP1",
 
     ## weighted averaged high-D data
     df_bin <- weighted_highD_data(training_data = training_data,
-                        nldr_df_with_id = nldr_df_with_hex_id,
-                        column_start_text = column_start_text)
+                                  nldr_df_with_hex_id = nldr_df_with_hex_id,
+                                  column_start_text = column_start_text)
 
   }
 

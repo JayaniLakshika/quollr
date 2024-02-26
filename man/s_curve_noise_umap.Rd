@@ -6,10 +6,10 @@
 \title{UMAP embedding for S-curve dataset which with noise dimensions}
 \format{
 ## `s_curve_noise_umap`
-A data frame with 225 rows and 3 columns:
+A data frame with 75 rows and 3 columns:
 \describe{
-  \item{UMAP1}{Numeric, UMAP coordinate 1.}
-  \item{UMAP2}{Numeric, UMAP coordinate 2.}
+  \item{UMAP1}{Numeric, first UMAP 2D embeddings.}
+  \item{UMAP2}{Numeric, second UMAP 2D embeddings.}
   \item{ID}{Numeric, identifier for each data point.}
 }
 }

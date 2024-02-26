@@ -7,11 +7,14 @@
 #' @param y The name of the column that contains second 2D embeddings component.
 #'
 #' @return A list contains scaled 2D embeddings.
+#'
 #' @importFrom rlang as_string sym
 #' @importFrom scales rescale
 #'
 #' @examples
-# generate_scaled_data(nldr_df = s_curve_noise_umap, x = "UMAP1", y = "UMAP2")
+#' generate_scaled_data(nldr_df = s_curve_noise_umap, x = "UMAP1", y = "UMAP2")
+#'
+#' @export
 generate_scaled_data <- function(nldr_df, x = "UMAP1", y = "UMAP2") {
 
   ## Obtain 2D embeddings

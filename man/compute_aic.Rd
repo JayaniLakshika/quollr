@@ -4,12 +4,12 @@
 \alias{compute_aic}
 \title{Compute the Akaike Information Criterion (AIC) for a given model.}
 \usage{
-compute_aic(p, total, num_bins, num_obs)
+compute_aic(p, mse, num_bins, num_obs)
 }
 \arguments{
 \item{p}{Number of dimensions of the data set.}
 
-\item{total}{Total mean squared error (MSE) of the model.}
+\item{mse}{Mean squared error (MSE) of the model.}
 
 \item{num_bins}{Total number of bins without empty bins used in the model.}
 
@@ -24,11 +24,10 @@ Compute the Akaike Information Criterion (AIC) for a given model.
 \examples{
 # Example usage of compute_aic function
 p <- 5
-total <- 1500
+mse <- 1500
 num_bins <- 10
 num_obs <- 100
-aic_value <- compute_aic(p, total, num_bins, num_obs)
+aic_value <- compute_aic(p, mse, num_bins, num_obs)
 cat("AIC Value:", aic_value, "\n")
-
 
 }

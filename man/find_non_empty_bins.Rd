@@ -2,37 +2,50 @@
 % Please edit documentation in R/2D.R
 \name{find_non_empty_bins}
 \alias{find_non_empty_bins}
-\title{Find the Number of Non-Empty Bins Required}
+\title{Find the Number of Bins Required}
 \usage{
 find_non_empty_bins(
-  nldr_df,
+  nldr_df_with_id,
   x = "UMAP1",
   y = "UMAP2",
-  shape_val,
-  non_empty_bins
+  non_empty_bins,
+  x_start = NA,
+  y_start = NA,
+  buffer_x = NA,
+  buffer_y = NA,
+  hex_size = NA
 )
 }
 \arguments{
-\item{nldr_df}{A data frame containing 2D embeddings.}
+\item{nldr_df_with_id}{A data frame containing 2D embeddings and unique ID column.}
 
 \item{x}{The name of the column that contains first 2D embeddings component.}
 
 \item{y}{The name of the column that contains second 2D embeddings component.}
 
-\item{shape_val}{The value of the shape parameter for hexagon binning.}
-
 \item{non_empty_bins}{The desired number of non-empty bins.}
+
+\item{x_start}{Starting point along the x-axis for hexagonal binning.}
+
+\item{y_start}{Starting point along the y-axis for hexagonal binning.}
+
+\item{buffer_x}{The buffer size along the x-axis.}
+
+\item{buffer_y}{The buffer size along the y-axis.}
+
+\item{hex_size}{A numeric value that initializes the radius of the outer circle surrounding the hexagon.}
 }
 \value{
-The number of bins along the x-axis needed to achieve the specified number of non-empty bins.
+The number of bins along the x and y axes
+needed to achieve a specific number of non-empty bins.
 }
 \description{
-This function determines the number of non-empty bins needed to satisfy a minimum requirement.
+This function determines the number of bins along the x and y axes
+to obtain a specific number of non-empty bins.
 }
 \examples{
-shape_value <- 1.833091
-non_empty_bins <- 3
-find_non_empty_bins(nldr_df = s_curve_noise_umap, x = "UMAP1", y = "UMAP2",
-shape_val = shape_value, non_empty_bins)
+find_non_empty_bins(nldr_df = s_curve_noise_umap_scaled,
+x = "UMAP1", y = "UMAP2", non_empty_bins = 10, x_start = NA,
+y_start = NA, buffer_x = NA, buffer_y = NA, hex_size = NA)
 
 }

@@ -57,6 +57,8 @@ avg_highD_data <- function(.data, column_start_text = "x") {
 #' buffer_y = NA, hex_size = NA)
 #' UMAP_data_with_hb_id <- as.data.frame(do.call(cbind, hex_bin_obj$nldr_data_with_hex_id))
 #' compute_weights(nldr_df_with_hex_id = UMAP_data_with_hb_id)
+#'
+#' @export
 compute_weights <- function(nldr_df_with_hex_id) {
 
   ## To get the 2D embeddings average of each bin
@@ -131,6 +133,8 @@ compute_weights <- function(nldr_df_with_hex_id) {
 #' UMAP_data_with_hb_id <- as.data.frame(do.call(cbind, hex_bin_obj$nldr_data_with_hex_id))
 #' weighted_highD_data(training_data = s_curve_noise_training,
 #' nldr_df_with_hex_id = UMAP_data_with_hb_id, column_start_text = "x")
+#'
+#' @export
 weighted_highD_data <- function(training_data, nldr_df_with_hex_id,
                                 column_start_text = "x") {
   ## Remove ID column from training data
@@ -217,8 +221,9 @@ weighted_highD_data <- function(training_data, nldr_df_with_hex_id,
 #' df_bin <- avg_highD_data(df_all, column_start_text = "x")
 #' tr1_object <- triangulate_bin_centroids(hex_bin_df = df_bin_centroids, x = "c_x", y = "c_y")
 #' tr_from_to_df <- generate_edge_info(triangular_object = tr1_object)
-#' distance_df <- cal_2d_dist(tr_from_to_df_coord = tr_from_to_df, start_x = "x_from", start_y = "y_from",
-#' end_x = "x_to", end_y = "y_to", select_col_vec = c("from", "to", "distance"))
+#' distance_df <- cal_2d_dist(tr_from_to_df_coord = tr_from_to_df, start_x = "x_from",
+#' start_y = "y_from", end_x = "x_to", end_y = "y_to",
+#' select_col_vec = c("from", "to", "distance"))
 #' show_langevitour(df = df_all, df_b = df_bin, df_b_with_center_data = df_bin_centroids,
 #' benchmark_value = 0.75, distance = distance_df, distance_col = "distance",
 #' use_default_benchmark_val = FALSE, column_start_text = "x")

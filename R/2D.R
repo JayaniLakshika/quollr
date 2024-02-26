@@ -91,7 +91,7 @@ generate_full_grid_centroids <- function(nldr_df, x = "UMAP1", y = "UMAP2",
     max_y_start <- min(nldr_df[[rlang::as_string(rlang::sym(x))]]) + (1.5 * hex_size)
     min_y_start <- min(nldr_df[[rlang::as_string(rlang::sym(x))]]) - (1.5 * hex_size)
 
-    if ((y_start < min_y_start) | (xy_start > max_y_start)){
+    if ((y_start < min_y_start) | (y_start > max_y_start)){
       stop(paste0("y_start value is not compatible.
                   Need to use a value betweeen ", min_y_start," and ", max_y_start,"."))
 
@@ -232,7 +232,7 @@ gen_hex_coordinates <- function(all_centroids_df, hex_size = NA){
 
     ## Append to existing vectors
     x <- append(x, x_spec)
-    y <- append(x, y_spec)
+    y <- append(y, y_spec)
     hex_poly_id <- append(hex_poly_id, hexID_rep)
 
   }
@@ -262,9 +262,11 @@ gen_hex_coordinates <- function(all_centroids_df, hex_size = NA){
 #' x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
 #' num_bins_y = num_bins_y, x_start = NA, y_start = NA, buffer_x = NA,
 #' buffer_y = NA, hex_size = NA)
-#' all_centroids_df <- as.data.frame(do.call(cbind, centroid_list[c(2, 3)]))
-#' s_curve_noise_umap_scaled <- s_curve_noise_umap_scaled |> dplyr::select(-ID)
-#' assign_data(nldr_df = s_curve_noise_umap_scaled, centroid_df = all_centroids_df)
+#' all_centroids_df <- as.data.frame(do.call(cbind, centroid_list))
+#' s_curve_noise_umap_scaled_rm_id <- s_curve_noise_umap_scaled |> dplyr::select(-ID)
+#' assign_data(nldr_df = s_curve_noise_umap_scaled_rm_id, centroid_df = all_centroids_df)
+#'
+#' @export
 assign_data <- function(nldr_df, centroid_df, type_NLDR = "UMAP") {
 
   ## To assign names for 2D embeddings
@@ -324,6 +326,8 @@ assign_data <- function(nldr_df, centroid_df, type_NLDR = "UMAP") {
 #' centroid_df = all_centroids_df)
 #' umap_with_hb_id <- as.data.frame(do.call(cbind, nldr_with_hb_id_list))
 #' compute_std_counts(nldr_df_with_hex_id = umap_with_hb_id)
+#'
+#' @export
 compute_std_counts <- function(nldr_df_with_hex_id) {
 
   ## Group by hexagon IDs
@@ -341,7 +345,6 @@ compute_std_counts <- function(nldr_df_with_hex_id) {
 #'
 #' This function maps points to their corresponding hexagonal bins based on the provided data frames.
 #'
-#' @param full_grid_with_hexbin_id A data frame with hexagonal bin IDs and coordinates.
 #' @param nldr_data_with_hb_id A data frame with 2D embedding data, ID and hexagonal bin IDs.
 #'
 #' @return A data frame with hexagonal bin IDs and the corresponding points.
@@ -354,11 +357,13 @@ compute_std_counts <- function(nldr_df_with_hex_id) {
 #'                                         y = "UMAP2", hex_size = NA, buffer_y = NA)
 #' centroid_list <- generate_full_grid_centroids(nldr_df = s_curve_noise_umap_scaled,
 #'                                              x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
-#'                                              num_bins_y = num_bins_y, x_start = NA, y_start = NA, buffer_x = NA,
+#'                                              num_bins_y = num_bins_y, x_start = NA,
+#'                                              y_start = NA, buffer_x = NA,
 #'                                              buffer_y = NA, hex_size = NA)
 #' all_centroids_df <- as.data.frame(do.call(cbind, centroid_list))
 #' s_curve_noise_umap_scaled_rm_id <- s_curve_noise_umap_scaled |> dplyr::select(-ID)
-#' nldr_with_hb_id_list <- assign_data(nldr_df = s_curve_noise_umap_scaled_rm_id, centroid_df = all_centroids_df)
+#' nldr_with_hb_id_list <- assign_data(nldr_df = s_curve_noise_umap_scaled_rm_id,
+#' centroid_df = all_centroids_df)
 #' umap_with_hb_id <- as.data.frame(do.call(cbind, nldr_with_hb_id_list))
 #' umap_with_hb_id <- umap_with_hb_id |> dplyr::mutate(ID = s_curve_noise_umap_scaled$ID)
 #' find_pts_in_hexbins(nldr_data_with_hb_id = umap_with_hb_id)
@@ -511,6 +516,8 @@ generate_hex_binning_info <- function(nldr_df, x = "UMAP1", y = "UMAP2",
 #' std_counts_list <- compute_std_counts(nldr_df_with_hex_id = umap_with_hb_id)
 #' counts_df <- as.data.frame(do.call(cbind, std_counts_list))
 #' extract_hexbin_centroids(centroids_df = all_centroids_df, counts_df = counts_df)
+#'
+#' @export
 extract_hexbin_centroids <- function(centroids_df, counts_df) {
 
   ## To arrange the hexagon IDs
@@ -554,6 +561,8 @@ extract_hexbin_centroids <- function(centroids_df, counts_df) {
 #' std_counts_list <- compute_std_counts(nldr_df_with_hex_id = umap_with_hb_id)
 #' counts_df <- as.data.frame(do.call(cbind, std_counts_list))
 #' extract_hexbin_mean(nldr_df_with_hex_id = umap_with_hb_id, counts_df = counts_df)
+#'
+#' @export
 extract_hexbin_mean <- function(nldr_df_with_hex_id, counts_df) {
 
   ## To arrange the hexagon IDs
@@ -609,6 +618,8 @@ extract_hexbin_mean <- function(nldr_df_with_hex_id, counts_df) {
 #' counts_df <- as.data.frame(do.call(cbind, std_counts_list))
 #' df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df, counts_df = counts_df)
 #' triangulate_bin_centroids(hex_bin_df = df_bin_centroids, x = "c_x", y = "c_y")
+#'
+#' @export
 triangulate_bin_centroids <- function(hex_bin_df, x = "c_x", y = "c_y"){
   tr1 <- tripack::tri.mesh(hex_bin_df[[rlang::as_string(rlang::sym(x))]],
                            hex_bin_df[[rlang::as_string(rlang::sym(y))]])
@@ -651,6 +662,8 @@ triangulate_bin_centroids <- function(hex_bin_df, x = "c_x", y = "c_y"){
 #' df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df, counts_df = counts_df)
 #' tr1_object <- triangulate_bin_centroids(hex_bin_df = df_bin_centroids, x = "c_x", y = "c_y")
 #' generate_edge_info(triangular_object = tr1_object)
+#'
+#' @export
 generate_edge_info <- function(triangular_object) {
 
   # Create a data frame with x and y coordinate values from the triangular object
@@ -725,6 +738,8 @@ generate_edge_info <- function(triangular_object) {
 #' tr_from_to_df <- generate_edge_info(triangular_object = tr1_object)
 #' cal_2d_dist(tr_from_to_df_coord = tr_from_to_df, start_x = "x_from", start_y = "y_from",
 #' end_x = "x_to", end_y = "y_to", select_col_vec = c("from", "to", "distance"))
+#'
+#' @export
 cal_2d_dist <- function(tr_from_to_df_coord, start_x = "x_from", start_y = "y_from", end_x = "x_to",
                         end_y = "y_to", select_col_vec = c("from", "to", "distance")) {
   # Calculate the 2D distances
@@ -781,15 +796,18 @@ cal_2d_dist <- function(tr_from_to_df_coord, start_x = "x_from", start_y = "y_fr
 #' df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df, counts_df = counts_df)
 #' tr1_object <- triangulate_bin_centroids(hex_bin_df = df_bin_centroids, x = "c_x", y = "c_y")
 #' tr_from_to_df <- generate_edge_info(triangular_object = tr1_object)
-#' distance_df <- cal_2d_dist(tr_from_to_df_coord = tr_from_to_df, start_x = "x_from", start_y = "y_from",
-#' end_x = "x_to", end_y = "y_to", select_col_vec = c("from", "to", "distance"))
+#' distance_df <- cal_2d_dist(tr_from_to_df_coord = tr_from_to_df, start_x = "x_from",
+#' start_y = "y_from", end_x = "x_to", end_y = "y_to",
+#' select_col_vec = c("from", "to", "distance"))
 #' colour_long_edges(distance_edges = distance_df, benchmark_value = 0.75,
 #' tr_from_to_df_coord = tr_from_to_df, distance_col = "distance")
+#'
+#' @export
 colour_long_edges <- function(distance_edges, benchmark_value, tr_from_to_df_coord, distance_col) {
 
   # Create the tibble with x and y coordinates
-  tr_df <- tibble::tibble(x = c(tr_from_to_df[["x_from"]], tr_from_to_df[["x_to"]]),
-                          y = c(tr_from_to_df[["y_from"]], tr_from_to_df[["y_to"]])) |>
+  tr_df <- tibble::tibble(x = c(tr_from_to_df_coord[["x_from"]], tr_from_to_df_coord[["x_to"]]),
+                          y = c(tr_from_to_df_coord[["y_from"]], tr_from_to_df_coord[["y_to"]])) |>
     dplyr::distinct()
 
   # label small and long edges
@@ -846,18 +864,22 @@ colour_long_edges <- function(distance_edges, benchmark_value, tr_from_to_df_coo
 #' umap_with_hb_id <- as.data.frame(do.call(cbind, nldr_with_hb_id_list))
 #' std_counts_list <- compute_std_counts(nldr_df_with_hex_id = umap_with_hb_id)
 #' counts_df <- as.data.frame(do.call(cbind, std_counts_list))
-#' df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df, counts_df = counts_df)
+#' df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df,
+#'  counts_df = counts_df)
 #' tr1_object <- triangulate_bin_centroids(hex_bin_df = df_bin_centroids, x = "c_x", y = "c_y")
 #' tr_from_to_df <- generate_edge_info(triangular_object = tr1_object)
-#' distance_df <- cal_2d_dist(tr_from_to_df_coord = tr_from_to_df, start_x = "x_from", start_y = "y_from",
-#' end_x = "x_to", end_y = "y_to", select_col_vec = c("from", "to", "distance"))
+#' distance_df <- cal_2d_dist(tr_from_to_df_coord = tr_from_to_df, start_x = "x_from",
+#' start_y = "y_from", end_x = "x_to", end_y = "y_to",
+#' select_col_vec = c("from", "to", "distance"))
 #' remove_long_edges(distance_edges = distance_df, benchmark_value = 0.75,
 #' tr_from_to_df_coord = tr_from_to_df, distance_col = "distance")
+#'
+#' @export
 remove_long_edges <- function(distance_edges, benchmark_value, tr_from_to_df_coord,
                               distance_col) {
   # Create the tibble with x and y coordinates
-  tr_df <- tibble::tibble(x = c(tr_from_to_df[["x_from"]], tr_from_to_df[["x_to"]]),
-                          y = c(tr_from_to_df[["y_from"]], tr_from_to_df[["y_to"]])) |>
+  tr_df <- tibble::tibble(x = c(tr_from_to_df_coord[["x_from"]], tr_from_to_df_coord[["x_to"]]),
+                          y = c(tr_from_to_df_coord[["y_from"]], tr_from_to_df_coord[["y_to"]])) |>
     dplyr::distinct()
 
   # Filter small edges
@@ -901,9 +923,15 @@ remove_long_edges <- function(distance_edges, benchmark_value, tr_from_to_df_coo
 #' find_non_empty_bins(nldr_df = s_curve_noise_umap_scaled,
 #' x = "UMAP1", y = "UMAP2", non_empty_bins = 10, x_start = NA,
 #' y_start = NA, buffer_x = NA, buffer_y = NA, hex_size = NA)
+#'
+#' @export
 find_non_empty_bins <- function(nldr_df_with_id, x = "UMAP1", y = "UMAP2",
                                 non_empty_bins, x_start = NA, y_start = NA,
                                 buffer_x = NA, buffer_y = NA, hex_size = NA) {
+
+  if (is.na(non_empty_bins)) {
+    stop("Required number of non-empty bins is not defined.")
+  }
 
   max_bins_along_axis <- ceiling(sqrt(NROW(nldr_df_with_id)))
 

@@ -19,46 +19,51 @@ knitr::opts_chunk$set(
 
 ```{r setup, echo = FALSE}
 library(quollr)
-library(snedata)
-library(rsample)
-library(umap)
 library(ggplot2)
 library(dplyr)
 ```
 
 ```{r echo = FALSE}
-model <- fit_high_d_model(training_data = s_curve_noise_training, 
-                 nldr_df_with_id = s_curve_noise_umap, num_bins_x = 4, 
-                 shape_val = 1.833091)
+num_bins_x <- calculate_effective_x_bins(nldr_df = s_curve_noise_umap_scaled,
+                                         x = "UMAP1", hex_size = 0.2)
+num_bins_y <- calculate_effective_y_bins(nldr_df = s_curve_noise_umap_scaled,
+                                         y = "UMAP2", hex_size = 0.2)
 
-df_bin_centroids <- model$df_bin_centroids
+hb_obj <- generate_hex_binning_info(nldr_df = s_curve_noise_umap_scaled,
+                            x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
+                            num_bins_y = num_bins_y, x_start = NA,
+                            y_start = NA, buffer_x = NA,
+                            buffer_y = NA, hex_size = 0.2)
 ```
 
-To generate the full hexagonal grid, you need to start from the bin centroid info that obtained from `extract_hexbin_centroids()`.
 
 ```{r}
 ## Data set with all possible centroids in the hexagonal grid
-
-full_centroid_df <- generate_full_grid_centroids(df_bin_centroids)
-full_centroid_df 
+all_centroids_df <- as.data.frame(do.call(cbind, hb_obj$full_grid_hex_centroids))
+all_centroids_df
 
 ## Generate all coordinates of hexagons
-hex_grid <- full_hex_grid(full_centroid_df)
+hex_grid <- as.data.frame(do.call(cbind, hb_obj$full_grid_hex_poly_coordinates))
+hex_grid
 
-ggplot(data = hex_grid, aes(x = x, y = y)) + geom_polygon(fill = "white", color = "black", aes(group = id)) +
-  geom_point(data = hex_grid, aes(x = x, y = y), color = "black") +
-  geom_point(data = df_bin_centroids, aes(x = x, y = y), color = "red")
+## To obtain the standardise counts within hexbins
+counts_df <- as.data.frame(do.call(cbind, hb_obj$hex_id_with_std_counts))
+df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df, 
+                                             counts_df = counts_df)
 
-ggplot(data = hex_grid, aes(x = x, y = y)) + geom_polygon(fill = "white", color = "black", aes(group = id)) +
-  geom_point(data = full_centroid_df, aes(x = x, y = y), color = "black") +
-  geom_point(data = df_bin_centroids, aes(x = x, y = y), color = "red")
+ggplot(data = hex_grid, aes(x = x, y = y)) + 
+  geom_polygon(fill = "white", color = "black", aes(group = hex_poly_id)) +
+  geom_point(data = all_centroids_df, aes(x = c_x, y = c_y), color = "red") 
 
-hex_full_count_df <- generate_full_grid_info(df_bin_centroids)
+ggplot(data = hex_grid, aes(x = x, y = y)) + 
+  geom_polygon(fill = "white", color = "black", aes(group = hex_poly_id)) +
+  geom_point(data = all_centroids_df, aes(x = c_x, y = c_y), color = "red") +
+  geom_point(data = df_bin_centroids, aes(x = c_x, y = c_y), color = "blue")
 
-ggplot(data = hex_full_count_df, aes(x = x, y = y)) +
-  geom_polygon(color = "black", aes(group = polygon_id, fill = std_counts)) +
-  geom_text(aes(x = c_x, y = c_y, label = hexID)) +
+hex_grid_with_counts <- dplyr::left_join(hex_grid, counts_df, by = c("hex_poly_id" = "hb_id"))
+
+ggplot(data = hex_grid_with_counts, aes(x = x, y = y)) +
+  geom_polygon(color = "black", aes(group = hex_poly_id, fill = std_counts)) +
+  geom_text(data = all_centroids_df, aes(x = c_x, y = c_y, label = hexID)) +
   scale_fill_viridis_c(direction = -1, na.value = "#ffffff")
-
-
 ```

@@ -16,18 +16,29 @@ predict_2d_embeddings(test_data, df_bin_centroids, df_bin, type_NLDR = "UMAP")
 \item{type_NLDR}{The type of non-linear dimensionality reduction (NLDR) used. Default is "UMAP".}
 }
 \value{
-A data frame with predicted 2D embedding for each data point in the test dataset.
+A list contains predicted 2D embeddings, ID in the test data, and predicted hexagonal IDs.
 }
 \description{
 Given a test dataset, the centroid coordinates of hexagonal bins in  2D and high-dimensional space,
 predict the 2D embeddings for each data point in the test dataset.
 }
 \examples{
-model <- fit_high_d_model(training_data = s_curve_noise_training,
-nldr_df_with_id = s_curve_noise_umap)
-df_bin_centroids <- model$df_bin_centroids
-df_bin <- model$df_bin
-predict_2d_embeddings(test_data = s_curve_noise_test, df_bin_centroids = df_bin_centroids,
+training_data <- s_curve_noise_training
+num_bins_x <- calculate_effective_x_bins(nldr_df = s_curve_noise_umap_scaled,
+x = "UMAP1", hex_size = NA, buffer_x = NA)
+num_bins_y <- calculate_effective_y_bins(nldr_df = s_curve_noise_umap_scaled,
+ y = "UMAP2", hex_size = NA, buffer_y = NA)
+hex_bin_obj <- generate_hex_binning_info(nldr_df = s_curve_noise_umap_scaled,
+x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
+num_bins_y = num_bins_y, x_start = NA, y_start = NA, buffer_x = NA,
+buffer_y = NA, hex_size = NA)
+all_centroids_df <- as.data.frame(do.call(cbind, hex_bin_obj$full_grid_hex_centroids))
+counts_df <- as.data.frame(do.call(cbind, hex_bin_obj$hex_id_with_std_counts))
+df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df, counts_df = counts_df)
+UMAP_data_with_hb_id <- hex_bin_obj$nldr_data_with_hex_id
+df_all <- dplyr::bind_cols(training_data |> dplyr::select(-ID), UMAP_data_with_hb_id)
+df_bin <- avg_highD_data(df_all, column_start_text = "x")
+predict_2d_embeddings(test_data = s_curve_noise_training, df_bin_centroids = df_bin_centroids,
 df_bin = df_bin, type_NLDR = "UMAP")
 
 }

@@ -38,16 +38,15 @@ Remotes: https://github.com/jlmelville/snedata
 Imports: 
     dplyr,
     ggplot2,
-    hexbin,
     langevitour,
     stats,
     tibble,
     tripack,
     rsample,
     tidyselect,
-    here,
     proxy,
-    rlang
+    rlang,
+    scales
 URL: https://github.com/JayaniLakshika/quollr
 BugReports: https://github.com/JayaniLakshika/quollr/issues
 Depends: 

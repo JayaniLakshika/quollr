@@ -20,12 +20,7 @@ knitr::opts_chunk$set(
 ```{r setup, echo = FALSE}
 library(quollr)
 library(ggplot2)
-```
-
-```{r echo = FALSE}
-# import data
-training_data <- s_curve_noise_training
-UMAP_data <- s_curve_noise_umap
+library(tibble)
 ```
 
 # Constructing the model in the 2D space
@@ -37,34 +32,36 @@ UMAP_data <- s_curve_noise_umap
 To begin the algorithm, you need to determine the number of bins along the x-axis for creating regular hexagons in the hexagonal grid.
 
 ```{r}
-num_bins_x <- calculate_effective_x_bins(.data = UMAP_data, x = "UMAP1",
-                                         cell_area = 1)
-
-num_bins_x
+num_bins_x <- calculate_effective_x_bins(nldr_df = s_curve_noise_umap_scaled,
+                                         x = "UMAP1", hex_size = 0.2)
+num_bins_x 
 ```
 
-### Shape parameter
+### Number of bins along the y-axis
 
 Then, you need to determine the shape parameter, which control the shape and size of the hexagons in the hexagonal grid.
 
 ```{r}
-shape_value <- calculate_effective_shape_value(.data = UMAP_data, 
-                                               x = "UMAP1", y = "UMAP2")
-
-shape_value
+num_bins_y <- calculate_effective_y_bins(nldr_df = s_curve_noise_umap_scaled,
+                                         y = "UMAP2", hex_size = 0.2)
+num_bins_y 
 ```
 
 ## 2. Obtain hexagonal bin centroids
 
 ```{r}
-hexbin_data_object <- extract_hexbin_centroids(nldr_df = UMAP_data, 
-                                               num_bins = num_bins_x, shape_val = shape_value)
+hb_obj <- generate_hex_binning_info(nldr_df = s_curve_noise_umap_scaled,
+                            x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
+                            num_bins_y = num_bins_y, x_start = NA,
+                            y_start = NA, buffer_x = NA,
+                            buffer_y = NA, hex_size = 0.2)
 
-df_bin_centroids <- hexbin_data_object$hexdf_data
-df_bin_centroids 
+all_centroids_df <- as.data.frame(do.call(cbind, hb_obj$full_grid_hex_centroids))
+counts_df <- as.data.frame(do.call(cbind, hb_obj$hex_id_with_std_counts))
 
-hexbin_object <- hexbin_data_object$hb_data
-str(hexbin_object)
+df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df, 
+                                             counts_df = counts_df)
+glimpse(df_bin_centroids) 
 ```
 
 ## 3. Remove low-density hexagons
@@ -72,10 +69,12 @@ str(hexbin_object)
 ```{r}
 ## To identify low density hexagons
 df_bin_centroids_low <- df_bin_centroids |>
-  dplyr::filter(std_counts <= 0.1666667)
+  dplyr::filter(std_counts <= 0.25)
 
 ## To identify low-density hexagons needed to remove by investigating neighbouring mean density
-identify_rm_bins <- find_low_density_hexagons(df_bin_centroids_all = df_bin_centroids, num_bins_x = num_bins_x, df_bin_centroids_low = df_bin_centroids_low)
+identify_rm_bins <- find_low_density_hexagons(df_bin_centroids_all = df_bin_centroids,
+                                              num_bins_x = num_bins_x,
+                                              df_bin_centroids_low = df_bin_centroids_low)
 
 ## To remove low-density hexagons
 df_bin_centroids <- df_bin_centroids |>
@@ -87,7 +86,7 @@ df_bin_centroids <- df_bin_centroids |>
 Next, you need to perform triangulation on the bin centroids to construct a triangular mesh. Triangulation involves connecting the bin centroids with triangular edges to form a mesh that reveals the local structure of the data.
 
 ```{r}
-tr1_object <- triangulate_bin_centroids(.data = df_bin_centroids, x = "x", y = "y")
+tr1_object <- triangulate_bin_centroids(hex_bin_df = df_bin_centroids, x = "c_x", y = "c_y")
 str(tr1_object)
 
 tr_from_to_df <- generate_edge_info(triangular_object = tr1_object)
@@ -97,7 +96,7 @@ tr_from_to_df
 ```{r}
 ## To draw the traingular mesh
 
-trimesh <- ggplot(df_bin_centroids, aes(x = x, y = y)) +
+trimesh <- ggplot(df_bin_centroids, aes(x = c_x, y = c_y)) +
   geom_trimesh() +
   coord_equal() +
   xlab(expression(C[x]^{(2)})) + ylab(expression(C[y]^{(2)})) +
@@ -111,18 +110,22 @@ trimesh
 
 ```{r}
 ## Compute 2D distances
-distance <- cal_2d_dist(.data = tr_from_to_df)
+distance_df <- cal_2d_dist(tr_from_to_df_coord = tr_from_to_df, start_x = "x_from", 
+                        start_y = "y_from", end_x = "x_to", end_y = "y_to", 
+                        select_col_vec = c("from", "to", "distance"))
 
 ## To find the benchmark value to remove long edges
-benchmark <- find_benchmark_value(.data = distance, distance_col = "distance")
+benchmark <- find_benchmark_value(distance_edges = distance_df, distance_col = "distance")
 benchmark
 ```
 
 ```{r}
 ## To draw the traingular mesh after remove long edges in 2D
 
-trimesh_removed <- remove_long_edges(.data = distance, benchmark_value = benchmark,
-                                     triangular_object = tr1_object, distance_col = "distance") +
+trimesh_removed <- remove_long_edges(distance_edges = distance_df, 
+                                     benchmark_value = 0.75, 
+                                     tr_from_to_df_coord = tr_from_to_df, 
+                                     distance_col = "distance") +
   xlab(expression(C[x]^{(2)})) + ylab(expression(C[y]^{(2)})) +
   theme(axis.text = element_text(size = 5),
         axis.title = element_text(size = 7))
@@ -136,12 +139,11 @@ To extend the model created in the 2D space to higher dimensions, you need to ta
 
 ```{r}
 ## Add hexbin Ids for the 2D embeddings
-UMAP_data_with_hb_id <- UMAP_data |> 
-  dplyr::mutate(hb_id = hexbin_data_object$hb_data@cID)
-UMAP_data_with_hb_id
+umap_data_with_hb_id <- as.data.frame(do.call(cbind, hb_obj$nldr_data_with_hex_id))
+umap_data_with_hb_id
         
 ## To generate a data set with high-dimensional training data and 2D embeddings with hexagonal IDs
-df_all <- dplyr::bind_cols(training_data |> dplyr::select(-ID), UMAP_data_with_hb_id)
+df_all <- dplyr::bind_cols(s_curve_noise_training |> dplyr::select(-ID), umap_data_with_hb_id)
 df_all
 
 df_bin <- avg_highD_data(.data = df_all)
@@ -153,7 +155,12 @@ df_bin
 To visualize the model and the high-dimensional data, tour technique is used. 
 
 ```{r}
-tour1 <- show_langevitour(df_all, df_bin, df_bin_centroids, benchmark_value = benchmark, 
-                          distance = distance, distance_col = 'distance')
+tour1 <- show_langevitour(df = df_all, df_b = df_bin, 
+                          df_b_with_center_data = df_bin_centroids, 
+                          benchmark_value = 0.75, 
+                          distance_df = distance_df, distance_col = "distance", 
+                          use_default_benchmark_val = FALSE, column_start_text = "x")
 tour1
+
+
 ```

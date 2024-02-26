@@ -4,36 +4,33 @@
 \alias{compute_mean_density_hex}
 \title{Compute Mean Density of Hexagonal Bins}
 \usage{
-compute_mean_density_hex(
-  df_bin_centroids,
-  num_bins_x,
-  col_std_counts = "std_counts",
-  col_hb_id = "hexID"
-)
+compute_mean_density_hex(df_bin_centroids, num_bins_x = NA)
 }
 \arguments{
 \item{df_bin_centroids}{A data frame containing information about hexagonal bin centroids,
 including the hexagon ID and the standard normalized counts (\code{std_counts}).}
 
 \item{num_bins_x}{The number of bins along the x-axis for the hexagonal grid.}
-
-\item{col_std_counts}{The name of the column containing the standardized counts.}
-
-\item{col_hb_id}{The name of the column containing the hexagonal bin IDs.}
 }
 \value{
-A data frame with an additional column, \code{mean_density}, representing the mean
+A list contains hexagonal IDs and the mean
 density of each hexagonal bin based on its neighboring bins.
 }
 \description{
 This function calculates the mean density of hexagonal bins based on their neighboring bins.
 }
 \examples{
-num_bins_x <- 4
-shape_value <- 1.833091
-hexbin_data_object <- extract_hexbin_centroids(nldr_df = s_curve_noise_umap,
-num_bins = num_bins_x, shape_val = shape_value)
-df_bin_centroids <- hexbin_data_object$hexdf_data
-compute_mean_density_hex(df_bin_centroids, num_bins_x)
+num_bins_x <- calculate_effective_x_bins(nldr_df = s_curve_noise_umap_scaled,
+x = "UMAP1", hex_size = NA, buffer_x = NA)
+num_bins_y <- calculate_effective_y_bins(nldr_df = s_curve_noise_umap_scaled,
+ y = "UMAP2", hex_size = NA, buffer_y = NA)
+hex_bin_obj <- generate_hex_binning_info(nldr_df = s_curve_noise_umap_scaled,
+x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
+num_bins_y = num_bins_y, x_start = NA, y_start = NA, buffer_x = NA,
+buffer_y = NA, hex_size = NA)
+all_centroids_df <- as.data.frame(do.call(cbind, hex_bin_obj$full_grid_hex_centroids))
+counts_df <- as.data.frame(do.call(cbind, hex_bin_obj$hex_id_with_std_counts))
+df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df, counts_df = counts_df)
+compute_mean_density_hex(df_bin_centroids, num_bins_x = num_bins_x)
 
 }

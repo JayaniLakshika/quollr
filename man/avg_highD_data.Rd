@@ -7,9 +7,9 @@
 avg_highD_data(.data, column_start_text = "x")
 }
 \arguments{
-\item{.data}{A data frame containing the high-dimensional data and 2D embeddings.}
+\item{.data}{A data frame containing the high-dimensional data and 2D embeddings with hexagonal bin IDs.}
 
-\item{column_start_text}{The text that begin the column name of the high-D data}
+\item{column_start_text}{The text that begin the column name of the high-dimensional data}
 }
 \value{
 A data frame with the average values of the high-dimensional data within each hexagonal bin.
@@ -19,13 +19,16 @@ This function calculates the average values of high-dimensional data within each
 }
 \examples{
 training_data <- s_curve_noise_training
-num_bins_x <- 4
-shape_value <- 1.833091
-hexbin_data_object <- extract_hexbin_centroids(nldr_df = s_curve_noise_umap,
-num_bins = num_bins_x, shape_val = shape_value)
-df_bin_centroids <- hexbin_data_object$hexdf_data
-UMAP_data_with_hb_id <- s_curve_noise_umap |> dplyr::mutate(hb_id = hexbin_data_object$hb_data@cID)
+num_bins_x <- calculate_effective_x_bins(nldr_df = s_curve_noise_umap_scaled,
+x = "UMAP1", hex_size = NA, buffer_x = NA)
+num_bins_y <- calculate_effective_y_bins(nldr_df = s_curve_noise_umap_scaled,
+ y = "UMAP2", hex_size = NA, buffer_y = NA)
+hex_bin_obj <- generate_hex_binning_info(nldr_df = s_curve_noise_umap_scaled,
+x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
+num_bins_y = num_bins_y, x_start = NA, y_start = NA, buffer_x = NA,
+buffer_y = NA, hex_size = NA)
+UMAP_data_with_hb_id <- hex_bin_obj$nldr_data_with_hex_id
 df_all <- dplyr::bind_cols(training_data |> dplyr::select(-ID), UMAP_data_with_hb_id)
-avg_highD_data(df_all)
+avg_highD_data(df_all, column_start_text = "x")
 
 }

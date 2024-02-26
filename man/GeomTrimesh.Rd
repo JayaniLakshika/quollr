@@ -22,12 +22,4 @@ This function defines a custom ggplot2 Geom, GeomTrimesh, for rendering triangul
   It creates a tibble of \code{vertices} and a tibble of \code{trimesh}. The final plot is constructed using \code{ggplot2::GeomPoint$draw_panel}
   for vertices and \code{ggplot2::GeomSegment$draw_panel} for trimesh.
 }
-\examples{
-\dontrun{
-  # Example usage in a ggplot
-  ggplot(data = my_data, aes(x = x, y = y, xend = xend, yend = yend)) +
-    geom_trimesh()
-}
-
-}
 \keyword{datasets}

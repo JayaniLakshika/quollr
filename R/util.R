@@ -10,7 +10,10 @@
 #' @return A numeric value representing the effective number of bins along x-axis.
 #'
 #' @examples
-# calculate_effective_x_bins(nldr_df = s_curve_noise_umap_scaled, x = "UMAP1", hex_size = NA, buffer_x = NA)
+#' calculate_effective_x_bins(nldr_df = s_curve_noise_umap_scaled, x = "UMAP1",
+#' hex_size = NA, buffer_x = NA)
+#'
+#' @export
 calculate_effective_x_bins <- function(nldr_df, x = "UMAP1", hex_size = NA, buffer_x = NA){
 
   x_values <- nldr_df[[rlang::as_string(rlang::sym(x))]]
@@ -44,6 +47,10 @@ calculate_effective_x_bins <- function(nldr_df, x = "UMAP1", hex_size = NA, buff
       stop(paste0("Buffer along the x-axis exceeds than ", sqrt(3) * hex_size, ".
                   Need to assign a value less than ", sqrt(3) * hex_size, "."))
 
+    } else if (buffer_x <= 0) {
+
+      stop(paste0("Buffer along the x-axis is less than or equal to zero."))
+
     }
 
 
@@ -55,7 +62,7 @@ calculate_effective_x_bins <- function(nldr_df, x = "UMAP1", hex_size = NA, buff
   horizontal_spacing <- sqrt(3) * hex_size
 
   num_bins <- ceiling(xwidth/horizontal_spacing)
-  num_bins
+  return(num_bins)
 }
 
 
@@ -71,7 +78,10 @@ calculate_effective_x_bins <- function(nldr_df, x = "UMAP1", hex_size = NA, buff
 #' @return A numeric value representing the effective number of bins along x-axis.
 #'
 #' @examples
-#' calculate_effective_y_bins(nldr_df = s_curve_noise_umap_scaled, y = "UMAP2", hex_size = NA, buffer_y = NA)
+#' calculate_effective_y_bins(nldr_df = s_curve_noise_umap_scaled, y = "UMAP2",
+#' hex_size = NA, buffer_y = NA)
+#'
+#' @export
 calculate_effective_y_bins <- function(nldr_df, y = "UMAP2", hex_size = NA, buffer_y = NA){
 
   y_values <- nldr_df[[rlang::as_string(rlang::sym(y))]]
@@ -105,6 +115,10 @@ calculate_effective_y_bins <- function(nldr_df, y = "UMAP2", hex_size = NA, buff
       stop(paste0("Buffer along the y-axis exceeds than ", 1.5 * hex_size, ".
                   Need to assign a value less than ", 1.5 * hex_size, "."))
 
+    } else if (buffer_y <= 0) {
+
+      stop(paste0("Buffer along the y-axis is less than or equal to zero."))
+
     }
   }
 
@@ -116,7 +130,7 @@ calculate_effective_y_bins <- function(nldr_df, y = "UMAP2", hex_size = NA, buff
   vertical_spacing <- 1.5 * hex_size
 
   num_bins <- ceiling(ywidth/vertical_spacing)
-  num_bins
+  return(num_bins)
 
 }
 

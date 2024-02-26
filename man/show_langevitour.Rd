@@ -33,23 +33,35 @@ benchmark value  to remove long edges(default is FALSE).}
 
 \item{column_start_text}{The text that begin the column name of the high-D data}
 }
+\value{
+A langevitour object with the model and the high-dimensional data.
+}
 \description{
 This function generates a LangeviTour visualization based on different conditions and input parameters.
 }
 \examples{
 training_data <- s_curve_noise_training
-num_bins_x <- 4
-shape_value <- 1.833091
-hexbin_data_object <- extract_hexbin_centroids(nldr_df = s_curve_noise_umap,
-num_bins = num_bins_x, shape_val = shape_value)
-df_bin_centroids <- hexbin_data_object$hexdf_data
-UMAP_data_with_hb_id <- s_curve_noise_umap |> dplyr::mutate(hb_id = hexbin_data_object$hb_data@cID)
+num_bins_x <- calculate_effective_x_bins(nldr_df = s_curve_noise_umap_scaled,
+x = "UMAP1", hex_size = NA, buffer_x = NA)
+num_bins_y <- calculate_effective_y_bins(nldr_df = s_curve_noise_umap_scaled,
+ y = "UMAP2", hex_size = NA, buffer_y = NA)
+hex_bin_obj <- generate_hex_binning_info(nldr_df = s_curve_noise_umap_scaled,
+x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
+num_bins_y = num_bins_y, x_start = NA, y_start = NA, buffer_x = NA,
+buffer_y = NA, hex_size = NA)
+all_centroids_df <- as.data.frame(do.call(cbind, hex_bin_obj$full_grid_hex_centroids))
+counts_df <- as.data.frame(do.call(cbind, hex_bin_obj$hex_id_with_std_counts))
+df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df, counts_df = counts_df)
+UMAP_data_with_hb_id <- as.data.frame(do.call(cbind, hex_bin_obj$nldr_data_with_hex_id))
 df_all <- dplyr::bind_cols(training_data |> dplyr::select(-ID), UMAP_data_with_hb_id)
-df_bin <- avg_highD_data(df_all)
-tr1_object <- triangulate_bin_centroids(df_bin_centroids, "x", "y")
+df_bin <- avg_highD_data(df_all, column_start_text = "x")
+tr1_object <- triangulate_bin_centroids(hex_bin_df = df_bin_centroids, x = "c_x", y = "c_y")
 tr_from_to_df <- generate_edge_info(triangular_object = tr1_object)
-distance_df <- cal_2d_dist(.data = tr_from_to_df)
-show_langevitour(df_all, df_bin, df_bin_centroids, benchmark_value = 5.44,
-distance = distance_df, distance_col = "distance")
+distance_df <- cal_2d_dist(tr_from_to_df_coord = tr_from_to_df, start_x = "x_from",
+start_y = "y_from", end_x = "x_to", end_y = "y_to",
+select_col_vec = c("from", "to", "distance"))
+show_langevitour(df = df_all, df_b = df_bin, df_b_with_center_data = df_bin_centroids,
+benchmark_value = 0.75, distance = distance_df, distance_col = "distance",
+use_default_benchmark_val = FALSE, column_start_text = "x")
 
 }

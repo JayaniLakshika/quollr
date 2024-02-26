@@ -6,39 +6,37 @@
 \usage{
 weighted_highD_data(
   training_data,
-  nldr_df_with_id,
-  hb_object,
+  nldr_df_with_hex_id,
   column_start_text = "x"
 )
 }
 \arguments{
 \item{training_data}{A data frame containing the training data with an ID column.}
 
-\item{nldr_df_with_id}{A data frame containing 2D embeddings with an unique identifier.}
-
-\item{hb_object}{An object containing information about hexbin IDs.}
+\item{nldr_df_with_hex_id}{A data frame with 2D embeddings and hexagonal bin IDs.}
 
 \item{column_start_text}{The starting text of the column names in the training_data
 that should be considered for the weighted mean. Default is "x".}
 }
 \value{
 A data frame with the computed weighted mean for each specified column.
+nldr_df_with_hex_id = UMAP_data_with_hb_id, column_start_text = "x")
 }
 \description{
 This function computes the weighted mean of the specified columns in the training data
 based on the distances from the average points in the non-linear dimensionality reduction (NLDR) space.
 }
 \examples{
-num_bins_x <- 4
-shape_value <- 1.833091
-hexbin_data_object <- extract_hexbin_centroids(nldr_df = s_curve_noise_umap,
-num_bins = num_bins_x, shape_val = shape_value)
-hexdf_data <- hexbin_data_object$hexdf_data
-hb_object <- hexbin_data_object$hb_data
+num_bins_x <- calculate_effective_x_bins(nldr_df = s_curve_noise_umap_scaled,
+x = "UMAP1", hex_size = NA, buffer_x = NA)
+num_bins_y <- calculate_effective_y_bins(nldr_df = s_curve_noise_umap_scaled,
+ y = "UMAP2", hex_size = NA, buffer_y = NA)
+hex_bin_obj <- generate_hex_binning_info(nldr_df = s_curve_noise_umap_scaled,
+x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
+num_bins_y = num_bins_y, x_start = NA, y_start = NA, buffer_x = NA,
+buffer_y = NA, hex_size = NA)
+UMAP_data_with_hb_id <- as.data.frame(do.call(cbind, hex_bin_obj$nldr_data_with_hex_id))
 weighted_highD_data(training_data = s_curve_noise_training,
-nldr_df_with_id = s_curve_noise_umap, hb_object = hb_object, column_start_text = "x")
+nldr_df_with_hex_id = UMAP_data_with_hb_id, column_start_text = "x")
 
-}
-\seealso{
-\code{\link{compute_weights}}
 }

@@ -8,8 +8,8 @@
 ## `s_curve_noise_umap_predict`
 A data frame with 75 rows and 3 columns:
 \describe{
-  \item{UMAP1}{Numeric, UMAP coordinate 1.}
-  \item{UMAP2}{Numeric, UMAP coordinate 2.}
+  \item{UMAP1}{Numeric, predicted first UMAP 2D embeddings.}
+  \item{UMAP2}{Numeric, predicted second UMAP 2D embeddings.}
   \item{ID}{Numeric, identifier for each data point.}
 }
 }

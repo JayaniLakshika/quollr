@@ -4,21 +4,25 @@
 \alias{calculate_effective_x_bins}
 \title{Calculate the effective number of bins along x-axis}
 \usage{
-calculate_effective_x_bins(.data, x = "UMAP1", cell_area = 1)
+calculate_effective_x_bins(nldr_df, x = "UMAP1", hex_size = NA, buffer_x = NA)
 }
 \arguments{
-\item{.data}{A data frame, data frame extension (e.g., a tibble), or a lazy data frame (e.g., from dbplyr or dtplyr).}
+\item{nldr_df}{A data frame containing 2D embeddings.}
 
-\item{x}{A character variable name representing the x-axis.}
+\item{x}{The name of the column that contains first 2D embeddings component.}
 
-\item{cell_area}{A numeric value that initialise the area of the hexagon.}
+\item{hex_size}{A numeric value that initializes the radius of the outer circle surrounding the hexagon.}
+
+\item{buffer_x}{The buffer size along the x-axis.}
 }
 \value{
 A numeric value representing the effective number of bins along x-axis.
 }
 \description{
-This function calculates the effective number of bins along the x-axis of a hexbin plot.
+This function calculates the effective number of bins along the x-axis of a hexagonal grid.
 }
 \examples{
-calculate_effective_x_bins(.data = s_curve_noise_umap, x = "UMAP1", cell_area = 1)
+calculate_effective_x_bins(nldr_df = s_curve_noise_umap_scaled, x = "UMAP1",
+hex_size = NA, buffer_x = NA)
+
 }
