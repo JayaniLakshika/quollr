@@ -594,7 +594,7 @@ extract_hexbin_mean <- function(nldr_df_with_hex_id, counts_df) {
 #' @param y The name of the column that contains y coordinates of bin centroids/ means.
 #'
 #' @return A triangular object representing the triangulated bin centroids/ means.
-#' @importFrom tripack tri.mesh
+#' @importFrom interp tri.mesh
 #' @importFrom rlang sym as_string
 #'
 #' @examples
@@ -621,7 +621,7 @@ extract_hexbin_mean <- function(nldr_df_with_hex_id, counts_df) {
 #'
 #' @export
 triangulate_bin_centroids <- function(hex_bin_df, x = "c_x", y = "c_y"){
-  tr1 <- tripack::tri.mesh(hex_bin_df[[rlang::as_string(rlang::sym(x))]],
+  tr1 <- interp::tri.mesh(hex_bin_df[[rlang::as_string(rlang::sym(x))]],
                            hex_bin_df[[rlang::as_string(rlang::sym(y))]])
   return(tr1)
 }
@@ -638,7 +638,7 @@ triangulate_bin_centroids <- function(hex_bin_df, x = "c_x", y = "c_y"){
 #' relationships and the corresponding x and y coordinates.
 #' @importFrom tibble tibble as_tibble
 #' @importFrom dplyr mutate filter rename distinct left_join
-#' @importFrom tripack triangles
+#' @importFrom interp triangles
 #'
 #' @examples
 #' num_bins_x <- calculate_effective_x_bins(nldr_df = s_curve_noise_umap_scaled,
@@ -671,7 +671,7 @@ generate_edge_info <- function(triangular_object) {
                           ID = 1:length(triangular_object$x))  # Add ID numbers for joining with from and to points in tr_arcs
 
   # Extract the triangles from the triangular object
-  trang <- tripack::triangles(triangular_object)
+  trang <- interp::triangles(triangular_object)
   trang <- tibble::as_tibble(trang)
 
   # Create data frames with from-to edges

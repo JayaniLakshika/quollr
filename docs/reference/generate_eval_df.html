@@ -100,8 +100,8 @@
 <span class="r-in"><span>num_bins_y <span class="op">=</span> <span class="va">num_bins_y</span>, x_start <span class="op">=</span> <span class="cn">NA</span>, y_start <span class="op">=</span> <span class="cn">NA</span>, buffer_x <span class="op">=</span> <span class="cn">NA</span>,</span></span>
 <span class="r-in"><span>buffer_y <span class="op">=</span> <span class="cn">NA</span>, hex_size <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Hex size is set to 0.2.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> x_start is set to 0.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> y_start is set to 0.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> x_start is set to -0.173205080756888.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> y_start is set to -0.15.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Hex size is set to 0.2.</span>
 <span class="r-in"><span><span class="va">all_centroids_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="va">cbind</span>, <span class="va">hex_bin_obj</span><span class="op">$</span><span class="va">full_grid_hex_centroids</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">counts_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="va">cbind</span>, <span class="va">hex_bin_obj</span><span class="op">$</span><span class="va">hex_id_with_std_counts</span><span class="op">)</span><span class="op">)</span></span></span>
@@ -115,10 +115,10 @@
 <span class="r-in"><span><span class="fu">generate_eval_df</span><span class="op">(</span>test_data <span class="op">=</span> <span class="va">s_curve_noise_training</span>, prediction_df <span class="op">=</span> <span class="va">pred_df_test</span>,</span></span>
 <span class="r-in"><span>df_bin <span class="op">=</span> <span class="va">df_bin</span>, col_start <span class="op">=</span> <span class="st">"x"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $mse</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.2612147</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.3229922</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $aic</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] -536.7666</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] -453.3167</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 </code></pre></div>

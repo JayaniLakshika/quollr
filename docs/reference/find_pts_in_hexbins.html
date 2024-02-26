@@ -88,8 +88,8 @@
 <span class="r-in"><span>                                             y_start <span class="op">=</span> <span class="cn">NA</span>, buffer_x <span class="op">=</span> <span class="cn">NA</span>,</span></span>
 <span class="r-in"><span>                                             buffer_y <span class="op">=</span> <span class="cn">NA</span>, hex_size <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Hex size is set to 0.2.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> x_start is set to 0.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> y_start is set to 0.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> x_start is set to -0.173205080756888.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> y_start is set to -0.15.</span>
 <span class="r-in"><span><span class="va">all_centroids_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="va">cbind</span>, <span class="va">centroid_list</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">s_curve_noise_umap_scaled_rm_id</span> <span class="op">&lt;-</span> <span class="va">s_curve_noise_umap_scaled</span> <span class="op">|&gt;</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">ID</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">nldr_with_hb_id_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="assign_data.html">assign_data</a></span><span class="op">(</span>nldr_df <span class="op">=</span> <span class="va">s_curve_noise_umap_scaled_rm_id</span>,</span></span>
@@ -98,7 +98,7 @@
 <span class="r-in"><span><span class="va">umap_with_hb_id</span> <span class="op">&lt;-</span> <span class="va">umap_with_hb_id</span> <span class="op">|&gt;</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>ID <span class="op">=</span> <span class="va">s_curve_noise_umap_scaled</span><span class="op">$</span><span class="va">ID</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">find_pts_in_hexbins</span><span class="op">(</span>nldr_data_with_hb_id <span class="op">=</span> <span class="va">umap_with_hb_id</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $hexID</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  6 18  1 33 13 28 23 12 34  7  2 27</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  6 18 24  2 12 34 28 13  7 29</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $pts_list</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $pts_list$`Points in hexID: 6`</span>
@@ -113,31 +113,13 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> [39]  52  54  55  56  57  59  60  62  63  64  65  66  67  69  70  71  72  73  74</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [58]  75  76  77  78  79  80  81  84  87  89  91  93  94  95  96  97  99 100</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $pts_list$`Points in hexID: 1`</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $pts_list$`Points in hexID: 24`</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1]   1   2   3   4   6   7   8   9  11  12  14  15  16  17  19  20  21  22  23</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [20]  24  25  26  31  33  34  35  37  38  39  40  41  42  43  44  45  46  47  51</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [39]  52  54  55  56  57  59  60  62  63  64  65  66  67  69  70  71  72  73  74</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [58]  75  76  77  78  79  80  81  84  87  89  91  93  94  95  96  97  99 100</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $pts_list$`Points in hexID: 33`</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]   1   2   3   4   6   7   8   9  11  12  14  15  16  17  19  20  21  22  23</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [20]  24  25  26  31  33  34  35  37  38  39  40  41  42  43  44  45  46  47  51</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [39]  52  54  55  56  57  59  60  62  63  64  65  66  67  69  70  71  72  73  74</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [58]  75  76  77  78  79  80  81  84  87  89  91  93  94  95  96  97  99 100</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $pts_list$`Points in hexID: 13`</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]   1   2   3   4   6   7   8   9  11  12  14  15  16  17  19  20  21  22  23</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [20]  24  25  26  31  33  34  35  37  38  39  40  41  42  43  44  45  46  47  51</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [39]  52  54  55  56  57  59  60  62  63  64  65  66  67  69  70  71  72  73  74</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [58]  75  76  77  78  79  80  81  84  87  89  91  93  94  95  96  97  99 100</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $pts_list$`Points in hexID: 28`</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]   1   2   3   4   6   7   8   9  11  12  14  15  16  17  19  20  21  22  23</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [20]  24  25  26  31  33  34  35  37  38  39  40  41  42  43  44  45  46  47  51</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [39]  52  54  55  56  57  59  60  62  63  64  65  66  67  69  70  71  72  73  74</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [58]  75  76  77  78  79  80  81  84  87  89  91  93  94  95  96  97  99 100</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $pts_list$`Points in hexID: 23`</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $pts_list$`Points in hexID: 2`</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1]   1   2   3   4   6   7   8   9  11  12  14  15  16  17  19  20  21  22  23</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [20]  24  25  26  31  33  34  35  37  38  39  40  41  42  43  44  45  46  47  51</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [39]  52  54  55  56  57  59  60  62  63  64  65  66  67  69  70  71  72  73  74</span>
@@ -155,19 +137,25 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> [39]  52  54  55  56  57  59  60  62  63  64  65  66  67  69  70  71  72  73  74</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [58]  75  76  77  78  79  80  81  84  87  89  91  93  94  95  96  97  99 100</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $pts_list$`Points in hexID: 28`</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]   1   2   3   4   6   7   8   9  11  12  14  15  16  17  19  20  21  22  23</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [20]  24  25  26  31  33  34  35  37  38  39  40  41  42  43  44  45  46  47  51</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [39]  52  54  55  56  57  59  60  62  63  64  65  66  67  69  70  71  72  73  74</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [58]  75  76  77  78  79  80  81  84  87  89  91  93  94  95  96  97  99 100</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $pts_list$`Points in hexID: 13`</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]   1   2   3   4   6   7   8   9  11  12  14  15  16  17  19  20  21  22  23</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [20]  24  25  26  31  33  34  35  37  38  39  40  41  42  43  44  45  46  47  51</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [39]  52  54  55  56  57  59  60  62  63  64  65  66  67  69  70  71  72  73  74</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [58]  75  76  77  78  79  80  81  84  87  89  91  93  94  95  96  97  99 100</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $pts_list$`Points in hexID: 7`</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1]   1   2   3   4   6   7   8   9  11  12  14  15  16  17  19  20  21  22  23</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [20]  24  25  26  31  33  34  35  37  38  39  40  41  42  43  44  45  46  47  51</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [39]  52  54  55  56  57  59  60  62  63  64  65  66  67  69  70  71  72  73  74</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [58]  75  76  77  78  79  80  81  84  87  89  91  93  94  95  96  97  99 100</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $pts_list$`Points in hexID: 2`</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]   1   2   3   4   6   7   8   9  11  12  14  15  16  17  19  20  21  22  23</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [20]  24  25  26  31  33  34  35  37  38  39  40  41  42  43  44  45  46  47  51</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [39]  52  54  55  56  57  59  60  62  63  64  65  66  67  69  70  71  72  73  74</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [58]  75  76  77  78  79  80  81  84  87  89  91  93  94  95  96  97  99 100</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $pts_list$`Points in hexID: 27`</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $pts_list$`Points in hexID: 29`</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1]   1   2   3   4   6   7   8   9  11  12  14  15  16  17  19  20  21  22  23</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [20]  24  25  26  31  33  34  35  37  38  39  40  41  42  43  44  45  46  47  51</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [39]  52  54  55  56  57  59  60  62  63  64  65  66  67  69  70  71  72  73  74</span>

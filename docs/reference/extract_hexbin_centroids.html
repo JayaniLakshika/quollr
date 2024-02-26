@@ -94,8 +94,8 @@
 <span class="r-in"><span>                                             buffer_x <span class="op">=</span> <span class="cn">NA</span>,</span></span>
 <span class="r-in"><span>                                             buffer_y <span class="op">=</span> <span class="cn">NA</span>, hex_size <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Hex size is set to 0.2.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> x_start is set to 0.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> y_start is set to 0.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> x_start is set to -0.173205080756888.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> y_start is set to -0.15.</span>
 <span class="r-in"><span><span class="va">all_centroids_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="va">cbind</span>, <span class="va">centroid_list</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">s_curve_noise_umap_scaled_rm_id</span> <span class="op">&lt;-</span> <span class="va">s_curve_noise_umap_scaled</span> <span class="op">|&gt;</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">ID</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">nldr_with_hb_id_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="assign_data.html">assign_data</a></span><span class="op">(</span>nldr_df <span class="op">=</span> <span class="va">s_curve_noise_umap_scaled_rm_id</span>,</span></span>
@@ -104,19 +104,17 @@
 <span class="r-in"><span><span class="va">std_counts_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="compute_std_counts.html">compute_std_counts</a></span><span class="op">(</span>nldr_df_with_hex_id <span class="op">=</span> <span class="va">umap_with_hb_id</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">counts_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="va">cbind</span>, <span class="va">std_counts_list</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">extract_hexbin_centroids</span><span class="op">(</span>centroids_df <span class="op">=</span> <span class="va">all_centroids_df</span>, counts_df <span class="op">=</span> <span class="va">counts_df</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    hexID       c_x c_y std_counts</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1      1 0.0000000 0.0 0.40000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2      2 0.3464102 0.0 0.26666667</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3      6 0.1732051 0.3 0.86666667</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4      7 0.5196152 0.3 0.13333333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5     12 0.3464102 0.6 0.20000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6     13 0.6928203 0.6 0.53333333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7     18 0.8660254 0.9 0.80000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8     23 0.6928203 1.2 0.06666667</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9     27 0.5196152 1.5 0.06666667</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10    28 0.8660254 1.5 1.00000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11    33 0.6928203 1.8 0.46666667</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12    34 1.0392305 1.8 0.20000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    hexID       c_x   c_y std_counts</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1      2 0.1732051 -0.15  0.2352941</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2      6 0.0000000  0.15  0.5294118</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3      7 0.3464102  0.15  0.4117647</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4     12 0.1732051  0.45  0.1764706</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5     13 0.5196152  0.45  0.3529412</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6     18 0.6928203  0.75  0.7058824</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7     24 0.8660254  1.05  0.4705882</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8     28 0.6928203  1.35  0.2941176</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9     29 1.0392305  1.35  0.2352941</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10    34 0.8660254  1.65  1.0000000</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

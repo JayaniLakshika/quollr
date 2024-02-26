@@ -5,10 +5,21 @@ library(scales)
 
 set.seed(20230531)
 
+## To generate S-curve data
+s_curve <- function(n_samples = 100) {
+  tt <- 3 * pi * stats::runif(n = n_samples, min = -0.5, max = 0.5)
+  x <- sin(tt)
+  y <- 2.0 * stats::runif(n = n_samples)
+  z <- sign(tt) * (cos(tt) - 1)
+  X <- cbind(x, y, z)
+
+  data.frame(X, color = linear_color_map(tt), stringsAsFactors = FALSE)
+}
+
 # Simulate some s_curve_noise
 
 sample_size <- 100
-s_curve_noise <- snedata::s_curve(n_samples = sample_size)
+s_curve_noise <- s_curve(n_samples = sample_size)
 s_curve_noise <- s_curve_noise |>
   dplyr::select(-color)
 names(s_curve_noise) <- c("x1", "x2", "x3")

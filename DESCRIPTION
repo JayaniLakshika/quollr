@@ -40,12 +40,12 @@ Imports:
     langevitour,
     stats,
     tibble,
-    tripack,
     rsample,
     tidyselect,
     proxy,
     rlang,
-    scales
+    scales,
+    interp
 URL: https://github.com/JayaniLakshika/quollr
 BugReports: https://github.com/JayaniLakshika/quollr/issues
 Depends: 
@@ -55,7 +55,6 @@ Suggests:
     rmarkdown,
     testthat (>= 3.0.0),
     vdiffr,
-    umap,
-    snedata (>= 0.0.0.9000)
+    umap
 VignetteBuilder: knitr
 Config/testthat/edition: 3

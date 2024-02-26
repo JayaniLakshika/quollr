@@ -101,8 +101,8 @@ provided in the input data frame and returns the triangular object.</p>
 <span class="r-in"><span>                                             buffer_x <span class="op">=</span> <span class="cn">NA</span>,</span></span>
 <span class="r-in"><span>                                             buffer_y <span class="op">=</span> <span class="cn">NA</span>, hex_size <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Hex size is set to 0.2.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> x_start is set to 0.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> y_start is set to 0.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> x_start is set to -0.173205080756888.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> y_start is set to -0.15.</span>
 <span class="r-in"><span><span class="va">all_centroids_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="va">cbind</span>, <span class="va">centroid_list</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">s_curve_noise_umap_scaled_rm_id</span> <span class="op">&lt;-</span> <span class="va">s_curve_noise_umap_scaled</span> <span class="op">|&gt;</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">ID</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">nldr_with_hb_id_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="assign_data.html">assign_data</a></span><span class="op">(</span>nldr_df <span class="op">=</span> <span class="va">s_curve_noise_umap_scaled_rm_id</span>,</span></span>
@@ -112,26 +112,25 @@ provided in the input data frame and returns the triangular object.</p>
 <span class="r-in"><span><span class="va">counts_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="va">cbind</span>, <span class="va">std_counts_list</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">df_bin_centroids</span> <span class="op">&lt;-</span> <span class="fu"><a href="extract_hexbin_centroids.html">extract_hexbin_centroids</a></span><span class="op">(</span>centroids_df <span class="op">=</span> <span class="va">all_centroids_df</span>, counts_df <span class="op">=</span> <span class="va">counts_df</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">triangulate_bin_centroids</span><span class="op">(</span>hex_bin_df <span class="op">=</span> <span class="va">df_bin_centroids</span>, x <span class="op">=</span> <span class="st">"c_x"</span>, y <span class="op">=</span> <span class="st">"c_y"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> triangulation nodes with neigbours:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> node: (x,y): neighbours</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1: (0,0) [3]: 2 3 9 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2: (0.3464102,0) [3]: 1 3 4 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3: (0.1732051,0.3) [5]: 1 2 4 5 9 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4: (0.5196152,0.3) [4]: 2 3 5 6 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5: (0.3464102,0.6) [6]: 3 4 6 7 8 9 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6: (0.6928203,0.6) [3]: 4 5 7 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7: (0.8660254,0.9) [5]: 5 6 8 10 12 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8: (0.6928203,1.2) [4]: 5 7 9 10 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9: (0.5196152,1.5) [6]: 1 3 5 8 10 11 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10: (0.8660254,1.5) [5]: 7 8 9 11 12 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11: (0.6928203,1.8) [3]: 9 10 12 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12: (1.03923,1.8) [3]: 7 10 11 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> number of nodes: 12 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> number of arcs: 25 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> number of boundary nodes: 8 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> boundary nodes:  1 2 4 6 7 9 11 12 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> number of triangles: 14 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> number of constraints: 0 </span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>triangle collapsed!</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>triangle collapsed!</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>three points coincide or are collinear!</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>three points coincide or are collinear!</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Delaunay triangulation, node and triangle indices:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> triangle: nodes (a,b,c), neighbour triangles [i,j,k] </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1: (1,3,2), [2,0,4]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2: (4,2,3), [1,3,9]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3: (5,4,3), [2,4,5]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4: (5,3,1), [1,8,3]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5: (6,4,5), [3,7,10]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6: (6,7,8), [11,10,7]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7: (7,6,5), [5,8,6]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8: (7,1,5), [4,7,0]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9: (8,4,2), [2,0,10]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10: (6,8,4), [9,5,6]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11: (9,8,7), [6,0,12]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12: (10,8,9), [11,0,0]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> boundary nodes:  2 1 7 9 10 8 </span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

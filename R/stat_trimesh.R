@@ -45,7 +45,7 @@ stat_trimesh <- function(mapping = NULL, data = NULL, geom = GeomTrimesh$default
 #' @importFrom dplyr row_number
 #' @importFrom dplyr bind_rows
 #' @importFrom stats setNames
-#' @importFrom tripack triangles
+#' @importFrom interp triangles
 #' @importFrom tibble add_row
 
 StatTrimesh <- ggplot2::ggproto(
@@ -54,14 +54,14 @@ StatTrimesh <- ggplot2::ggproto(
   compute_group = function(data, scales, outliers = TRUE) {
 
     # Create triangular object
-    triangular_object <- tripack::tri.mesh(data$x, data$y, duplicate = "remove")
+    suppressWarnings(triangular_object <- interp::tri.mesh(data$x, data$y))
 
     # Create a data frame with x and y coordinate values from the triangular object
     tr_df <- tibble::tibble(x = triangular_object$x, y = triangular_object$y,
                             ID = 1:length(triangular_object$x))  # Add ID numbers for joining with from and to points in tr_arcs
 
     # Extract the triangles from the triangular object
-    trang <- tripack::triangles(triangular_object)
+    trang <- interp::triangles(triangular_object)
     trang <- tibble::as_tibble(trang)
 
     # Create data frames with from-to edges
