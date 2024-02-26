@@ -27,9 +27,9 @@ library(tibble)
 
 ## 1. Compute hexagonal grid configurations
 
-### Number of bins along the x-axis
+To begin the algorithm, you need to determine the number of bins along the x and y axes to have regular hexagons in the hexagonal grid.
 
-To begin the algorithm, you need to determine the number of bins along the x-axis for creating regular hexagons in the hexagonal grid.
+### Number of bins along the x-axis
 
 ```{r}
 num_bins_x <- calculate_effective_x_bins(nldr_df = s_curve_noise_umap_scaled,
@@ -39,8 +39,6 @@ num_bins_x
 
 ### Number of bins along the y-axis
 
-Then, you need to determine the shape parameter, which control the shape and size of the hexagons in the hexagonal grid.
-
 ```{r}
 num_bins_y <- calculate_effective_y_bins(nldr_df = s_curve_noise_umap_scaled,
                                          y = "UMAP2", hex_size = 0.2)
@@ -48,6 +46,7 @@ num_bins_y
 ```
 
 ## 2. Obtain hexagonal bin centroids
+
 
 ```{r}
 hb_obj <- generate_hex_binning_info(nldr_df = s_curve_noise_umap_scaled,
@@ -83,7 +82,7 @@ df_bin_centroids <- df_bin_centroids |>
 
 ## 4. Triangulate hexagonal bin centroids
 
-Next, you need to perform triangulation on the bin centroids to construct a triangular mesh. Triangulation involves connecting the bin centroids with triangular edges to form a mesh that reveals the local structure of the data.
+Next, you need to perform triangulation on the bin centroids to construct a triangular mesh. 
 
 ```{r}
 tr1_object <- triangulate_bin_centroids(hex_bin_df = df_bin_centroids, x = "c_x", y = "c_y")
