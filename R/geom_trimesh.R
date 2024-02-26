@@ -74,14 +74,20 @@ GeomTrimesh <- ggplot2::ggproto("GeomTrimesh",
                                 draw_key = ggplot2::draw_key_point,
                                 draw_panel = function(data, panel_scales, coord) {
 
+                                  point_info <- tibble::tibble(
+                                    x = c(data$x, data$xend),
+                                    y = c(data$y, data$yend)
+                                  ) |>
+                                    dplyr::distinct()
+
                                   vertices <- tibble::tibble(
-                                    x = data$x,
-                                    y = data$y,
-                                    colour = rep("#33a02c", nrow(data)),
-                                    shape = data$shape,
-                                    size = rep(2, nrow(data)),
-                                    fill = rep("#33a02c", nrow(data)),
-                                    alpha = data$alpha,
+                                    x = point_info$x,
+                                    y = point_info$y,
+                                    colour = rep("#33a02c", nrow(point_info)),
+                                    shape = rep(data$shape[1], nrow(point_info)),
+                                    size = rep(2, nrow(point_info)),
+                                    fill = rep("#33a02c", nrow(point_info)),
+                                    alpha = rep(data$alpha[1], nrow(point_info)),
                                     stroke = 0.5,
                                     stringsAsFactors = FALSE
                                   )

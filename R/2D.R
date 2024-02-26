@@ -684,10 +684,6 @@ generate_edge_info <- function(triangular_object) {
     dplyr::distinct(x, y) |>
     dplyr::rename(c("from" = "x", "to" = "y"))
 
-  ## Extract from and to values a vectors
-  from_vec <- tr_arcs_df$from
-  to_vec <- tr_arcs_df$to
-
   ## Map from and to coordinates
   tr_from_to_df_coord <- dplyr::left_join(tr_arcs_df, tr_df, by = c("from" = "ID")) |>
     dplyr::rename(c("x_from" = "x", "y_from" = "y"))
