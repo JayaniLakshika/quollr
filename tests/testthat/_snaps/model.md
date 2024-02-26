@@ -1,20 +1,11 @@
 # fit_high_d_model() works
 
     Code
-      fit_high_d_model(training_data = s_curve_noise_training, nldr_df_with_id = s_curve_noise_umap_scaled,
-        x = "UMAP1", y = "UMAP2", num_bins_x = NA, num_bins_y = NA, x_start = NA,
-        y_start = NA, buffer_x = NA, buffer_y = NA, hex_size = NA, is_bin_centroid = TRUE,
-        is_rm_lwd_hex = FALSE, benchmark_to_rm_lwd_hex = NA, is_avg_high_d = TRUE,
-        column_start_text = "x")
-    Message
-      Hex size is set to 0.2.
-      Buffer along the x-axis is set to 0.519615242270663.
-      Hex size is set to 0.2.
-      Buffer along the y-axis is set to 0.45.
-      Hex size is set to 0.2.
-      x_start is set to -0.173205080756888.
-      y_start is set to -0.15.
-      Hex size is set to 0.2.
+      suppressMessages(fit_high_d_model(training_data = s_curve_noise_training,
+        nldr_df_with_id = s_curve_noise_umap_scaled, x = "UMAP1", y = "UMAP2",
+        num_bins_x = NA, num_bins_y = NA, x_start = NA, y_start = NA, buffer_x = NA,
+        buffer_y = NA, hex_size = NA, is_bin_centroid = TRUE, is_rm_lwd_hex = FALSE,
+        benchmark_to_rm_lwd_hex = NA, is_avg_high_d = TRUE, column_start_text = "x"))
     Output
       $df_bin
       # A tibble: 10 x 8
@@ -48,16 +39,11 @@
 ---
 
     Code
-      fit_high_d_model(training_data = s_curve_noise_training, nldr_df_with_id = s_curve_noise_umap_scaled,
-        x = "UMAP1", y = "UMAP2", num_bins_x = 5, num_bins_y = 8, x_start = NA,
-        y_start = NA, buffer_x = NA, buffer_y = NA, hex_size = NA, is_bin_centroid = TRUE,
-        is_rm_lwd_hex = FALSE, benchmark_to_rm_lwd_hex = NA, is_avg_high_d = TRUE,
-        column_start_text = "x")
-    Message
-      Hex size is set to 0.2.
-      x_start is set to -0.173205080756888.
-      y_start is set to -0.15.
-      Hex size is set to 0.2.
+      suppressMessages(fit_high_d_model(training_data = s_curve_noise_training,
+        nldr_df_with_id = s_curve_noise_umap_scaled, x = "UMAP1", y = "UMAP2",
+        num_bins_x = 5, num_bins_y = 8, x_start = NA, y_start = NA, buffer_x = NA,
+        buffer_y = NA, hex_size = NA, is_bin_centroid = TRUE, is_rm_lwd_hex = FALSE,
+        benchmark_to_rm_lwd_hex = NA, is_avg_high_d = TRUE, column_start_text = "x"))
     Output
       $df_bin
       # A tibble: 10 x 8
@@ -91,20 +77,11 @@
 ---
 
     Code
-      fit_high_d_model(training_data = s_curve_noise_training, nldr_df_with_id = s_curve_noise_umap_scaled,
-        x = "UMAP1", y = "UMAP2", num_bins_x = NA, num_bins_y = NA, x_start = NA,
-        y_start = NA, buffer_x = NA, buffer_y = NA, hex_size = NA, is_bin_centroid = TRUE,
-        is_rm_lwd_hex = TRUE, benchmark_to_rm_lwd_hex = NA, is_avg_high_d = TRUE,
-        column_start_text = "x")
-    Message
-      Hex size is set to 0.2.
-      Buffer along the x-axis is set to 0.519615242270663.
-      Hex size is set to 0.2.
-      Buffer along the y-axis is set to 0.45.
-      Hex size is set to 0.2.
-      x_start is set to -0.173205080756888.
-      y_start is set to -0.15.
-      Hex size is set to 0.2.
+      suppressMessages(fit_high_d_model(training_data = s_curve_noise_training,
+        nldr_df_with_id = s_curve_noise_umap_scaled, x = "UMAP1", y = "UMAP2",
+        num_bins_x = NA, num_bins_y = NA, x_start = NA, y_start = NA, buffer_x = NA,
+        buffer_y = NA, hex_size = NA, is_bin_centroid = TRUE, is_rm_lwd_hex = TRUE,
+        benchmark_to_rm_lwd_hex = NA, is_avg_high_d = TRUE, column_start_text = "x"))
     Output
       $df_bin
       # A tibble: 10 x 8
@@ -138,20 +115,11 @@
 ---
 
     Code
-      fit_high_d_model(training_data = s_curve_noise_training, nldr_df_with_id = s_curve_noise_umap_scaled,
-        x = "UMAP1", y = "UMAP2", num_bins_x = NA, num_bins_y = NA, x_start = NA,
-        y_start = NA, buffer_x = NA, buffer_y = NA, hex_size = NA, is_bin_centroid = TRUE,
-        is_rm_lwd_hex = TRUE, benchmark_to_rm_lwd_hex = 0.4, is_avg_high_d = TRUE,
-        column_start_text = "x")
-    Message
-      Hex size is set to 0.2.
-      Buffer along the x-axis is set to 0.519615242270663.
-      Hex size is set to 0.2.
-      Buffer along the y-axis is set to 0.45.
-      Hex size is set to 0.2.
-      x_start is set to -0.173205080756888.
-      y_start is set to -0.15.
-      Hex size is set to 0.2.
+      suppressMessages(fit_high_d_model(training_data = s_curve_noise_training,
+        nldr_df_with_id = s_curve_noise_umap_scaled, x = "UMAP1", y = "UMAP2",
+        num_bins_x = NA, num_bins_y = NA, x_start = NA, y_start = NA, buffer_x = NA,
+        buffer_y = NA, hex_size = NA, is_bin_centroid = TRUE, is_rm_lwd_hex = TRUE,
+        benchmark_to_rm_lwd_hex = 0.4, is_avg_high_d = TRUE, column_start_text = "x"))
     Output
       $df_bin
       # A tibble: 10 x 8
@@ -185,20 +153,11 @@
 ---
 
     Code
-      fit_high_d_model(training_data = s_curve_noise_training, nldr_df_with_id = s_curve_noise_umap_scaled,
-        x = "UMAP1", y = "UMAP2", num_bins_x = NA, num_bins_y = NA, x_start = NA,
-        y_start = NA, buffer_x = NA, buffer_y = NA, hex_size = NA, is_bin_centroid = FALSE,
-        is_rm_lwd_hex = FALSE, benchmark_to_rm_lwd_hex = NA, is_avg_high_d = TRUE,
-        column_start_text = "x")
-    Message
-      Hex size is set to 0.2.
-      Buffer along the x-axis is set to 0.519615242270663.
-      Hex size is set to 0.2.
-      Buffer along the y-axis is set to 0.45.
-      Hex size is set to 0.2.
-      x_start is set to -0.173205080756888.
-      y_start is set to -0.15.
-      Hex size is set to 0.2.
+      suppressMessages(fit_high_d_model(training_data = s_curve_noise_training,
+        nldr_df_with_id = s_curve_noise_umap_scaled, x = "UMAP1", y = "UMAP2",
+        num_bins_x = NA, num_bins_y = NA, x_start = NA, y_start = NA, buffer_x = NA,
+        buffer_y = NA, hex_size = NA, is_bin_centroid = FALSE, is_rm_lwd_hex = FALSE,
+        benchmark_to_rm_lwd_hex = NA, is_avg_high_d = TRUE, column_start_text = "x"))
     Output
       $df_bin
       # A tibble: 10 x 8
@@ -234,20 +193,11 @@
 ---
 
     Code
-      fit_high_d_model(training_data = s_curve_noise_training, nldr_df_with_id = s_curve_noise_umap_scaled,
-        x = "UMAP1", y = "UMAP2", num_bins_x = NA, num_bins_y = NA, x_start = NA,
-        y_start = NA, buffer_x = NA, buffer_y = NA, hex_size = NA, is_bin_centroid = FALSE,
-        is_rm_lwd_hex = FALSE, benchmark_to_rm_lwd_hex = NA, is_avg_high_d = FALSE,
-        column_start_text = "x")
-    Message
-      Hex size is set to 0.2.
-      Buffer along the x-axis is set to 0.519615242270663.
-      Hex size is set to 0.2.
-      Buffer along the y-axis is set to 0.45.
-      Hex size is set to 0.2.
-      x_start is set to -0.173205080756888.
-      y_start is set to -0.15.
-      Hex size is set to 0.2.
+      suppressMessages(fit_high_d_model(training_data = s_curve_noise_training,
+        nldr_df_with_id = s_curve_noise_umap_scaled, x = "UMAP1", y = "UMAP2",
+        num_bins_x = NA, num_bins_y = NA, x_start = NA, y_start = NA, buffer_x = NA,
+        buffer_y = NA, hex_size = NA, is_bin_centroid = FALSE, is_rm_lwd_hex = FALSE,
+        benchmark_to_rm_lwd_hex = NA, is_avg_high_d = FALSE, column_start_text = "x"))
     Output
       $df_bin
       # A tibble: 10 x 8

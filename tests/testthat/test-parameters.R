@@ -1,7 +1,7 @@
 test_that("find_benchmark_value() works", {
 
-  model <- fit_high_d_model(training_data = s_curve_noise_training,
-                            nldr_df_with_id = s_curve_noise_umap_scaled)
+  model <- suppressMessages(fit_high_d_model(training_data = s_curve_noise_training,
+                            nldr_df_with_id = s_curve_noise_umap_scaled))
   df_bin_centroids <- model$df_bin_centroids
 
   suppressWarnings(tr1_object <- triangulate_bin_centroids(hex_bin_df = df_bin_centroids,
@@ -23,17 +23,17 @@ test_that("find_benchmark_value() works", {
 
 test_that("compute_mean_density_hex() works", {
 
-  num_bins_x <- calculate_effective_x_bins(nldr_df = s_curve_noise_umap_scaled,
-                                           x = "UMAP1", hex_size = NA, buffer_x = NA)
-  num_bins_y <- calculate_effective_y_bins(nldr_df = s_curve_noise_umap_scaled,
-                                           y = "UMAP2", hex_size = NA, buffer_y = NA)
+  num_bins_x <- suppressMessages(calculate_effective_x_bins(nldr_df = s_curve_noise_umap_scaled,
+                                           x = "UMAP1", hex_size = NA, buffer_x = NA))
+  num_bins_y <- suppressMessages(calculate_effective_y_bins(nldr_df = s_curve_noise_umap_scaled,
+                                           y = "UMAP2", hex_size = NA, buffer_y = NA))
 
   ## Obtain the hexbin object
-  hb_obj <- generate_hex_binning_info(nldr_df = s_curve_noise_umap_scaled,
+  suppressMessages(hb_obj <- generate_hex_binning_info(nldr_df = s_curve_noise_umap_scaled,
                                       x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
                                       num_bins_y = num_bins_y, x_start = NA,
                                       y_start = NA, buffer_x = NA,
-                                      buffer_y = NA, hex_size = NA)
+                                      buffer_y = NA, hex_size = NA))
 
   all_centroids_df <- as.data.frame(do.call(cbind, hb_obj$full_grid_hex_centroids))
   counts_df <- as.data.frame(do.call(cbind, hb_obj$hex_id_with_std_counts))
@@ -56,17 +56,17 @@ test_that("compute_mean_density_hex() works", {
 
 test_that("find_low_density_hexagons() works", {
 
-  num_bins_x <- calculate_effective_x_bins(nldr_df = s_curve_noise_umap_scaled,
-                                           x = "UMAP1", hex_size = NA, buffer_x = NA)
-  num_bins_y <- calculate_effective_y_bins(nldr_df = s_curve_noise_umap_scaled,
-                                           y = "UMAP2", hex_size = NA, buffer_y = NA)
+  num_bins_x <- suppressMessages(calculate_effective_x_bins(nldr_df = s_curve_noise_umap_scaled,
+                                           x = "UMAP1", hex_size = NA, buffer_x = NA))
+  num_bins_y <- suppressMessages(calculate_effective_y_bins(nldr_df = s_curve_noise_umap_scaled,
+                                           y = "UMAP2", hex_size = NA, buffer_y = NA))
 
   ## Obtain the hexbin object
-  hb_obj <- generate_hex_binning_info(nldr_df = s_curve_noise_umap_scaled,
+  suppressMessages(hb_obj <- generate_hex_binning_info(nldr_df = s_curve_noise_umap_scaled,
                                       x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
                                       num_bins_y = num_bins_y, x_start = NA,
                                       y_start = NA, buffer_x = NA,
-                                      buffer_y = NA, hex_size = NA)
+                                      buffer_y = NA, hex_size = NA))
 
   all_centroids_df <- as.data.frame(do.call(cbind, hb_obj$full_grid_hex_centroids))
   counts_df <- as.data.frame(do.call(cbind, hb_obj$hex_id_with_std_counts))

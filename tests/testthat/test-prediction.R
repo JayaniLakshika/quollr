@@ -1,7 +1,7 @@
 test_that("predict_2d_embeddings() works", {
 
-  model <- fit_high_d_model(training_data = s_curve_noise_training,
-                            nldr_df_with_id = s_curve_noise_umap_scaled)
+  model <- suppressMessages(fit_high_d_model(training_data = s_curve_noise_training,
+                            nldr_df_with_id = s_curve_noise_umap_scaled))
   df_bin_centroids <- model$df_bin_centroids
   df_bin <- model$df_bin
   testthat::expect_snapshot(predict_2d_embeddings(test_data = s_curve_noise_training,
@@ -38,8 +38,8 @@ test_that("compute_aic() works", {
 
 test_that("generate_eval_df() works", {
 
-  model <- fit_high_d_model(training_data = s_curve_noise_training,
-                            nldr_df_with_id = s_curve_noise_umap_scaled)
+  model <- suppressMessages(fit_high_d_model(training_data = s_curve_noise_training,
+                            nldr_df_with_id = s_curve_noise_umap_scaled))
   df_bin_centroids <- model$df_bin_centroids
   df_bin <- model$df_bin
 

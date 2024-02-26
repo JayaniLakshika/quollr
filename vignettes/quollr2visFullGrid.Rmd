@@ -62,6 +62,11 @@ ggplot(data = hex_grid, aes(x = x, y = y)) +
   geom_point(data = df_bin_centroids, aes(x = c_x, y = c_y), color = "blue") +
   coord_fixed()
 
+ggplot(data = hex_grid, aes(x = x, y = y)) + 
+  geom_polygon(fill = "white", color = "black", aes(group = hex_poly_id)) +
+  geom_point(data = s_curve_noise_umap_scaled, aes(x = UMAP1, y = UMAP2), color = "blue") +
+  coord_fixed()
+
 hex_grid_with_counts <- dplyr::left_join(hex_grid, counts_df, by = c("hex_poly_id" = "hb_id"))
 
 ggplot(data = hex_grid_with_counts, aes(x = x, y = y)) +
