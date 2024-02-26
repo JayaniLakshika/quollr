@@ -2,7 +2,7 @@
 title: "3. Predict 2D embeddings"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{prediction}
+  %\VignetteIndexEntry{quollr3prediction}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

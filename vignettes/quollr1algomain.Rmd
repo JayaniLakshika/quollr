@@ -2,7 +2,7 @@
 title: "1. Main steps"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{algomain}
+  %\VignetteIndexEntry{quollr1algomain}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

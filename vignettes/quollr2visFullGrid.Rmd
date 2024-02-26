@@ -2,7 +2,7 @@
 title: "2. Visualise full hexagonal grid"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{visFullGrid}
+  %\VignetteIndexEntry{quollr2visFullGrid}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -53,17 +53,20 @@ df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df,
 
 ggplot(data = hex_grid, aes(x = x, y = y)) + 
   geom_polygon(fill = "white", color = "black", aes(group = hex_poly_id)) +
-  geom_point(data = all_centroids_df, aes(x = c_x, y = c_y), color = "red") 
+  geom_point(data = all_centroids_df, aes(x = c_x, y = c_y), color = "red") +
+  coord_fixed()
 
 ggplot(data = hex_grid, aes(x = x, y = y)) + 
   geom_polygon(fill = "white", color = "black", aes(group = hex_poly_id)) +
   geom_point(data = all_centroids_df, aes(x = c_x, y = c_y), color = "red") +
-  geom_point(data = df_bin_centroids, aes(x = c_x, y = c_y), color = "blue")
+  geom_point(data = df_bin_centroids, aes(x = c_x, y = c_y), color = "blue") +
+  coord_fixed()
 
 hex_grid_with_counts <- dplyr::left_join(hex_grid, counts_df, by = c("hex_poly_id" = "hb_id"))
 
 ggplot(data = hex_grid_with_counts, aes(x = x, y = y)) +
   geom_polygon(color = "black", aes(group = hex_poly_id, fill = std_counts)) +
   geom_text(data = all_centroids_df, aes(x = c_x, y = c_y, label = hexID)) +
-  scale_fill_viridis_c(direction = -1, na.value = "#ffffff")
+  scale_fill_viridis_c(direction = -1, na.value = "#ffffff") +
+  coord_fixed()
 ```
