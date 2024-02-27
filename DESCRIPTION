@@ -43,7 +43,6 @@ Imports:
     tidyselect,
     proxy,
     rlang,
-    scales,
     interp (>= 1.1-6)
 URL: https://github.com/JayaniLakshika/quollr
 BugReports: https://github.com/JayaniLakshika/quollr/issues
