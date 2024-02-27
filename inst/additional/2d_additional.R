@@ -125,3 +125,132 @@ vdiffr::expect_doppelganger("remove_long_edges basic with bin means",
                                               benchmark_value = 0.75,
                                               tr_from_to_df_coord = tr_from_to_df_n,
                                               distance_col = "distance"))
+
+generate_full_grid_centroids <- function(nldr_df, x = "UMAP1", y = "UMAP2",
+                                         num_bins_x, num_bins_y, x_start = NA,
+                                         y_start = NA, buffer_x = NA,
+                                         buffer_y = NA, hex_size = NA){
+
+  ## hex size is not provided
+  if (is.na(hex_size)) {
+    ## To compute the diameter of the hexagon
+    hex_size <- 0.2
+    message(paste0("Hex size is set to ", hex_size, "."))
+
+  }
+
+  ## If number of bins along the x-axis is not given
+  if (is.na(num_bins_x)) {
+    ## compute the number of bins along the x-axis
+    num_bins_x <- calculate_effective_x_bins(nldr_df, x = "UMAP1",
+                                             hex_size = hex_size,
+                                             buffer_x = buffer_x)
+
+
+  }
+
+  ## If number of bins along the y-axis is not given
+  if (is.na(num_bins_y)) {
+    num_bins_y <- calculate_effective_y_bins(nldr_df, y = "UMAP2",
+                                             hex_size = hex_size,
+                                             buffer_y = buffer_y)
+
+  }
+
+
+  ## If x_start and y_start not define
+  if (is.na(x_start)) {
+
+    # Define starting point
+    x_start <- min(nldr_df[[rlang::as_string(rlang::sym(x))]]) - (sqrt(3) * hex_size/2)
+
+    message(paste0("x_start is set to ", x_start, "."))
+
+  } else {
+    max_x_start <- min(nldr_df[[rlang::as_string(rlang::sym(x))]]) + (sqrt(3) * hex_size)
+    min_x_start <- min(nldr_df[[rlang::as_string(rlang::sym(x))]]) - (sqrt(3) * hex_size)
+
+    if ((x_start < min_x_start) | (x_start > max_x_start)){
+      stop(paste0("x_start value is not compatible.
+                  Need to use a value betweeen ", min_x_start," and ", max_x_start,"."))
+
+    }
+
+  }
+
+  if (is.na(y_start)) {
+    # Define starting point
+    y_start <- min(nldr_df[[rlang::as_string(rlang::sym(y))]]) - (1.5 * hex_size/2)
+
+    message(paste0("y_start is set to ", y_start, "."))
+
+
+  } else {
+
+    max_y_start <- min(nldr_df[[rlang::as_string(rlang::sym(x))]]) + (1.5 * hex_size)
+    min_y_start <- min(nldr_df[[rlang::as_string(rlang::sym(x))]]) - (1.5 * hex_size)
+
+    if ((y_start < min_y_start) | (y_start > max_y_start)){
+      stop(paste0("y_start value is not compatible.
+                  Need to use a value betweeen ", min_y_start," and ", max_y_start,"."))
+
+    }
+
+
+
+  }
+
+
+  # Calculate horizontal and vertical spacing
+  horizontal_spacing <- sqrt(3) * hex_size
+  vertical_spacing <- 1.5 * hex_size
+
+  # Initialize vector to store hexgon centroid coordinates
+  c_x <- numeric(0)
+  c_y <- numeric(0)
+
+  # Generate hexagon grid
+  for (i in 1:num_bins_y) {
+    for (j in 1:num_bins_x) {
+
+      if (i == 1) {
+        ## For the first hexbin along the y-axis
+        y <- y_start
+
+        if (j == 1) {
+          ## For the first hexbin along the x-axis
+          x <- x_start
+
+        } else {
+
+          ## For the bins along the x-axis except the first one
+          x <- x_start + (j - 1) * horizontal_spacing
+          if (i %% 2 == 0) {  # Adjust for even rows
+            x <- x + horizontal_spacing / 2
+          }
+
+        }
+
+      } else {
+
+        ## For the bins along the x and y axes except the first ones
+        x <- x_start + (j - 1) * horizontal_spacing
+        y <- y_start + (i - 1) * vertical_spacing
+        if (i %% 2 == 0) {  # Adjust for even rows
+          x <- x + horizontal_spacing / 2
+        }
+
+      }
+
+      c_x <- append(c_x, x)
+      c_y <- append(c_y, y)
+
+    }
+  }
+
+  ## To generate hexIDs
+  hexID <- 1:length(c_x)
+
+  return(list(hexID = hexID, c_x = c_x, c_y = c_y))
+
+}

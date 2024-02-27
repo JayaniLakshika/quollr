@@ -4,7 +4,7 @@
 \alias{calculate_effective_x_bins}
 \title{Calculate the effective number of bins along x-axis}
 \usage{
-calculate_effective_x_bins(nldr_df, x = "UMAP1", hex_size = NA, buffer_x = NA)
+calculate_effective_x_bins(nldr_df, x, hex_size = NA, buffer_x = NA)
 }
 \arguments{
 \item{nldr_df}{A data frame containing 2D embeddings.}

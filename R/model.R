@@ -100,7 +100,7 @@ fit_high_d_model <- function(training_data, nldr_df_with_id, x = "UMAP1",
       dplyr::filter(std_counts <= benchmark_to_rm_lwd_hex)
 
     ## To identify low-density hexagons needed to remove by investigating neighbouring mean density
-    identify_rm_bins <- find_low_density_hexagons(df_bin_centroids_all = df_bin_centroids,
+    identify_rm_bins <- find_low_dens_hex(df_bin_centroids_all = df_bin_centroids,
                                                   num_bins_x = num_bins_x,
                                                   df_bin_centroids_low = df_bin_centroids_low)
 

@@ -77,7 +77,7 @@ calc_y_max <- function(aspect_ratio, hex_ratio) {
 #' gen_scaled_data(nldr_df = s_curve_noise_umap, x = "UMAP1", y = "UMAP2")
 #'
 #' @export
-gen_scaled_data <- function(nldr_df, x, y, hex_ratio) {
+gen_scaled_data <- function(nldr_df, x, y, hex_ratio = NA) {
 
   ## Obtain 2D embeddings
   emb1_vec <- nldr_df[[rlang::as_string(rlang::sym(x))]]
@@ -94,7 +94,7 @@ gen_scaled_data <- function(nldr_df, x, y, hex_ratio) {
   ## Scale second embedding between 0 and ymax
   y_min <- 0
 
-  if(is.na(ymax)) {
+  if(is.na(hex_ratio)) {
     ## Default hex ratio
     hex_ratio <- 2/sqrt(3)
   }

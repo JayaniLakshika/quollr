@@ -54,7 +54,7 @@ test_that("compute_mean_density_hex() works", {
 })
 
 
-test_that("find_low_density_hexagons() works", {
+test_that("find_low_dens_hex() works", {
 
   num_bins_x <- suppressMessages(calculate_effective_x_bins(nldr_df = s_curve_noise_umap_scaled,
                                            x = "UMAP1", hex_size = NA, buffer_x = NA))
@@ -75,28 +75,28 @@ test_that("find_low_density_hexagons() works", {
   df_bin_centroids_low <- df_bin_centroids |>
     dplyr::filter(std_counts <= 0.43)
 
-  testthat::expect_snapshot(find_low_density_hexagons(df_bin_centroids_all = df_bin_centroids,
+  testthat::expect_snapshot(find_low_dens_hex(df_bin_centroids_all = df_bin_centroids,
                                                       num_bins_x = num_bins_x,
                                                       df_bin_centroids_low = df_bin_centroids_low))
 
-  testthat::expect_snapshot(find_low_density_hexagons(df_bin_centroids_all = df_bin_centroids,
+  testthat::expect_snapshot(find_low_dens_hex(df_bin_centroids_all = df_bin_centroids,
                                                       num_bins_x = num_bins_x,
                                                       df_bin_centroids_low = data.frame(matrix(nrow = 0, ncol = 0))))
 
-  testthat::expect_error(find_low_density_hexagons(df_bin_centroids_all = df_bin_centroids,
+  testthat::expect_error(find_low_dens_hex(df_bin_centroids_all = df_bin_centroids,
                                                    num_bins_x = NA,
                                                    df_bin_centroids_low = df_bin_centroids_low))
 
   df_bin_centroids_na <- df_bin_centroids |>
     dplyr::mutate(std_counts = dplyr::if_else(dplyr::row_number() == 8, NA_integer_, std_counts))
-  testthat::expect_error(find_low_density_hexagons(df_bin_centroids_all = df_bin_centroids_na,
+  testthat::expect_error(find_low_dens_hex(df_bin_centroids_all = df_bin_centroids_na,
                                                    num_bins_x = num_bins_x,
                                                    df_bin_centroids_low = df_bin_centroids_low))
 
   df_bin_centroids_low <- df_bin_centroids |>
     dplyr::filter(std_counts <= 0.2222222)
 
-  testthat::expect_snapshot(find_low_density_hexagons(df_bin_centroids_all = df_bin_centroids,
+  testthat::expect_snapshot(find_low_dens_hex(df_bin_centroids_all = df_bin_centroids,
                                                       num_bins_x = num_bins_x,
                                                       df_bin_centroids_low = df_bin_centroids_low))
 

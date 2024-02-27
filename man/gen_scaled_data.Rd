@@ -4,7 +4,7 @@
 \alias{gen_scaled_data}
 \title{Scaling the 2D embeddings}
 \usage{
-gen_scaled_data(nldr_df, x, y, hex_ratio)
+gen_scaled_data(nldr_df, x, y, hex_ratio = NA)
 }
 \arguments{
 \item{nldr_df}{A data frame containing 2D embeddings.}

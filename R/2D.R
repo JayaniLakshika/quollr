@@ -106,47 +106,34 @@ generate_full_grid_centroids <- function(nldr_df, x = "UMAP1", y = "UMAP2",
   horizontal_spacing <- sqrt(3) * hex_size
   vertical_spacing <- 1.5 * hex_size
 
-  # Initialize vector to store hexgon centroid coordinates
-  c_x <- numeric(0)
-  c_y <- numeric(0)
+  # Generate x-coordinate of centroids for odd rows
+  c_x_vec_odd <- seq(x_start, (num_bins_x - 1) * horizontal_spacing, by = horizontal_spacing)
 
-  # Generate hexagon grid
-  for (i in 1:num_bins_y) {
-    for (j in 1:num_bins_x) {
+  # Generate x-coordinate of centroids for even rows
+  c_x_vec_even <- c_x_vec_odd + horizontal_spacing/2
+  c_x_vec <- c(c_x_vec_odd, c_x_vec_even)
 
-      if (i == 1) {
-        ## For the first hexbin along the y-axis
-        y <- y_start
+  # Generate y-coordinate of centroids
+  c_y_vec <- seq(y_start, (num_bins_y - 1) * vertical_spacing, by = vertical_spacing)
+  c_y <- rep(c_y_vec, each = num_bins_x)
 
-        if (j == 1) {
-          ## For the first hexbin along the x-axis
-          x <- x_start
+  ## Do the number of belongs y axis is even or odd and adjust the x-coordinates
+  if ((num_bins_y %% 2) == 0) {
 
-        } else {
+    c_x <- rep(c_x_vec, num_bins_y/2)
 
-          ## For the bins along the x-axis except the first one
-          x <- x_start + (j - 1) * horizontal_spacing
-          if (i %% 2 == 0) {  # Adjust for even rows
-            x <- x + horizontal_spacing / 2
-          }
+  } else {
 
-        }
+    if ((ceiling(num_bins_y/2) %% 2) == 0) {
 
-      } else {
+      c_x <- append(rep(c_x_vec, floor(num_bins_y/2)), c_x_vec_odd)
 
-        ## For the bins along the x and y axes except the first ones
-        x <- x_start + (j - 1) * horizontal_spacing
-        y <- y_start + (i - 1) * vertical_spacing
-        if (i %% 2 == 0) {  # Adjust for even rows
-          x <- x + horizontal_spacing / 2
-        }
+    } else{
 
-      }
-
-      c_x <- append(c_x, x)
-      c_y <- append(c_y, y)
+      c_x <- append(rep(c_x_vec, floor(num_bins_y/2)), c_x_vec_even)
 
     }
+
   }
 
   ## To generate hexIDs

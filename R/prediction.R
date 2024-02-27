@@ -28,11 +28,11 @@
 #' UMAP_data_with_hb_id <- hex_bin_obj$nldr_data_with_hex_id
 #' df_all <- dplyr::bind_cols(training_data |> dplyr::select(-ID), UMAP_data_with_hb_id)
 #' df_bin <- avg_highD_data(df_all, column_start_text = "x")
-#' predict_2d_embeddings(test_data = s_curve_noise_training, df_bin_centroids = df_bin_centroids,
+#' predict_emb(test_data = s_curve_noise_training, df_bin_centroids = df_bin_centroids,
 #' df_bin = df_bin, type_NLDR = "UMAP")
 #'
 #' @export
-predict_2d_embeddings <- function(test_data, df_bin_centroids, df_bin, type_NLDR = "UMAP") {
+predict_emb <- function(test_data, df_bin_centroids, df_bin, type_NLDR = "UMAP") {
 
   test_data_matrix <- test_data |>
     dplyr::select(-ID) |>
@@ -144,14 +144,14 @@ compute_aic <- function(p, mse, num_bins, num_obs) {
 #' UMAP_data_with_hb_id <- hex_bin_obj$nldr_data_with_hex_id
 #' df_all <- dplyr::bind_cols(training_data |> dplyr::select(-ID), UMAP_data_with_hb_id)
 #' df_bin <- avg_highD_data(df_all, column_start_text = "x")
-#' pred_emb_list <- predict_2d_embeddings(test_data = s_curve_noise_training,
+#' pred_emb_list <- predict_emb(test_data = s_curve_noise_training,
 #' df_bin_centroids = df_bin_centroids, df_bin = df_bin, type_NLDR = "UMAP")
 #' pred_df_test <- as.data.frame(do.call(cbind, pred_emb_list))
-#' generate_eval_df(test_data = s_curve_noise_training, prediction_df = pred_df_test,
+#' gen_summary(test_data = s_curve_noise_training, prediction_df = pred_df_test,
 #' df_bin = df_bin, col_start = "x")
 #'
 #' @export
-generate_eval_df <- function(test_data, prediction_df, df_bin, col_start = "x") {
+gen_summary <- function(test_data, prediction_df, df_bin, col_start = "x") {
 
   ## Rename columns to avoid conflicts
   names(df_bin)[-1] <- paste0("model_high_d_", names(df_bin)[-1])

@@ -80,11 +80,17 @@ usethis::use_data(s_curve_noise_umap_predict, overwrite = TRUE)
 
 ## scaled 2D embeddings
 
+aspect_ratio <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
+
 s_curve_noise_umap_scaled <- s_curve_noise_umap
 
-s_curve_noise_umap_scaled$UMAP1 <- rescale(s_curve_noise_umap_scaled$UMAP1)
-y_min <- -sqrt(3)/2
-y_max <- sqrt(3)/2
+s_curve_noise_umap_scaled$UMAP1 <- ((s_curve_noise_umap_scaled$UMAP1 - min(s_curve_noise_umap_scaled$UMAP1))/
+                                      (max(s_curve_noise_umap_scaled$UMAP1) - min(s_curve_noise_umap_scaled$UMAP1))) * (1 - 0)
+y_min <- 0
+
+hex_size <- 0.2
+y_max <- ceiling(aspect_ratio/(2/sqrt(3))) * 2/sqrt(3)
+
 s_curve_noise_umap_scaled$UMAP2 <- ((s_curve_noise_umap_scaled$UMAP2 - min(s_curve_noise_umap_scaled$UMAP2))/
 (max(s_curve_noise_umap_scaled$UMAP2) - min(s_curve_noise_umap_scaled$UMAP2))) * (y_max - y_min)
 

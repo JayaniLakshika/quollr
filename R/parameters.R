@@ -186,11 +186,11 @@ compute_mean_density_hex <- function(df_bin_centroids, num_bins_x = NA) {
 #' df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df, counts_df = counts_df)
 #' df_bin_centroids_low <- df_bin_centroids |>
 #' dplyr::filter(std_counts <= 0.43)
-#' find_low_density_hexagons(df_bin_centroids_all = df_bin_centroids, num_bins_x = num_bins_x,
+#' find_low_dens_hex(df_bin_centroids_all = df_bin_centroids, num_bins_x = num_bins_x,
 #' df_bin_centroids_low = df_bin_centroids_low)
 #'
 #' @export
-find_low_density_hexagons <- function(df_bin_centroids_all, num_bins_x,
+find_low_dens_hex <- function(df_bin_centroids_all, num_bins_x,
                                       df_bin_centroids_low) {
 
   if (is.na(num_bins_x)) {

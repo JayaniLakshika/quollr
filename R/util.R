@@ -14,7 +14,7 @@
 #' hex_size = NA, buffer_x = NA)
 #'
 #' @export
-calculate_effective_x_bins <- function(nldr_df, x = "UMAP1", hex_size = NA, buffer_x = NA){
+calculate_effective_x_bins <- function(nldr_df, x, hex_size = NA, buffer_x = NA){
 
   x_values <- nldr_df[[rlang::as_string(rlang::sym(x))]]
 
@@ -82,7 +82,7 @@ calculate_effective_x_bins <- function(nldr_df, x = "UMAP1", hex_size = NA, buff
 #' hex_size = NA, buffer_y = NA)
 #'
 #' @export
-calculate_effective_y_bins <- function(nldr_df, y = "UMAP2", hex_size = NA, buffer_y = NA){
+calculate_effective_y_bins <- function(nldr_df, y, hex_size = NA, buffer_y = NA){
 
   y_values <- nldr_df[[rlang::as_string(rlang::sym(y))]]
 
