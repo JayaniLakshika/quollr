@@ -4,8 +4,8 @@
       suppressMessages(fit_high_d_model(training_data = s_curve_noise_training,
         nldr_df_with_id = s_curve_noise_umap_scaled, x = "UMAP1", y = "UMAP2",
         num_bins_x = NA, num_bins_y = NA, x_start = NA, y_start = NA, buffer_x = NA,
-        buffer_y = NA, hex_size = NA, is_bin_centroid = TRUE, is_rm_lwd_hex = FALSE,
-        benchmark_to_rm_lwd_hex = NA, is_avg_high_d = TRUE, column_start_text = "x"))
+        buffer_y = NA, hex_size = NA, is_rm_lwd_hex = FALSE, benchmark_to_rm_lwd_hex = NA,
+        column_start_text = "x"))
     Output
       $df_bin
       # A tibble: 10 x 8
@@ -42,8 +42,8 @@
       suppressMessages(fit_high_d_model(training_data = s_curve_noise_training,
         nldr_df_with_id = s_curve_noise_umap_scaled, x = "UMAP1", y = "UMAP2",
         num_bins_x = 5, num_bins_y = 8, x_start = NA, y_start = NA, buffer_x = NA,
-        buffer_y = NA, hex_size = NA, is_bin_centroid = TRUE, is_rm_lwd_hex = FALSE,
-        benchmark_to_rm_lwd_hex = NA, is_avg_high_d = TRUE, column_start_text = "x"))
+        buffer_y = NA, hex_size = NA, is_rm_lwd_hex = FALSE, benchmark_to_rm_lwd_hex = NA,
+        column_start_text = "x"))
     Output
       $df_bin
       # A tibble: 10 x 8
@@ -80,8 +80,8 @@
       suppressMessages(fit_high_d_model(training_data = s_curve_noise_training,
         nldr_df_with_id = s_curve_noise_umap_scaled, x = "UMAP1", y = "UMAP2",
         num_bins_x = NA, num_bins_y = NA, x_start = NA, y_start = NA, buffer_x = NA,
-        buffer_y = NA, hex_size = NA, is_bin_centroid = TRUE, is_rm_lwd_hex = TRUE,
-        benchmark_to_rm_lwd_hex = NA, is_avg_high_d = TRUE, column_start_text = "x"))
+        buffer_y = NA, hex_size = NA, is_rm_lwd_hex = TRUE, benchmark_to_rm_lwd_hex = NA,
+        column_start_text = "x"))
     Output
       $df_bin
       # A tibble: 10 x 8
@@ -118,8 +118,8 @@
       suppressMessages(fit_high_d_model(training_data = s_curve_noise_training,
         nldr_df_with_id = s_curve_noise_umap_scaled, x = "UMAP1", y = "UMAP2",
         num_bins_x = NA, num_bins_y = NA, x_start = NA, y_start = NA, buffer_x = NA,
-        buffer_y = NA, hex_size = NA, is_bin_centroid = TRUE, is_rm_lwd_hex = TRUE,
-        benchmark_to_rm_lwd_hex = 0.4, is_avg_high_d = TRUE, column_start_text = "x"))
+        buffer_y = NA, hex_size = NA, is_rm_lwd_hex = TRUE, benchmark_to_rm_lwd_hex = 0.4,
+        column_start_text = "x"))
     Output
       $df_bin
       # A tibble: 10 x 8
@@ -148,85 +148,5 @@
       8     28 0.6928203  1.35  0.2941176
       9     29 1.0392305  1.35  0.2352941
       10    34 0.8660254  1.65  1.0000000
-      
-
----
-
-    Code
-      suppressMessages(fit_high_d_model(training_data = s_curve_noise_training,
-        nldr_df_with_id = s_curve_noise_umap_scaled, x = "UMAP1", y = "UMAP2",
-        num_bins_x = NA, num_bins_y = NA, x_start = NA, y_start = NA, buffer_x = NA,
-        buffer_y = NA, hex_size = NA, is_bin_centroid = FALSE, is_rm_lwd_hex = FALSE,
-        benchmark_to_rm_lwd_hex = NA, is_avg_high_d = TRUE, column_start_text = "x"))
-    Output
-      $df_bin
-      # A tibble: 10 x 8
-         hb_id       x1     x2     x3        x4        x5       x6        x7
-         <dbl>    <dbl>  <dbl>  <dbl>     <dbl>     <dbl>    <dbl>     <dbl>
-       1     2 -0.637   1.74   -1.76   0.00953  -0.00143  -0.0117  -0.00152 
-       2     6 -0.498   0.524  -1.73  -0.000237  0.00234  -0.0297  -0.000242
-       3     7  0.294   1.40   -1.88   0.00890  -0.00803  -0.0123  -0.00120 
-       4    12  0.309   0.0421 -1.83   0.00656   0.00823   0.00489 -0.00389 
-       5    13  0.868   0.747  -0.781 -0.00408   0.000857  0.0248   0.00170 
-       6    18  0.357   1.27   -0.169  0.00607   0.00124   0.0152   0.00204 
-       7    24 -0.792   1.25    0.514 -0.000777  0.000464  0.00602  0.000371
-       8    28 -0.597   1.19    1.77   0.000240 -0.00417  -0.0185  -0.000786
-       9    29 -0.00544 0.211   1.92   0.00116   0.00266   0.00949 -0.00209 
-      10    34  0.622   1.21    1.64  -0.000560  0.00540  -0.00741 -0.000886
-      
-      $df_bin_centroids
-      # A tibble: 10 x 4
-         hexID    c_x    c_y std_counts
-         <dbl>  <dbl>  <dbl>      <dbl>
-       1     2 0.157  0.0193      0.235
-       2     6 0.0627 0.208       0.529
-       3     7 0.272  0.145       0.412
-       4    12 0.150  0.333       0.176
-       5    13 0.476  0.503       0.353
-       6    18 0.686  0.742       0.706
-       7    24 0.790  0.987       0.471
-       8    28 0.751  1.44        0.294
-       9    29 0.929  1.46        0.235
-      10    34 0.848  1.63        1    
-      
-
----
-
-    Code
-      suppressMessages(fit_high_d_model(training_data = s_curve_noise_training,
-        nldr_df_with_id = s_curve_noise_umap_scaled, x = "UMAP1", y = "UMAP2",
-        num_bins_x = NA, num_bins_y = NA, x_start = NA, y_start = NA, buffer_x = NA,
-        buffer_y = NA, hex_size = NA, is_bin_centroid = FALSE, is_rm_lwd_hex = FALSE,
-        benchmark_to_rm_lwd_hex = NA, is_avg_high_d = FALSE, column_start_text = "x"))
-    Output
-      $df_bin
-      # A tibble: 10 x 8
-         hb_id      x1     x2     x3        x4        x5       x6        x7
-         <dbl>   <dbl>  <dbl>  <dbl>     <dbl>     <dbl>    <dbl>     <dbl>
-       1     2 -0.630  1.74   -1.77   0.00910  -0.00246  -0.00854 -0.00158 
-       2     6 -0.456  0.443  -1.79  -0.000130  0.00210  -0.0341   0.000214
-       3     7  0.320  1.47   -1.89   0.00914  -0.00849  -0.0201  -0.00109 
-       4    12  0.303  0.0545 -1.87   0.00553   0.0119   -0.00321 -0.00288 
-       5    13  0.883  0.701  -0.755  0.000532 -0.000361  0.0175   0.00205 
-       6    18  0.334  1.34   -0.148  0.00579   0.000540  0.0103   0.00299 
-       7    24 -0.802  1.24    0.502 -0.00103   0.00134   0.0157   0.000799
-       8    28 -0.584  1.21    1.78   0.000158 -0.00400  -0.0145  -0.000303
-       9    29 -0.0395 0.199   1.95  -0.00361  -0.00255  -0.00902 -0.00213 
-      10    34  0.643  1.22    1.63  -0.000436  0.00541  -0.00879 -0.00113 
-      
-      $df_bin_centroids
-      # A tibble: 10 x 4
-         hexID    c_x    c_y std_counts
-         <dbl>  <dbl>  <dbl>      <dbl>
-       1     2 0.157  0.0193      0.235
-       2     6 0.0627 0.208       0.529
-       3     7 0.272  0.145       0.412
-       4    12 0.150  0.333       0.176
-       5    13 0.476  0.503       0.353
-       6    18 0.686  0.742       0.706
-       7    24 0.790  0.987       0.471
-       8    28 0.751  1.44        0.294
-       9    29 0.929  1.46        0.235
-      10    34 0.848  1.63        1    
       
 

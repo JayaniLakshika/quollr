@@ -16,10 +16,8 @@ fit_high_d_model(
   buffer_x = NA,
   buffer_y = NA,
   hex_size = NA,
-  is_bin_centroid = TRUE,
   is_rm_lwd_hex = FALSE,
   benchmark_to_rm_lwd_hex = NA,
-  is_avg_high_d = TRUE,
   column_start_text = "x"
 )
 }
@@ -46,13 +44,9 @@ fit_high_d_model(
 
 \item{hex_size}{A numeric value that initializes the radius of the outer circle surrounding the hexagon.}
 
-\item{is_bin_centroid}{Logical, indicating whether to use bin centroids (default is TRUE).}
-
 \item{is_rm_lwd_hex}{Logical, indicating whether to remove low-density hexagons (default is FALSE).}
 
 \item{benchmark_to_rm_lwd_hex}{The benchmark value to remove low-density hexagons.}
-
-\item{is_avg_high_d}{Logical, indicating whether to average the high-dimensional data within bins (default is TRUE).}
 
 \item{column_start_text}{The text prefix for columns in the high-dimensional data.}
 }

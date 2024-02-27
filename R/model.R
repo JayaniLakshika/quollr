@@ -15,10 +15,8 @@
 #' @param buffer_x The buffer size along the x-axis.
 #' @param buffer_y The buffer size along the y-axis.
 #' @param hex_size A numeric value that initializes the radius of the outer circle surrounding the hexagon.
-#' @param is_bin_centroid Logical, indicating whether to use bin centroids (default is TRUE).
 #' @param is_rm_lwd_hex Logical, indicating whether to remove low-density hexagons (default is FALSE).
 #' @param benchmark_to_rm_lwd_hex The benchmark value to remove low-density hexagons.
-#' @param is_avg_high_d Logical, indicating whether to average the high-dimensional data within bins (default is TRUE).
 #' @param column_start_text The text prefix for columns in the high-dimensional data.
 #'
 #' @return A list containing the data frame with high-dimensional coordinates for 2D bin centroids (\code{df_bin})
@@ -33,9 +31,8 @@ fit_high_d_model <- function(training_data, nldr_df_with_id, x = "UMAP1",
                              y = "UMAP2", num_bins_x = NA, num_bins_y = NA,
                              x_start = NA, y_start = NA,
                              buffer_x = NA, buffer_y = NA,  hex_size = NA,
-                             is_bin_centroid = TRUE, is_rm_lwd_hex = FALSE,
-                             benchmark_to_rm_lwd_hex = NA,
-                             is_avg_high_d = TRUE, column_start_text = "x") {
+                             is_rm_lwd_hex = FALSE, benchmark_to_rm_lwd_hex = NA,
+                             column_start_text = "x") {
 
   ## If number of bins along the x-axis is not given
   if (is.na(num_bins_x)) {
@@ -67,18 +64,9 @@ fit_high_d_model <- function(training_data, nldr_df_with_id, x = "UMAP1",
   counts_df <- as.data.frame(do.call(cbind, hb_obj$hex_id_with_std_counts))
   nldr_df_with_hex_id <- as.data.frame(do.call(cbind, hb_obj$nldr_data_with_hex_id))
 
-  ## Do you need to use bin centroids or bin means?
-  if (isTRUE(is_bin_centroid)) {
-    ## For bin centroids
-    df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df,
-                                                 counts_df = counts_df)
-
-  } else {
-    ## For bin means
-    df_bin_centroids <- extract_hexbin_mean(nldr_df_with_hex_id = nldr_df_with_hex_id,
-                                            counts_df = counts_df)
-
-  }
+  ## To obtain bin centroids
+  df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df,
+                                               counts_df = counts_df)
 
   if (isFALSE(is_rm_lwd_hex)) {
     if (!is.na(benchmark_to_rm_lwd_hex)) {
@@ -125,21 +113,8 @@ fit_high_d_model <- function(training_data, nldr_df_with_id, x = "UMAP1",
   ## To generate a data set with high-D and 2D training data
   df_all <- dplyr::bind_cols(training_data |> dplyr::select(-ID), nldr_df_with_hex_id)
 
-  ## Do you need to use bin centroids or bin means?
-  if (isTRUE(is_avg_high_d)) {
-
-    ## averaged high-D data
-    df_bin <- avg_highD_data(.data = df_all, column_start_text = column_start_text)
-
-
-  } else {
-
-    ## weighted averaged high-D data
-    df_bin <- weighted_highD_data(training_data = training_data,
-                                  nldr_df_with_hex_id = nldr_df_with_hex_id,
-                                  column_start_text = column_start_text)
-
-  }
+  ## averaged high-D data
+  df_bin <- avg_highD_data(.data = df_all, column_start_text = column_start_text)
 
   ## high-D model only contains the bins in 2D
   df_bin <- df_bin |>

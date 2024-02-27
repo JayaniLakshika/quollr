@@ -2,7 +2,7 @@
 % Please edit documentation in R/2d.R
 \name{triangulate_bin_centroids}
 \alias{triangulate_bin_centroids}
-\title{Triangulate Bin Centroids/ Bin means}
+\title{Triangulate Bin Centroids}
 \usage{
 triangulate_bin_centroids(hex_bin_df, x = "c_x", y = "c_y")
 }
