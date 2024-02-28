@@ -1,6 +1,7 @@
-#' Find Benchmark Value To Remove Long Edges
+#' Compute a benchmark value to remove long edges
 #'
-#' This function finds the benchmark value to remove long edges based on the differences in a distance column.
+#' This function finds the benchmark value to remove long edges based on
+#' the differences in a distance column.
 #'
 #' @param distance_edges The data frame containing the distances.
 #' @param distance_col The name of the column containing the distances.
@@ -12,30 +13,26 @@
 #' @importFrom rlang sym
 #'
 #' @examples
-#' training_data <- s_curve_noise_training
-#' num_bins_x <- calculate_effective_x_bins(nldr_df = s_curve_noise_umap_scaled,
-#' x = "UMAP1", hex_size = NA, buffer_x = NA)
-#' num_bins_y <- calculate_effective_y_bins(nldr_df = s_curve_noise_umap_scaled,
-#'  y = "UMAP2", hex_size = NA, buffer_y = NA)
-#' hex_bin_obj <- generate_hex_binning_info(nldr_df = s_curve_noise_umap_scaled,
+#' num_bins_list <- calc_bins(data = s_curve_noise_umap_scaled, x = "UMAP1",
+#' y = "UMAP2", hex_size = NA, buffer_x = NA, buffer_y = NA)
+#' num_bins_x <- num_bins_list$num_x
+#' num_bins_y <- num_bins_list$num_y
+#' hb_obj <- hex_binning(data = s_curve_noise_umap_scaled,
 #' x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
 #' num_bins_y = num_bins_y, x_start = NA, y_start = NA, buffer_x = NA,
-#' buffer_y = NA, hex_size = NA)
-#' all_centroids_df <- as.data.frame(do.call(cbind, hex_bin_obj$full_grid_hex_centroids))
-#' counts_df <- as.data.frame(do.call(cbind, hex_bin_obj$hex_id_with_std_counts))
+#' buffer_y = NA, hex_size = NA, col_start = "UMAP")
+#' all_centroids_df <- as.data.frame(do.call(cbind, hb_obj$centroids))
+#' counts_df <- as.data.frame(do.call(cbind, hb_obj$std_cts))
 #' df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df, counts_df = counts_df)
-#' UMAP_data_with_hb_id <- hex_bin_obj$nldr_data_with_hex_id
-#' df_all <- dplyr::bind_cols(training_data |> dplyr::select(-ID), UMAP_data_with_hb_id)
-#' df_bin <- avg_highD_data(df_all, column_start_text = "x")
-#' tr1_object <- triangulate_bin_centroids(hex_bin_df = df_bin_centroids, x = "c_x", y = "c_y")
-#' tr_from_to_df <- generate_edge_info(triangular_object = tr1_object)
-#' distance_df <- cal_2d_dist(tr_from_to_df_coord = tr_from_to_df,
-#' start_x = "x_from", start_y = "y_from", end_x = "x_to", end_y = "y_to",
-#' select_col_vec = c("from", "to", "distance"))
-#' find_benchmark_value(distance_edges = distance_df, distance_col = "distance")
+#' tr1_object <- tri_bin_centroids(hex_df = df_bin_centroids, x = "c_x", y = "c_y")
+#' tr_from_to_df <- gen_edges(tri_object = tr1_object)
+#' distance_df <- cal_2d_dist(tr_coord_df = tr_from_to_df, start_x = "x_from",
+#' start_y = "y_from", end_x = "x_to", end_y = "y_to",
+#' select_vars = c("from", "to", "distance"))
+#' find_lg_benchmark(distance_edges = distance_df, distance_col = "distance")
 #'
 #' @export
-find_benchmark_value <- function(distance_edges, distance_col) {
+find_lg_benchmark <- function(distance_edges, distance_col) {
 
   if (any(is.na(distance_edges[[rlang::as_string(rlang::sym(distance_col))]]))) {
     stop("NAs present")
@@ -90,7 +87,7 @@ find_benchmark_value <- function(distance_edges, distance_col) {
 
 }
 
-#' Compute Mean Density of Hexagonal Bins
+#' Compute mean density of hexagonal bins
 #'
 #' This function calculates the mean density of hexagonal bins based on their neighboring bins.
 #'
@@ -104,17 +101,18 @@ find_benchmark_value <- function(distance_edges, distance_col) {
 #' @importFrom dplyr filter
 #'
 #' @examples
-#' num_bins_x <- calculate_effective_x_bins(nldr_df = s_curve_noise_umap_scaled,
-#' x = "UMAP1", hex_size = NA, buffer_x = NA)
-#' num_bins_y <- calculate_effective_y_bins(nldr_df = s_curve_noise_umap_scaled,
-#'  y = "UMAP2", hex_size = NA, buffer_y = NA)
-#' hex_bin_obj <- generate_hex_binning_info(nldr_df = s_curve_noise_umap_scaled,
+#' num_bins_list <- calc_bins(data = s_curve_noise_umap_scaled, x = "UMAP1",
+#' y = "UMAP2", hex_size = NA, buffer_x = NA, buffer_y = NA)
+#' num_bins_x <- num_bins_list$num_x
+#' num_bins_y <- num_bins_list$num_y
+#' hb_obj <- hex_binning(data = s_curve_noise_umap_scaled,
 #' x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
 #' num_bins_y = num_bins_y, x_start = NA, y_start = NA, buffer_x = NA,
-#' buffer_y = NA, hex_size = NA)
-#' all_centroids_df <- as.data.frame(do.call(cbind, hex_bin_obj$full_grid_hex_centroids))
-#' counts_df <- as.data.frame(do.call(cbind, hex_bin_obj$hex_id_with_std_counts))
-#' df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df, counts_df = counts_df)
+#' buffer_y = NA, hex_size = NA, col_start = "UMAP")
+#' all_centroids_df <- as.data.frame(do.call(cbind, hb_obj$centroids))
+#' counts_df <- as.data.frame(do.call(cbind, hb_obj$std_cts))
+#' df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df,
+#' counts_df = counts_df)
 #' compute_mean_density_hex(df_bin_centroids, num_bins_x = num_bins_x)
 #'
 #' @export
@@ -160,9 +158,10 @@ compute_mean_density_hex <- function(df_bin_centroids, num_bins_x = NA) {
 }
 
 
-#' Find Low-Density Hexagons
+#' Find low-density Hexagons
 #'
-#' This function identifies hexagons with low density based on the mean density of their neighboring hexagons.
+#' This function identifies hexagons with low density based on the mean density
+#' of their neighboring hexagons.
 #'
 #' @param df_bin_centroids_all The data frame containing all hexagonal bin centroids.
 #' @param num_bins_x Number of bins along the x-axis for hexagon binning.
@@ -173,17 +172,18 @@ compute_mean_density_hex <- function(df_bin_centroids, num_bins_x = NA) {
 #' @importFrom stats quantile
 #'
 #' @examples
-#' num_bins_x <- calculate_effective_x_bins(nldr_df = s_curve_noise_umap_scaled,
-#' x = "UMAP1", hex_size = NA, buffer_x = NA)
-#' num_bins_y <- calculate_effective_y_bins(nldr_df = s_curve_noise_umap_scaled,
-#'  y = "UMAP2", hex_size = NA, buffer_y = NA)
-#' hex_bin_obj <- generate_hex_binning_info(nldr_df = s_curve_noise_umap_scaled,
+#' num_bins_list <- calc_bins(data = s_curve_noise_umap_scaled, x = "UMAP1",
+#' y = "UMAP2", hex_size = NA, buffer_x = NA, buffer_y = NA)
+#' num_bins_x <- num_bins_list$num_x
+#' num_bins_y <- num_bins_list$num_y
+#' hb_obj <- hex_binning(data = s_curve_noise_umap_scaled,
 #' x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
 #' num_bins_y = num_bins_y, x_start = NA, y_start = NA, buffer_x = NA,
-#' buffer_y = NA, hex_size = NA)
-#' all_centroids_df <- as.data.frame(do.call(cbind, hex_bin_obj$full_grid_hex_centroids))
-#' counts_df <- as.data.frame(do.call(cbind, hex_bin_obj$hex_id_with_std_counts))
-#' df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df, counts_df = counts_df)
+#' buffer_y = NA, hex_size = NA, col_start = "UMAP")
+#' all_centroids_df <- as.data.frame(do.call(cbind, hb_obj$centroids))
+#' counts_df <- as.data.frame(do.call(cbind, hb_obj$std_cts))
+#' df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df,
+#' counts_df = counts_df)
 #' df_bin_centroids_low <- df_bin_centroids |>
 #' dplyr::filter(std_counts <= 0.43)
 #' find_low_dens_hex(df_bin_centroids_all = df_bin_centroids, num_bins_x = num_bins_x,

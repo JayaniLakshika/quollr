@@ -36,7 +36,7 @@ avg_highd_data <- function(data, col_start = "x") {
 }
 
 
-#' Show LangeviTour Visualization
+#' Visualize the model overlaid on high-dimensional data
 #'
 #' This function generates a LangeviTour visualization based on different
 #' conditions and input parameters.

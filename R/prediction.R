@@ -1,4 +1,4 @@
-#' Predict 2D Embeddings
+#' Predict 2D embeddings
 #'
 #' Given a test dataset, the centroid coordinates of hexagonal bins in  2D and high-dimensional space,
 #' predict the 2D embeddings for each data point in the test dataset.
@@ -6,33 +6,22 @@
 #' @param test_data The test dataset containing high-dimensional coordinates and an unique identifier.
 #' @param df_bin_centroids Centroid coordinates of hexagonal bins in 2D space.
 #' @param df_bin Centroid coordinates of hexagonal bins in high dimensions.
-#' @param type_NLDR The type of non-linear dimensionality reduction (NLDR) used. Default is "UMAP".
+#' @param type_NLDR The type of non-linear dimensionality reduction (NLDR) used.
 #'
 #' @return A list contains predicted 2D embeddings, ID in the test data, and predicted hexagonal IDs.
 #' @importFrom dplyr select
 #' @importFrom proxy dist
 #'
 #' @examples
-#' training_data <- s_curve_noise_training
-#' num_bins_x <- calculate_effective_x_bins(nldr_df = s_curve_noise_umap_scaled,
-#' x = "UMAP1", hex_size = NA, buffer_x = NA)
-#' num_bins_y <- calculate_effective_y_bins(nldr_df = s_curve_noise_umap_scaled,
-#'  y = "UMAP2", hex_size = NA, buffer_y = NA)
-#' hex_bin_obj <- generate_hex_binning_info(nldr_df = s_curve_noise_umap_scaled,
-#' x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
-#' num_bins_y = num_bins_y, x_start = NA, y_start = NA, buffer_x = NA,
-#' buffer_y = NA, hex_size = NA)
-#' all_centroids_df <- as.data.frame(do.call(cbind, hex_bin_obj$full_grid_hex_centroids))
-#' counts_df <- as.data.frame(do.call(cbind, hex_bin_obj$hex_id_with_std_counts))
-#' df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df, counts_df = counts_df)
-#' UMAP_data_with_hb_id <- hex_bin_obj$nldr_data_with_hex_id
-#' df_all <- dplyr::bind_cols(training_data |> dplyr::select(-ID), UMAP_data_with_hb_id)
-#' df_bin <- avg_highD_data(df_all, column_start_text = "x")
+#' model <- fit_highd_model(training_data = s_curve_noise_training, x = "UMAP1", y = "UMAP2",
+#' nldr_df_with_id = s_curve_noise_umap_scaled, col_start_2d = "UMAP", col_start_highd = "x")
+#' df_bin_centroids <- model$df_bin_centroids
+#' df_bin <- model$df_bin
 #' predict_emb(test_data = s_curve_noise_training, df_bin_centroids = df_bin_centroids,
 #' df_bin = df_bin, type_NLDR = "UMAP")
 #'
 #' @export
-predict_emb <- function(test_data, df_bin_centroids, df_bin, type_NLDR = "UMAP") {
+predict_emb <- function(test_data, df_bin_centroids, df_bin, type_NLDR) {
 
   test_data_matrix <- test_data |>
     dplyr::select(-ID) |>
@@ -115,37 +104,26 @@ compute_aic <- function(p, mse, num_bins, num_obs) {
   return(aic)
 }
 
-#' Generate Evaluation Data Frame
+#' Generate evaluation metrics
 #'
 #' This function generates an evaluation data frame based on the provided data and predictions.
 #'
 #' @param test_data The data set containing high-dimensional data along with an unique identifier.
 #' @param prediction_df The data set with 2D embeddings, IDs, and predicted hexagonal IDs.
 #' @param df_bin The data set with averaged/weighted high-dimensional data.
-#' @param col_start The text that begin the column name of the high-D data
+#' @param col_start The text that begin the column name of the high-dimensional data.
 #'
 #' @return A list contains MSE and AIC values.
 #'
 #' @importFrom dplyr left_join
 #'
 #' @examples
-#' training_data <- s_curve_noise_training
-#' num_bins_x <- calculate_effective_x_bins(nldr_df = s_curve_noise_umap_scaled,
-#' x = "UMAP1", hex_size = NA, buffer_x = NA)
-#' num_bins_y <- calculate_effective_y_bins(nldr_df = s_curve_noise_umap_scaled,
-#'  y = "UMAP2", hex_size = NA, buffer_y = NA)
-#' hex_bin_obj <- generate_hex_binning_info(nldr_df = s_curve_noise_umap_scaled,
-#' x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
-#' num_bins_y = num_bins_y, x_start = NA, y_start = NA, buffer_x = NA,
-#' buffer_y = NA, hex_size = NA)
-#' all_centroids_df <- as.data.frame(do.call(cbind, hex_bin_obj$full_grid_hex_centroids))
-#' counts_df <- as.data.frame(do.call(cbind, hex_bin_obj$hex_id_with_std_counts))
-#' df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df, counts_df = counts_df)
-#' UMAP_data_with_hb_id <- hex_bin_obj$nldr_data_with_hex_id
-#' df_all <- dplyr::bind_cols(training_data |> dplyr::select(-ID), UMAP_data_with_hb_id)
-#' df_bin <- avg_highD_data(df_all, column_start_text = "x")
-#' pred_emb_list <- predict_emb(test_data = s_curve_noise_training,
-#' df_bin_centroids = df_bin_centroids, df_bin = df_bin, type_NLDR = "UMAP")
+#' model <- fit_highd_model(training_data = s_curve_noise_training, x = "UMAP1", y = "UMAP2",
+#' nldr_df_with_id = s_curve_noise_umap_scaled, col_start_2d = "UMAP", col_start_highd = "x")
+#' df_bin_centroids <- model$df_bin_centroids
+#' df_bin <- model$df_bin
+#' pred_emb_list <- predict_emb(test_data = s_curve_noise_training, df_bin_centroids = df_bin_centroids,
+#' df_bin = df_bin, type_NLDR = "UMAP")
 #' pred_df_test <- as.data.frame(do.call(cbind, pred_emb_list))
 #' gen_summary(test_data = s_curve_noise_training, prediction_df = pred_df_test,
 #' df_bin = df_bin, col_start = "x")
@@ -156,8 +134,9 @@ gen_summary <- function(test_data, prediction_df, df_bin, col_start = "x") {
   ## Rename columns to avoid conflicts
   names(df_bin)[-1] <- paste0("model_high_d_", names(df_bin)[-1])
 
+  ## Map high-D averaged mean coordinates
   prediction_df <- prediction_df |>
-    dplyr::left_join(df_bin, by = c("pred_hb_id" = "hb_id")) ## Map high-D averaged/weighted mean coordinates
+    dplyr::left_join(df_bin, by = c("pred_hb_id" = "hb_id"))
 
   prediction_df <- prediction_df |>
     dplyr::left_join(test_data, by = c("ID" = "ID")) ## Map high-D data

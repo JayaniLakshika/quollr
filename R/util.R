@@ -26,9 +26,6 @@ calc_bins <- function(data, x, y, hex_size = NA, buffer_x = NA, buffer_y = NA){
   x_values <- data[[rlang::as_string(rlang::sym(x))]]
   y_values <- data[[rlang::as_string(rlang::sym(y))]]
 
-  ## Initialize horizontal and vertical spacing
-  hs <- sqrt(3) * hex_size
-  vs <- 1.5 * hex_size
 
   if (anyNA(x_values) | anyNA(y_values)) {
     stop("NAs present")
@@ -48,6 +45,10 @@ calc_bins <- function(data, x, y, hex_size = NA, buffer_x = NA, buffer_y = NA){
 
     }
   }
+
+  ## Initialize horizontal and vertical spacing
+  hs <- sqrt(3) * hex_size
+  vs <- 1.5 * hex_size
 
   if (is.na(buffer_x)) {
     buffer_x <- sqrt(3) * hex_size * 1.5

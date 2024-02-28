@@ -168,9 +168,9 @@ gen_hex_coord <- function(centroids_df, hex_size = NA){
   }
 
   ## Obtain centroid info
-  hex_ids <- all_centroids_df$hexID
-  c_x_vec <- all_centroids_df$c_x
-  c_y_vec <- all_centroids_df$c_y
+  hex_ids <- centroids_df$hexID
+  c_x_vec <- centroids_df$c_x
+  c_y_vec <- centroids_df$c_y
 
   ## Compute the distance for hexagonal coordinates from the centroids
   if ((length(unique(c_x_vec)) == 1) || (length(unique(c_y_vec)) == 1)) {
