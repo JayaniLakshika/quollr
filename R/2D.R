@@ -567,10 +567,10 @@ tri_bin_centroids <- function(hex_df, x, y){
 #' counts_df <- as.data.frame(do.call(cbind, hb_obj$std_cts))
 #' df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df, counts_df = counts_df)
 #' tr1_object <- tri_bin_centroids(hex_df = df_bin_centroids, x = "c_x", y = "c_y")
-#' gen_edge_info(tri_object = tr1_object)
+#' gen_edges(tri_object = tr1_object)
 #'
 #' @export
-gen_edge_info <- function(tri_object) {
+gen_edges <- function(tri_object) {
 
   # Create a data frame with x and y coordinate values from the triangular object
   tr_df <- tibble::tibble(x = tri_object$x, y = tri_object$y,
@@ -633,7 +633,7 @@ gen_edge_info <- function(tri_object) {
 #' counts_df <- as.data.frame(do.call(cbind, hb_obj$std_cts))
 #' df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df, counts_df = counts_df)
 #' tr1_object <- tri_bin_centroids(hex_df = df_bin_centroids, x = "c_x", y = "c_y")
-#' tr_from_to_df <- gen_edge_info(tri_object = tr1_object)
+#' tr_from_to_df <- gen_edges(tri_object = tr1_object)
 #' cal_2d_dist(tr_coord_df = tr_from_to_df, start_x = "x_from", start_y = "y_from",
 #' end_x = "x_to", end_y = "y_to", select_vars = c("from", "to", "distance"))
 #'
@@ -687,7 +687,7 @@ cal_2d_dist <- function(tr_coord_df, start_x, start_y, end_x, end_y,
 #' counts_df <- as.data.frame(do.call(cbind, hb_obj$std_cts))
 #' df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df, counts_df = counts_df)
 #' tr1_object <- tri_bin_centroids(hex_df = df_bin_centroids, x = "c_x", y = "c_y")
-#' tr_from_to_df <- gen_edge_info(tri_object = tr1_object)
+#' tr_from_to_df <- gen_edges(tri_object = tr1_object)
 #' distance_df <- cal_2d_dist(tr_coord_df = tr_from_to_df, start_x = "x_from",
 #' start_y = "y_from", end_x = "x_to", end_y = "y_to",
 #' select_vars = c("from", "to", "distance"))
@@ -753,7 +753,7 @@ vis_lg_mesh <- function(distance_edges, benchmark_value,
 #' counts_df <- as.data.frame(do.call(cbind, hb_obj$std_cts))
 #' df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df, counts_df = counts_df)
 #' tr1_object <- tri_bin_centroids(hex_df = df_bin_centroids, x = "c_x", y = "c_y")
-#' tr_from_to_df <- gen_edge_info(tri_object = tr1_object)
+#' tr_from_to_df <- gen_edges(tri_object = tr1_object)
 #' distance_df <- cal_2d_dist(tr_coord_df = tr_from_to_df, start_x = "x_from",
 #' start_y = "y_from", end_x = "x_to", end_y = "y_to",
 #' select_vars = c("from", "to", "distance"))
