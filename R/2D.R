@@ -17,20 +17,19 @@
 #' @importFrom rlang sym as_string
 #'
 #' @examples
-#' num_bins_x <- calculate_effective_x_bins(nldr_df = s_curve_noise_umap_scaled,
-#' x = "UMAP1", hex_size = NA, buffer_x = NA)
-#' num_bins_y <- calculate_effective_y_bins(nldr_df = s_curve_noise_umap_scaled,
-#'  y = "UMAP2", hex_size = NA, buffer_y = NA)
+#' num_bins_list <- calc_bins(data = s_curve_noise_umap_scaled, x = "UMAP1",
+#' y = "UMAP2", hex_size = NA, buffer_x = NA, buffer_y = NA)
+#' num_bins_x <- num_bins_list$num_x
+#' num_bins_y <- num_bins_list$num_y
 #' generate_full_grid_centroids(nldr_df = s_curve_noise_umap_scaled,
 #' x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
 #' num_bins_y = num_bins_y, x_start = NA, y_start = NA, buffer_x = NA,
 #' buffer_y = NA, hex_size = NA)
 #'
 #' @export
-generate_full_grid_centroids <- function(nldr_df, x = "UMAP1", y = "UMAP2",
-                                         num_bins_x, num_bins_y, x_start = NA,
-                                         y_start = NA, buffer_x = NA,
-                                         buffer_y = NA, hex_size = NA){
+gen_centroids <- function(data, x, y, num_bins_x, num_bins_y, x_start = NA,
+                          y_start = NA, buffer_x = NA, buffer_y = NA,
+                          hex_size = NA){
 
   ## hex size is not provided
   if (is.na(hex_size)) {
@@ -103,18 +102,18 @@ generate_full_grid_centroids <- function(nldr_df, x = "UMAP1", y = "UMAP2",
 
 
   # Calculate horizontal and vertical spacing
-  horizontal_spacing <- sqrt(3) * hex_size
-  vertical_spacing <- 1.5 * hex_size
+  hs <- sqrt(3) * hex_size
+  vs <- 1.5 * hex_size
 
   # Generate x-coordinate of centroids for odd rows
-  c_x_vec_odd <- seq(x_start, (num_bins_x - 1) * horizontal_spacing, by = horizontal_spacing)
+  c_x_vec_odd <- seq(x_start, (num_bins_x - 1) * hs, by = hs)
 
   # Generate x-coordinate of centroids for even rows
-  c_x_vec_even <- c_x_vec_odd + horizontal_spacing/2
+  c_x_vec_even <- c_x_vec_odd + hs/2
   c_x_vec <- c(c_x_vec_odd, c_x_vec_even)
 
   # Generate y-coordinate of centroids
-  c_y_vec <- seq(y_start, (num_bins_y - 1) * vertical_spacing, by = vertical_spacing)
+  c_y_vec <- seq(y_start, (num_bins_y - 1) * vs, by = vs)
   c_y <- rep(c_y_vec, each = num_bins_x)
 
   ## Do the number of belongs y axis is even or odd and adjust the x-coordinates
