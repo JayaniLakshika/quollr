@@ -1,8 +1,8 @@
 ---
-title: "2. Visualise full hexagonal grid"
+title: "3. Algorithm for binning data"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{quollr2visFullGrid}
+  %\VignetteIndexEntry{3. Algorithm for binning data}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

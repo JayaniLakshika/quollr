@@ -1,8 +1,8 @@
 ---
-title: "3. Predict 2D embeddings"
+title: "5. Predict 2D embeddings"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{quollr3prediction}
+  %\VignetteIndexEntry{5. Predict 2D embeddings}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
