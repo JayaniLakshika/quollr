@@ -2,7 +2,7 @@
 % Please edit documentation in R/parameters.R
 \name{compute_mean_density_hex}
 \alias{compute_mean_density_hex}
-\title{Compute Mean Density of Hexagonal Bins}
+\title{Compute mean density of hexagonal bins}
 \usage{
 compute_mean_density_hex(df_bin_centroids, num_bins_x = NA)
 }
@@ -20,17 +20,18 @@ density of each hexagonal bin based on its neighboring bins.
 This function calculates the mean density of hexagonal bins based on their neighboring bins.
 }
 \examples{
-num_bins_x <- calculate_effective_x_bins(nldr_df = s_curve_noise_umap_scaled,
-x = "UMAP1", hex_size = NA, buffer_x = NA)
-num_bins_y <- calculate_effective_y_bins(nldr_df = s_curve_noise_umap_scaled,
- y = "UMAP2", hex_size = NA, buffer_y = NA)
-hex_bin_obj <- generate_hex_binning_info(nldr_df = s_curve_noise_umap_scaled,
+num_bins_list <- calc_bins(data = s_curve_noise_umap_scaled, x = "UMAP1",
+y = "UMAP2", hex_size = NA, buffer_x = NA, buffer_y = NA)
+num_bins_x <- num_bins_list$num_x
+num_bins_y <- num_bins_list$num_y
+hb_obj <- hex_binning(data = s_curve_noise_umap_scaled,
 x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
 num_bins_y = num_bins_y, x_start = NA, y_start = NA, buffer_x = NA,
-buffer_y = NA, hex_size = NA)
-all_centroids_df <- as.data.frame(do.call(cbind, hex_bin_obj$full_grid_hex_centroids))
-counts_df <- as.data.frame(do.call(cbind, hex_bin_obj$hex_id_with_std_counts))
-df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df, counts_df = counts_df)
+buffer_y = NA, hex_size = NA, col_start = "UMAP")
+all_centroids_df <- as.data.frame(do.call(cbind, hb_obj$centroids))
+counts_df <- as.data.frame(do.call(cbind, hb_obj$std_cts))
+df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df,
+counts_df = counts_df)
 compute_mean_density_hex(df_bin_centroids, num_bins_x = num_bins_x)
 
 }

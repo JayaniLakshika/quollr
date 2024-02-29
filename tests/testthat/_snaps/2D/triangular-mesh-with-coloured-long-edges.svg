@@ -98,6 +98,6 @@
 <line x1='496.78' y1='300.25' x2='510.61' y2='300.25' style='stroke-width: 1.07; stroke: #636363; stroke-linecap: butt;' />
 <text x='517.81' y='286.00' style='font-size: 8.80px; font-family: sans;' textLength='45.51px' lengthAdjust='spacingAndGlyphs'>long_edges</text>
 <text x='517.81' y='303.28' style='font-size: 8.80px; font-family: sans;' textLength='49.42px' lengthAdjust='spacingAndGlyphs'>small_edges</text>
-<text x='182.53' y='14.56' style='font-size: 13.20px; font-family: sans;' textLength='239.22px' lengthAdjust='spacingAndGlyphs'>color-long-edges-basic with bin centroids</text>
+<text x='182.53' y='14.56' style='font-size: 13.20px; font-family: sans;' textLength='245.09px' lengthAdjust='spacingAndGlyphs'>Triangular mesh with coloured long edges</text>
 </g>
 </svg>

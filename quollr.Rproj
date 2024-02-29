@@ -19,4 +19,5 @@ BuildType: Package
 PackageUseDevtools: Yes
 PackagePath: /Users/jpiy0001/Desktop/PhD Monash research files/quollr
 PackageInstallArgs: --no-multiarch --with-keep.source
+PackageCheckArgs: --as-cran
 PackageRoxygenize: rd,collate,namespace,vignette

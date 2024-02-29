@@ -48,7 +48,7 @@
 <li class="active nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/quollr1algomain.html">1. Main steps</a>
+    <a class="dropdown-item" href="../articles/quollr1algomain.html">1. Algorithm for binning data</a>
     <a class="dropdown-item" href="../articles/quollr2visFullGrid.html">2. Visualise full hexagonal grid</a>
     <a class="dropdown-item" href="../articles/quollr3prediction.html">3. Predict 2D embeddings</a>
   </div>
@@ -93,13 +93,13 @@ projection (UMAP). In that case, the <code>predict_2d_embeddings</code>
 function serves as a valuable tool to predict 2D embeddings, regardless
 of the NLDR technique.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_high_d_model.html">fit_high_d_model</a></span><span class="op">(</span>training_data <span class="op">=</span> <span class="va">s_curve_noise_training</span>, </span>
-<span>                 nldr_df_with_id <span class="op">=</span> <span class="va">s_curve_noise_umap_scaled</span><span class="op">)</span></span>
-<span></span>
+<code class="sourceCode R"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_highd_model.html">fit_highd_model</a></span><span class="op">(</span>training_data <span class="op">=</span> <span class="va">s_curve_noise_training</span>, x <span class="op">=</span> <span class="st">"UMAP1"</span>, </span>
+<span>                         y <span class="op">=</span> <span class="st">"UMAP2"</span>, nldr_df_with_id <span class="op">=</span> <span class="va">s_curve_noise_umap_scaled</span>, </span>
+<span>                         col_start_2d <span class="op">=</span> <span class="st">"UMAP"</span>, col_start_highd <span class="op">=</span> <span class="st">"x"</span><span class="op">)</span></span>
 <span><span class="va">df_bin_centroids</span> <span class="op">&lt;-</span> <span class="va">model</span><span class="op">$</span><span class="va">df_bin_centroids</span></span>
 <span><span class="va">df_bin</span> <span class="op">&lt;-</span> <span class="va">model</span><span class="op">$</span><span class="va">df_bin</span></span></code></pre></div>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">predict_emb_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/predict_2d_embeddings.html">predict_2d_embeddings</a></span><span class="op">(</span>test_data <span class="op">=</span> <span class="va">s_curve_noise_test</span>, </span>
+<code class="sourceCode R"><span><span class="va">predict_emb_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/predict_emb.html">predict_emb</a></span><span class="op">(</span>test_data <span class="op">=</span> <span class="va">s_curve_noise_test</span>, </span>
 <span>                                    df_bin_centroids <span class="op">=</span> <span class="va">df_bin_centroids</span>, </span>
 <span>                                    df_bin <span class="op">=</span> <span class="va">df_bin</span>, type_NLDR <span class="op">=</span> <span class="st">"UMAP"</span><span class="op">)</span></span>
 <span></span>

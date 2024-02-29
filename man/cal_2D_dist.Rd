@@ -2,19 +2,13 @@
 % Please edit documentation in R/2d.R
 \name{cal_2d_dist}
 \alias{cal_2d_dist}
-\title{Calculate 2D Distances Between Points}
+\title{Calculate 2D Euclidean distances between vertices}
 \usage{
-cal_2d_dist(
-  tr_from_to_df_coord,
-  start_x = "x_from",
-  start_y = "y_from",
-  end_x = "x_to",
-  end_y = "y_to",
-  select_col_vec = c("from", "to", "distance")
-)
+cal_2d_dist(tr_coord_df, start_x, start_y, end_x, end_y, select_vars)
 }
 \arguments{
-\item{tr_from_to_df_coord}{A data frame containing columns for the x and y coordinates of start and end points.}
+\item{tr_coord_df}{A data frame containing columns for the
+x and y coordinates of start and end points.}
 
 \item{start_x}{Column name for the x-coordinate of the starting point.}
 
@@ -24,37 +18,31 @@ cal_2d_dist(
 
 \item{end_y}{Column name for the y-coordinate of the ending point.}
 
-\item{select_col_vec}{A character vector specifying the columns to be selected in the resulting data frame.}
+\item{select_vars}{A character vector specifying the columns to be
+selected in the resulting data frame.}
 }
 \value{
-A data frame with columns for the starting point, ending point, and calculated distances.
+A data frame with columns for the starting point, ending point,
+and calculated distances.
 }
 \description{
 This function calculates the 2D distances between pairs of points in a data frame.
 }
 \examples{
-num_bins_x <- calculate_effective_x_bins(nldr_df = s_curve_noise_umap_scaled,
-                                        x = "UMAP1", hex_size = NA, buffer_x = NA)
-num_bins_y <- calculate_effective_y_bins(nldr_df = s_curve_noise_umap_scaled,
-                                        y = "UMAP2", hex_size = NA, buffer_y = NA)
-centroid_list <- generate_full_grid_centroids(nldr_df = s_curve_noise_umap_scaled,
-                                             x = "UMAP1", y = "UMAP2",
-                                             num_bins_x = num_bins_x,
-                                             num_bins_y = num_bins_y,
-                                             x_start = NA, y_start = NA,
-                                             buffer_x = NA,
-                                             buffer_y = NA, hex_size = NA)
-all_centroids_df <- as.data.frame(do.call(cbind, centroid_list))
-s_curve_noise_umap_scaled_rm_id <- s_curve_noise_umap_scaled |> dplyr::select(-ID)
-nldr_with_hb_id_list <- assign_data(nldr_df = s_curve_noise_umap_scaled_rm_id,
-centroid_df = all_centroids_df)
-umap_with_hb_id <- as.data.frame(do.call(cbind, nldr_with_hb_id_list))
-std_counts_list <- compute_std_counts(nldr_df_with_hex_id = umap_with_hb_id)
-counts_df <- as.data.frame(do.call(cbind, std_counts_list))
+num_bins_list <- calc_bins(data = s_curve_noise_umap_scaled, x = "UMAP1",
+y = "UMAP2", hex_size = NA, buffer_x = NA, buffer_y = NA)
+num_bins_x <- num_bins_list$num_x
+num_bins_y <- num_bins_list$num_y
+hb_obj <- hex_binning(data = s_curve_noise_umap_scaled,
+x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
+num_bins_y = num_bins_y, x_start = NA, y_start = NA, buffer_x = NA,
+buffer_y = NA, hex_size = NA, col_start = "UMAP")
+all_centroids_df <- as.data.frame(do.call(cbind, hb_obj$centroids))
+counts_df <- as.data.frame(do.call(cbind, hb_obj$std_cts))
 df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df, counts_df = counts_df)
-tr1_object <- triangulate_bin_centroids(hex_bin_df = df_bin_centroids, x = "c_x", y = "c_y")
-tr_from_to_df <- generate_edge_info(triangular_object = tr1_object)
-cal_2d_dist(tr_from_to_df_coord = tr_from_to_df, start_x = "x_from", start_y = "y_from",
-end_x = "x_to", end_y = "y_to", select_col_vec = c("from", "to", "distance"))
+tr1_object <- tri_bin_centroids(hex_df = df_bin_centroids, x = "c_x", y = "c_y")
+tr_from_to_df <- gen_edges(tri_object = tr1_object)
+cal_2d_dist(tr_coord_df = tr_from_to_df, start_x = "x_from", start_y = "y_from",
+end_x = "x_to", end_y = "y_to", select_vars = c("from", "to", "distance"))
 
 }

@@ -2,26 +2,26 @@
 % Please edit documentation in R/data_preprocessing.R
 \name{gen_scaled_data}
 \alias{gen_scaled_data}
-\title{Scaling the 2D embeddings}
+\title{Scaling the data}
 \usage{
-gen_scaled_data(nldr_df, x, y, hex_ratio = NA)
+gen_scaled_data(data, x, y, hex_ratio = NA)
 }
 \arguments{
-\item{nldr_df}{A data frame containing 2D embeddings.}
+\item{data}{A tibble or data frame.}
 
-\item{x}{The name of the column that contains first 2D embeddings component.}
+\item{x}{The name of the column that contains values along the x-axis.}
 
-\item{y}{The name of the column that contains second 2D embeddings component.}
+\item{y}{The name of the column that contains values along the y-axis.}
 
 \item{hex_ratio}{Numeric value representing the ratio of the hexagon size.}
 }
 \value{
-A list contains scaled 2D embeddings.
+A list contains scaled x and y coordinates.
 }
 \description{
-This function scales the 2D embeddings.
+This function scales the x and y coordinates.
 }
 \examples{
-gen_scaled_data(nldr_df = s_curve_noise_umap, x = "UMAP1", y = "UMAP2")
+gen_scaled_data(data = s_curve_noise_umap, x = "UMAP1", y = "UMAP2")
 
 }

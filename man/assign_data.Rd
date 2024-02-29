@@ -2,34 +2,36 @@
 % Please edit documentation in R/2d.R
 \name{assign_data}
 \alias{assign_data}
-\title{Assign Data To Hexagons}
+\title{Assign data to hexagons}
 \usage{
-assign_data(nldr_df, centroid_df, type_NLDR = "UMAP")
+assign_data(data, centroid_df, col_start)
 }
 \arguments{
-\item{nldr_df}{A data frame containing 2D embeddings only.}
+\item{data}{data A tibble or data frame.}
 
-\item{centroid_df}{The dataset with all centroid coordinates only.}
+\item{centroid_df}{The dataset with centroid coordinates only.}
 
-\item{type_NLDR}{The type of non-linear dimensionality reduction (NLDR) used. Default is "UMAP".}
+\item{col_start}{The text that begins the column name of x and y axes of data.}
 }
 \value{
-A list contains 2D embeddings and respective hexagon ID (emb_1, emb_2, and hb_id respectively).
+A list contains x and y coordinates and corresponding hexagon ID
+(emb_1, emb_2, and hb_id respectively).
 }
 \description{
-This function generates the coordinates of hexagons after passing hexagonal centroids.
+This function assigns the data to hexagons.
 }
 \examples{
-num_bins_x <- calculate_effective_x_bins(nldr_df = s_curve_noise_umap_scaled,
-x = "UMAP1", hex_size = NA, buffer_x = NA)
-num_bins_y <- calculate_effective_y_bins(nldr_df = s_curve_noise_umap_scaled,
- y = "UMAP2", hex_size = NA, buffer_y = NA)
-centroid_list <- generate_full_grid_centroids(nldr_df = s_curve_noise_umap_scaled,
+num_bins_list <- calc_bins(data = s_curve_noise_umap_scaled, x = "UMAP1",
+y = "UMAP2", hex_size = NA, buffer_x = NA, buffer_y = NA)
+num_bins_x <- num_bins_list$num_x
+num_bins_y <- num_bins_list$num_y
+centroid_list <- gen_centroids(data = s_curve_noise_umap_scaled,
 x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
 num_bins_y = num_bins_y, x_start = NA, y_start = NA, buffer_x = NA,
 buffer_y = NA, hex_size = NA)
 all_centroids_df <- as.data.frame(do.call(cbind, centroid_list))
 s_curve_noise_umap_scaled_rm_id <- s_curve_noise_umap_scaled |> dplyr::select(-ID)
-assign_data(nldr_df = s_curve_noise_umap_scaled_rm_id, centroid_df = all_centroids_df)
+assign_data(data = s_curve_noise_umap_scaled_rm_id,
+centroid_df = all_centroids_df, col_start = "UMAP")
 
 }

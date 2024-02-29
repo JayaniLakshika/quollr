@@ -122,8 +122,8 @@ compute_aic <- function(p, mse, num_bins, num_obs) {
 #' nldr_df_with_id = s_curve_noise_umap_scaled, col_start_2d = "UMAP", col_start_highd = "x")
 #' df_bin_centroids <- model$df_bin_centroids
 #' df_bin <- model$df_bin
-#' pred_emb_list <- predict_emb(test_data = s_curve_noise_training, df_bin_centroids = df_bin_centroids,
-#' df_bin = df_bin, type_NLDR = "UMAP")
+#' pred_emb_list <- predict_emb(test_data = s_curve_noise_training,
+#' df_bin_centroids = df_bin_centroids, df_bin = df_bin, type_NLDR = "UMAP")
 #' pred_df_test <- as.data.frame(do.call(cbind, pred_emb_list))
 #' gen_summary(test_data = s_curve_noise_training, prediction_df = pred_df_test,
 #' df_bin = df_bin, col_start = "x")

@@ -2,7 +2,7 @@
 % Please edit documentation in R/parameters.R
 \name{find_low_dens_hex}
 \alias{find_low_dens_hex}
-\title{Find Low-Density Hexagons}
+\title{Find low-density Hexagons}
 \usage{
 find_low_dens_hex(df_bin_centroids_all, num_bins_x, df_bin_centroids_low)
 }
@@ -17,20 +17,22 @@ find_low_dens_hex(df_bin_centroids_all, num_bins_x, df_bin_centroids_low)
 A vector containing the IDs of hexagons to be removed after investigating their neighboring bins.
 }
 \description{
-This function identifies hexagons with low density based on the mean density of their neighboring hexagons.
+This function identifies hexagons with low density based on the mean density
+of their neighboring hexagons.
 }
 \examples{
-num_bins_x <- calculate_effective_x_bins(nldr_df = s_curve_noise_umap_scaled,
-x = "UMAP1", hex_size = NA, buffer_x = NA)
-num_bins_y <- calculate_effective_y_bins(nldr_df = s_curve_noise_umap_scaled,
- y = "UMAP2", hex_size = NA, buffer_y = NA)
-hex_bin_obj <- generate_hex_binning_info(nldr_df = s_curve_noise_umap_scaled,
+num_bins_list <- calc_bins(data = s_curve_noise_umap_scaled, x = "UMAP1",
+y = "UMAP2", hex_size = NA, buffer_x = NA, buffer_y = NA)
+num_bins_x <- num_bins_list$num_x
+num_bins_y <- num_bins_list$num_y
+hb_obj <- hex_binning(data = s_curve_noise_umap_scaled,
 x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
 num_bins_y = num_bins_y, x_start = NA, y_start = NA, buffer_x = NA,
-buffer_y = NA, hex_size = NA)
-all_centroids_df <- as.data.frame(do.call(cbind, hex_bin_obj$full_grid_hex_centroids))
-counts_df <- as.data.frame(do.call(cbind, hex_bin_obj$hex_id_with_std_counts))
-df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df, counts_df = counts_df)
+buffer_y = NA, hex_size = NA, col_start = "UMAP")
+all_centroids_df <- as.data.frame(do.call(cbind, hb_obj$centroids))
+counts_df <- as.data.frame(do.call(cbind, hb_obj$std_cts))
+df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df,
+counts_df = counts_df)
 df_bin_centroids_low <- df_bin_centroids |>
 dplyr::filter(std_counts <= 0.43)
 find_low_dens_hex(df_bin_centroids_all = df_bin_centroids, num_bins_x = num_bins_x,

@@ -118,8 +118,8 @@ show_langevitour <- function(df, df_b, df_b_with_center_data, benchmark_value = 
 
     } else {
 
-      benchmark_value <- find_benchmark_value(distance_edges = distance_df,
-                                              distance_col = distance_col)
+      benchmark_value <- find_lg_benchmark(distance_edges = distance_df,
+                                           distance_col = distance_col)
 
       ## Set the maximum difference as the criteria
       distance_df_small_edges <- distance_df |>

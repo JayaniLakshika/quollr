@@ -2,9 +2,9 @@
 % Please edit documentation in R/prediction.R
 \name{predict_emb}
 \alias{predict_emb}
-\title{Predict 2D Embeddings}
+\title{Predict 2D embeddings}
 \usage{
-predict_emb(test_data, df_bin_centroids, df_bin, type_NLDR = "UMAP")
+predict_emb(test_data, df_bin_centroids, df_bin, type_NLDR)
 }
 \arguments{
 \item{test_data}{The test dataset containing high-dimensional coordinates and an unique identifier.}
@@ -13,7 +13,7 @@ predict_emb(test_data, df_bin_centroids, df_bin, type_NLDR = "UMAP")
 
 \item{df_bin}{Centroid coordinates of hexagonal bins in high dimensions.}
 
-\item{type_NLDR}{The type of non-linear dimensionality reduction (NLDR) used. Default is "UMAP".}
+\item{type_NLDR}{The type of non-linear dimensionality reduction (NLDR) used.}
 }
 \value{
 A list contains predicted 2D embeddings, ID in the test data, and predicted hexagonal IDs.
@@ -23,21 +23,10 @@ Given a test dataset, the centroid coordinates of hexagonal bins in  2D and high
 predict the 2D embeddings for each data point in the test dataset.
 }
 \examples{
-training_data <- s_curve_noise_training
-num_bins_x <- calculate_effective_x_bins(nldr_df = s_curve_noise_umap_scaled,
-x = "UMAP1", hex_size = NA, buffer_x = NA)
-num_bins_y <- calculate_effective_y_bins(nldr_df = s_curve_noise_umap_scaled,
- y = "UMAP2", hex_size = NA, buffer_y = NA)
-hex_bin_obj <- generate_hex_binning_info(nldr_df = s_curve_noise_umap_scaled,
-x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
-num_bins_y = num_bins_y, x_start = NA, y_start = NA, buffer_x = NA,
-buffer_y = NA, hex_size = NA)
-all_centroids_df <- as.data.frame(do.call(cbind, hex_bin_obj$full_grid_hex_centroids))
-counts_df <- as.data.frame(do.call(cbind, hex_bin_obj$hex_id_with_std_counts))
-df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df, counts_df = counts_df)
-UMAP_data_with_hb_id <- hex_bin_obj$nldr_data_with_hex_id
-df_all <- dplyr::bind_cols(training_data |> dplyr::select(-ID), UMAP_data_with_hb_id)
-df_bin <- avg_highD_data(df_all, column_start_text = "x")
+model <- fit_highd_model(training_data = s_curve_noise_training, x = "UMAP1", y = "UMAP2",
+nldr_df_with_id = s_curve_noise_umap_scaled, col_start_2d = "UMAP", col_start_highd = "x")
+df_bin_centroids <- model$df_bin_centroids
+df_bin <- model$df_bin
 predict_emb(test_data = s_curve_noise_training, df_bin_centroids = df_bin_centroids,
 df_bin = df_bin, type_NLDR = "UMAP")
 

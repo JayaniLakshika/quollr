@@ -31,7 +31,7 @@ calc_bins <- function(data, x, y, hex_size = NA, buffer_x = NA, buffer_y = NA){
     stop("NAs present")
   }
 
-  if (any(is.infinite(x_values)) | any(is.infinite(x_values))) {
+  if (any(is.infinite(x_values)) | any(is.infinite(y_values))) {
     stop("Inf present")
   }
 

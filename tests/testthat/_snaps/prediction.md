@@ -1,7 +1,7 @@
-# predict_2d_embeddings() works
+# predict_emb() works
 
     Code
-      predict_2d_embeddings(test_data = s_curve_noise_training, df_bin_centroids = df_bin_centroids,
+      predict_emb(test_data = s_curve_noise_training, df_bin_centroids = df_bin_centroids,
         df_bin = df_bin, type_NLDR = "UMAP")
     Output
       $pred_UMAP_1
@@ -41,7 +41,7 @@
 ---
 
     Code
-      predict_2d_embeddings(test_data = s_curve_noise_test, df_bin_centroids = df_bin_centroids,
+      predict_emb(test_data = s_curve_noise_test, df_bin_centroids = df_bin_centroids,
         df_bin = df_bin, type_NLDR = "UMAP")
     Output
       $pred_UMAP_1
@@ -62,10 +62,10 @@
        [1]  2 24 34  7  7  7 24 34  2 13  7 13 18 29 13 13  6 28 12  7 18 24 12 34 28
       
 
-# generate_eval_df() works
+# gen_summary() works
 
     Code
-      generate_eval_df(test_data = s_curve_noise_training, prediction_df = pred_df_test,
+      gen_summary(test_data = s_curve_noise_training, prediction_df = pred_df_test,
         df_bin = df_bin, col_start = "x")
     Output
       $mse
@@ -78,7 +78,7 @@
 ---
 
     Code
-      generate_eval_df(test_data = s_curve_noise_test, prediction_df = pred_df_test_n,
+      gen_summary(test_data = s_curve_noise_test, prediction_df = pred_df_test_n,
         df_bin = df_bin, col_start = "x")
     Output
       $mse

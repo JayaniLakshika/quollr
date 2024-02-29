@@ -1,7 +1,7 @@
-# avg_highD_data() works
+# avg_highd_data() works
 
     Code
-      avg_highD_data(df_all, column_start_text = "x")
+      avg_highd_data(data = df_all, col_start = "x")
     Output
       # A tibble: 10 x 8
          hb_id       x1     x2     x3        x4        x5       x6        x7

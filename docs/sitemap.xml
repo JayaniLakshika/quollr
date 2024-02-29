@@ -49,6 +49,9 @@
     <loc>https://jayanilakshika.github.io/quollr/reference/cal_2D_dist.html</loc>
   </url>
   <url>
+    <loc>https://jayanilakshika.github.io/quollr/reference/calc_bins.html</loc>
+  </url>
+  <url>
     <loc>https://jayanilakshika.github.io/quollr/reference/calc_y_max.html</loc>
   </url>
   <url>
@@ -88,10 +91,19 @@
     <loc>https://jayanilakshika.github.io/quollr/reference/find_benchmark_value.html</loc>
   </url>
   <url>
+    <loc>https://jayanilakshika.github.io/quollr/reference/find_lg_benchmark.html</loc>
+  </url>
+  <url>
+    <loc>https://jayanilakshika.github.io/quollr/reference/find_low_dens_hex.html</loc>
+  </url>
+  <url>
     <loc>https://jayanilakshika.github.io/quollr/reference/find_low_density_hexagons.html</loc>
   </url>
   <url>
     <loc>https://jayanilakshika.github.io/quollr/reference/find_non_empty_bins.html</loc>
+  </url>
+  <url>
+    <loc>https://jayanilakshika.github.io/quollr/reference/find_pts.html</loc>
   </url>
   <url>
     <loc>https://jayanilakshika.github.io/quollr/reference/find_pts_in_hexbins.html</loc>
@@ -100,13 +112,28 @@
     <loc>https://jayanilakshika.github.io/quollr/reference/fit_high_d_model.html</loc>
   </url>
   <url>
+    <loc>https://jayanilakshika.github.io/quollr/reference/fit_highd_model.html</loc>
+  </url>
+  <url>
     <loc>https://jayanilakshika.github.io/quollr/reference/full_hex_grid.html</loc>
+  </url>
+  <url>
+    <loc>https://jayanilakshika.github.io/quollr/reference/gen_centroids.html</loc>
+  </url>
+  <url>
+    <loc>https://jayanilakshika.github.io/quollr/reference/gen_edges.html</loc>
+  </url>
+  <url>
+    <loc>https://jayanilakshika.github.io/quollr/reference/gen_hex_coord.html</loc>
   </url>
   <url>
     <loc>https://jayanilakshika.github.io/quollr/reference/gen_hex_coordinates.html</loc>
   </url>
   <url>
     <loc>https://jayanilakshika.github.io/quollr/reference/gen_scaled_data.html</loc>
+  </url>
+  <url>
+    <loc>https://jayanilakshika.github.io/quollr/reference/gen_summary.html</loc>
   </url>
   <url>
     <loc>https://jayanilakshika.github.io/quollr/reference/generate_edge_info.html</loc>
@@ -130,6 +157,9 @@
     <loc>https://jayanilakshika.github.io/quollr/reference/geom_trimesh.html</loc>
   </url>
   <url>
+    <loc>https://jayanilakshika.github.io/quollr/reference/hex_binning.html</loc>
+  </url>
+  <url>
     <loc>https://jayanilakshika.github.io/quollr/reference/index.html</loc>
   </url>
   <url>
@@ -140,6 +170,9 @@
   </url>
   <url>
     <loc>https://jayanilakshika.github.io/quollr/reference/predict_2d_embeddings.html</loc>
+  </url>
+  <url>
+    <loc>https://jayanilakshika.github.io/quollr/reference/predict_emb.html</loc>
   </url>
   <url>
     <loc>https://jayanilakshika.github.io/quollr/reference/predict_hex_id.html</loc>
@@ -172,7 +205,16 @@
     <loc>https://jayanilakshika.github.io/quollr/reference/stat_trimesh.html</loc>
   </url>
   <url>
+    <loc>https://jayanilakshika.github.io/quollr/reference/tri_bin_centroids.html</loc>
+  </url>
+  <url>
     <loc>https://jayanilakshika.github.io/quollr/reference/triangulate_bin_centroids.html</loc>
+  </url>
+  <url>
+    <loc>https://jayanilakshika.github.io/quollr/reference/vis_lg_mesh.html</loc>
+  </url>
+  <url>
+    <loc>https://jayanilakshika.github.io/quollr/reference/vis_rmlg_mesh.html</loc>
   </url>
   <url>
     <loc>https://jayanilakshika.github.io/quollr/reference/weighted_highD_data.html</loc>

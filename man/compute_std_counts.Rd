@@ -2,12 +2,12 @@
 % Please edit documentation in R/2d.R
 \name{compute_std_counts}
 \alias{compute_std_counts}
-\title{Compute Standardize Counts in Hexagons}
+\title{Compute standardize counts in hexagons}
 \usage{
-compute_std_counts(nldr_df_with_hex_id)
+compute_std_counts(data_hex_id)
 }
 \arguments{
-\item{nldr_df_with_hex_id}{A data frame with 2D embeddings and hexagonal bin IDs.}
+\item{data_hex_id}{A data frame with x and y coordinates and hexagonal bin IDs.}
 }
 \value{
 A list that contains hexagon IDs and the corresponding standardize counts.
@@ -16,22 +16,19 @@ A list that contains hexagon IDs and the corresponding standardize counts.
 This function computes the standardize number of points within each hexagon.
 }
 \examples{
-num_bins_x <- calculate_effective_x_bins(nldr_df = s_curve_noise_umap_scaled,
-                                        x = "UMAP1", hex_size = NA, buffer_x = NA)
-num_bins_y <- calculate_effective_y_bins(nldr_df = s_curve_noise_umap_scaled,
-                                        y = "UMAP2", hex_size = NA, buffer_y = NA)
-centroid_list <- generate_full_grid_centroids(nldr_df = s_curve_noise_umap_scaled,
-                                             x = "UMAP1", y = "UMAP2",
-                                             num_bins_x = num_bins_x,
-                                             num_bins_y = num_bins_y,
-                                             x_start = NA, y_start = NA,
-                                             buffer_x = NA,
-                                             buffer_y = NA, hex_size = NA)
+num_bins_list <- calc_bins(data = s_curve_noise_umap_scaled, x = "UMAP1",
+y = "UMAP2", hex_size = NA, buffer_x = NA, buffer_y = NA)
+num_bins_x <- num_bins_list$num_x
+num_bins_y <- num_bins_list$num_y
+centroid_list <- gen_centroids(data = s_curve_noise_umap_scaled,
+x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
+num_bins_y = num_bins_y, x_start = NA, y_start = NA, buffer_x = NA,
+buffer_y = NA, hex_size = NA)
 all_centroids_df <- as.data.frame(do.call(cbind, centroid_list))
 s_curve_noise_umap_scaled_rm_id <- s_curve_noise_umap_scaled |> dplyr::select(-ID)
-nldr_with_hb_id_list <- assign_data(nldr_df = s_curve_noise_umap_scaled_rm_id,
-centroid_df = all_centroids_df)
+nldr_with_hb_id_list <- assign_data(data = s_curve_noise_umap_scaled_rm_id,
+centroid_df = all_centroids_df, col_start = "UMAP")
 umap_with_hb_id <- as.data.frame(do.call(cbind, nldr_with_hb_id_list))
-compute_std_counts(nldr_df_with_hex_id = umap_with_hb_id)
+compute_std_counts(data_hex_id = umap_with_hb_id)
 
 }

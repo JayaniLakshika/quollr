@@ -1,16 +1,19 @@
 test_that("predict_emb() works", {
 
-  model <- suppressMessages(fit_high_d_model(training_data = s_curve_noise_training,
-                            nldr_df_with_id = s_curve_noise_umap_scaled))
+  suppressMessages(model <- fit_highd_model(training_data = s_curve_noise_training,
+                                            x = "UMAP1", y = "UMAP2",
+                                            nldr_df_with_id = s_curve_noise_umap_scaled,
+                                            col_start_2d = "UMAP", col_start_highd = "x"))
   df_bin_centroids <- model$df_bin_centroids
   df_bin <- model$df_bin
+
   testthat::expect_snapshot(predict_emb(test_data = s_curve_noise_training,
-                                                  df_bin_centroids = df_bin_centroids,
-                                                  df_bin = df_bin, type_NLDR = "UMAP"))
+                                        df_bin_centroids = df_bin_centroids,
+                                        df_bin = df_bin, type_NLDR = "UMAP"))
 
   testthat::expect_snapshot(predict_emb(test_data = s_curve_noise_test,
-                                                  df_bin_centroids = df_bin_centroids,
-                                                  df_bin = df_bin, type_NLDR = "UMAP"))
+                                        df_bin_centroids = df_bin_centroids,
+                                        df_bin = df_bin, type_NLDR = "UMAP"))
 
 })
 
@@ -38,28 +41,30 @@ test_that("compute_aic() works", {
 
 test_that("gen_summary() works", {
 
-  model <- suppressMessages(fit_high_d_model(training_data = s_curve_noise_training,
-                            nldr_df_with_id = s_curve_noise_umap_scaled))
+  suppressMessages(model <- fit_highd_model(training_data = s_curve_noise_training,
+                                            x = "UMAP1", y = "UMAP2",
+                                            nldr_df_with_id = s_curve_noise_umap_scaled,
+                                            col_start_2d = "UMAP", col_start_highd = "x"))
   df_bin_centroids <- model$df_bin_centroids
   df_bin <- model$df_bin
-
   pred_emb_list <- predict_emb(test_data = s_curve_noise_training,
-                                         df_bin_centroids = df_bin_centroids,
-                                         df_bin = df_bin, type_NLDR = "UMAP")
+                               df_bin_centroids = df_bin_centroids,
+                               df_bin = df_bin, type_NLDR = "UMAP")
   pred_df_test <- as.data.frame(do.call(cbind, pred_emb_list))
 
+
   testthat::expect_snapshot(gen_summary(test_data = s_curve_noise_training,
-                                             prediction_df = pred_df_test,
-                                             df_bin = df_bin, col_start = "x"))
+                                        prediction_df = pred_df_test,
+                                        df_bin = df_bin, col_start = "x"))
 
 
   pred_emb_list_n <- predict_emb(test_data = s_curve_noise_test,
-                                         df_bin_centroids = df_bin_centroids,
-                                         df_bin = df_bin, type_NLDR = "UMAP")
+                                 df_bin_centroids = df_bin_centroids,
+                                 df_bin = df_bin, type_NLDR = "UMAP")
   pred_df_test_n <- as.data.frame(do.call(cbind, pred_emb_list_n))
 
   testthat::expect_snapshot(gen_summary(test_data = s_curve_noise_test,
-                                             prediction_df = pred_df_test_n,
-                                             df_bin = df_bin, col_start = "x"))
+                                        prediction_df = pred_df_test_n,
+                                        df_bin = df_bin, col_start = "x"))
 
 })

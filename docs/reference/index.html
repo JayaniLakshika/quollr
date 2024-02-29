@@ -24,7 +24,7 @@
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/quollr1algomain.html">1. Main steps</a>
+    <a class="dropdown-item" href="../articles/quollr1algomain.html">1. Algorithm for binning data</a>
     <a class="dropdown-item" href="../articles/quollr2visFullGrid.html">2. Visualise full hexagonal grid</a>
     <a class="dropdown-item" href="../articles/quollr3prediction.html">3. Predict 2D embeddings</a>
   </div>
@@ -68,37 +68,27 @@
           
           <code><a href="assign_data.html">assign_data()</a></code> 
         </dt>
-        <dd>Assign Data To Hexagons</dd>
+        <dd>Assign data to hexagons</dd>
       </dl><dl><dt>
           
-          <code><a href="avg_highD_data.html">avg_highD_data()</a></code> 
+          <code><a href="avg_highd_data.html">avg_highd_data()</a></code> 
         </dt>
-        <dd>Average High-Dimensional Data</dd>
+        <dd>Create a dataframe with averaged high-dimensional data</dd>
       </dl><dl><dt>
           
           <code><a href="cal_2d_dist.html">cal_2d_dist()</a></code> 
         </dt>
-        <dd>Calculate 2D Distances Between Points</dd>
+        <dd>Calculate 2D Euclidean distances between vertices</dd>
+      </dl><dl><dt>
+          
+          <code><a href="calc_bins.html">calc_bins()</a></code> 
+        </dt>
+        <dd>Calculate the effective number of bins along x-axis and y-axis</dd>
       </dl><dl><dt>
           
           <code><a href="calc_y_max.html">calc_y_max()</a></code> 
         </dt>
         <dd>Compute maximum value of y for scaling</dd>
-      </dl><dl><dt>
-          
-          <code><a href="calculate_effective_x_bins.html">calculate_effective_x_bins()</a></code> 
-        </dt>
-        <dd>Calculate the effective number of bins along x-axis</dd>
-      </dl><dl><dt>
-          
-          <code><a href="calculate_effective_y_bins.html">calculate_effective_y_bins()</a></code> 
-        </dt>
-        <dd>Calculate the effective number of bins along y-axis</dd>
-      </dl><dl><dt>
-          
-          <code><a href="colour_long_edges.html">colour_long_edges()</a></code> 
-        </dt>
-        <dd>Color Long Edges</dd>
       </dl><dl><dt>
           
           <code><a href="compute_aic.html">compute_aic()</a></code> 
@@ -108,12 +98,12 @@
           
           <code><a href="compute_mean_density_hex.html">compute_mean_density_hex()</a></code> 
         </dt>
-        <dd>Compute Mean Density of Hexagonal Bins</dd>
+        <dd>Compute mean density of hexagonal bins</dd>
       </dl><dl><dt>
           
           <code><a href="compute_std_counts.html">compute_std_counts()</a></code> 
         </dt>
-        <dd>Compute Standardize Counts in Hexagons</dd>
+        <dd>Compute standardize counts in hexagons</dd>
       </dl><dl><dt>
           
           <code><a href="extract_hexbin_centroids.html">extract_hexbin_centroids()</a></code> 
@@ -121,59 +111,54 @@
         <dd>Extract hexagonal bin centroids coordinates and the corresponding standardize counts.</dd>
       </dl><dl><dt>
           
-          <code><a href="find_benchmark_value.html">find_benchmark_value()</a></code> 
+          <code><a href="find_lg_benchmark.html">find_lg_benchmark()</a></code> 
         </dt>
-        <dd>Find Benchmark Value To Remove Long Edges</dd>
+        <dd>Compute a benchmark value to remove long edges</dd>
       </dl><dl><dt>
           
-          <code><a href="find_low_density_hexagons.html">find_low_density_hexagons()</a></code> 
+          <code><a href="find_low_dens_hex.html">find_low_dens_hex()</a></code> 
         </dt>
-        <dd>Find Low-Density Hexagons</dd>
+        <dd>Find low-density Hexagons</dd>
       </dl><dl><dt>
           
           <code><a href="find_non_empty_bins.html">find_non_empty_bins()</a></code> 
         </dt>
-        <dd>Find the Number of Bins Required</dd>
+        <dd>Find the number of bins required to achieve required number of non-empty bins.</dd>
       </dl><dl><dt>
           
-          <code><a href="find_pts_in_hexbins.html">find_pts_in_hexbins()</a></code> 
+          <code><a href="find_pts.html">find_pts()</a></code> 
         </dt>
-        <dd>Find Points in Hexagonal Bins</dd>
+        <dd>Find points in hexagonal bins</dd>
       </dl><dl><dt>
           
-          <code><a href="fit_high_d_model.html">fit_high_d_model()</a></code> 
+          <code><a href="fit_highd_model.html">fit_highd_model()</a></code> 
         </dt>
         <dd>Construct the 2D model and lift into high-D</dd>
       </dl><dl><dt>
           
-          <code><a href="gen_hex_coordinates.html">gen_hex_coordinates()</a></code> 
+          <code><a href="gen_centroids.html">gen_centroids()</a></code> 
         </dt>
-        <dd>Generate Hexagonal Coordinates</dd>
+        <dd>Generate centroid coordinate</dd>
+      </dl><dl><dt>
+          
+          <code><a href="gen_edges.html">gen_edges()</a></code> 
+        </dt>
+        <dd>Generate edge information</dd>
+      </dl><dl><dt>
+          
+          <code><a href="gen_hex_coord.html">gen_hex_coord()</a></code> 
+        </dt>
+        <dd>Generate hexagonal polygon coordinates</dd>
       </dl><dl><dt>
           
           <code><a href="gen_scaled_data.html">gen_scaled_data()</a></code> 
         </dt>
-        <dd>Scaling the 2D embeddings</dd>
+        <dd>Scaling the data</dd>
       </dl><dl><dt>
           
-          <code><a href="generate_edge_info.html">generate_edge_info()</a></code> 
+          <code><a href="gen_summary.html">gen_summary()</a></code> 
         </dt>
-        <dd>Generate Edge Information</dd>
-      </dl><dl><dt>
-          
-          <code><a href="generate_eval_df.html">generate_eval_df()</a></code> 
-        </dt>
-        <dd>Generate Evaluation Data Frame</dd>
-      </dl><dl><dt>
-          
-          <code><a href="generate_full_grid_centroids.html">generate_full_grid_centroids()</a></code> 
-        </dt>
-        <dd>Generate Full Grid Centroids Coordinates</dd>
-      </dl><dl><dt>
-          
-          <code><a href="generate_hex_binning_info.html">generate_hex_binning_info()</a></code> 
-        </dt>
-        <dd>Generate Hexagonal Binning Info</dd>
+        <dd>Generate evaluation metrics</dd>
       </dl><dl><dt>
           
           <code><a href="geom_trimesh.html">geom_trimesh()</a></code> 
@@ -181,14 +166,14 @@
         <dd>Create a trimesh plot</dd>
       </dl><dl><dt>
           
-          <code><a href="predict_2d_embeddings.html">predict_2d_embeddings()</a></code> 
+          <code><a href="hex_binning.html">hex_binning()</a></code> 
         </dt>
-        <dd>Predict 2D Embeddings</dd>
+        <dd>Hexagonal binning</dd>
       </dl><dl><dt>
           
-          <code><a href="remove_long_edges.html">remove_long_edges()</a></code> 
+          <code><a href="predict_emb.html">predict_emb()</a></code> 
         </dt>
-        <dd>Remove Long Edges from a Triangular Mesh Plot</dd>
+        <dd>Predict 2D embeddings</dd>
       </dl><dl><dt>
           
           <code><a href="s_curve_noise.html">s_curve_noise</a></code> 
@@ -223,7 +208,7 @@
           
           <code><a href="show_langevitour.html">show_langevitour()</a></code> 
         </dt>
-        <dd>Show LangeviTour Visualization</dd>
+        <dd>Visualize the model overlaid on high-dimensional data</dd>
       </dl><dl><dt>
           
           <code><a href="stat_trimesh.html">stat_trimesh()</a></code> 
@@ -231,9 +216,19 @@
         <dd>stat_trimesh Custom Stat for trimesh plot</dd>
       </dl><dl><dt>
           
-          <code><a href="triangulate_bin_centroids.html">triangulate_bin_centroids()</a></code> 
+          <code><a href="tri_bin_centroids.html">tri_bin_centroids()</a></code> 
         </dt>
-        <dd>Triangulate Bin Centroids</dd>
+        <dd>Triangulate bin centroids</dd>
+      </dl><dl><dt>
+          
+          <code><a href="vis_lg_mesh.html">vis_lg_mesh()</a></code> 
+        </dt>
+        <dd>Visualize triangular mesh with coloured long edges</dd>
+      </dl><dl><dt>
+          
+          <code><a href="vis_rmlg_mesh.html">vis_rmlg_mesh()</a></code> 
+        </dt>
+        <dd>Visualize triangular mesh after removing the long edges</dd>
       </dl></div>
   </main></div>
 

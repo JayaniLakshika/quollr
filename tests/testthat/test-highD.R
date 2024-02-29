@@ -1,54 +1,56 @@
-test_that("avg_highD_data() works", {
+test_that("avg_highd_data() works", {
 
-  suppressMessages(num_bins_x <- calculate_effective_x_bins(nldr_df = s_curve_noise_umap_scaled,
-  x = "UMAP1", hex_size = NA, buffer_x = NA))
-  suppressMessages(num_bins_y <- calculate_effective_y_bins(nldr_df = s_curve_noise_umap_scaled,
-   y = "UMAP2", hex_size = NA, buffer_y = NA))
-  suppressMessages(hex_bin_obj <- generate_hex_binning_info(nldr_df = s_curve_noise_umap_scaled,
-  x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
-  num_bins_y = num_bins_y, x_start = NA, y_start = NA, buffer_x = NA,
-  buffer_y = NA, hex_size = NA))
-  umap_with_hb_id <- hex_bin_obj$nldr_data_with_hex_id
+  num_bins_list <- calc_bins(data = s_curve_noise_umap_scaled, x = "UMAP1",
+                             y = "UMAP2", hex_size = NA, buffer_x = NA, buffer_y = NA)
+  num_bins_x <- num_bins_list$num_x
+  num_bins_y <- num_bins_list$num_y
+  suppressMessages(hb_obj <- hex_binning(data = s_curve_noise_umap_scaled,
+                                         x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
+                                         num_bins_y = num_bins_y, x_start = NA, y_start = NA, buffer_x = NA,
+                                         buffer_y = NA, hex_size = NA, col_start = "UMAP"))
+  umap_with_hb_id <- hb_obj$data_hb_id
   df_all <- dplyr::bind_cols(s_curve_noise_training |> dplyr::select(-ID), umap_with_hb_id)
-  testthat::expect_snapshot(avg_highD_data(df_all, column_start_text = "x"))
+  testthat::expect_snapshot(avg_highd_data(data = df_all, col_start = "x"))
 
 })
 
 
 test_that("show_langevitour() works", {
 
-  suppressMessages(num_bins_x <- calculate_effective_x_bins(nldr_df = s_curve_noise_umap_scaled,
-                                           x = "UMAP1", hex_size = NA, buffer_x = NA))
-  suppressMessages(num_bins_y <- calculate_effective_y_bins(nldr_df = s_curve_noise_umap_scaled,
-                                           y = "UMAP2", hex_size = NA, buffer_y = NA))
+  num_bins_list <- calc_bins(data = s_curve_noise_umap_scaled, x = "UMAP1",
+                             y = "UMAP2", hex_size = NA, buffer_x = NA, buffer_y = NA)
+  num_bins_x <- num_bins_list$num_x
+  num_bins_y <- num_bins_list$num_y
+  suppressMessages(hb_obj <- hex_binning(data = s_curve_noise_umap_scaled,
+                                         x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
+                                         num_bins_y = num_bins_y, x_start = NA,
+                                         y_start = NA, buffer_x = NA,
+                                         buffer_y = NA, hex_size = NA,
+                                         col_start = "UMAP"))
 
-  ## Obtain the hexbin object
-  suppressMessages(hb_obj <- generate_hex_binning_info(nldr_df = s_curve_noise_umap_scaled,
-                                      x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
-                                      num_bins_y = num_bins_y, x_start = NA,
-                                      y_start = NA, buffer_x = NA,
-                                      buffer_y = NA, hex_size = NA))
-
-  all_centroids_df <- as.data.frame(do.call(cbind, hb_obj$full_grid_hex_centroids))
-  counts_df <- as.data.frame(do.call(cbind, hb_obj$hex_id_with_std_counts))
+  all_centroids_df <- as.data.frame(do.call(cbind, hb_obj$centroids))
+  counts_df <- as.data.frame(do.call(cbind, hb_obj$std_cts))
   df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df,
                                                counts_df = counts_df)
 
-  umap_with_hb_id <- as.data.frame(do.call(cbind, hb_obj$nldr_data_with_hex_id))
+  umap_with_hb_id <- as.data.frame(do.call(cbind, hb_obj$data_hb_id))
   df_all <- dplyr::bind_cols(s_curve_noise_training |> dplyr::select(-ID), umap_with_hb_id)
-  df_bin <- avg_highD_data(df_all, column_start_text = "x")
+  df_bin <- avg_highd_data(data = df_all, col_start = "x")
 
-  suppressWarnings(tr1_object <- triangulate_bin_centroids(hex_bin_df = df_bin_centroids,
-                                                           x = "c_x", y = "c_y"))
-  tr_from_to_df <- generate_edge_info(triangular_object = tr1_object)
+  suppressWarnings(tr1_object <- tri_bin_centroids(hex_df = df_bin_centroids,
+                                                   x = "c_x", y = "c_y"))
+  tr_from_to_df <- gen_edges(tri_object = tr1_object)
 
-  distance_df <- cal_2d_dist(tr_from_to_df_coord = tr_from_to_df, start_x = "x_from",
-                             start_y = "y_from", end_x = "x_to", end_y = "y_to",
-                             select_col_vec = c("from", "to", "distance"))
-  tour_widget <- show_langevitour(df = df_all, df_b = df_bin, df_b_with_center_data = df_bin_centroids,
+  distance_df <- cal_2d_dist(tr_coord_df = tr_from_to_df, start_x = "x_from",
+                             start_y = "y_from", end_x = "x_to",
+                             end_y = "y_to",
+                             select_vars = c("from", "to", "distance"))
+  tour_widget <- show_langevitour(df = df_all, df_b = df_bin,
+                                  df_b_with_center_data = df_bin_centroids,
                                   benchmark_value = 0.75, distance = distance_df,
                                   distance_col = "distance",
-                                  use_default_benchmark_val = FALSE, column_start_text = "x")
+                                  use_default_benchmark_val = FALSE,
+                                  col_start = "x")
 
   # Test if the output is an HTML widget object
   #testthat::expect_type(tour_widget, "list")

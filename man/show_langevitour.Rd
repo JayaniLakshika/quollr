@@ -2,7 +2,7 @@
 % Please edit documentation in R/highd.R
 \name{show_langevitour}
 \alias{show_langevitour}
-\title{Show LangeviTour Visualization}
+\title{Visualize the model overlaid on high-dimensional data}
 \usage{
 show_langevitour(
   df,
@@ -12,15 +12,15 @@ show_langevitour(
   distance_df,
   distance_col,
   use_default_benchmark_val = FALSE,
-  column_start_text = "x"
+  col_start
 )
 }
 \arguments{
 \item{df}{A data frame containing the high-dimensional data.}
 
-\item{df_b}{A data frame containing the high-dimensional coordinates of bin centroids/ means.}
+\item{df_b}{A data frame containing the high-dimensional coordinates of bin centroids.}
 
-\item{df_b_with_center_data}{The dataset with hexbin centroids/ means.}
+\item{df_b_with_center_data}{The dataset with hexbin centroids.}
 
 \item{benchmark_value}{The benchmark value used to remove long edges (optional).}
 
@@ -29,39 +29,40 @@ show_langevitour(
 \item{distance_col}{The name of the distance column.}
 
 \item{use_default_benchmark_val}{Logical, indicating whether to use default
-benchmark value  to remove long edges(default is FALSE).}
+benchmark value  to remove long edges (default is FALSE).}
 
-\item{column_start_text}{The text that begin the column name of the high-D data}
+\item{col_start}{The text that begin the column name of the high-dimensional data.}
 }
 \value{
 A langevitour object with the model and the high-dimensional data.
 }
 \description{
-This function generates a LangeviTour visualization based on different conditions and input parameters.
+This function generates a LangeviTour visualization based on different
+conditions and input parameters.
 }
 \examples{
-training_data <- s_curve_noise_training
-num_bins_x <- calculate_effective_x_bins(nldr_df = s_curve_noise_umap_scaled,
-x = "UMAP1", hex_size = NA, buffer_x = NA)
-num_bins_y <- calculate_effective_y_bins(nldr_df = s_curve_noise_umap_scaled,
- y = "UMAP2", hex_size = NA, buffer_y = NA)
-hex_bin_obj <- generate_hex_binning_info(nldr_df = s_curve_noise_umap_scaled,
+num_bins_list <- calc_bins(data = s_curve_noise_umap_scaled, x = "UMAP1",
+y = "UMAP2", hex_size = NA, buffer_x = NA, buffer_y = NA)
+num_bins_x <- num_bins_list$num_x
+num_bins_y <- num_bins_list$num_y
+hb_obj <- hex_binning(data = s_curve_noise_umap_scaled,
 x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
 num_bins_y = num_bins_y, x_start = NA, y_start = NA, buffer_x = NA,
-buffer_y = NA, hex_size = NA)
-all_centroids_df <- as.data.frame(do.call(cbind, hex_bin_obj$full_grid_hex_centroids))
-counts_df <- as.data.frame(do.call(cbind, hex_bin_obj$hex_id_with_std_counts))
-df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df, counts_df = counts_df)
-UMAP_data_with_hb_id <- as.data.frame(do.call(cbind, hex_bin_obj$nldr_data_with_hex_id))
-df_all <- dplyr::bind_cols(training_data |> dplyr::select(-ID), UMAP_data_with_hb_id)
-df_bin <- avg_highD_data(df_all, column_start_text = "x")
-tr1_object <- triangulate_bin_centroids(hex_bin_df = df_bin_centroids, x = "c_x", y = "c_y")
-tr_from_to_df <- generate_edge_info(triangular_object = tr1_object)
-distance_df <- cal_2d_dist(tr_from_to_df_coord = tr_from_to_df, start_x = "x_from",
+buffer_y = NA, hex_size = NA, col_start = "UMAP")
+all_centroids_df <- as.data.frame(do.call(cbind, hb_obj$centroids))
+counts_df <- as.data.frame(do.call(cbind, hb_obj$std_cts))
+umap_data_with_hb_id <- as.data.frame(do.call(cbind, hb_obj$data_hb_id))
+df_all <- dplyr::bind_cols(s_curve_noise_training |> dplyr::select(-ID), umap_data_with_hb_id)
+df_bin <- avg_highd_data(data = df_all, col_start = "x")
+df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df,
+counts_df = counts_df)
+tr1_object <- tri_bin_centroids(hex_df = df_bin_centroids, x = "c_x", y = "c_y")
+tr_from_to_df <- gen_edges(tri_object = tr1_object)
+distance_df <- cal_2d_dist(tr_coord_df = tr_from_to_df, start_x = "x_from",
 start_y = "y_from", end_x = "x_to", end_y = "y_to",
-select_col_vec = c("from", "to", "distance"))
+select_vars = c("from", "to", "distance"))
 show_langevitour(df = df_all, df_b = df_bin, df_b_with_center_data = df_bin_centroids,
 benchmark_value = 0.75, distance = distance_df, distance_col = "distance",
-use_default_benchmark_val = FALSE, column_start_text = "x")
+use_default_benchmark_val = FALSE, col_start = "x")
 
 }

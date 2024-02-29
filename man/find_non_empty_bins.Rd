@@ -2,26 +2,27 @@
 % Please edit documentation in R/2d.R
 \name{find_non_empty_bins}
 \alias{find_non_empty_bins}
-\title{Find the Number of Bins Required}
+\title{Find the number of bins required to achieve required number of non-empty bins.}
 \usage{
 find_non_empty_bins(
-  nldr_df_with_id,
-  x = "UMAP1",
-  y = "UMAP2",
+  data,
+  x = x,
+  y = y,
   non_empty_bins,
   x_start = NA,
   y_start = NA,
   buffer_x = NA,
   buffer_y = NA,
-  hex_size = NA
+  hex_size = NA,
+  col_start
 )
 }
 \arguments{
-\item{nldr_df_with_id}{A data frame containing 2D embeddings and unique ID column.}
+\item{data}{A tibble or data frame.}
 
-\item{x}{The name of the column that contains first 2D embeddings component.}
+\item{x}{The name of the column that contains values along the x-axis.}
 
-\item{y}{The name of the column that contains second 2D embeddings component.}
+\item{y}{The name of the column that contains values along the y-axis.}
 
 \item{non_empty_bins}{The desired number of non-empty bins.}
 
@@ -33,7 +34,10 @@ find_non_empty_bins(
 
 \item{buffer_y}{The buffer size along the y-axis.}
 
-\item{hex_size}{A numeric value that initializes the radius of the outer circle surrounding the hexagon.}
+\item{hex_size}{A numeric value that initializes the radius of the outer
+circle surrounding the hexagon.}
+
+\item{col_start}{The text that begins the column name of x and y axes of data.}
 }
 \value{
 The number of bins along the x and y axes
@@ -44,8 +48,8 @@ This function determines the number of bins along the x and y axes
 to obtain a specific number of non-empty bins.
 }
 \examples{
-find_non_empty_bins(nldr_df = s_curve_noise_umap_scaled,
+find_non_empty_bins(data = s_curve_noise_umap_scaled,
 x = "UMAP1", y = "UMAP2", non_empty_bins = 10, x_start = NA,
-y_start = NA, buffer_x = NA, buffer_y = NA, hex_size = NA)
+y_start = NA, buffer_x = NA, buffer_y = NA, hex_size = NA, col_start = "UMAP")
 
 }

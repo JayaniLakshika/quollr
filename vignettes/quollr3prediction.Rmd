@@ -25,9 +25,9 @@ library(ggplot2)
 Some Non-linear dimension reduction techniques (NLDR), such as t-distributed stochastic neighbor embedding (tSNE) do not provide mechanism to employ prediction like Uniform manifold approximation and projection (UMAP). In that case, the `predict_2d_embeddings` function serves as a valuable tool to predict 2D embeddings, regardless of the NLDR technique. 
 
 ```{r}
-model <- fit_high_d_model(training_data = s_curve_noise_training, 
-                 nldr_df_with_id = s_curve_noise_umap_scaled)
-
+model <- fit_highd_model(training_data = s_curve_noise_training, x = "UMAP1", 
+                         y = "UMAP2", nldr_df_with_id = s_curve_noise_umap_scaled, 
+                         col_start_2d = "UMAP", col_start_highd = "x")
 df_bin_centroids <- model$df_bin_centroids
 df_bin <- model$df_bin
 ```

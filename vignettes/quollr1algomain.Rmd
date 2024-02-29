@@ -29,36 +29,26 @@ library(tibble)
 
 To begin the algorithm, you need to determine the number of bins along the x and y axes to have regular hexagons in the hexagonal grid.
 
-### Number of bins along the x-axis
-
 ```{r}
-num_bins_x <- calculate_effective_x_bins(nldr_df = s_curve_noise_umap_scaled,
-                                         x = "UMAP1", hex_size = 0.2)
-num_bins_x 
-```
-
-### Number of bins along the y-axis
-
-```{r}
-num_bins_y <- calculate_effective_y_bins(nldr_df = s_curve_noise_umap_scaled,
-                                         y = "UMAP2", hex_size = 0.2)
-num_bins_y 
+num_bins_list <- calc_bins(data = s_curve_noise_umap_scaled, x = "UMAP1", 
+                           y = "UMAP2", hex_size = NA, buffer_x = NA, 
+                           buffer_y = NA)
+num_bins_x <- num_bins_list$num_x
+num_bins_y <- num_bins_list$num_y
 ```
 
 ## 2. Obtain hexagonal bin centroids
 
 
 ```{r}
-hb_obj <- generate_hex_binning_info(nldr_df = s_curve_noise_umap_scaled,
-                            x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
-                            num_bins_y = num_bins_y, x_start = NA,
-                            y_start = NA, buffer_x = NA,
-                            buffer_y = NA, hex_size = 0.2)
+hb_obj <- hex_binning(data = s_curve_noise_umap_scaled, x = "UMAP1", y = "UMAP2", 
+                      num_bins_x = num_bins_x, num_bins_y = num_bins_y, 
+                      x_start = NA, y_start = NA, buffer_x = NA, 
+                      buffer_y = NA, hex_size = NA, col_start = "UMAP")
 
-all_centroids_df <- as.data.frame(do.call(cbind, hb_obj$full_grid_hex_centroids))
-counts_df <- as.data.frame(do.call(cbind, hb_obj$hex_id_with_std_counts))
-
-df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df, 
+all_centroids_df <- as.data.frame(do.call(cbind, hb_obj$centroids))
+counts_df <- as.data.frame(do.call(cbind, hb_obj$std_cts))
+df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df,
                                              counts_df = counts_df)
 glimpse(df_bin_centroids) 
 ```
@@ -85,10 +75,10 @@ df_bin_centroids <- df_bin_centroids |>
 Next, you need to perform triangulation on the bin centroids to construct a triangular mesh. 
 
 ```{r}
-tr1_object <- triangulate_bin_centroids(hex_bin_df = df_bin_centroids, x = "c_x", y = "c_y")
+tr1_object <- tri_bin_centroids(hex_df = df_bin_centroids, x = "c_x", y = "c_y")
 str(tr1_object)
 
-tr_from_to_df <- generate_edge_info(triangular_object = tr1_object)
+tr_from_to_df <- gen_edges(tri_object = tr1_object)
 tr_from_to_df
 ```
 
@@ -109,21 +99,22 @@ trimesh
 
 ```{r}
 ## Compute 2D distances
-distance_df <- cal_2d_dist(tr_from_to_df_coord = tr_from_to_df, start_x = "x_from", 
-                        start_y = "y_from", end_x = "x_to", end_y = "y_to", 
-                        select_col_vec = c("from", "to", "distance"))
+distance_df <- cal_2d_dist(tr_coord_df = tr_from_to_df, start_x = "x_from", 
+                           start_y = "y_from", end_x = "x_to", end_y = "y_to", 
+                           select_vars = c("from", "to", "distance"))
 
 ## To find the benchmark value to remove long edges
-benchmark <- find_benchmark_value(distance_edges = distance_df, distance_col = "distance")
+benchmark <- find_lg_benchmark(distance_edges = distance_df, 
+                                  distance_col = "distance")
 benchmark
 ```
 
 ```{r}
 ## To draw the traingular mesh after remove long edges in 2D
 
-trimesh_removed <- remove_long_edges(distance_edges = distance_df, 
+trimesh_removed <- vis_rmlg_mesh(distance_edges = distance_df, 
                                      benchmark_value = 0.75, 
-                                     tr_from_to_df_coord = tr_from_to_df, 
+                                     tr_coord_df = tr_from_to_df, 
                                      distance_col = "distance") +
   xlab(expression(C[x]^{(2)})) + ylab(expression(C[y]^{(2)})) +
   theme(axis.text = element_text(size = 5),
@@ -138,14 +129,14 @@ To extend the model created in the 2D space to higher dimensions, you need to ta
 
 ```{r}
 ## Add hexbin Ids for the 2D embeddings
-umap_data_with_hb_id <- as.data.frame(do.call(cbind, hb_obj$nldr_data_with_hex_id))
+umap_data_with_hb_id <- as.data.frame(do.call(cbind, hb_obj$data_hb_id))
 umap_data_with_hb_id
         
 ## To generate a data set with high-dimensional training data and 2D embeddings with hexagonal IDs
 df_all <- dplyr::bind_cols(s_curve_noise_training |> dplyr::select(-ID), umap_data_with_hb_id)
 df_all
 
-df_bin <- avg_highD_data(.data = df_all)
+df_bin <- avg_highd_data(data = df_all, col_start = "x")
 df_bin
 ```
 
@@ -158,7 +149,7 @@ tour1 <- show_langevitour(df = df_all, df_b = df_bin,
                           df_b_with_center_data = df_bin_centroids, 
                           benchmark_value = 0.75, 
                           distance_df = distance_df, distance_col = "distance", 
-                          use_default_benchmark_val = FALSE, column_start_text = "x")
+                          use_default_benchmark_val = FALSE, col_start = "x")
 tour1
 
 
