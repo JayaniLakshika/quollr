@@ -1,6 +1,6 @@
 test_that("geom_trimesh() works", {
-  num_bins_list <- calc_bins(data = s_curve_noise_umap_scaled, x = "UMAP1",
-                             y = "UMAP2", hex_size = NA, buffer_x = NA, buffer_y = NA)
+  suppressMessages(num_bins_list <- calc_bins(data = s_curve_noise_umap_scaled, x = "UMAP1",
+                             y = "UMAP2", hex_size = NA, buffer_x = NA, buffer_y = NA))
   num_bins_x <- num_bins_list$num_x
   num_bins_y <- num_bins_list$num_y
   suppressMessages(hb_obj <- hex_binning(data = s_curve_noise_umap_scaled,
