@@ -12,12 +12,12 @@
 [![R-CMD-check](https://github.com/JayaniLakshika/quollr/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/JayaniLakshika/quollr/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-The `quollr` package provide functions to construct a model in the 2D
-space based on 2D embedding and then lifts to the high dimensional
-space. The package also provides a tools to visalise model in 2D space,
-and visualise the fitted model overlaid on data using the tour
-technique. Furthermore, facilitates to generate summary of high
-dimensional distributions.
+The `quollr` package offers functions to construct a model in 2D space
+from a 2D embedding and then lift it to the high-dimensional space.
+Additionally, it provides tools to visualize the model in 2D space and
+to overlay the fitted model on data using the tour technique.
+Furthermore, it facilitates the generation of summaries of
+high-dimensional distributions.
 
 <!--For a thorough background and discussion on this work, please read our paper [link to the paper].
 &#10;## Installation
@@ -57,14 +57,14 @@ is available in this package.
 ## Roadmap
 
 - To learn more about the data preprocessing: [1. Data
-  preprocessing](https://quollr.netlify.app/articles/algomain)
+  preprocessing](https://jayanilakshika.github.io/quollr/articles/quollr1dataprocessing.html)
 - To learn more about the main steps of the algorithm: [2. Algorithm for
-  visualising the model overlaid with high-dimensional
-  data](https://quollr.netlify.app/articles/algomain)
+  visualising the model overlaid on high-dimensional
+  data](https://jayanilakshika.github.io/quollr/articles/quollr2algo.html)
 - To create the full hexagonal grid: [3. Algorithm for binning
-  data](https://quollr.netlify.app/articles/visfullgrid)
+  data](https://jayanilakshika.github.io/quollr/articles/quollr3hexbin.html)
 - To generate model summaries: [4. Generating model
-  summaries](https://quollr.netlify.app/articles/prediction)
+  summaries](https://jayanilakshika.github.io/quollr/articles/quollr4summary.html)
 
 ## Copyright
 
