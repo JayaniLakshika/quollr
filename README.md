@@ -13,7 +13,8 @@ the method and parameter choices. It is difficult to determine whether
 any are accurate, which is best, or whether they have missed structure.
 To help assess the NLDR and decide on which, if any, is best, we have
 developed an algorithm to create a model that is then used to display as
-a wireframe in high dimensions.
+a wireframe in high dimensions. The `quollr` package provides functions
+to implement the algorithm.
 
 <!--For a thorough background and discussion on this work, please read our paper [link to the paper].
 &#10;## Installation
