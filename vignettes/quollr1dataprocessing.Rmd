@@ -17,16 +17,14 @@ knitr::opts_chunk$set(
 )
 ```
 
+Here, we'll walk through the process of preprocessing 2D embedding data to obtain regular hexagons.
+
 ```{r setup}
 library(quollr)
 library(dplyr)
 ```
 
-To begin the algorithm, you need to have 2D embedding generated for the training data. Then, you need to preprocess the 2D embedding data to obtain regular hexagons. 
-
-The example discussed in this package is 3-$d$ S-curve data with additional four noise dimensions. UMAP is used as the Non-linear dimension reduction technique and UMAP embeddings are generated for the training S-curve data.
-
-You can pass the generated UMAP embedding data to undergo the preproceesing. The function default `hex_ratio` is set up to obtain regular exagons, but you can change according to what height and width should need to have in obtaining regular hexagons.
+First, you'll need 2D embedding data generated for your training data. For our example, we'll use a 3-$d$ S-curve dataset with four additional noise dimensions. We've used UMAP as our non-linear dimension reduction technique to generate embeddings for the S-curve data.
 
 ```{r}
 scaled_umap <- gen_scaled_data(data = s_curve_noise_umap, x = "UMAP1", y = "UMAP2", 
@@ -34,3 +32,5 @@ scaled_umap <- gen_scaled_data(data = s_curve_noise_umap, x = "UMAP1", y = "UMAP
 
 glimpse(scaled_umap)
 ```
+
+`gen_scaled_data` function preprocesses the 2D embedding data to obtain regular hexagons. The `hex_ratio` parameter determines the aspect ratio of the hexagons. By default, it's set up to obtain regular hexagons, but you can adjust it to customize the height and width of the hexagons as needed.

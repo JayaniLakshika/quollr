@@ -28,7 +28,7 @@ Authors@R:
              email = "ttalagala@sjp.ac.lk", 
              role = "aut", 
              comment = c(ORCID = "0000-0002-0656-9789")))
-Description: Questioning how a high-dimensional object looks in low-dimensions. With 'quollr', you can create linked interactive graphics that facilitate the exploration and analysis of high-dimensional datasets. This powerful tool allows you to diagnose the quality of dimension reduction techniques and gain insights into the global structure of your data through interactive tours. A complete description of the method is discussed in paper.
+Description: The `quollr` package offers functions to construct a model in 2D space from a 2D embedding and then lift it to the high-dimensional space. Additionally, it provides tools to visualize the model in 2D space and to overlay the fitted model on data using the tour technique. Furthermore, it facilitates the generation of summaries of high-dimensional distributions.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true

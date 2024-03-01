@@ -49,10 +49,9 @@
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/quollr1dataprocessing.html">1. Data preprocessing</a>
-    <a class="dropdown-item" href="../articles/quollr2algo.html">1. Algorithm for visualising the model overlaid with high-dimensional data</a>
-    <a class="dropdown-item" href="../articles/quollr3hexbin.html">2. Algorithm for binning data</a>
-    <a class="dropdown-item" href="../articles/quollr4summary.html">Generating summaries</a>
-    <a class="dropdown-item" href="../articles/quollr5predict.html">Predict 2D embeddings</a>
+    <a class="dropdown-item" href="../articles/quollr2algo.html">2. Algorithm for visualising the model overlaid on high-dimensional data</a>
+    <a class="dropdown-item" href="../articles/quollr3hexbin.html">3. Algorithm for binning data</a>
+    <a class="dropdown-item" href="../articles/quollr4summary.html">4. Generating model summaries</a>
   </div>
 </li>
       </ul>
@@ -88,8 +87,28 @@
 
     
     
+<p>Here, we’ll walk through the process of preprocessing 2D embedding
+data to obtain regular hexagons.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/JayaniLakshika/quollr" class="external-link">quollr</a></span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/JayaniLakshika/quollr" class="external-link">quollr</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span></code></pre></div>
+<p>First, you’ll need 2D embedding data generated for your training
+data. For our example, we’ll use a 3-<span class="math inline">\(d\)</span> S-curve dataset with four additional
+noise dimensions. We’ve used UMAP as our non-linear dimension reduction
+technique to generate embeddings for the S-curve data.</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">scaled_umap</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gen_scaled_data.html">gen_scaled_data</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">s_curve_noise_umap</span>, x <span class="op">=</span> <span class="st">"UMAP1"</span>, y <span class="op">=</span> <span class="st">"UMAP2"</span>, </span>
+<span>                hex_ratio <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="va">scaled_umap</span><span class="op">)</span></span>
+<span><span class="co">#&gt; List of 2</span></span>
+<span><span class="co">#&gt;  $ scaled_UMAP1: num [1:75] 0.0804 0.7386 0.8399 0.1672 0.2629 ...</span></span>
+<span><span class="co">#&gt;  $ scaled_UMAP2: num [1:75] 0.366 1.1464 1.2392 0.0494 0.4556 ...</span></span></code></pre></div>
+<p><code>gen_scaled_data</code> function preprocesses the 2D embedding
+data to obtain regular hexagons. The <code>hex_ratio</code> parameter
+determines the aspect ratio of the hexagons. By default, it’s set up to
+obtain regular hexagons, but you can adjust it to customize the height
+and width of the hexagons as needed.</p>
   </main>
 </div>
 

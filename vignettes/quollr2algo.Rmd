@@ -1,8 +1,8 @@
 ---
-title: "2. Algorithm for visualising the model overlaid with high-dimensional data"
+title: "2. Algorithm for visualising the model overlaid on high-dimensional data"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{2. Algorithm for visualising the model overlaid with high-dimensional data}
+  %\VignetteIndexEntry{2. Algorithm for visualising the model overlaid on high-dimensional data}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -17,7 +17,9 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup, echo = FALSE}
+In here, we'll walk through the algorithm for preprocessing 2D embedding data to construct a model overlaid with high-dimensional data.
+
+```{r setup}
 library(quollr)
 library(ggplot2)
 library(tibble)
@@ -25,11 +27,11 @@ library(tibble)
 
 The algorithm consists of two steps. First, construct the model in 2D space. Second, lift the model into high-dimensions. Therefore, to begin the process, first you need to know how the 2D model is constructed.
 
-The algorithm begins with 2D embedding data and results a tour which shows the model overlaid with high-dimensional data.
+## Construct the 2D model
 
-To construct the model in the 2D space, first you need to decide hexagonal grid configurations, which means that the number of bins along the x and y axes. You can start with by calculating the defaults and make the changes to have a representative model later. 
+### Compute hexagonal grid configurations
 
-Let's compute with default settings for `hex_size`, `buffer_x`, and `buffer_y`.
+To construct the model in the 2D space, first you need to decide hexagonal grid configurations, which means that the number of bins along the x and y axes. You can begin by calculating default number of bins along the axes with default settings for `hex_size`, `buffer_x`, and `buffer_y`.
 
 ```{r}
 num_bins_list <- calc_bins(data = s_curve_noise_umap_scaled, x = "UMAP1", 
@@ -39,7 +41,9 @@ num_bins_x <- num_bins_list$num_x
 num_bins_y <- num_bins_list$num_y
 ```
 
-Next, you need to hexagonally bins the 2D layout and obtain the bin centroids. Discussed in details in [3. Algorithm for binning data](https://quollr.netlify.app/articles/visfullgrid).
+### Obtain bin centroids
+
+Next, you need to hexagonally bins the 2D layout and obtain the bin centroids. Discussed in details in [3. Algorithm for binning data](https://quollr.netlify.app/articles/visfullgrid). 
 
 ```{r}
 hb_obj <- hex_binning(data = s_curve_noise_umap_scaled, x = "UMAP1", y = "UMAP2", 
@@ -59,6 +63,8 @@ df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df,
 glimpse(df_bin_centroids) 
 ```
 
+### Remove low density hexagons
+
 One of the parameters that you need to control is that the benchmark value to remove low density hexagons. The default value is the first quartile of the standardise counts.
 
 ```{r}
@@ -70,7 +76,7 @@ benchmark_value_rm_lwd
 
 There is two ways that you can follow after this. First, you can remove the low density hexagons from `df_bin_centroids` and proceed. Second, you can check whether is that actually reliable to remove the identified low density hexagons by looking at their neighboring bins and if so remove them and proceed. In here, let's do with second option.
 
-You need to obtain the low density hexagons.
+Here, you need to obtain the low density hexagons.
 
 ```{r}
 df_bin_centroids_low <- df_bin_centroids |>
@@ -88,21 +94,18 @@ identify_rm_bins <- find_low_dens_hex(df_bin_centroids_all = df_bin_centroids,
 identify_rm_bins
 ```
 
-As you see, even though there are low density hexagons, it's not a good choice of removing them. 
+As you have seen, even though there are low density hexagons, it's not a good decision to remove them. Therefore, let's use the same `df_bin_centroids` as before.
 
-```{r}
-df_bin_centroids <- df_bin_centroids |>
-  dplyr::filter(!(hexID %in% identify_rm_bins))
-```
+### Triangulate bin centroids
 
-Then you need to triangulate the bin centroids.
+Then, you need to triangulate the bin centroids.
 
 ```{r}
 tr1_object <- tri_bin_centroids(hex_df = df_bin_centroids, x = "c_x", y = "c_y")
 str(tr1_object)
 ```
 
-To visualise what you get, use `geom_trimesh()` just passing the hexagonal bin centroid coordinates and it shows the triangular mesh.
+To visualize the results, simply use `geom_trimesh()` and provide the hexagonal bin centroid coordinates. This will display the triangular mesh for you to examine.
 
 ```{r}
 trimesh <- ggplot(df_bin_centroids, aes(x = c_x, y = c_y)) +
@@ -115,14 +118,18 @@ trimesh <- ggplot(df_bin_centroids, aes(x = c_x, y = c_y)) +
 trimesh
 ```
 
-To construct the wireframe in 2D, you need to find which vertices are connected. By passing triangular object to `gen_edges`, you can obtain which edges are exists and which vertices are connected.
+### Create the wireframe in 2D
+
+To build the wireframe in 2D, you'll need to identify which vertices are connected. You can obtain this by passing the triangular object to the `gen_edges` function, which will provide information on the existing edges and the connected vertices.
 
 ```{r}
 tr_from_to_df <- gen_edges(tri_object = tr1_object)
 glimpse(tr_from_to_df)
 ```
 
-Another important parameter of this algorithm is the benchmark value of removing long edges. To compute it, you first need to generate the 2D Euclidean distance data set for the edges.
+### Remove long edges
+
+Another important parameter in this algorithm is the benchmark value for removing long edges. To compute this value, you first need to generate the 2D Euclidean distance dataset for the edges.
 
 ```{r}
 distance_df <- cal_2d_dist(tr_coord_df = tr_from_to_df, start_x = "x_from", 
@@ -131,7 +138,8 @@ distance_df <- cal_2d_dist(tr_coord_df = tr_from_to_df, start_x = "x_from",
 glimpse(distance_df)
 ```
 
-Then, to compute a default value for the benchmark value, you can pass the `distance_df` to `find_lg_benchmark()`. Again, to obtain a representative model, you can change this value accordingly. This function is only provide a default value.
+Then, you can use the `find_lg_benchmark()` function to compute a default benchmark value to remove long edges. However, this default value may need adjustment for a better representation. In here, used the benchmark value as $0.75$.
+
 
 ```{r}
 benchmark <- find_lg_benchmark(distance_edges = distance_df, 
@@ -139,7 +147,7 @@ benchmark <- find_lg_benchmark(distance_edges = distance_df,
 benchmark
 ```
 
-To visualse what you get, you can use `vis_lg_mesh()` and `vis_rmlg_mesh()`. In here, used the benchmark value as $0.75$.
+To visualize the results, you can use `vis_lg_mesh()` and `vis_rmlg_mesh()`. These functions enable you to observe the wireframe in 2D obtained from the algorithm's computations.
 
 ```{r}
 trimesh_coloured <- vis_lg_mesh(distance_edges = distance_df, 
@@ -165,7 +173,9 @@ trimesh_removed <- vis_rmlg_mesh(distance_edges = distance_df,
 trimesh_removed
 ```
 
-To lift the constructed model into high-dimensions, you need to map the 2D hexagonal bin centroids to high-dimensions. To do that first you need to obtain the data set which have the 2D embedding with their corresponding hexagonal bin IDs.
+## Lift the model into high-dimensions
+
+To lift the constructed model into high-dimensions, you need to map the 2D hexagonal bin centroids to high-dimensions. To do that, first, you need to obtain the data set which have the 2D embedding with their corresponding hexagonal bin IDs.
 
 ```{r}
 umap_data_with_hb_id <- as.data.frame(do.call(cbind, hb_obj$data_hb_id))
@@ -179,12 +189,14 @@ df_all <- dplyr::bind_cols(s_curve_noise_training |> dplyr::select(-ID), umap_da
 glimpse(df_all)
 ```
 
-Then, you need to pass the generated data set to `avg_highd_data()` to obtain the high-dimensional coordinates of the model.
+Then, use `avg_highd_data()` to obtain the high-dimensional coordinates of the model.
 
 ```{r} 
 df_bin <- avg_highd_data(data = df_all, col_start = "x")
 glimpse(df_bin)
 ```
+
+## Result
 
 Finally, to visualise the model overlaid with the high-dimensional data, you initially need to pass the data set with the high-dimensional data and the 2D embedding with hexagonal bin IDs (`df_all`),  high-dimensional mapping of hexagonal bin centroids (`df_bin`), 2D hexagonal bin coordinates (`df_bin_centroids`), and wireframe data (`distance_df`).
 
