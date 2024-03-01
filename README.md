@@ -69,4 +69,4 @@ is available in this package.
 ## Copyright
 
 This package is licensed under the [MIT
-license](https://github.com/JayaniLakshika/quollr/LICENSE.md).
+license](https://github.com/JayaniLakshika/quollr/tree/main?tab=MIT-2-ov-file).
