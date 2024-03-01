@@ -17,13 +17,7 @@ knitr::opts_chunk$set(
 # quollr
 <img src="man/figures/logo.png" align="right" height="139" alt="" />
 
-<!-- badges: start -->
-[![R-CMD-check](https://github.com/JayaniLakshika/quollr/workflows/R-CMD-check/badge.svg)](https://github.com/JayaniLakshika/quollr/workflows/R-CMD-check)
-[![test](https://github.com/JayaniLakshika/quollr/workflows/test-coverage/badge.svg)](https://github.com/JayaniLakshika/quollr/actions/workflows/test-coverage.yaml)
-[![R-CMD-check](https://github.com/JayaniLakshika/quollr/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/JayaniLakshika/quollr/actions/workflows/R-CMD-check.yaml)
-<!-- badges: end -->
-
-The `quollr` package offers functions to construct a model in 2D space from a 2D embedding and then lift it to the high-dimensional space. Additionally, it provides tools to visualize the model in 2D space and to overlay the fitted model on data using the tour technique. Furthermore, it facilitates the generation of summaries of high-dimensional distributions.
+Non-linear dimension reduction (NLDR) techniques provide a low-dimensional representation of high-dimensional data by applying a non-linear transformation. The complexity of the transformations and data structure can create wildly different representations depending on the method and parameter choices. It is difficult to determine whether any are accurate, which is best, or whether they have missed structure. To help assess the NLDR and decide on which, if any, is best, we have developed an algorithm to create a model that is then used to display as a wireframe in high dimensions. 
 
 <!--For a thorough background and discussion on this work, please read our paper [link to the paper].
 

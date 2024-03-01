@@ -1,58 +1,54 @@
-Package: quollr
 Type: Package
+Package: quollr
 Title: Visualising How Nonlinear Dimension Reduction Warps Your Data
 Version: 0.1.0
-Authors@R: 
-    c(person(given = "Jayani", 
-            family = "P.G. Lakshika",
-            role = c("aut", "cre"),
-            email = "jayanilakshika76@gmail.com",
-            comment = c(ORCID = "0000-0002-6265-6481")),
-      person(given = "Dianne", 
-             family = "Cook", 
-             email = "dicook@monash.edu", 
-             role = "aut", 
-             comment = c(ORCID = "0000-0002-3813-7155")),
-      person(given = "Paul", 
-             family = "Harrison", 
-             email = "paul.harrison@monash.edu", 
-             role = "aut", 
-             comment = c(ORCID = "0000-0002-3980-268X")),
-      person(given = "Michael", 
-             family = "Lydeamore", 
-             email = "michael.lydeamore@monash.edu", 
-             role = "aut", 
-             comment = c(ORCID = "0000-0001-6515-827X")),
-      person(given = "Thiyanga", 
-             family = "S. Talagala", 
-             email = "ttalagala@sjp.ac.lk", 
-             role = "aut", 
-             comment = c(ORCID = "0000-0002-0656-9789")))
-Description: The `quollr` package offers functions to construct a model in 2D space from a 2D embedding and then lift it to the high-dimensional space. Additionally, it provides tools to visualize the model in 2D space and to overlay the fitted model on data using the tour technique. Furthermore, it facilitates the generation of summaries of high-dimensional distributions.
+Authors@R: c(
+    person("Jayani", "P.G. Lakshika", , "jayanilakshika76@gmail.com", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0002-6265-6481")),
+    person("Dianne", "Cook", , "dicook@monash.edu", role = "aut",
+           comment = c(ORCID = "0000-0002-3813-7155")),
+    person("Paul", "Harrison", , "paul.harrison@monash.edu", role = "aut",
+           comment = c(ORCID = "0000-0002-3980-268X")),
+    person("Michael", "Lydeamore", , "michael.lydeamore@monash.edu", role = "aut",
+           comment = c(ORCID = "0000-0001-6515-827X")),
+    person("Thiyanga", "S. Talagala", , "ttalagala@sjp.ac.lk", role = "aut",
+           comment = c(ORCID = "0000-0002-0656-9789"))
+  )
+Description: This package offers functions to construct a model in 2D
+    space from a 2D embedding and then lift it to the high-dimensional
+    space. Additionally, it provides tools to visualize the model in 2D
+    space and to overlay the fitted model on data using the tour
+    technique. Furthermore, it facilitates the generation of summaries of
+    high-dimensional distributions. The process is what Hadley Wickham,
+    Dianne Cook, and Heike Hofmann (2015) <doi:10.1002/sam.11271> coined
+    viewing the “model in the data space”, and the NLDR view would be
+    considered viewing the “data in the (NLDR) model space”.
 License: MIT + file LICENSE
-Encoding: UTF-8
-LazyData: true
-RoxygenNote: 7.3.0
-Imports: 
-    dplyr,
-    ggplot2,
-    langevitour,
-    stats,
-    tibble,
-    rsample,
-    tidyselect,
-    proxy,
-    rlang,
-    interp (>= 1.1-6)
 URL: https://github.com/JayaniLakshika/quollr
 BugReports: https://github.com/JayaniLakshika/quollr/issues
 Depends: 
     R (>= 3.5.0)
+Imports: 
+    dplyr,
+    ggplot2,
+    grid,
+    interp (>= 1.1-6),
+    langevitour,
+    proxy,
+    rlang,
+    rsample,
+    stats,
+    tibble,
+    tidyselect
 Suggests: 
     knitr,
     rmarkdown,
     testthat (>= 3.0.0),
     vdiffr,
     umap
-VignetteBuilder: knitr
+VignetteBuilder: 
+    knitr
 Config/testthat/edition: 3
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.3.0
