@@ -17,7 +17,7 @@ knitr::opts_chunk$set(
 # quollr
 <img src="man/figures/logo.png" align="right" height="139" alt="" />
 
-Non-linear dimension reduction (NLDR) techniques provide a low-dimensional representation of high-dimensional data by applying a non-linear transformation. The complexity of the transformations and data structure can create wildly different representations depending on the method and parameter choices. It is difficult to determine whether any are accurate, which is best, or whether they have missed structure. To help assess the NLDR and decide on which, if any, is best, we have developed an algorithm to create a model that is then used to display as a wireframe in high dimensions. The `quollr` package provides functions to implement the algorithm.
+Nonlinear dimension reduction (NLDR) techniques provide a low-dimensional representation of high-dimensional data by applying a non-linear transformation. The complexity of the transformations and data structure can create wildly different representations depending on the method and parameter choices. It is difficult to determine whether any are accurate, which is best, or whether they have missed structure. To help assess the NLDR and decide on which, if any, is best, we have developed an algorithm to create a model that is then used to display as a wireframe in high dimensions. The `quollr` package provides functions to implement the algorithm.
 
 <!--For a thorough background and discussion on this work, please read our paper [link to the paper].
 
