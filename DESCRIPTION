@@ -14,15 +14,12 @@ Authors@R: c(
     person("Thiyanga", "S. Talagala", , "ttalagala@sjp.ac.lk", role = "aut",
            comment = c(ORCID = "0000-0002-0656-9789"))
   )
-Description: This package offers functions to construct a model in 2D
-    space from a 2D embedding and then lift it to the high-dimensional
+Description: To construct a model in 2D
+    space from 2D embedding data and then lift it to the high-dimensional
     space. Additionally, it provides tools to visualize the model in 2D
     space and to overlay the fitted model on data using the tour
     technique. Furthermore, it facilitates the generation of summaries of
-    high-dimensional distributions. The process is what Hadley Wickham,
-    Dianne Cook, and Heike Hofmann (2015) <doi:10.1002/sam.11271> coined
-    viewing the “model in the data space”, and the NLDR view would be
-    considered viewing the “data in the (NLDR) model space”.
+    high-dimensional distributions.
 License: MIT + file LICENSE
 URL: https://github.com/JayaniLakshika/quollr
 BugReports: https://github.com/JayaniLakshika/quollr/issues
@@ -51,4 +48,4 @@ VignetteBuilder:
 Config/testthat/edition: 3
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.3.0
+RoxygenNote: 7.3.1
