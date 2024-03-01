@@ -32,8 +32,8 @@ high-dimensional distributions.
 The development version from [GitHub](https://github.com/) with:
 
 ``` r
-# install.packages("remotes")
-# remotes::install_github("JayaniLakshika/quollr")
+install.packages("remotes")
+remotes::install_github("JayaniLakshika/quollr")
 ```
 
 ## Usage
