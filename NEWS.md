@@ -1,3 +1,3 @@
-# quollr 0.1.1
+# quollr 0.1.0
 
 * Initial CRAN submission.
