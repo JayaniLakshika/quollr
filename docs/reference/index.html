@@ -6,7 +6,7 @@
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
     
 
-    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light"><div class="container">
+    <nav class="navbar fixed-top navbar-dark navbar-expand-lg bg-primary"><div class="container">
     
     <a class="navbar-brand me-2" href="../index.html">quollr</a>
 
@@ -50,9 +50,227 @@
     </div>
 
     <div class="section level2">
-      <h2 id="all-functions">All functions<a class="anchor" aria-label="anchor" href="#all-functions"></a></h2>
+      <h2 id="data">Data<a class="anchor" aria-label="anchor" href="#data"></a></h2>
+      
+      <p class="section-desc"></p><p>The example data sets.</p>
+
+      
+    </div><div id="" class="section level2">
       
       
+      
+
+      <dl><dt>
+          
+          <code><a href="s_curve_noise.html">s_curve_noise</a></code> 
+        </dt>
+        <dd>S-curve dataset with noise dimensions</dd>
+      </dl><dl><dt>
+          
+          <code><a href="s_curve_noise_training.html">s_curve_noise_training</a></code> 
+        </dt>
+        <dd>S-curve dataset with noise dimensions for training</dd>
+      </dl><dl><dt>
+          
+          <code><a href="s_curve_noise_test.html">s_curve_noise_test</a></code> 
+        </dt>
+        <dd>S-curve dataset with noise dimensions for test</dd>
+      </dl><dl><dt>
+          
+          <code><a href="s_curve_noise_umap.html">s_curve_noise_umap</a></code> 
+        </dt>
+        <dd>UMAP embedding for S-curve dataset which with noise dimensions</dd>
+      </dl><dl><dt>
+          
+          <code><a href="s_curve_noise_umap_scaled.html">s_curve_noise_umap_scaled</a></code> 
+        </dt>
+        <dd>Scaled UMAP embedding for S-curve dataset which with noise dimensions</dd>
+      </dl><dl><dt>
+          
+          <code><a href="s_curve_noise_umap_predict.html">s_curve_noise_umap_predict</a></code> 
+        </dt>
+        <dd>Predicted UMAP embedding for S-curve dataset which with noise dimensions</dd>
+      </dl></div><div class="section level2">
+      <h2 id="data-preprocessing">Data preprocessing<a class="anchor" aria-label="anchor" href="#data-preprocessing"></a></h2>
+      
+      <p class="section-desc"></p><p>These are for data preprocessing.</p>
+
+      
+    </div><div id="" class="section level2">
+      
+      
+      
+
+      <dl><dt>
+          
+          <code><a href="calc_y_max.html">calc_y_max()</a></code> 
+        </dt>
+        <dd>Compute maximum value of y for scaling</dd>
+      </dl><dl><dt>
+          
+          <code><a href="gen_scaled_data.html">gen_scaled_data()</a></code> 
+        </dt>
+        <dd>Scaling the data</dd>
+      </dl></div><div class="section level2">
+      <h2 id="hexagonal-binning">Hexagonal binning<a class="anchor" aria-label="anchor" href="#hexagonal-binning"></a></h2>
+      
+      <p class="section-desc"></p><p>These are for hexagonal binning.</p>
+
+      
+    </div><div id="" class="section level2">
+      
+      
+      
+
+      <dl><dt>
+          
+          <code><a href="calc_bins.html">calc_bins()</a></code> 
+        </dt>
+        <dd>Calculate the effective number of bins along x-axis and y-axis</dd>
+      </dl><dl><dt>
+          
+          <code><a href="gen_centroids.html">gen_centroids()</a></code> 
+        </dt>
+        <dd>Generate centroid coordinate</dd>
+      </dl><dl><dt>
+          
+          <code><a href="gen_hex_coord.html">gen_hex_coord()</a></code> 
+        </dt>
+        <dd>Generate hexagonal polygon coordinates</dd>
+      </dl><dl><dt>
+          
+          <code><a href="assign_data.html">assign_data()</a></code> 
+        </dt>
+        <dd>Assign data to hexagons</dd>
+      </dl><dl><dt>
+          
+          <code><a href="compute_std_counts.html">compute_std_counts()</a></code> 
+        </dt>
+        <dd>Compute standardize counts in hexagons</dd>
+      </dl><dl><dt>
+          
+          <code><a href="hex_binning.html">hex_binning()</a></code> 
+        </dt>
+        <dd>Hexagonal binning</dd>
+      </dl></div><div class="section level2">
+      <h2 id="-d-model-construction">2D model construction<a class="anchor" aria-label="anchor" href="#-d-model-construction"></a></h2>
+      
+      <p class="section-desc"></p><p>These are to construct the 2D model.</p>
+
+      
+    </div><div id="" class="section level2">
+      
+      
+      
+
+      <dl><dt>
+          
+          <code><a href="cal_2d_dist.html">cal_2d_dist()</a></code> 
+        </dt>
+        <dd>Calculate 2D Euclidean distances between vertices</dd>
+      </dl><dl><dt>
+          
+          <code><a href="extract_hexbin_centroids.html">extract_hexbin_centroids()</a></code> 
+        </dt>
+        <dd>Extract hexagonal bin centroids coordinates and the corresponding standardize counts.</dd>
+      </dl><dl><dt>
+          
+          <code><a href="tri_bin_centroids.html">tri_bin_centroids()</a></code> 
+        </dt>
+        <dd>Triangulate bin centroids</dd>
+      </dl><dl><dt>
+          
+          <code><a href="gen_edges.html">gen_edges()</a></code> 
+        </dt>
+        <dd>Generate edge information</dd>
+      </dl></div><div class="section level2">
+      <h2 id="parameters">Parameters<a class="anchor" aria-label="anchor" href="#parameters"></a></h2>
+      
+      <p class="section-desc"></p><p>These are to compute default parameter values.</p>
+
+      
+    </div><div id="" class="section level2">
+      
+      
+      
+
+      <dl><dt>
+          
+          <code><a href="compute_mean_density_hex.html">compute_mean_density_hex()</a></code> 
+        </dt>
+        <dd>Compute mean density of hexagonal bins</dd>
+      </dl><dl><dt>
+          
+          <code><a href="find_low_dens_hex.html">find_low_dens_hex()</a></code> 
+        </dt>
+        <dd>Find low-density Hexagons</dd>
+      </dl><dl><dt>
+          
+          <code><a href="find_lg_benchmark.html">find_lg_benchmark()</a></code> 
+        </dt>
+        <dd>Compute a benchmark value to remove long edges</dd>
+      </dl></div><div class="section level2">
+      <h2 id="lift-to-high-dimensions">Lift to high dimensions<a class="anchor" aria-label="anchor" href="#lift-to-high-dimensions"></a></h2>
+      
+      <p class="section-desc"></p><p>The function is to lift the constructed 2D model into high-dimensions.</p>
+
+      
+    </div><div id="" class="section level2">
+      
+      
+      
+
+      <dl><dt>
+          
+          <code><a href="avg_highd_data.html">avg_highd_data()</a></code> 
+        </dt>
+        <dd>Create a dataframe with averaged high-dimensional data</dd>
+      </dl></div><div class="section level2">
+      <h2 id="fit-the-model">Fit the model<a class="anchor" aria-label="anchor" href="#fit-the-model"></a></h2>
+      
+      <p class="section-desc"></p><p>The function is to fit the model.</p>
+
+      
+    </div><div id="" class="section level2">
+      
+      
+      
+
+      <dl><dt>
+          
+          <code><a href="fit_highd_model.html">fit_highd_model()</a></code> 
+        </dt>
+        <dd>Construct the 2D model and lift into high-D</dd>
+      </dl></div><div class="section level2">
+      <h2 id="model-summaries">Model summaries<a class="anchor" aria-label="anchor" href="#model-summaries"></a></h2>
+      
+      <p class="section-desc"></p><p>These are to obtain model summaries.</p>
+
+      
+    </div><div id="" class="section level2">
+      
+      
+      
+
+      <dl><dt>
+          
+          <code><a href="compute_aic.html">compute_aic()</a></code> 
+        </dt>
+        <dd>Compute the Akaike Information Criterion (AIC) for a given model.</dd>
+      </dl><dl><dt>
+          
+          <code><a href="gen_summary.html">gen_summary()</a></code> 
+        </dt>
+        <dd>Generate evaluation metrics</dd>
+      </dl><dl><dt>
+          
+          <code><a href="predict_emb.html">predict_emb()</a></code> 
+        </dt>
+        <dd>Predict 2D embeddings</dd>
+      </dl></div><div class="section level2">
+      <h2 id="visualisation">Visualisation<a class="anchor" aria-label="anchor" href="#visualisation"></a></h2>
+      
+      <p class="section-desc"></p><p>These are to visualise the model in 2D and high-dimensions.</p>
 
       
     </div><div id="" class="section level2">
@@ -67,159 +285,14 @@
         <dd>GeomTrimesh: A Custom ggplot2 Geom for Triangular Meshes</dd>
       </dl><dl><dt>
           
-          <code><a href="assign_data.html">assign_data()</a></code> 
-        </dt>
-        <dd>Assign data to hexagons</dd>
-      </dl><dl><dt>
-          
-          <code><a href="avg_highd_data.html">avg_highd_data()</a></code> 
-        </dt>
-        <dd>Create a dataframe with averaged high-dimensional data</dd>
-      </dl><dl><dt>
-          
-          <code><a href="cal_2d_dist.html">cal_2d_dist()</a></code> 
-        </dt>
-        <dd>Calculate 2D Euclidean distances between vertices</dd>
-      </dl><dl><dt>
-          
-          <code><a href="calc_bins.html">calc_bins()</a></code> 
-        </dt>
-        <dd>Calculate the effective number of bins along x-axis and y-axis</dd>
-      </dl><dl><dt>
-          
-          <code><a href="calc_y_max.html">calc_y_max()</a></code> 
-        </dt>
-        <dd>Compute maximum value of y for scaling</dd>
-      </dl><dl><dt>
-          
-          <code><a href="compute_aic.html">compute_aic()</a></code> 
-        </dt>
-        <dd>Compute the Akaike Information Criterion (AIC) for a given model.</dd>
-      </dl><dl><dt>
-          
-          <code><a href="compute_mean_density_hex.html">compute_mean_density_hex()</a></code> 
-        </dt>
-        <dd>Compute mean density of hexagonal bins</dd>
-      </dl><dl><dt>
-          
-          <code><a href="compute_std_counts.html">compute_std_counts()</a></code> 
-        </dt>
-        <dd>Compute standardize counts in hexagons</dd>
-      </dl><dl><dt>
-          
-          <code><a href="extract_hexbin_centroids.html">extract_hexbin_centroids()</a></code> 
-        </dt>
-        <dd>Extract hexagonal bin centroids coordinates and the corresponding standardize counts.</dd>
-      </dl><dl><dt>
-          
-          <code><a href="find_lg_benchmark.html">find_lg_benchmark()</a></code> 
-        </dt>
-        <dd>Compute a benchmark value to remove long edges</dd>
-      </dl><dl><dt>
-          
-          <code><a href="find_low_dens_hex.html">find_low_dens_hex()</a></code> 
-        </dt>
-        <dd>Find low-density Hexagons</dd>
-      </dl><dl><dt>
-          
-          <code><a href="find_non_empty_bins.html">find_non_empty_bins()</a></code> 
-        </dt>
-        <dd>Find the number of bins required to achieve required number of non-empty bins.</dd>
-      </dl><dl><dt>
-          
-          <code><a href="find_pts.html">find_pts()</a></code> 
-        </dt>
-        <dd>Find points in hexagonal bins</dd>
-      </dl><dl><dt>
-          
-          <code><a href="fit_highd_model.html">fit_highd_model()</a></code> 
-        </dt>
-        <dd>Construct the 2D model and lift into high-D</dd>
-      </dl><dl><dt>
-          
-          <code><a href="gen_centroids.html">gen_centroids()</a></code> 
-        </dt>
-        <dd>Generate centroid coordinate</dd>
-      </dl><dl><dt>
-          
-          <code><a href="gen_edges.html">gen_edges()</a></code> 
-        </dt>
-        <dd>Generate edge information</dd>
-      </dl><dl><dt>
-          
-          <code><a href="gen_hex_coord.html">gen_hex_coord()</a></code> 
-        </dt>
-        <dd>Generate hexagonal polygon coordinates</dd>
-      </dl><dl><dt>
-          
-          <code><a href="gen_scaled_data.html">gen_scaled_data()</a></code> 
-        </dt>
-        <dd>Scaling the data</dd>
-      </dl><dl><dt>
-          
-          <code><a href="gen_summary.html">gen_summary()</a></code> 
-        </dt>
-        <dd>Generate evaluation metrics</dd>
-      </dl><dl><dt>
-          
-          <code><a href="geom_trimesh.html">geom_trimesh()</a></code> 
-        </dt>
-        <dd>Create a trimesh plot</dd>
-      </dl><dl><dt>
-          
-          <code><a href="hex_binning.html">hex_binning()</a></code> 
-        </dt>
-        <dd>Hexagonal binning</dd>
-      </dl><dl><dt>
-          
-          <code><a href="predict_emb.html">predict_emb()</a></code> 
-        </dt>
-        <dd>Predict 2D embeddings</dd>
-      </dl><dl><dt>
-          
-          <code><a href="s_curve_noise.html">s_curve_noise</a></code> 
-        </dt>
-        <dd>S-curve dataset with noise dimensions</dd>
-      </dl><dl><dt>
-          
-          <code><a href="s_curve_noise_test.html">s_curve_noise_test</a></code> 
-        </dt>
-        <dd>S-curve dataset with noise dimensions for test</dd>
-      </dl><dl><dt>
-          
-          <code><a href="s_curve_noise_training.html">s_curve_noise_training</a></code> 
-        </dt>
-        <dd>S-curve dataset with noise dimensions for training</dd>
-      </dl><dl><dt>
-          
-          <code><a href="s_curve_noise_umap.html">s_curve_noise_umap</a></code> 
-        </dt>
-        <dd>UMAP embedding for S-curve dataset which with noise dimensions</dd>
-      </dl><dl><dt>
-          
-          <code><a href="s_curve_noise_umap_predict.html">s_curve_noise_umap_predict</a></code> 
-        </dt>
-        <dd>Predicted UMAP embedding for S-curve dataset which with noise dimensions</dd>
-      </dl><dl><dt>
-          
-          <code><a href="s_curve_noise_umap_scaled.html">s_curve_noise_umap_scaled</a></code> 
-        </dt>
-        <dd>Scaled UMAP embedding for S-curve dataset which with noise dimensions</dd>
-      </dl><dl><dt>
-          
-          <code><a href="show_langevitour.html">show_langevitour()</a></code> 
-        </dt>
-        <dd>Visualize the model overlaid on high-dimensional data</dd>
-      </dl><dl><dt>
-          
           <code><a href="stat_trimesh.html">stat_trimesh()</a></code> 
         </dt>
         <dd>stat_trimesh Custom Stat for trimesh plot</dd>
       </dl><dl><dt>
           
-          <code><a href="tri_bin_centroids.html">tri_bin_centroids()</a></code> 
+          <code><a href="geom_trimesh.html">geom_trimesh()</a></code> 
         </dt>
-        <dd>Triangulate bin centroids</dd>
+        <dd>Create a trimesh plot</dd>
       </dl><dl><dt>
           
           <code><a href="vis_lg_mesh.html">vis_lg_mesh()</a></code> 
@@ -230,8 +303,35 @@
           <code><a href="vis_rmlg_mesh.html">vis_rmlg_mesh()</a></code> 
         </dt>
         <dd>Visualize triangular mesh after removing the long edges</dd>
+      </dl><dl><dt>
+          
+          <code><a href="show_langevitour.html">show_langevitour()</a></code> 
+        </dt>
+        <dd>Visualize the model overlaid on high-dimensional data</dd>
+      </dl></div><div class="section level2">
+      <h2 id="additional">Additional<a class="anchor" aria-label="anchor" href="#additional"></a></h2>
+      
+      <p class="section-desc"></p><p>These are additional functionalities.</p>
+
+      
+    </div><div id="" class="section level2">
+      
+      
+      
+
+      <dl><dt>
+          
+          <code><a href="find_pts.html">find_pts()</a></code> 
+        </dt>
+        <dd>Find points in hexagonal bins</dd>
+      </dl><dl><dt>
+          
+          <code><a href="find_non_empty_bins.html">find_non_empty_bins()</a></code> 
+        </dt>
+        <dd>Find the number of bins required to achieve required number of non-empty bins.</dd>
       </dl></div>
-  </main></div>
+  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
+    </nav></aside></div>
 
 
     <footer><div class="pkgdown-footer-left">
