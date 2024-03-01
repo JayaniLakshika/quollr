@@ -5,7 +5,7 @@
 
 <img src="man/figures/logo.png" align="right" height="139" alt="" />
 
-Non-linear dimension reduction (NLDR) techniques provide a
+Nonlinear dimension reduction (NLDR) techniques provide a
 low-dimensional representation of high-dimensional data by applying a
 non-linear transformation. The complexity of the transformations and
 data structure can create wildly different representations depending on
