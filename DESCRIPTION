@@ -1,7 +1,7 @@
 Package: quollr
 Type: Package
 Title: Visualising How Nonlinear Dimension Reduction Warps Your Data
-Version: 0.1.0
+Version: 0.1.1
 Authors@R: 
     c(person(given = "Jayani", 
             family = "P.G. Lakshika",
