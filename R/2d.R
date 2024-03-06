@@ -504,6 +504,49 @@ extract_hexbin_centroids <- function(centroids_df, counts_df) {
   return(centroids_df)
 }
 
+#' Extract hexagonal bin mean coordinates and the corresponding standardize counts.
+#'
+#' @param nldr_df_with_hex_id A data frame with 2D embeddings and hexagonal bin IDs.
+#' @param counts_df A data frame contains hexagon IDs with the standardize number of points within each hexagon.
+#'
+#' @return A data frame contains hexagon ID, bin mean coordinates, and standardize counts.
+#' @importFrom dplyr arrange group_by summarise filter mutate
+#' @importFrom tidyselect everything
+#'
+#' @examples
+#' num_bins_list <- calc_bins(data = s_curve_noise_umap_scaled, x = "UMAP1",
+#' y = "UMAP2", hex_size = NA, buffer_x = NA, buffer_y = NA)
+#' num_bins_x <- num_bins_list$num_x
+#' num_bins_y <- num_bins_list$num_y
+#' hb_obj <- hex_binning(data = s_curve_noise_umap_scaled,
+#' x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
+#' num_bins_y = num_bins_y, x_start = NA, y_start = NA, buffer_x = NA,
+#' buffer_y = NA, hex_size = NA, col_start = "UMAP")
+#' umap_with_hb_id <- as.data.frame(do.call(cbind, hb_obj$data_hb_id))
+#' counts_df <- as.data.frame(do.call(cbind, hb_obj$std_cts))
+#' extract_hexbin_mean(nldr_df_with_hex_id = umap_with_hb_id, counts_df = counts_df)
+#'
+#' @export
+extract_hexbin_mean <- function(nldr_df_with_hex_id, counts_df) {
+
+  ## To arrange the hexagon IDs
+  counts_df <- counts_df |>
+    dplyr::arrange(hb_id)
+
+  ## To compute hexagonal bin means
+  hex_mean_df <- nldr_df_with_hex_id |>
+    dplyr::group_by(hb_id) |>
+    dplyr::summarise(dplyr::across(tidyselect::everything(), mean)) |>
+    dplyr::arrange(hb_id) |>
+    dplyr::filter(hb_id %in% counts_df$hb_id) |>
+    dplyr::mutate(std_counts = counts_df$std_counts)
+
+  ## Rename columns
+  names(hex_mean_df) <- c("hexID", "c_x", "c_y", "std_counts")
+
+  return(hex_mean_df)
+}
+
 
 #' Triangulate bin centroids
 #'
@@ -813,7 +856,7 @@ vis_rmlg_mesh <- function(distance_edges, benchmark_value, tr_coord_df,
 #' y_start = NA, buffer_x = NA, buffer_y = NA, hex_size = NA, col_start = "UMAP")
 #'
 #' @export
-find_non_empty_bins <- function(data, x = x, y = y, non_empty_bins, x_start = NA,
+find_non_empty_bins <- function(data, x, y, non_empty_bins, x_start = NA,
                                 y_start = NA, buffer_x = NA, buffer_y = NA,
                                 hex_size = NA, col_start) {
 

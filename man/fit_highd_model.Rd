@@ -16,6 +16,7 @@ fit_highd_model(
   buffer_x = NA,
   buffer_y = NA,
   hex_size = NA,
+  is_bin_centroid = TRUE,
   is_rm_lwd_hex = FALSE,
   benchmark_to_rm_lwd_hex = NA,
   col_start_2d,
@@ -45,6 +46,8 @@ fit_highd_model(
 
 \item{hex_size}{A numeric value that initializes the radius of the outer circle
 surrounding the hexagon.}
+
+\item{is_bin_centroid}{Logical, indicating whether to use bin centroids (default is TRUE).}
 
 \item{is_rm_lwd_hex}{Logical, indicating whether to remove low-density hexagons
 (default is FALSE).}

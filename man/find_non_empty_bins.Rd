@@ -6,8 +6,8 @@
 \usage{
 find_non_empty_bins(
   data,
-  x = x,
-  y = y,
+  x,
+  y,
   non_empty_bins,
   x_start = NA,
   y_start = NA,

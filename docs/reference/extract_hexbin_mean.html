@@ -6,11 +6,11 @@
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
     
 
-    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light"><div class="container">
+    <nav class="navbar fixed-top navbar-dark navbar-expand-lg bg-primary"><div class="container">
     
     <a class="navbar-brand me-2" href="../index.html">quollr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -24,10 +24,14 @@
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/quollr1algomain.html">1. Main steps</a>
-    <a class="dropdown-item" href="../articles/quollr2visFullGrid.html">2. Visualise full hexagonal grid</a>
-    <a class="dropdown-item" href="../articles/quollr3prediction.html">3. Predict 2D embeddings</a>
+    <a class="dropdown-item" href="../articles/quollr1dataprocessing.html">1. Data preprocessing</a>
+    <a class="dropdown-item" href="../articles/quollr2algo.html">2. Algorithm for visualising the model overlaid on high-dimensional data</a>
+    <a class="dropdown-item" href="../articles/quollr3hexbin.html">3. Algorithm for binning data</a>
+    <a class="dropdown-item" href="../articles/quollr4summary.html">4. Generating model summaries</a>
   </div>
+</li>
+<li class="nav-item">
+  <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
@@ -78,31 +82,23 @@
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">num_bins_x</span> <span class="op">&lt;-</span> <span class="fu"><a href="calculate_effective_x_bins.html">calculate_effective_x_bins</a></span><span class="op">(</span>nldr_df <span class="op">=</span> <span class="va">s_curve_noise_umap_scaled</span>,</span></span>
-<span class="r-in"><span>                                        x <span class="op">=</span> <span class="st">"UMAP1"</span>, hex_size <span class="op">=</span> <span class="cn">NA</span>, buffer_x <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">num_bins_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="calc_bins.html">calc_bins</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">s_curve_noise_umap_scaled</span>, x <span class="op">=</span> <span class="st">"UMAP1"</span>,</span></span>
+<span class="r-in"><span>y <span class="op">=</span> <span class="st">"UMAP2"</span>, hex_size <span class="op">=</span> <span class="cn">NA</span>, buffer_x <span class="op">=</span> <span class="cn">NA</span>, buffer_y <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Hex size is set to 0.2.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Buffer along the x-axis is set to 0.519615242270663.</span>
-<span class="r-in"><span><span class="va">num_bins_y</span> <span class="op">&lt;-</span> <span class="fu"><a href="calculate_effective_y_bins.html">calculate_effective_y_bins</a></span><span class="op">(</span>nldr_df <span class="op">=</span> <span class="va">s_curve_noise_umap_scaled</span>,</span></span>
-<span class="r-in"><span>                                        y <span class="op">=</span> <span class="st">"UMAP2"</span>, hex_size <span class="op">=</span> <span class="cn">NA</span>, buffer_y <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Hex size is set to 0.2.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Buffer along the y-axis is set to 0.45.</span>
-<span class="r-in"><span><span class="va">centroid_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="generate_full_grid_centroids.html">generate_full_grid_centroids</a></span><span class="op">(</span>nldr_df <span class="op">=</span> <span class="va">s_curve_noise_umap_scaled</span>,</span></span>
-<span class="r-in"><span>                                             x <span class="op">=</span> <span class="st">"UMAP1"</span>, y <span class="op">=</span> <span class="st">"UMAP2"</span>,</span></span>
-<span class="r-in"><span>                                             num_bins_x <span class="op">=</span> <span class="va">num_bins_x</span>,</span></span>
-<span class="r-in"><span>                                             num_bins_y <span class="op">=</span> <span class="va">num_bins_y</span>,</span></span>
-<span class="r-in"><span>                                             x_start <span class="op">=</span> <span class="cn">NA</span>, y_start <span class="op">=</span> <span class="cn">NA</span>,</span></span>
-<span class="r-in"><span>                                             buffer_x <span class="op">=</span> <span class="cn">NA</span>,</span></span>
-<span class="r-in"><span>                                             buffer_y <span class="op">=</span> <span class="cn">NA</span>, hex_size <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">num_bins_x</span> <span class="op">&lt;-</span> <span class="va">num_bins_list</span><span class="op">$</span><span class="va">num_x</span></span></span>
+<span class="r-in"><span><span class="va">num_bins_y</span> <span class="op">&lt;-</span> <span class="va">num_bins_list</span><span class="op">$</span><span class="va">num_y</span></span></span>
+<span class="r-in"><span><span class="va">hb_obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="hex_binning.html">hex_binning</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">s_curve_noise_umap_scaled</span>,</span></span>
+<span class="r-in"><span>x <span class="op">=</span> <span class="st">"UMAP1"</span>, y <span class="op">=</span> <span class="st">"UMAP2"</span>, num_bins_x <span class="op">=</span> <span class="va">num_bins_x</span>,</span></span>
+<span class="r-in"><span>num_bins_y <span class="op">=</span> <span class="va">num_bins_y</span>, x_start <span class="op">=</span> <span class="cn">NA</span>, y_start <span class="op">=</span> <span class="cn">NA</span>, buffer_x <span class="op">=</span> <span class="cn">NA</span>,</span></span>
+<span class="r-in"><span>buffer_y <span class="op">=</span> <span class="cn">NA</span>, hex_size <span class="op">=</span> <span class="cn">NA</span>, col_start <span class="op">=</span> <span class="st">"UMAP"</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Hex size is set to 0.2.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> x_start is set to -0.173205080756888.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> y_start is set to -0.15.</span>
-<span class="r-in"><span><span class="va">all_centroids_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="va">cbind</span>, <span class="va">centroid_list</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">s_curve_noise_umap_scaled_rm_id</span> <span class="op">&lt;-</span> <span class="va">s_curve_noise_umap_scaled</span> <span class="op">|&gt;</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">ID</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">nldr_with_hb_id_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="assign_data.html">assign_data</a></span><span class="op">(</span>nldr_df <span class="op">=</span> <span class="va">s_curve_noise_umap_scaled_rm_id</span>,</span></span>
-<span class="r-in"><span>centroid_df <span class="op">=</span> <span class="va">all_centroids_df</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">umap_with_hb_id</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="va">cbind</span>, <span class="va">nldr_with_hb_id_list</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">std_counts_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="compute_std_counts.html">compute_std_counts</a></span><span class="op">(</span>nldr_df_with_hex_id <span class="op">=</span> <span class="va">umap_with_hb_id</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">counts_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="va">cbind</span>, <span class="va">std_counts_list</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Hex size is set to 0.2.</span>
+<span class="r-in"><span><span class="va">umap_with_hb_id</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="va">cbind</span>, <span class="va">hb_obj</span><span class="op">$</span><span class="va">data_hb_id</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">counts_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="va">cbind</span>, <span class="va">hb_obj</span><span class="op">$</span><span class="va">std_cts</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">extract_hexbin_mean</span><span class="op">(</span>nldr_df_with_hex_id <span class="op">=</span> <span class="va">umap_with_hb_id</span>, counts_df <span class="op">=</span> <span class="va">counts_df</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 10 × 4</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    hexID    c_x    c_y std_counts</span>

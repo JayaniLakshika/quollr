@@ -16,6 +16,7 @@
 #' @param buffer_y The buffer size along the y-axis.
 #' @param hex_size A numeric value that initializes the radius of the outer circle
 #' surrounding the hexagon.
+#' @param is_bin_centroid Logical, indicating whether to use bin centroids (default is TRUE).
 #' @param is_rm_lwd_hex Logical, indicating whether to remove low-density hexagons
 #' (default is FALSE).
 #' @param benchmark_to_rm_lwd_hex The benchmark value to remove low-density hexagons.
@@ -34,8 +35,9 @@
 fit_highd_model <- function(training_data, nldr_df_with_id, x, y, num_bins_x = NA,
                       num_bins_y = NA, x_start = NA, y_start = NA,
                       buffer_x = NA, buffer_y = NA,  hex_size = NA,
-                      is_rm_lwd_hex = FALSE, benchmark_to_rm_lwd_hex = NA,
-                      col_start_2d, col_start_highd) {
+                      is_bin_centroid = TRUE, is_rm_lwd_hex = FALSE,
+                      benchmark_to_rm_lwd_hex = NA, col_start_2d,
+                      col_start_highd) {
 
   ## If number of bins along the x-axis and/or y-axis is not given
   if (is.na(num_bins_x) | is.na(num_bins_y)) {
@@ -57,9 +59,18 @@ fit_highd_model <- function(training_data, nldr_df_with_id, x, y, num_bins_x = N
   counts_df <- as.data.frame(do.call(cbind, hb_obj$std_cts))
   nldr_df_with_hex_id <- as.data.frame(do.call(cbind, hb_obj$data_hb_id))
 
-  ## To obtain bin centroids
-  df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df,
-                                               counts_df = counts_df)
+  ## Do you need to use bin centroids or bin means?
+  if (isTRUE(is_bin_centroid)) {
+    ## For bin centroids
+    df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df,
+                                                 counts_df = counts_df)
+
+  } else {
+    ## For bin means
+    df_bin_centroids <- extract_hexbin_mean(nldr_df_with_hex_id = nldr_df_with_hex_id,
+                                            counts_df = counts_df)
+
+  }
 
   if (isFALSE(is_rm_lwd_hex)) {
     if (!is.na(benchmark_to_rm_lwd_hex)) {
