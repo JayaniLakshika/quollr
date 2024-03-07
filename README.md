@@ -17,14 +17,16 @@ a wireframe in high dimensions. The `quollr` package provides functions
 to implement the algorithm.
 
 <!--For a thorough background and discussion on this work, please read our paper [link to the paper].
-&#10;## Installation
-&#10;You can install the released version of `quollr` from [CRAN](https://CRAN.R-project.org) with:
-&#10;``` r
-# install.packages("quollr") 
-```
 -->
 
 ## Installation
+
+You can install the released version of `quollr` from
+[CRAN](https://CRAN.R-project.org) with:
+
+``` r
+install.packages("quollr") 
+```
 
 The development version from [GitHub](https://github.com/) with:
 
