@@ -871,7 +871,9 @@ find_non_empty_bins <- function(data, x, y, non_empty_bins, x_start = NA,
                                   num_bins_y_vec = 2:max_bins_along_axis) |>
     dplyr::mutate(num_x = pmin(num_bins_x_vec, num_bins_y_vec),
                   num_y = pmax(num_bins_x_vec, num_bins_y_vec)) |>
-    dplyr::distinct(num_x, num_y)
+    dplyr::distinct(num_x, num_y) |>
+    dplyr::mutate(num_bins = num_x * num_y) |>
+    dplyr::filter(num_bins >= non_empty_bins)
 
   num_bins_x <- num_bins_comb_df$num_x[1]
   num_bins_y <- num_bins_comb_df$num_y[1]
@@ -889,7 +891,13 @@ find_non_empty_bins <- function(data, x, y, non_empty_bins, x_start = NA,
   i <- 1
 
   while (num_of_non_empty_bins < non_empty_bins) {
+
     i <- i + 1
+
+    if (NROW(num_bins_comb_df) < i) {
+      stop("There is no matching number of bins along the x and y axes
+           for the required number of non empty bins.")
+    }
 
     num_bins_x <- num_bins_comb_df$num_x[i]
     num_bins_y <- num_bins_comb_df$num_y[i]
