@@ -79,8 +79,8 @@ gen_centroids <- function(data, x, y, num_bins_x, num_bins_y, x_start = NA,
 
   } else {
 
-    max_y_start <- min(data[[rlang::as_string(rlang::sym(x))]]) + (1.5 * hex_size)
-    min_y_start <- min(data[[rlang::as_string(rlang::sym(x))]]) - (1.5 * hex_size)
+    max_y_start <- min(data[[rlang::as_string(rlang::sym(y))]]) + (1.5 * hex_size)
+    min_y_start <- min(data[[rlang::as_string(rlang::sym(y))]]) - (1.5 * hex_size)
 
     if ((y_start < min_y_start) | (y_start > max_y_start)){
       stop(paste0("y_start value is not compatible.
