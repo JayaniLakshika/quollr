@@ -1,0 +1,37 @@
+---
+title: "5. Quick start"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{5. Quick start}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(quollr)
+library(tibble)
+```
+
+In here, we use `fit_highd_model()` function to construct the model in 2D and high-dimensional space using the provided training data (`s_curve_noise_training`) and the precomputed scaled UMAP embeddings (`s_curve_noise_umap_scaled`). The function takes various parameters to configure the model construction process, such as the column names for the 2D embeddings (`x` and `y`), the number of bins (`num_bins_x` and `num_bins_y`), and other options for binning and hexagon visualization. 
+
+```{r, message=FALSE}
+model <- fit_highd_model(training_data=s_curve_noise_training, 
+                         nldr_df_with_id=s_curve_noise_umap_scaled, x = "UMAP1", 
+                         y  = "UMAP2", num_bins_x = NA, num_bins_y = NA, 
+                         x_start = NA, y_start = NA, buffer_x = NA, 
+                         buffer_y = NA,  hex_size = NA, is_bin_centroid = TRUE, 
+                         is_rm_lwd_hex = FALSE, benchmark_to_rm_lwd_hex = NA, 
+                         col_start_2d = "UMAP", col_start_highd = "x")
+## 2D model
+glimpse(model$df_bin)
+
+## high-D model
+glimpse(model$df_bin_centroids)
+```

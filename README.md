@@ -64,6 +64,8 @@ is available in this package.
   data](https://jayanilakshika.github.io/quollr/articles/quollr3hexbin.html)
 - To generate model summaries: [4. Generating model
   summaries](https://jayanilakshika.github.io/quollr/articles/quollr4summary.html)
+- Quick start guide: [5. Quick
+  start](https://jayanilakshika.github.io/quollr/articles/quollr5quickstart.html)
 
 ## Copyright
 
