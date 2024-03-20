@@ -1,9 +1,10 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# quollr
+# quollr <img src="man/figures/logo.png" align="right" height="139" alt="" />
 
-<img src="man/figures/logo.png" align="right" height="139" alt="" />
+[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/quollr)](https://CRAN.R-project.org/package=quollr)
+[![Downloads](http://cranlogs.r-pkg.org/badges/quollr)](https://cran.r-project.org/package=quollr)
 
 Nonlinear dimension reduction (NLDR) techniques provide a
 low-dimensional representation of high-dimensional data by applying a
