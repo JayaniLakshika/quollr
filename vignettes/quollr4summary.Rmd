@@ -1,0 +1,93 @@
+---
+title: "4. Generating model summaries"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{4. Generating model summaries}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+options(rmarkdown.html_vignette.check_title = FALSE)
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  warning = FALSE, 
+  message = FALSE
+)
+```
+
+```{r setup}
+library(quollr)
+library(dplyr)
+library(ggplot2)
+```
+
+To obtain the model summaries, first you need to obtain the 2D hexagonal bin centroids which is the 2D model (`df_bin_centroids`) and the high-dimensional coordinates of bin centroids which represents the lifted model in high-dimensions (`df_bin`).
+
+```{r}
+model <- fit_highd_model(training_data = s_curve_noise_training, x = "UMAP1", 
+                         y = "UMAP2", nldr_df_with_id = s_curve_noise_umap_scaled, 
+                         col_start_2d = "UMAP", col_start_highd = "x")
+df_bin_centroids <- model$df_bin_centroids
+df_bin <- model$df_bin
+```
+
+Let's first compute the model summaries for training data. To do that, you need to predict 2D embedding for the training data.
+
+```{r}
+pred_emb_list_training <- predict_emb(test_data = s_curve_noise_training, 
+                             df_bin_centroids = df_bin_centroids, 
+                             df_bin = df_bin, type_NLDR = "UMAP")
+pred_df_training <- as.data.frame(do.call(cbind, pred_emb_list_training))
+glimpse(pred_df_training)
+```
+
+```{r}
+s_curve_noise_umap_scaled |>
+    ggplot(aes(x = UMAP1,
+               y = UMAP2,
+               label = ID))+
+    geom_point(alpha=0.5) +
+    geom_point(data = pred_df_training, aes(x = pred_UMAP_1, y = pred_UMAP_2), 
+               color = "red", alpha=0.5) +
+    coord_equal() +
+    theme(plot.title = element_text(hjust = 0.5, size = 18, face = "bold"),
+          axis.text = element_text(size = 5),
+          axis.title = element_text(size = 7))
+```
+
+Next, you can use the generated 2D embedding to compute model summaries.
+
+```{r}
+gen_summary(test_data = s_curve_noise_training, prediction_df = pred_df_training,
+df_bin = df_bin, col_start = "x")
+```
+
+The same workflow is followed for the test data as well.
+
+```{r}
+pred_emb_list_test <- predict_emb(test_data = s_curve_noise_test, 
+                             df_bin_centroids = df_bin_centroids, 
+                             df_bin = df_bin, type_NLDR = "UMAP")
+pred_df_test <- as.data.frame(do.call(cbind, pred_emb_list_test))
+```
+
+```{r}
+s_curve_noise_umap_scaled |>
+    ggplot(aes(x = UMAP1,
+               y = UMAP2,
+               label = ID))+
+    geom_point(alpha=0.5) +
+    geom_point(data = pred_df_test, aes(x = pred_UMAP_1, y = pred_UMAP_2), 
+               color = "red", alpha=0.5) +
+    coord_equal() +
+    theme(plot.title = element_text(hjust = 0.5, size = 18, face = "bold"),
+          axis.text = element_text(size = 5),
+          axis.title = element_text(size = 7))
+```
+
+```{r}
+gen_summary(test_data = s_curve_noise_test, prediction_df = pred_df_test,
+df_bin = df_bin, col_start = "x")
+```
