@@ -68,6 +68,9 @@
       gen_summary(test_data = s_curve_noise_training, prediction_df = pred_df_test,
         df_bin = df_bin, col_start = "x")
     Output
+      $error
+      [1] 63.83385
+      
       $mse
       [1] 0.3229922
       
@@ -81,6 +84,9 @@
       gen_summary(test_data = s_curve_noise_test, prediction_df = pred_df_test_n,
         df_bin = df_bin, col_start = "x")
     Output
+      $error
+      [1] 21.83707
+      
       $mse
       [1] 0.3458999
       

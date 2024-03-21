@@ -16,7 +16,7 @@ gen_summary(test_data, prediction_df, df_bin, col_start = "x")
 \item{col_start}{The text that begin the column name of the high-dimensional data.}
 }
 \value{
-A list contains MSE and AIC values.
+A list contains Error, MSE and AIC values.
 }
 \description{
 This function generates an evaluation data frame based on the provided data and predictions.

@@ -113,7 +113,7 @@ compute_aic <- function(p, mse, num_bins, num_obs) {
 #' @param df_bin The data set with averaged/weighted high-dimensional data.
 #' @param col_start The text that begin the column name of the high-dimensional data.
 #'
-#' @return A list contains MSE and AIC values.
+#' @return A list contains Error, MSE and AIC values.
 #'
 #' @importFrom dplyr left_join
 #'
@@ -144,18 +144,24 @@ gen_summary <- function(test_data, prediction_df, df_bin, col_start = "x") {
   cols <- paste0(col_start, 1:(NCOL(df_bin) - 1))
   high_d_model_cols <- paste0("model_high_d_", col_start, 1:(NCOL(df_bin) - 1))
   error_cols <- paste0("error_square_", col_start, 1:(NCOL(df_bin) - 1))
+  abs_error_cols <- paste0("abs_error_", col_start, 1:(NCOL(df_bin) - 1))
 
   summary_df <- (prediction_df[, cols] - prediction_df[, high_d_model_cols])^2
   names(summary_df) <- error_cols
 
   row_wise_total_error <- rowSums(summary_df[, error_cols])
 
+  ## To obtain absolute error
+  abs_summary_df <- abs(prediction_df[, cols] - prediction_df[, high_d_model_cols])
+  names(abs_summary_df) <- abs_error_cols
+  error <- sum(rowSums(abs_summary_df[, abs_error_cols]))
+
   mse <-  mean(row_wise_total_error)
 
   aic <-  compute_aic((NCOL(df_bin) - 1), mse,
                       NROW(df_bin), NROW(test_data))
 
-  return(list(mse = mse, aic = aic))
+  return(list(error = error, mse = mse, aic = aic))
 
 }
 
