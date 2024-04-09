@@ -68,3 +68,25 @@ test_that("gen_summary() works", {
                                         df_bin = df_bin, col_start = "x"))
 
 })
+
+
+test_that("augment() works", {
+
+  suppressMessages(model <- fit_highd_model(training_data = s_curve_noise_training,
+                                            x = "UMAP1", y = "UMAP2",
+                                            nldr_df_with_id = s_curve_noise_umap_scaled,
+                                            col_start_2d = "UMAP", col_start_highd = "x"))
+  df_bin_centroids <- model$df_bin_centroids
+  df_bin <- model$df_bin
+  testthat::expect_snapshot(augment(df_bin_centroids = df_bin_centroids,
+                                    df_bin = df_bin, training_data = s_curve_noise_training,
+                                    newdata = NULL, type_NLDR = "UMAP",
+                                    col_start = "x"))
+
+  testthat::expect_snapshot(augment(df_bin_centroids = df_bin_centroids,
+                                    df_bin = df_bin, training_data = s_curve_noise_training,
+                                    newdata = s_curve_noise_test,
+                                    type_NLDR = "UMAP", col_start = "x"))
+
+})
+

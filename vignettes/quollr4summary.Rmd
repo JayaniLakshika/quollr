@@ -64,6 +64,15 @@ gen_summary(test_data = s_curve_noise_training, prediction_df = pred_df_training
 df_bin = df_bin, col_start = "x")
 ```
 
+To obtain a dataframe with the high-dimensional data, the fitted model data, the predicted NLDR data, and summary information, you can use the following function.
+
+```{r}
+augment(df_bin_centroids = df_bin_centroids, df_bin = df_bin, 
+        training_data = s_curve_noise_training, newdata = NULL, 
+        type_NLDR = "UMAP", col_start = "x") |>
+  head(5)
+```
+
 The same workflow is followed for the test data as well.
 
 ```{r}
@@ -90,4 +99,12 @@ s_curve_noise_umap_scaled |>
 ```{r}
 gen_summary(test_data = s_curve_noise_test, prediction_df = pred_df_test,
 df_bin = df_bin, col_start = "x")
+```
+
+```{r}
+augment(df_bin_centroids = df_bin_centroids,
+                                    df_bin = df_bin, training_data = s_curve_noise_training,
+                                    newdata = s_curve_noise_test, type_NLDR = "UMAP",
+                                    col_start = "x") |>
+  head(5)
 ```

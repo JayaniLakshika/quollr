@@ -165,5 +165,75 @@ gen_summary <- function(test_data, prediction_df, df_bin, col_start = "x") {
 
 }
 
+#' Augment Data with Predictions and Error Metrics
+#'
+#' This function augments a dataset with predictions and error metrics obtained
+#' from a nonlinear dimension reduction (NLDR) model.
+#'
+#' @param df_bin_centroids Centroid coordinates of hexagonal bins in 2D space.
+#' @param df_bin Centroid coordinates of hexagonal bins in high dimensions.
+#' @param training_data Training data used to fit the model.
+#' @param newdata Data to be augmented with predictions and error metrics.
+#' If NULL, the training data is used (default is NULL).
+#' @param type_NLDR The type of non-linear dimensionality reduction (NLDR) used.
+#' @param col_start The text that begin the column name of the high-dimensional data.
+#'
+#' @return A dataframe containing the augmented data with predictions,
+#' error metrics, and absolute error metrics.
+#'
+#' @examples
+#' model <- fit_highd_model(training_data = s_curve_noise_training, x = "UMAP1", y = "UMAP2",
+#' nldr_df_with_id = s_curve_noise_umap_scaled, col_start_2d = "UMAP", col_start_highd = "x")
+#' df_bin_centroids <- model$df_bin_centroids
+#' df_bin <- model$df_bin
+#' augment(df_bin_centroids = df_bin_centroids, df_bin = df_bin,
+#' training_data = s_curve_noise_training, newdata = NULL, type_NLDR = "UMAP",
+#' col_start = "x")
+#'
+#' @export
+augment <- function(df_bin_centroids, df_bin, training_data, newdata = NULL, type_NLDR, col_start) {
 
+  if(is.null(newdata)) {
+    newdata <- training_data
+  }
+
+  ## Rename columns to avoid conflicts
+  names(df_bin)[-1] <- paste0("model_high_d_", names(df_bin)[-1])
+
+  ## Map high-D averaged mean coordinates
+  prediction_list <- predict_emb(test_data = newdata, df_bin_centroids = df_bin_centroids,
+                               df_bin = df_bin, type_NLDR = type_NLDR)
+
+  prediction_df <- as.data.frame(do.call(cbind, prediction_list))
+
+  prediction_df <- prediction_df |>
+    dplyr::left_join(df_bin, by = c("pred_hb_id" = "hb_id"))
+
+  prediction_df <- prediction_df |>
+    dplyr::left_join(newdata, by = c("ID" = "ID")) ## Map high-D data
+
+  prediction_df <- prediction_df |>
+    dplyr::select("ID", tidyselect::starts_with(col_start),
+                  "pred_hb_id", tidyselect::starts_with("model_high_d_"))
+
+  cols <- paste0(col_start, 1:(NCOL(df_bin) - 1))
+  high_d_model_cols <- paste0("model_high_d_", col_start, 1:(NCOL(df_bin) - 1))
+  error_cols <- paste0("error_square_", col_start, 1:(NCOL(df_bin) - 1))
+  abs_error_cols <- paste0("abs_error_", col_start, 1:(NCOL(df_bin) - 1))
+
+  summary_df <- (prediction_df[, cols] - prediction_df[, high_d_model_cols])^2
+  names(summary_df) <- error_cols
+
+  summary_df$row_wise_total_error <- rowSums(summary_df[, error_cols])
+
+  ## To obtain absolute error
+  abs_summary_df <- abs(prediction_df[, cols] - prediction_df[, high_d_model_cols])
+  names(abs_summary_df) <- abs_error_cols
+
+  abs_summary_df$row_wise_abs_error <- sum(rowSums(abs_summary_df[, abs_error_cols]))
+
+  fit_data <- dplyr::bind_cols(prediction_df, summary_df, abs_summary_df)
+  return(fit_data)
+
+}
 
