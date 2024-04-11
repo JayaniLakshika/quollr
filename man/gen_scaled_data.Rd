@@ -4,7 +4,7 @@
 \alias{gen_scaled_data}
 \title{Scaling the data}
 \usage{
-gen_scaled_data(data, x, y, hex_ratio = NA)
+gen_scaled_data(data, x, y, hr = 2/sqrt(3))
 }
 \arguments{
 \item{data}{A tibble or data frame.}
@@ -13,15 +13,16 @@ gen_scaled_data(data, x, y, hex_ratio = NA)
 
 \item{y}{The name of the column that contains values along the y-axis.}
 
-\item{hex_ratio}{Numeric value representing the ratio of the hexagon size.}
+\item{hr}{Numeric value representing the ratio of the hexagon size.
+Default is 2/sqrt(3).}
 }
 \value{
-A list contains scaled x and y coordinates.
+A tibble contains scaled x and y coordinates.
 }
 \description{
 This function scales the x and y coordinates.
 }
 \examples{
-gen_scaled_data(data = s_curve_noise_umap, x = "UMAP1", y = "UMAP2")
+gen_scaled_data(data = s_curve_noise_umap, x = "UMAP1", y = "UMAP2", hr = 2/sqrt(3))
 
 }
