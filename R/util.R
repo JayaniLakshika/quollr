@@ -13,19 +13,20 @@
 #'
 #' @return A list of numeric values that represents the effective number of
 #' bins along the x and y axes of a hexagonal grid.
+#'
 #' @importFrom rlang sym as_string
+#' @importFrom dplyr across summarise mutate pull
 #'
 #' @examples
 #' calc_bins(data = s_curve_noise_umap_scaled, x = "UMAP1", y = "UMAP2",
-#' hex_size = NA, buffer_x = NA, buffer_y = NA)
+#' hex_size = 0.2, buffer_x = 0.346, buffer_y = 0.3)
 #'
 #' @export
-calc_bins <- function(data, x, y, hex_size = NA, buffer_x = NA, buffer_y = NA){
+calc_bins <- function(data, x, y, hex_size = 0.2, buffer_x = 0.346, buffer_y = 0.3){
 
   ## Obtain values in x and y axes
   x_values <- data[[rlang::as_string(rlang::sym(x))]]
   y_values <- data[[rlang::as_string(rlang::sym(y))]]
-
 
   if (anyNA(x_values) | anyNA(y_values)) {
     stop("NAs present")
@@ -35,64 +36,47 @@ calc_bins <- function(data, x, y, hex_size = NA, buffer_x = NA, buffer_y = NA){
     stop("Inf present")
   }
 
-  if (is.na(hex_size)) {
-    hex_size <- 0.2
-    message(paste0("Hex size is set to ", hex_size, "."))
+  if ((hex_size <= 0) || (is.infinite(hex_size))) {
+    stop("Invalid hex size value.")
 
-  } else {
-    if ((hex_size <= 0) || (is.infinite(hex_size))) {
-      stop("Invalid hex size value.")
-
-    }
   }
 
   ## Initialize horizontal and vertical spacing
   hs <- sqrt(3) * hex_size
   vs <- 1.5 * hex_size
 
-  if (is.na(buffer_x)) {
-    buffer_x <- sqrt(3) * hex_size * 1.5
-    message(paste0("Buffer along the x-axis is set to ", buffer_x, "."))
-  } else {
+  ## Buffer size is exceeds
+  if (buffer_x > round(hs, 3)) {
+    stop(paste0("Buffer along the x-axis exceeds than ", hs, ".
+                  Need to assign a value less than ", hs, "."))
 
-    ## Buffer size is exceeds
-    if (buffer_x > (sqrt(3) * hex_size)) {
-      stop(paste0("Buffer along the x-axis exceeds than ", sqrt(3) * hex_size, ".
-                  Need to assign a value less than ", sqrt(3) * hex_size, "."))
+  } else if (buffer_x <= 0) {
 
-    } else if (buffer_x <= 0) {
-
-      stop(paste0("Buffer along the x-axis is less than or equal to zero."))
-
-    }
-
+    stop(paste0("Buffer along the x-axis is less than or equal to zero."))
 
   }
 
-  if (is.na(buffer_y)) {
-    buffer_y <- 1.5 * hex_size * 1.5
-    message(paste0("Buffer along the y-axis is set to ", buffer_y, "."))
-  } else {
+  ## Buffer size is exceeds
+  if (buffer_y > round(vs, 3)) {
+    stop(paste0("Buffer along the y-axis exceeds than ", vs, ".
+                  Need to assign a value less than ", vs, "."))
 
-    ## Buffer size is exceeds
-    if (buffer_y > (1.5 * hex_size)) {
-      stop(paste0("Buffer along the y-axis exceeds than ", 1.5 * hex_size, ".
-                  Need to assign a value less than ", 1.5 * hex_size, "."))
+  } else if (buffer_y <= 0) {
 
-    } else if (buffer_y <= 0) {
+    stop(paste0("Buffer along the y-axis is less than or equal to zero."))
 
-      stop(paste0("Buffer along the y-axis is less than or equal to zero."))
-
-    }
   }
 
-  ## To compute the range along x-axis
-  xwidth <- diff(range(x_values))  + buffer_x
-  num_x <- ceiling(xwidth/hs)
+  bins_data <- data |>
+    summarise(across(c({{ x }}, {{ y }}), ~ max(.) - min(.))) |>
+    mutate(num_x = ceiling((get(!!x) + buffer_x) /hs),
+           num_y = ceiling((get(!!y) + buffer_y) /vs))
 
-  ## To compute the range along x-axis
-  ywidth <- diff(range(y_values))  + buffer_y
-  num_y <- ceiling(ywidth/vs)
+  num_x <- bins_data |>
+    pull(num_x)
+
+  num_y <- bins_data |>
+    pull(num_y)
 
   return(list(num_x = num_x, num_y = num_y))
 }

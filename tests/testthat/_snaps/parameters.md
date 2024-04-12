@@ -3,13 +3,19 @@
     Code
       compute_mean_density_hex(df_bin_centroids = df_bin_centroids, num_bins_x = num_bins_x)
     Output
-      $hb_id
-       [1]  2  6  7 12 13 18 24 28 29 34
-      
-      $mean_density
-       [1] 0.4117647 0.2941176 0.3235294 0.5000000 0.4313725 0.3333333 0.4705882
-       [8] 0.6176471 0.5882353 0.2647059
-      
+      # A tibble: 10 x 2
+         hb_id mean_density
+         <int>        <dbl>
+       1     2        0.412
+       2     5        0.294
+       3     6        0.324
+       4    10        0.5  
+       5    11        0.431
+       6    15        0.333
+       7    20        0.471
+       8    23        0.618
+       9    24        0.588
+      10    28        0.265
 
 ---
 
@@ -25,7 +31,7 @@
       find_low_dens_hex(df_bin_centroids_all = df_bin_centroids, num_bins_x = num_bins_x,
         df_bin_centroids_low = df_bin_centroids_low)
     Output
-      [1] 7
+      [1] 6
 
 ---
 
@@ -33,7 +39,7 @@
       find_low_dens_hex(df_bin_centroids_all = df_bin_centroids, num_bins_x = num_bins_x,
         df_bin_centroids_low = data.frame(matrix(nrow = 0, ncol = 0)))
     Output
-      numeric(0)
+      integer(0)
 
 ---
 
@@ -41,5 +47,5 @@
       find_low_dens_hex(df_bin_centroids_all = df_bin_centroids, num_bins_x = num_bins_x,
         df_bin_centroids_low = df_bin_centroids_low)
     Output
-      numeric(0)
+      integer(0)
 

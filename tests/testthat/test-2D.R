@@ -2,18 +2,18 @@ test_that("gen_centroids() works", {
 
   suppressMessages(num_bins_list <- calc_bins(data = s_curve_noise_umap_scaled,
                                               x = "UMAP1", y = "UMAP2",
-                                              hex_size = NA, buffer_x = NA,
-                                              buffer_y = NA))
+                                              hex_size = 0.2, buffer_x = 0.346,
+                                              buffer_y = 0.3))
   num_bins_x <- num_bins_list$num_x
   num_bins_y <- num_bins_list$num_y
-  suppressMessages(centroid_list <- gen_centroids(data = s_curve_noise_umap_scaled,
+  suppressMessages(all_centroids_df <- gen_centroids(data = s_curve_noise_umap_scaled,
                                                   x = "UMAP1", y = "UMAP2",
                                                   num_bins_x = num_bins_x,
                                                   num_bins_y = num_bins_y,
                                                   x_start = NA, y_start = NA,
-                                                  buffer_x = NA, buffer_y = NA,
-                                                  hex_size = NA))
-  testthat::expect_snapshot(centroid_list)
+                                                  buffer_x = 0.346, buffer_y = 0.3,
+                                                  hex_size = 0.2))
+  testthat::expect_snapshot(all_centroids_df)
 
 })
 
@@ -21,21 +21,20 @@ test_that("gen_hex_coord() works", {
 
   suppressMessages(num_bins_list <- calc_bins(data = s_curve_noise_umap_scaled,
                                               x = "UMAP1", y = "UMAP2",
-                                              hex_size = NA, buffer_x = NA,
-                                              buffer_y = NA))
+                                              hex_size = 0.2, buffer_x = 0.346,
+                                              buffer_y = 0.3))
   num_bins_x <- num_bins_list$num_x
   num_bins_y <- num_bins_list$num_y
-  suppressMessages(centroid_list <- gen_centroids(data = s_curve_noise_umap_scaled,
+  suppressMessages(all_centroids_df <- gen_centroids(data = s_curve_noise_umap_scaled,
                                                   x = "UMAP1", y = "UMAP2",
                                                   num_bins_x = num_bins_x,
                                                   num_bins_y = num_bins_y,
                                                   x_start = NA, y_start = NA,
-                                                  buffer_x = NA, buffer_y = NA,
-                                                  hex_size = NA))
-  all_centroids_df <- as.data.frame(do.call(cbind, centroid_list))
-  suppressMessages(all_hex_coordinates_list <- gen_hex_coord(
-    centroids_df = all_centroids_df, hex_size = NA))
-  testthat::expect_snapshot(all_hex_coordinates_list)
+                                                  buffer_x = 0.346, buffer_y = 0.3,
+                                                  hex_size = 0.2))
+  suppressMessages(all_hex_coord <- gen_hex_coord(
+    centroids_df = all_centroids_df, hex_size = 0.2))
+  testthat::expect_snapshot(all_hex_coord)
 
 })
 
@@ -43,19 +42,17 @@ test_that("assign_data() works", {
 
   suppressMessages(num_bins_list <- calc_bins(data = s_curve_noise_umap_scaled,
                                               x = "UMAP1", y = "UMAP2",
-                                              hex_size = NA, buffer_x = NA,
-                                              buffer_y = NA))
+                                              hex_size = 0.2, buffer_x = 0.346,
+                                              buffer_y = 0.3))
   num_bins_x <- num_bins_list$num_x
   num_bins_y <- num_bins_list$num_y
-  suppressMessages(centroid_list <- gen_centroids(data = s_curve_noise_umap_scaled,
+  suppressMessages(all_centroids_df <- gen_centroids(data = s_curve_noise_umap_scaled,
   x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
-  num_bins_y = num_bins_y, x_start = NA, y_start = NA, buffer_x = NA,
-  buffer_y = NA, hex_size = NA))
-  all_centroids_df <- as.data.frame(do.call(cbind, centroid_list))
-  s_curve_noise_umap_scaled_rm_id <- s_curve_noise_umap_scaled |> dplyr::select(-ID)
-  nldr_with_hb_id_list <- assign_data(data = s_curve_noise_umap_scaled_rm_id,
+  num_bins_y = num_bins_y, x_start = NA, y_start = NA, buffer_x = 0.346,
+  buffer_y = 0.3, hex_size = 0.2))
+  nldr_with_hb_id <- assign_data(data = s_curve_noise_umap_scaled,
   centroid_df = all_centroids_df, col_start = "UMAP")
-  testthat::expect_snapshot(nldr_with_hb_id_list)
+  testthat::expect_snapshot(nldr_with_hb_id)
 
 })
 
@@ -63,21 +60,18 @@ test_that("compute_std_counts() works", {
 
   suppressMessages(num_bins_list <- calc_bins(data = s_curve_noise_umap_scaled,
                                               x = "UMAP1", y = "UMAP2",
-                                              hex_size = NA, buffer_x = NA,
-                                              buffer_y = NA))
+                                              hex_size = 0.2, buffer_x = 0.346,
+                                              buffer_y = 0.3))
   num_bins_x <- num_bins_list$num_x
   num_bins_y <- num_bins_list$num_y
-  suppressMessages(centroid_list <- gen_centroids(data = s_curve_noise_umap_scaled,
+  suppressMessages(all_centroids_df <- gen_centroids(data = s_curve_noise_umap_scaled,
   x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
-  num_bins_y = num_bins_y, x_start = NA, y_start = NA, buffer_x = NA,
-  buffer_y = NA, hex_size = NA))
-  all_centroids_df <- as.data.frame(do.call(cbind, centroid_list))
-  s_curve_noise_umap_scaled_rm_id <- s_curve_noise_umap_scaled |> dplyr::select(-ID)
-  nldr_with_hb_id_list <- assign_data(data = s_curve_noise_umap_scaled_rm_id,
+  num_bins_y = num_bins_y, x_start = NA, y_start = NA, buffer_x = 0.346,
+  buffer_y = 0.3, hex_size = 0.2))
+  umap_with_hb_id <- assign_data(data = s_curve_noise_umap_scaled,
   centroid_df = all_centroids_df, col_start = "UMAP")
-  umap_with_hb_id <- as.data.frame(do.call(cbind, nldr_with_hb_id_list))
-  std_counst_list <- compute_std_counts(data_hex_id = umap_with_hb_id)
-  testthat::expect_snapshot(std_counst_list)
+  std_count_df <- compute_std_counts(data_hex_id = umap_with_hb_id)
+  testthat::expect_snapshot(std_count_df)
 
 })
 
@@ -85,20 +79,16 @@ test_that("find_pts() works", {
 
   suppressMessages(num_bins_list <- calc_bins(data = s_curve_noise_umap_scaled,
                                               x = "UMAP1", y = "UMAP2",
-                                              hex_size = NA, buffer_x = NA,
-                                              buffer_y = NA))
+                                              hex_size = 0.2, buffer_x = 0.346,
+                                              buffer_y = 0.3))
   num_bins_x <- num_bins_list$num_x
   num_bins_y <- num_bins_list$num_y
-  suppressMessages(centroid_list <- gen_centroids(data = s_curve_noise_umap_scaled,
+  suppressMessages(all_centroids_df <- gen_centroids(data = s_curve_noise_umap_scaled,
   x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
-  num_bins_y = num_bins_y, x_start = NA, y_start = NA, buffer_x = NA,
-  buffer_y = NA, hex_size = NA))
-  all_centroids_df <- as.data.frame(do.call(cbind, centroid_list))
-  s_curve_noise_umap_scaled_rm_id <- s_curve_noise_umap_scaled |> dplyr::select(-ID)
-  nldr_with_hb_id_list <- assign_data(data = s_curve_noise_umap_scaled_rm_id,
+  num_bins_y = num_bins_y, x_start = NA, y_start = NA, buffer_x = 0.346,
+  buffer_y = 0.3, hex_size = 0.2))
+  umap_with_hb_id <- assign_data(data = s_curve_noise_umap_scaled,
   centroid_df = all_centroids_df, col_start = "UMAP")
-  umap_with_hb_id <- as.data.frame(do.call(cbind, nldr_with_hb_id_list))
-  umap_with_hb_id <- umap_with_hb_id |> dplyr::mutate(ID = s_curve_noise_umap_scaled$ID)
 
   testthat::expect_snapshot(find_pts(data_hex_id = umap_with_hb_id))
 
@@ -108,8 +98,8 @@ test_that("hex_binning() works", {
 
   suppressMessages(num_bins_list <- calc_bins(data = s_curve_noise_umap_scaled,
                                               x = "UMAP1", y = "UMAP2",
-                                              hex_size = NA, buffer_x = NA,
-                                              buffer_y = NA))
+                                              hex_size = 0.2, buffer_x = 0.346,
+                                              buffer_y = 0.3))
   num_bins_x <- num_bins_list$num_x
   num_bins_y <- num_bins_list$num_y
 
@@ -118,8 +108,8 @@ test_that("hex_binning() works", {
                                                          num_bins_x = num_bins_x,
                                                          num_bins_y = num_bins_y,
                                                          x_start = NA, y_start = NA,
-                                                         buffer_x = NA, buffer_y = NA,
-                                                         hex_size = NA, col_start = "UMAP")))
+                                                         buffer_x = 0.346, buffer_y = 0.3,
+                                                         hex_size = 0.2, col_start = "UMAP")))
 
 })
 
@@ -131,17 +121,17 @@ test_that("find_non_empty_bins() works", {
                                                                  non_empty_bins = 10,
                                                                  x_start = NA,
                                                                  y_start = NA,
-                                                                 buffer_x = NA,
-                                                                 buffer_y = NA,
-                                                                 hex_size = NA,
+                                                                 buffer_x = 0.346,
+                                                                 buffer_y = 0.3,
+                                                                 hex_size = 0.2,
                                                                  col_start = "UMAP")
   ))
 
   testthat::expect_error(find_non_empty_bins(data = s_curve_noise_umap_scaled,
                                              x = "UMAP1", y = "UMAP2",
                                              non_empty_bins = NA, x_start = NA,
-                                             y_start = NA, buffer_x = NA,
-                                             buffer_y = NA, hex_size = NA,
+                                             y_start = NA, buffer_x = 0.346,
+                                             buffer_y = 0.3, hex_size = 0.2,
                                              col_start = "UMAP")
   )
 
@@ -151,16 +141,16 @@ test_that("extract_hexbin_centroids() works", {
 
   suppressMessages(num_bins_list <- calc_bins(data = s_curve_noise_umap_scaled,
                                               x = "UMAP1", y = "UMAP2",
-                                              hex_size = NA, buffer_x = NA,
-                                              buffer_y = NA))
+                                              hex_size = 0.2, buffer_x = 0.346,
+                                              buffer_y = 0.3))
   num_bins_x <- num_bins_list$num_x
   num_bins_y <- num_bins_list$num_y
   suppressMessages(hb_obj <- hex_binning(data = s_curve_noise_umap_scaled,
   x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
-  num_bins_y = num_bins_y, x_start = NA, y_start = NA, buffer_x = NA,
-  buffer_y = NA, hex_size = NA, col_start = "UMAP"))
-  all_centroids_df <- as.data.frame(do.call(cbind, hb_obj$centroids))
-  counts_df <- as.data.frame(do.call(cbind, hb_obj$std_cts))
+  num_bins_y = num_bins_y, x_start = NA, y_start = NA, buffer_x = 0.346,
+  buffer_y = 0.3, hex_size = 0.2, col_start = "UMAP"))
+  all_centroids_df <- hb_obj$centroids
+  counts_df <- hb_obj$std_cts
 
   testthat::expect_snapshot(extract_hexbin_centroids(centroids_df = all_centroids_df,
                                                      counts_df = counts_df))
@@ -171,16 +161,16 @@ test_that("extract_hexbin_mean() works", {
 
   suppressMessages(num_bins_list <- calc_bins(data = s_curve_noise_umap_scaled,
                                               x = "UMAP1", y = "UMAP2",
-                                              hex_size = NA, buffer_x = NA,
-                                              buffer_y = NA))
+                                              hex_size = 0.2, buffer_x = 0.346,
+                                              buffer_y = 0.3))
   num_bins_x <- num_bins_list$num_x
   num_bins_y <- num_bins_list$num_y
   suppressMessages(hb_obj <- hex_binning(data = s_curve_noise_umap_scaled,
                                          x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
-                                         num_bins_y = num_bins_y, x_start = NA, y_start = NA, buffer_x = NA,
-                                         buffer_y = NA, hex_size = NA, col_start = "UMAP"))
-  umap_with_hb_id <- as.data.frame(do.call(cbind, hb_obj$data_hb_id))
-  counts_df <- as.data.frame(do.call(cbind, hb_obj$std_cts))
+                                         num_bins_y = num_bins_y, x_start = NA, y_start = NA, buffer_x = 0.346,
+                                         buffer_y = 0.3, hex_size = 0.2, col_start = "UMAP"))
+  umap_with_hb_id <- hb_obj$data_hb_id
+  counts_df <- hb_obj$std_cts
 
   testthat::expect_snapshot(extract_hexbin_mean(nldr_df_with_hex_id = umap_with_hb_id,
                                                 counts_df = counts_df))
@@ -191,17 +181,17 @@ test_that("tri_bin_centroids() works", {
 
   suppressMessages(num_bins_list <- calc_bins(data = s_curve_noise_umap_scaled,
                                               x = "UMAP1", y = "UMAP2",
-                                              hex_size = NA, buffer_x = NA,
-                                              buffer_y = NA))
+                                              hex_size = 0.2, buffer_x = 0.346,
+                                              buffer_y = 0.3))
   num_bins_x <- num_bins_list$num_x
   num_bins_y <- num_bins_list$num_y
   suppressMessages(hb_obj <- hex_binning(data = s_curve_noise_umap_scaled,
                                          x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
                                          num_bins_y = num_bins_y, x_start = NA,
-                                         y_start = NA, buffer_x = NA, buffer_y = NA,
-                                         hex_size = NA, col_start = "UMAP"))
-  all_centroids_df <- as.data.frame(do.call(cbind, hb_obj$centroids))
-  counts_df <- as.data.frame(do.call(cbind, hb_obj$std_cts))
+                                         y_start = NA, buffer_x = 0.346, buffer_y = 0.3,
+                                         hex_size = 0.2, col_start = "UMAP"))
+  all_centroids_df <- hb_obj$centroids
+  counts_df <- hb_obj$std_cts
   df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df,
                                                counts_df = counts_df)
   testthat::expect_snapshot(suppressWarnings(tri_bin_centroids(hex_df = df_bin_centroids,
@@ -213,18 +203,18 @@ test_that("gen_edges() works", {
 
   suppressMessages(num_bins_list <- calc_bins(data = s_curve_noise_umap_scaled,
                                               x = "UMAP1", y = "UMAP2",
-                                              hex_size = NA, buffer_x = NA,
-                                              buffer_y = NA))
+                                              hex_size = 0.2, buffer_x = 0.346,
+                                              buffer_y = 0.3))
   num_bins_x <- num_bins_list$num_x
   num_bins_y <- num_bins_list$num_y
   suppressMessages(hb_obj <- hex_binning(data = s_curve_noise_umap_scaled,
                                          x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
                                          num_bins_y = num_bins_y, x_start = NA,
-                                         y_start = NA, buffer_x = NA,
-                                         buffer_y = NA, hex_size = NA,
+                                         y_start = NA, buffer_x = 0.346,
+                                         buffer_y = 0.3, hex_size = 0.2,
                                          col_start = "UMAP"))
-  all_centroids_df <- as.data.frame(do.call(cbind, hb_obj$centroids))
-  counts_df <- as.data.frame(do.call(cbind, hb_obj$std_cts))
+  all_centroids_df <- hb_obj$centroid
+  counts_df <- hb_obj$std_cts
   df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df,
                                                counts_df = counts_df)
   suppressWarnings(tr1_object <- tri_bin_centroids(hex_df = df_bin_centroids,
@@ -236,18 +226,18 @@ test_that("cal_2d_dist() works", {
 
   suppressMessages(num_bins_list <- calc_bins(data = s_curve_noise_umap_scaled,
                                               x = "UMAP1", y = "UMAP2",
-                                              hex_size = NA, buffer_x = NA,
-                                              buffer_y = NA))
+                                              hex_size = 0.2, buffer_x = 0.346,
+                                              buffer_y = 0.3))
   num_bins_x <- num_bins_list$num_x
   num_bins_y <- num_bins_list$num_y
   suppressMessages(hb_obj <- hex_binning(data = s_curve_noise_umap_scaled,
                                          x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
                                          num_bins_y = num_bins_y, x_start = NA,
-                                         y_start = NA, buffer_x = NA,
-                                         buffer_y = NA, hex_size = NA,
+                                         y_start = NA, buffer_x = 0.346,
+                                         buffer_y = 0.3, hex_size = 0.2,
                                          col_start = "UMAP"))
-  all_centroids_df <- as.data.frame(do.call(cbind, hb_obj$centroids))
-  counts_df <- as.data.frame(do.call(cbind, hb_obj$std_cts))
+  all_centroids_df <- hb_obj$centroids
+  counts_df <- hb_obj$std_cts
   df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df,
                                                counts_df = counts_df)
   suppressWarnings(tr1_object <- tri_bin_centroids(hex_df = df_bin_centroids,
@@ -267,18 +257,18 @@ test_that("vis_lg_mesh() works", {
 
   suppressMessages(num_bins_list <- calc_bins(data = s_curve_noise_umap_scaled,
                                               x = "UMAP1", y = "UMAP2",
-                                              hex_size = NA, buffer_x = NA,
-                                              buffer_y = NA))
+                                              hex_size = 0.2, buffer_x = 0.346,
+                                              buffer_y = 0.3))
   num_bins_x <- num_bins_list$num_x
   num_bins_y <- num_bins_list$num_y
   suppressMessages(hb_obj <- hex_binning(data = s_curve_noise_umap_scaled,
                                          x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
                                          num_bins_y = num_bins_y, x_start = NA,
-                                         y_start = NA, buffer_x = NA,
-                                         buffer_y = NA, hex_size = NA,
+                                         y_start = NA, buffer_x = 0.346,
+                                         buffer_y = 0.3, hex_size = 0.2,
                                          col_start = "UMAP"))
-  all_centroids_df <- as.data.frame(do.call(cbind, hb_obj$centroids))
-  counts_df <- as.data.frame(do.call(cbind, hb_obj$std_cts))
+  all_centroids_df <- hb_obj$centroids
+  counts_df <- hb_obj$std_cts
   df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df,
                                                counts_df = counts_df)
   suppressWarnings(tr1_object <- tri_bin_centroids(hex_df = df_bin_centroids,
@@ -302,18 +292,18 @@ test_that("vis_rmlg_mesh() works", {
 
   suppressMessages(num_bins_list <- calc_bins(data = s_curve_noise_umap_scaled,
                                               x = "UMAP1", y = "UMAP2",
-                                              hex_size = NA, buffer_x = NA,
-                                              buffer_y = NA))
+                                              hex_size = 0.2, buffer_x = 0.346,
+                                              buffer_y = 0.3))
   num_bins_x <- num_bins_list$num_x
   num_bins_y <- num_bins_list$num_y
   suppressMessages(hb_obj <- hex_binning(data = s_curve_noise_umap_scaled,
                                          x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
                                          num_bins_y = num_bins_y, x_start = NA,
-                                         y_start = NA, buffer_x = NA,
-                                         buffer_y = NA, hex_size = NA,
+                                         y_start = NA, buffer_x = 0.346,
+                                         buffer_y = 0.3, hex_size = 0.2,
                                          col_start = "UMAP"))
-  all_centroids_df <- as.data.frame(do.call(cbind, hb_obj$centroids))
-  counts_df <- as.data.frame(do.call(cbind, hb_obj$std_cts))
+  all_centroids_df <- hb_obj$centroids
+  counts_df <- hb_obj$std_cts
   df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df,
                                                counts_df = counts_df)
   suppressWarnings(tr1_object <- tri_bin_centroids(hex_df = df_bin_centroids,

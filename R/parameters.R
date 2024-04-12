@@ -13,16 +13,16 @@
 #' @importFrom rlang sym
 #'
 #' @examples
-#' num_bins_list <- calc_bins(data = s_curve_noise_umap_scaled, x = "UMAP1",
-#' y = "UMAP2", hex_size = NA, buffer_x = NA, buffer_y = NA)
+#' num_bins_list <- calc_bins(data = s_curve_noise_umap_scaled, x = "UMAP1", y = "UMAP2",
+#' hex_size = 0.2, buffer_x = 0.346, buffer_y = 0.3)
 #' num_bins_x <- num_bins_list$num_x
 #' num_bins_y <- num_bins_list$num_y
 #' hb_obj <- hex_binning(data = s_curve_noise_umap_scaled,
 #' x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
-#' num_bins_y = num_bins_y, x_start = NA, y_start = NA, buffer_x = NA,
-#' buffer_y = NA, hex_size = NA, col_start = "UMAP")
-#' all_centroids_df <- as.data.frame(do.call(cbind, hb_obj$centroids))
-#' counts_df <- as.data.frame(do.call(cbind, hb_obj$std_cts))
+#' num_bins_y = num_bins_y, x_start = NA, y_start = NA, buffer_x = 0.346,
+#' buffer_y = 0.3, hex_size = 0.2, col_start = "UMAP")
+#' all_centroids_df <- hb_obj$centroids
+#' counts_df <- hb_obj$std_cts
 #' df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df, counts_df = counts_df)
 #' tr1_object <- tri_bin_centroids(hex_df = df_bin_centroids, x = "c_x", y = "c_y")
 #' tr_from_to_df <- gen_edges(tri_object = tr1_object)
@@ -95,22 +95,22 @@ find_lg_benchmark <- function(distance_edges, distance_col) {
 #' including the hexagon ID and the standard normalized counts (\code{std_counts}).
 #' @param num_bins_x The number of bins along the x-axis for the hexagonal grid.
 #'
-#' @return A list contains hexagonal IDs and the mean
+#' @return A tibble contains hexagonal IDs and the mean
 #' density of each hexagonal bin based on its neighboring bins.
 #'
 #' @importFrom dplyr filter
 #'
 #' @examples
-#' num_bins_list <- calc_bins(data = s_curve_noise_umap_scaled, x = "UMAP1",
-#' y = "UMAP2", hex_size = NA, buffer_x = NA, buffer_y = NA)
+#' num_bins_list <- calc_bins(data = s_curve_noise_umap_scaled, x = "UMAP1", y = "UMAP2",
+#' hex_size = 0.2, buffer_x = 0.346, buffer_y = 0.3)
 #' num_bins_x <- num_bins_list$num_x
 #' num_bins_y <- num_bins_list$num_y
 #' hb_obj <- hex_binning(data = s_curve_noise_umap_scaled,
 #' x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
-#' num_bins_y = num_bins_y, x_start = NA, y_start = NA, buffer_x = NA,
-#' buffer_y = NA, hex_size = NA, col_start = "UMAP")
-#' all_centroids_df <- as.data.frame(do.call(cbind, hb_obj$centroids))
-#' counts_df <- as.data.frame(do.call(cbind, hb_obj$std_cts))
+#' num_bins_y = num_bins_y, x_start = NA, y_start = NA, buffer_x = 0.346,
+#' buffer_y = 0.3, hex_size = 0.2, col_start = "UMAP")
+#' all_centroids_df <- hb_obj$centroids
+#' counts_df <- hb_obj$std_cts
 #' df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df,
 #' counts_df = counts_df)
 #' compute_mean_density_hex(df_bin_centroids, num_bins_x = num_bins_x)
@@ -153,7 +153,9 @@ compute_mean_density_hex <- function(df_bin_centroids, num_bins_x = NA) {
     warning("There are hexagonal bins that don't have any neighbouring bins.")
   }
 
-  return(list(hb_id = hexID_vec, mean_density = mean_density_vec))
+  mean_df <- tibble::tibble(hb_id = hexID_vec, mean_density = mean_density_vec)
+
+  return(mean_df)
 
 }
 
@@ -172,16 +174,16 @@ compute_mean_density_hex <- function(df_bin_centroids, num_bins_x = NA) {
 #' @importFrom stats quantile
 #'
 #' @examples
-#' num_bins_list <- calc_bins(data = s_curve_noise_umap_scaled, x = "UMAP1",
-#' y = "UMAP2", hex_size = NA, buffer_x = NA, buffer_y = NA)
+#' num_bins_list <- calc_bins(data = s_curve_noise_umap_scaled, x = "UMAP1", y = "UMAP2",
+#' hex_size = 0.2, buffer_x = 0.346, buffer_y = 0.3)
 #' num_bins_x <- num_bins_list$num_x
 #' num_bins_y <- num_bins_list$num_y
 #' hb_obj <- hex_binning(data = s_curve_noise_umap_scaled,
 #' x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
-#' num_bins_y = num_bins_y, x_start = NA, y_start = NA, buffer_x = NA,
-#' buffer_y = NA, hex_size = NA, col_start = "UMAP")
-#' all_centroids_df <- as.data.frame(do.call(cbind, hb_obj$centroids))
-#' counts_df <- as.data.frame(do.call(cbind, hb_obj$std_cts))
+#' num_bins_y = num_bins_y, x_start = NA, y_start = NA, buffer_x = 0.346,
+#' buffer_y = 0.3, hex_size = 0.2, col_start = "UMAP")
+#' all_centroids_df <- hb_obj$centroids
+#' counts_df <- hb_obj$std_cts
 #' df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df,
 #' counts_df = counts_df)
 #' df_bin_centroids_low <- df_bin_centroids |>
@@ -202,10 +204,8 @@ find_low_dens_hex <- function(df_bin_centroids_all, num_bins_x,
   }
 
   ## To compute mean density of hexagons
-  mean_density_list <- compute_mean_density_hex(df_bin_centroids = df_bin_centroids_all,
+  mean_density_df <- compute_mean_density_hex(df_bin_centroids = df_bin_centroids_all,
                                                 num_bins_x = num_bins_x)
-
-  mean_density_df <- as.data.frame(do.call(cbind, mean_density_list))
 
   ## Take first quartile as the benchmark to remove hexagons using mean_density
   benchmark_mean_dens_rm_hex <- stats::quantile(mean_density_df$mean_density,

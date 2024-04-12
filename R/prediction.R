@@ -8,9 +8,10 @@
 #' @param df_bin Centroid coordinates of hexagonal bins in high dimensions.
 #' @param type_NLDR The type of non-linear dimensionality reduction (NLDR) used.
 #'
-#' @return A list contains predicted 2D embeddings, ID in the test data, and predicted hexagonal IDs.
+#' @return A tibble contains predicted 2D embeddings, ID in the test data, and predicted hexagonal IDs.
 #' @importFrom dplyr select
 #' @importFrom proxy dist
+#' @importFrom tibble tibble
 #'
 #' @examples
 #' model <- fit_highd_model(training_data = s_curve_noise_training, x = "UMAP1", y = "UMAP2",
@@ -45,10 +46,10 @@ predict_emb <- function(test_data, df_bin_centroids, df_bin, type_NLDR) {
   pred_emb1 = df_bin_centroids$c_x[match_indices]
   pred_emb2 = df_bin_centroids$c_y[match_indices]
 
-  pred_obj <- list(pred_emb1 = pred_emb1, pred_emb2 = pred_emb2,
+  pred_obj <- tibble::tibble(pred_emb1 = pred_emb1, pred_emb2 = pred_emb2,
                    ID = test_data$ID, pred_hb_id = pred_hb_id)
 
-  ## Rename list elements
+  ## Rename column names
   names(pred_obj) <- c(paste0("pred_", type_NLDR, "_", 1:2), "ID", "pred_hb_id")
 
   return(pred_obj)
@@ -113,23 +114,23 @@ compute_aic <- function(p, mse, num_bins, num_obs) {
 #' @param df_bin The data set with averaged/weighted high-dimensional data.
 #' @param col_start The text that begin the column name of the high-dimensional data.
 #'
-#' @return A list contains Error, MSE and AIC values.
+#' @return A tibble contains Error, MSE and AIC values.
 #'
 #' @importFrom dplyr left_join
+#' @importFrom tibble tibble
 #'
 #' @examples
 #' model <- fit_highd_model(training_data = s_curve_noise_training, x = "UMAP1", y = "UMAP2",
 #' nldr_df_with_id = s_curve_noise_umap_scaled, col_start_2d = "UMAP", col_start_highd = "x")
 #' df_bin_centroids <- model$df_bin_centroids
 #' df_bin <- model$df_bin
-#' pred_emb_list <- predict_emb(test_data = s_curve_noise_training,
+#' pred_df_test <- predict_emb(test_data = s_curve_noise_training,
 #' df_bin_centroids = df_bin_centroids, df_bin = df_bin, type_NLDR = "UMAP")
-#' pred_df_test <- as.data.frame(do.call(cbind, pred_emb_list))
-#' gen_summary(test_data = s_curve_noise_training, prediction_df = pred_df_test,
+#' glance(test_data = s_curve_noise_training, prediction_df = pred_df_test,
 #' df_bin = df_bin, col_start = "x")
 #'
 #' @export
-gen_summary <- function(test_data, prediction_df, df_bin, col_start = "x") {
+glance <- function(test_data, prediction_df, df_bin, col_start = "x") {
 
   ## Rename columns to avoid conflicts
   names(df_bin)[-1] <- paste0("model_high_d_", names(df_bin)[-1])
@@ -160,8 +161,9 @@ gen_summary <- function(test_data, prediction_df, df_bin, col_start = "x") {
 
   aic <-  compute_aic((NCOL(df_bin) - 1), mse,
                       NROW(df_bin), NROW(test_data))
+  summary_df <- tibble::tibble(Error = error, MSE = mse, AIC = aic)
 
-  return(list(error = error, mse = mse, aic = aic))
+  return(summary_df)
 
 }
 
@@ -178,8 +180,9 @@ gen_summary <- function(test_data, prediction_df, df_bin, col_start = "x") {
 #' @param type_NLDR The type of non-linear dimensionality reduction (NLDR) used.
 #' @param col_start The text that begin the column name of the high-dimensional data.
 #'
-#' @return A dataframe containing the augmented data with predictions,
+#' @return A tibble containing the augmented data with predictions,
 #' error metrics, and absolute error metrics.
+#' @importFrom dplyr left_join select bind_cols
 #'
 #' @examples
 #' model <- fit_highd_model(training_data = s_curve_noise_training, x = "UMAP1", y = "UMAP2",
@@ -201,10 +204,8 @@ augment <- function(df_bin_centroids, df_bin, training_data, newdata = NULL, typ
   names(df_bin)[-1] <- paste0("model_high_d_", names(df_bin)[-1])
 
   ## Map high-D averaged mean coordinates
-  prediction_list <- predict_emb(test_data = newdata, df_bin_centroids = df_bin_centroids,
+  prediction_df <- predict_emb(test_data = newdata, df_bin_centroids = df_bin_centroids,
                                df_bin = df_bin, type_NLDR = type_NLDR)
-
-  prediction_df <- as.data.frame(do.call(cbind, prediction_list))
 
   prediction_df <- prediction_df |>
     dplyr::left_join(df_bin, by = c("pred_hb_id" = "hb_id"))

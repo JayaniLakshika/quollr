@@ -13,20 +13,21 @@
 #' @importFrom tidyselect everything
 #'
 #' @examples
-#' num_bins_list <- calc_bins(data = s_curve_noise_umap_scaled, x = "UMAP1",
-#' y = "UMAP2", hex_size = NA, buffer_x = NA, buffer_y = NA)
+#' num_bins_list <- calc_bins(data = s_curve_noise_umap_scaled, x = "UMAP1", y = "UMAP2",
+#' hex_size = 0.2, buffer_x = 0.346, buffer_y = 0.3)
 #' num_bins_x <- num_bins_list$num_x
 #' num_bins_y <- num_bins_list$num_y
 #' hb_obj <- hex_binning(data = s_curve_noise_umap_scaled,
 #' x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
-#' num_bins_y = num_bins_y, x_start = NA, y_start = NA, buffer_x = NA,
-#' buffer_y = NA, hex_size = NA, col_start = "UMAP")
-#' umap_data_with_hb_id <- as.data.frame(do.call(cbind, hb_obj$data_hb_id))
-#' df_all <- dplyr::bind_cols(s_curve_noise_training |> dplyr::select(-ID), umap_data_with_hb_id)
+#' num_bins_y = num_bins_y, x_start = NA, y_start = NA, buffer_x = 0.346,
+#' buffer_y = 0.3, hex_size = 0.2, col_start = "UMAP")
+#' umap_data_with_hb_id <- hb_obj$data_hb_id
+#' df_all <- dplyr::bind_cols(s_curve_noise_training, umap_data_with_hb_id)
 #' avg_highd_data(data = df_all, col_start = "x")
 #'
 #' @export
 avg_highd_data <- function(data, col_start = "x") {
+
   df_b <- data |>
     dplyr::select(rsample::starts_with(col_start), hb_id) |>
     dplyr::group_by(hb_id) |>
@@ -58,17 +59,17 @@ avg_highd_data <- function(data, col_start = "x") {
 #' @importFrom langevitour langevitour
 #'
 #' @examples
-#' num_bins_list <- calc_bins(data = s_curve_noise_umap_scaled, x = "UMAP1",
-#' y = "UMAP2", hex_size = NA, buffer_x = NA, buffer_y = NA)
+#' num_bins_list <- calc_bins(data = s_curve_noise_umap_scaled, x = "UMAP1", y = "UMAP2",
+#' hex_size = 0.2, buffer_x = 0.346, buffer_y = 0.3)
 #' num_bins_x <- num_bins_list$num_x
 #' num_bins_y <- num_bins_list$num_y
 #' hb_obj <- hex_binning(data = s_curve_noise_umap_scaled,
 #' x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
-#' num_bins_y = num_bins_y, x_start = NA, y_start = NA, buffer_x = NA,
-#' buffer_y = NA, hex_size = NA, col_start = "UMAP")
-#' all_centroids_df <- as.data.frame(do.call(cbind, hb_obj$centroids))
-#' counts_df <- as.data.frame(do.call(cbind, hb_obj$std_cts))
-#' umap_data_with_hb_id <- as.data.frame(do.call(cbind, hb_obj$data_hb_id))
+#' num_bins_y = num_bins_y, x_start = NA, y_start = NA, buffer_x = 0.346,
+#' buffer_y = 0.3, hex_size = 0.2, col_start = "UMAP")
+#' all_centroids_df <- hb_obj$centroids
+#' counts_df <- hb_obj$std_cts
+#' umap_data_with_hb_id <- hb_obj$data_hb_id
 #' df_all <- dplyr::bind_cols(s_curve_noise_training |> dplyr::select(-ID), umap_data_with_hb_id)
 #' df_bin <- avg_highd_data(data = df_all, col_start = "x")
 #' df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df,

@@ -11,9 +11,9 @@ find_non_empty_bins(
   non_empty_bins,
   x_start = NA,
   y_start = NA,
-  buffer_x = NA,
-  buffer_y = NA,
-  hex_size = NA,
+  buffer_x = 0.346,
+  buffer_y = 0.3,
+  hex_size = 0.2,
   col_start
 )
 }
@@ -50,6 +50,6 @@ to obtain a specific number of non-empty bins.
 \examples{
 find_non_empty_bins(data = s_curve_noise_umap_scaled,
 x = "UMAP1", y = "UMAP2", non_empty_bins = 10, x_start = NA,
-y_start = NA, buffer_x = NA, buffer_y = NA, hex_size = NA, col_start = "UMAP")
+y_start = NA, buffer_x = 0.346, buffer_y = 0.3, hex_size = 0.2, col_start = "UMAP")
 
 }

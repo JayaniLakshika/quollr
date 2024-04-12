@@ -14,24 +14,22 @@ assign_data(data, centroid_df, col_start)
 \item{col_start}{The text that begins the column name of x and y axes of data.}
 }
 \value{
-A list contains x and y coordinates and corresponding hexagon ID
+A tibble contains x and y coordinates and corresponding hexagon ID
 (emb_1, emb_2, and hb_id respectively).
 }
 \description{
 This function assigns the data to hexagons.
 }
 \examples{
-num_bins_list <- calc_bins(data = s_curve_noise_umap_scaled, x = "UMAP1",
-y = "UMAP2", hex_size = NA, buffer_x = NA, buffer_y = NA)
+num_bins_list <- calc_bins(data = s_curve_noise_umap_scaled, x = "UMAP1", y = "UMAP2",
+hex_size = 0.2, buffer_x = 0.346, buffer_y = 0.3)
 num_bins_x <- num_bins_list$num_x
 num_bins_y <- num_bins_list$num_y
-centroid_list <- gen_centroids(data = s_curve_noise_umap_scaled,
+all_centroids_df <- gen_centroids(data = s_curve_noise_umap_scaled,
 x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
-num_bins_y = num_bins_y, x_start = NA, y_start = NA, buffer_x = NA,
-buffer_y = NA, hex_size = NA)
-all_centroids_df <- as.data.frame(do.call(cbind, centroid_list))
-s_curve_noise_umap_scaled_rm_id <- s_curve_noise_umap_scaled |> dplyr::select(-ID)
-assign_data(data = s_curve_noise_umap_scaled_rm_id,
+num_bins_y = num_bins_y, x_start = NA, y_start = NA, buffer_x = 0.346,
+buffer_y = 0.3, hex_size = 0.2)
+assign_data(data = s_curve_noise_umap_scaled,
 centroid_df = all_centroids_df, col_start = "UMAP")
 
 }

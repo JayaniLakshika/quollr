@@ -16,7 +16,7 @@ predict_emb(test_data, df_bin_centroids, df_bin, type_NLDR)
 \item{type_NLDR}{The type of non-linear dimensionality reduction (NLDR) used.}
 }
 \value{
-A list contains predicted 2D embeddings, ID in the test data, and predicted hexagonal IDs.
+A tibble contains predicted 2D embeddings, ID in the test data, and predicted hexagonal IDs.
 }
 \description{
 Given a test dataset, the centroid coordinates of hexagonal bins in  2D and high-dimensional space,

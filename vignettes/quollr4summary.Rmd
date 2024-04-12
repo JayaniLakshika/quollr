@@ -36,10 +36,9 @@ df_bin <- model$df_bin
 Let's first compute the model summaries for training data. To do that, you need to predict 2D embedding for the training data.
 
 ```{r}
-pred_emb_list_training <- predict_emb(test_data = s_curve_noise_training, 
+pred_df_training <- predict_emb(test_data = s_curve_noise_training, 
                              df_bin_centroids = df_bin_centroids, 
                              df_bin = df_bin, type_NLDR = "UMAP")
-pred_df_training <- as.data.frame(do.call(cbind, pred_emb_list_training))
 glimpse(pred_df_training)
 ```
 
@@ -60,7 +59,7 @@ s_curve_noise_umap_scaled |>
 Next, you can use the generated 2D embedding to compute model summaries.
 
 ```{r}
-gen_summary(test_data = s_curve_noise_training, prediction_df = pred_df_training,
+glance(test_data = s_curve_noise_training, prediction_df = pred_df_training,
 df_bin = df_bin, col_start = "x")
 ```
 
@@ -76,10 +75,9 @@ augment(df_bin_centroids = df_bin_centroids, df_bin = df_bin,
 The same workflow is followed for the test data as well.
 
 ```{r}
-pred_emb_list_test <- predict_emb(test_data = s_curve_noise_test, 
+pred_df_test <- predict_emb(test_data = s_curve_noise_test, 
                              df_bin_centroids = df_bin_centroids, 
                              df_bin = df_bin, type_NLDR = "UMAP")
-pred_df_test <- as.data.frame(do.call(cbind, pred_emb_list_test))
 ```
 
 ```{r}
@@ -97,14 +95,13 @@ s_curve_noise_umap_scaled |>
 ```
 
 ```{r}
-gen_summary(test_data = s_curve_noise_test, prediction_df = pred_df_test,
+glance(test_data = s_curve_noise_test, prediction_df = pred_df_test,
 df_bin = df_bin, col_start = "x")
 ```
 
 ```{r}
-augment(df_bin_centroids = df_bin_centroids,
-                                    df_bin = df_bin, training_data = s_curve_noise_training,
-                                    newdata = s_curve_noise_test, type_NLDR = "UMAP",
-                                    col_start = "x") |>
+augment(df_bin_centroids = df_bin_centroids, df_bin = df_bin, 
+        training_data = s_curve_noise_training, newdata = s_curve_noise_test, 
+        type_NLDR = "UMAP", col_start = "x") |>
   head(5)
 ```

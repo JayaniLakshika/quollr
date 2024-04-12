@@ -28,7 +28,7 @@ If NULL, the training data is used (default is NULL).}
 \item{col_start}{The text that begin the column name of the high-dimensional data.}
 }
 \value{
-A dataframe containing the augmented data with predictions,
+A tibble containing the augmented data with predictions,
 error metrics, and absolute error metrics.
 }
 \description{

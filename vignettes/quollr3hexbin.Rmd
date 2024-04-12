@@ -28,8 +28,9 @@ library(dplyr)
 First, you need to obtain the number of bins along the x and y axes in the hexagonal grid. Here, you need to decide which is the radius of outer circle of the hexagon (`hex_size`), total buffer along the axes.
 
 ```{r echo = FALSE}
-num_bins_list <- calc_bins(data = s_curve_noise_umap_scaled, x = "UMAP1",
-                             y = "UMAP2", hex_size = NA, buffer_x = NA, buffer_y = NA)
+num_bins_list <- calc_bins(data = s_curve_noise_umap_scaled, x = "UMAP1", 
+                           y = "UMAP2", hex_size = 0.2, buffer_x = 0.346, 
+                           buffer_y = 0.3)
 num_bins_x <- num_bins_list$num_x
 num_bins_y <- num_bins_list$num_y
 ```
@@ -40,20 +41,20 @@ Next, by passing the preprocessed 2D embedding data and hexagonal grid configura
 hb_obj <- hex_binning(data = s_curve_noise_umap_scaled, x = "UMAP1", 
                       y = "UMAP2", num_bins_x = num_bins_x, 
                       num_bins_y = num_bins_y, x_start = NA, y_start = NA, 
-                      buffer_x = NA, buffer_y = NA, hex_size = NA, col_start = "UMAP")
+                      buffer_x = 0.346, buffer_y = 0.3, hex_size = 0.2, col_start = "UMAP")
 ```
 
 ```{r}
 ## Data set with all possible centroids in the hexagonal grid
-all_centroids_df <- as.data.frame(do.call(cbind, hb_obj$centroids))
+all_centroids_df <- hb_obj$centroids
 glimpse(all_centroids_df)
 
 ## Generate all coordinates of hexagons
-hex_grid <- as.data.frame(do.call(cbind, hb_obj$hex_poly))
+hex_grid <- hb_obj$hex_poly
 glimpse(hex_grid)
 
 ## To obtain the standardise counts within hexbins
-counts_df <- as.data.frame(do.call(cbind, hb_obj$std_cts))
+counts_df <- hb_obj$std_cts
 df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df, 
                                              counts_df = counts_df)
 ```

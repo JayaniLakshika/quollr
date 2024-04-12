@@ -34,7 +34,7 @@
 #' @export
 fit_highd_model <- function(training_data, nldr_df_with_id, x, y, num_bins_x = NA,
                       num_bins_y = NA, x_start = NA, y_start = NA,
-                      buffer_x = NA, buffer_y = NA,  hex_size = NA,
+                      buffer_x = 0.346, buffer_y = 0.3,  hex_size = 0.2,
                       is_bin_centroid = TRUE, is_rm_lwd_hex = FALSE,
                       benchmark_to_rm_lwd_hex = NA, col_start_2d,
                       col_start_highd) {
@@ -55,9 +55,9 @@ fit_highd_model <- function(training_data, nldr_df_with_id, x, y, num_bins_x = N
                         buffer_y = buffer_y, hex_size = hex_size,
                         col_start = col_start_2d)
 
-  all_centroids_df <- as.data.frame(do.call(cbind, hb_obj$centroids))
-  counts_df <- as.data.frame(do.call(cbind, hb_obj$std_cts))
-  nldr_df_with_hex_id <- as.data.frame(do.call(cbind, hb_obj$data_hb_id))
+  all_centroids_df <- hb_obj$centroids
+  counts_df <- hb_obj$std_cts
+  nldr_df_with_hex_id <- hb_obj$data_hb_id
 
   ## Do you need to use bin centroids or bin means?
   if (isTRUE(is_bin_centroid)) {
