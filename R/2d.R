@@ -17,6 +17,7 @@
 #' @return A tibble contains hexIDs, x and y coordinates (hexID, c_x, c_y respectively)
 #' of all hexagon bin centroids.
 #' @importFrom rlang sym as_string
+#' @importFrom tibble tibble
 #'
 #' @examples
 #' num_bins_list <- calc_bins(data = s_curve_noise_umap_scaled, x = "UMAP1", y = "UMAP2",
@@ -25,17 +26,61 @@
 #' num_bins_y <- num_bins_list$num_y
 #' gen_centroids(data = s_curve_noise_umap_scaled,
 #' x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
-#' num_bins_y = num_bins_y, x_start = NA, y_start = NA, buffer_x = 0.346,
+#' num_bins_y = num_bins_y, x_start = -0.1732051, y_start = -0.15, buffer_x = 0.346,
 #' buffer_y = 0.3, hex_size = 0.2)
 #'
 #' @export
-gen_centroids <- function(data, x, y, num_bins_x, num_bins_y, x_start = NA,
-                          y_start = NA, buffer_x = 0.346, buffer_y = 0.3,
-                          hex_size = 0.2){
+gen_centroids <- function(data, x, y, num_bins_x, num_bins_y, x_start,
+                          y_start, buffer_x, buffer_y, hex_size){
+
+  if (missing(hex_size)) {
+    hex_size <- 0.2
+  }
+
+  # Calculate horizontal and vertical spacing
+  hs <- sqrt(3) * hex_size
+  vs <- 1.5 * hex_size
+
+  if (missing(buffer_x)) {
+    buffer_x <- round(hs * 1.5, 3)
+
+    message(paste0("Buffer along the x-axis is set to ", buffer_x, "."))
+
+  } else {
+    if (buffer_x > round(hs * 1.5, 3)) {
+
+      stop(paste0("Buffer along the x-axis exceeds than ", hs, ".
+                     Need to assign a value less than or equal to ", hs, "."))
+
+    } else if (buffer_x <= 0 ) {
+
+      stop(paste0("Buffer along the x-axis is less than or equal to zero."))
+
+    }
+  }
+
+  if (missing(buffer_y)) {
+    buffer_y <- round(vs * 1.5, 3)
+
+    message(paste0("Buffer along the y-axis is set to ", buffer_y, "."))
+
+
+  } else {
+    if (buffer_y > round(vs * 1.5, 3)) {
+
+      stop(paste0("Buffer along the y-axis exceeds than ", vs, ".
+                     Need to assign a value less than or equal to ", vs, "."))
+
+    } else if (buffer_y <= 0 ) {
+
+      stop(paste0("Buffer along the y-axis is less than or equal to zero."))
+
+    }
+  }
 
 
   ## If number of bins along the x-axis and/or y-axis is not given
-  if (is.na(num_bins_x) | is.na(num_bins_y)) {
+  if (missing(num_bins_x) | missing(num_bins_y)) {
     ## compute the number of bins along the x-axis
     bin_list <- calc_bins(data = data, x = x, y = y, hex_size = hex_size,
                           buffer_x = buffer_x, buffer_y = buffer_y)
@@ -45,7 +90,7 @@ gen_centroids <- function(data, x, y, num_bins_x, num_bins_y, x_start = NA,
 
 
   ## If x_start and y_start not define
-  if (is.na(x_start)) {
+  if (missing(x_start)) {
     # Define starting point
     x_start <- min(data[[rlang::as_string(rlang::sym(x))]]) - (sqrt(3) * hex_size/2)
 
@@ -63,7 +108,7 @@ gen_centroids <- function(data, x, y, num_bins_x, num_bins_y, x_start = NA,
 
   }
 
-  if (is.na(y_start)) {
+  if (missing(y_start)) {
     # Define starting point
     y_start <- min(data[[rlang::as_string(rlang::sym(y))]]) - (1.5 * hex_size/2)
 
@@ -83,10 +128,6 @@ gen_centroids <- function(data, x, y, num_bins_x, num_bins_y, x_start = NA,
 
   }
 
-
-  # Calculate horizontal and vertical spacing
-  hs <- sqrt(3) * hex_size
-  vs <- 1.5 * hex_size
 
   # Generate x-coordinate of centroids for odd rows
   c_x_vec_odd <- seq(x_start, (num_bins_x - 1) * hs, by = hs)
@@ -143,7 +184,7 @@ gen_centroids <- function(data, x, y, num_bins_x, num_bins_y, x_start = NA,
 #' num_bins_y <- num_bins_list$num_y
 #' all_centroids_df <- gen_centroids(data = s_curve_noise_umap_scaled,
 #' x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
-#' num_bins_y = num_bins_y, x_start = NA, y_start = NA, buffer_x = 0.346,
+#' num_bins_y = num_bins_y, x_start = -0.1732051, y_start = -0.15, buffer_x = 0.346,
 #' buffer_y = 0.3, hex_size = 0.2)
 #' gen_hex_coord(centroids_df = all_centroids_df, hex_size = 0.2)
 #'
@@ -223,7 +264,7 @@ gen_hex_coord <- function(centroids_df, hex_size = 0.2){
 #' num_bins_y <- num_bins_list$num_y
 #' all_centroids_df <- gen_centroids(data = s_curve_noise_umap_scaled,
 #' x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
-#' num_bins_y = num_bins_y, x_start = NA, y_start = NA, buffer_x = 0.346,
+#' num_bins_y = num_bins_y, x_start = -0.1732051, y_start = -0.15, buffer_x = 0.346,
 #' buffer_y = 0.3, hex_size = 0.2)
 #' assign_data(data = s_curve_noise_umap_scaled,
 #' centroid_df = all_centroids_df, col_start = "UMAP")
@@ -267,7 +308,7 @@ assign_data <- function(data, centroid_df, col_start) {
 #' num_bins_y <- num_bins_list$num_y
 #' all_centroids_df <- gen_centroids(data = s_curve_noise_umap_scaled,
 #' x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
-#' num_bins_y = num_bins_y, x_start = NA, y_start = NA, buffer_x = 0.346,
+#' num_bins_y = num_bins_y, x_start = -0.1732051, y_start = -0.15, buffer_x = 0.346,
 #' buffer_y = 0.3, hex_size = 0.2)
 #' umap_with_hb_id <- assign_data(data = s_curve_noise_umap_scaled,
 #' centroid_df = all_centroids_df, col_start = "UMAP")
@@ -301,7 +342,7 @@ compute_std_counts <- function(data_hex_id) {
 #' num_bins_y <- num_bins_list$num_y
 #' all_centroids_df <- gen_centroids(data = s_curve_noise_umap_scaled,
 #' x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
-#' num_bins_y = num_bins_y, x_start = NA, y_start = NA, buffer_x = 0.346,
+#' num_bins_y = num_bins_y, x_start = -0.1732051, y_start = -0.15, buffer_x = 0.346,
 #' buffer_y = 0.3, hex_size = 0.2)
 #' umap_with_hb_id <- assign_data(data = s_curve_noise_umap_scaled,
 #' centroid_df = all_centroids_df, col_start = "UMAP")
@@ -372,13 +413,67 @@ find_pts <- function(data_hex_id) {
 #' num_bins_y <- num_bins_list$num_y
 #' hex_binning(data = s_curve_noise_umap_scaled,
 #' x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
-#' num_bins_y = num_bins_y, x_start = NA, y_start = NA, buffer_x = 0.346,
+#' num_bins_y = num_bins_y, x_start = -0.1732051, y_start = -0.15, buffer_x = 0.346,
 #' buffer_y = 0.3, hex_size = 0.2, col_start = "UMAP")
 #'
 #' @export
-hex_binning <- function(data, x, y, num_bins_x, num_bins_y, x_start = NA,
-                        y_start = NA, buffer_x = 0.346, buffer_y = 0.3,
-                        hex_size = 0.2, col_start) {
+hex_binning <- function(data, x, y, num_bins_x, num_bins_y, x_start,
+                        y_start, buffer_x, buffer_y,
+                        hex_size, col_start) {
+
+  if (missing(hex_size)) {
+    hex_size <- 0.2
+  }
+
+  # Calculate horizontal and vertical spacing
+  hs <- sqrt(3) * hex_size
+  vs <- 1.5 * hex_size
+
+  if (missing(buffer_x)) {
+    buffer_x <- round(hs * 1.5, 3)
+
+    message(paste0("Buffer along the x-axis is set to ", buffer_x, "."))
+
+  } else {
+    if (buffer_x > round(hs * 1.5, 3)) {
+
+      message(paste0("Buffer along the x-axis exceeds than ", hs, ".
+                     Need to assign a value less than or equal to ", hs, "."))
+
+    } else if (buffer_x <= 0) {
+
+      message(paste0("Buffer along the x-axis is less than or equal to zero."))
+
+    }
+  }
+
+  if (missing(buffer_y)) {
+    buffer_y <- round(vs * 1.5, 3)
+
+    message(paste0("Buffer along the y-axis is set to ", buffer_y, "."))
+
+
+  } else {
+    if (buffer_y > round(vs * 1.5, 3)) {
+
+      message(paste0("Buffer along the y-axis exceeds than ", vs, ".
+                     Need to assign a value less than or equal to ", vs, "."))
+
+    } else if (buffer_y <= 0 ) {
+
+      message(paste0("Buffer along the y-axis is less than or equal to zero."))
+
+    }
+  }
+
+  ## If number of bins along the x-axis and/or y-axis is not given
+  if (missing(num_bins_x) | missing(num_bins_y)) {
+    ## compute the number of bins along the x-axis
+    bin_list <- calc_bins(data = data, x = x, y = y, hex_size = hex_size,
+                          buffer_x = buffer_x, buffer_y = buffer_y)
+    num_bins_x <- bin_list$num_x
+    num_bins_y <- bin_list$num_y
+  }
 
   ## To generate all the centroids of the grid
   all_centroids_df <- gen_centroids(data = data, x = x, y = y, num_bins_x = num_bins_x,
@@ -432,7 +527,7 @@ hex_binning <- function(data, x, y, num_bins_x, num_bins_y, x_start = NA,
 #' num_bins_y <- num_bins_list$num_y
 #' hb_obj <- hex_binning(data = s_curve_noise_umap_scaled,
 #' x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
-#' num_bins_y = num_bins_y, x_start = NA, y_start = NA, buffer_x = 0.346,
+#' num_bins_y = num_bins_y, x_start = -0.1732051, y_start = -0.15, buffer_x = 0.346,
 #' buffer_y = 0.3, hex_size = 0.2, col_start = "UMAP")
 #' all_centroids_df <- hb_obj$centroids
 #' counts_df <- hb_obj$std_cts
@@ -469,7 +564,7 @@ extract_hexbin_centroids <- function(centroids_df, counts_df) {
 #' num_bins_y <- num_bins_list$num_y
 #' hb_obj <- hex_binning(data = s_curve_noise_umap_scaled,
 #' x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
-#' num_bins_y = num_bins_y, x_start = NA, y_start = NA, buffer_x = 0.346,
+#' num_bins_y = num_bins_y, x_start = -0.1732051, y_start = -0.15, buffer_x = 0.346,
 #' buffer_y = 0.3, hex_size = 0.2, col_start = "UMAP")
 #' all_centroids_df <- hb_obj$centroids
 #' counts_df <- hb_obj$std_cts
@@ -520,7 +615,7 @@ extract_hexbin_mean <- function(nldr_df_with_hex_id, counts_df) {
 #' num_bins_y <- num_bins_list$num_y
 #' hb_obj <- hex_binning(data = s_curve_noise_umap_scaled,
 #' x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
-#' num_bins_y = num_bins_y, x_start = NA, y_start = NA, buffer_x = 0.346,
+#' num_bins_y = num_bins_y, x_start = -0.1732051, y_start = -0.15, buffer_x = 0.346,
 #' buffer_y = 0.3, hex_size = 0.2, col_start = "UMAP")
 #' all_centroids_df <- hb_obj$centroids
 #' counts_df <- hb_obj$std_cts
@@ -556,7 +651,7 @@ tri_bin_centroids <- function(hex_df, x, y){
 #' num_bins_y <- num_bins_list$num_y
 #' hb_obj <- hex_binning(data = s_curve_noise_umap_scaled,
 #' x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
-#' num_bins_y = num_bins_y, x_start = NA, y_start = NA, buffer_x = 0.346,
+#' num_bins_y = num_bins_y, x_start = -0.1732051, y_start = -0.15, buffer_x = 0.346,
 #' buffer_y = 0.3, hex_size = 0.2, col_start = "UMAP")
 #' all_centroids_df <- hb_obj$centroids
 #' counts_df <- hb_obj$std_cts
@@ -622,7 +717,7 @@ gen_edges <- function(tri_object) {
 #' num_bins_y <- num_bins_list$num_y
 #' hb_obj <- hex_binning(data = s_curve_noise_umap_scaled,
 #' x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
-#' num_bins_y = num_bins_y, x_start = NA, y_start = NA, buffer_x = 0.346,
+#' num_bins_y = num_bins_y, x_start = -0.1732051, y_start = -0.15, buffer_x = 0.346,
 #' buffer_y = 0.3, hex_size = 0.2, col_start = "UMAP")
 #' all_centroids_df <- hb_obj$centroids
 #' counts_df <- hb_obj$std_cts
@@ -676,7 +771,7 @@ cal_2d_dist <- function(tr_coord_df, start_x, start_y, end_x, end_y,
 #' num_bins_y <- num_bins_list$num_y
 #' hb_obj <- hex_binning(data = s_curve_noise_umap_scaled,
 #' x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
-#' num_bins_y = num_bins_y, x_start = NA, y_start = NA, buffer_x = 0.346,
+#' num_bins_y = num_bins_y, x_start = -0.1732051, y_start = -0.15, buffer_x = 0.346,
 #' buffer_y = 0.3, hex_size = 0.2, col_start = "UMAP")
 #' all_centroids_df <- hb_obj$centroids
 #' counts_df <- hb_obj$std_cts
@@ -742,7 +837,7 @@ vis_lg_mesh <- function(distance_edges, benchmark_value,
 #' num_bins_y <- num_bins_list$num_y
 #' hb_obj <- hex_binning(data = s_curve_noise_umap_scaled,
 #' x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
-#' num_bins_y = num_bins_y, x_start = NA, y_start = NA, buffer_x = 0.346,
+#' num_bins_y = num_bins_y, x_start = -0.1732051, y_start = -0.15, buffer_x = 0.346,
 #' buffer_y = 0.3, hex_size = 0.2, col_start = "UMAP")
 #' all_centroids_df <- hb_obj$centroids
 #' counts_df <- hb_obj$std_cts
@@ -804,15 +899,60 @@ vis_rmlg_mesh <- function(distance_edges, benchmark_value, tr_coord_df,
 #'
 #' @examples
 #' find_non_empty_bins(data = s_curve_noise_umap_scaled,
-#' x = "UMAP1", y = "UMAP2", non_empty_bins = 10, x_start = NA,
-#' y_start = NA, buffer_x = 0.346, buffer_y = 0.3, hex_size = 0.2, col_start = "UMAP")
+#' x = "UMAP1", y = "UMAP2", non_empty_bins = 10, x_start = -0.1732051, y_start = -0.15,
+#' buffer_x = 0.346, buffer_y = 0.3, hex_size = 0.2, col_start = "UMAP")
 #'
 #' @export
-find_non_empty_bins <- function(data, x, y, non_empty_bins, x_start = NA,
-                                y_start = NA, buffer_x = 0.346, buffer_y = 0.3,
-                                hex_size = 0.2, col_start) {
+find_non_empty_bins <- function(data, x, y, non_empty_bins, x_start, y_start,
+                                buffer_x, buffer_y, hex_size, col_start) {
 
-  if (is.na(non_empty_bins)) {
+  if (missing(hex_size)) {
+    hex_size <- 0.2
+  }
+
+  # Calculate horizontal and vertical spacing
+  hs <- sqrt(3) * hex_size
+  vs <- 1.5 * hex_size
+
+  if (missing(buffer_x)) {
+    buffer_x <- round(hs * 1.5, 3)
+
+    message(paste0("Buffer along the x-axis is set to ", buffer_x, "."))
+
+  } else {
+    if (buffer_x > round(hs, 3)) {
+
+      message(paste0("Buffer along the x-axis exceeds than ", hs, ".
+                     Need to assign a value less than or equal to ", hs, "."))
+
+    } else if (buffer_x <= 0 ) {
+
+      message(paste0("Buffer along the x-axis is less than or equal to zero."))
+
+    }
+  }
+
+  if (missing(buffer_y)) {
+    buffer_y <- round(vs * 1.5, 3)
+
+    message(paste0("Buffer along the y-axis is set to ", buffer_y, "."))
+
+
+  } else {
+    if (buffer_y > round(vs, 3)) {
+
+      message(paste0("Buffer along the y-axis exceeds than ", vs, ".
+                     Need to assign a value less than or equal to ", vs, "."))
+
+    } else if (buffer_y <= 0 ) {
+
+      message(paste0("Buffer along the y-axis is less than or equal to zero."))
+
+    }
+  }
+
+
+  if (missing(non_empty_bins)) {
     stop("Required number of non-empty bins is not defined.")
   }
 

@@ -101,13 +101,14 @@ data. For our example, we’ll use a 3-<span class="math inline">\(d\)</span> S-
 noise dimensions. We’ve used UMAP as our non-linear dimension reduction
 technique to generate embeddings for the S-curve data.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">scaled_umap</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gen_scaled_data.html">gen_scaled_data</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">s_curve_noise_umap</span>, x <span class="op">=</span> <span class="st">"UMAP1"</span>, y <span class="op">=</span> <span class="st">"UMAP2"</span>, </span>
-<span>                hex_ratio <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">scaled_umap</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gen_scaled_data.html">gen_scaled_data</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">s_curve_noise_umap</span>, x <span class="op">=</span> <span class="st">"UMAP1"</span>, y <span class="op">=</span> <span class="st">"UMAP2"</span>, hr <span class="op">=</span> <span class="fl">2</span><span class="op">/</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="fl">3</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="va">scaled_umap</span><span class="op">)</span></span>
-<span><span class="co">#&gt; List of 2</span></span>
-<span><span class="co">#&gt;  $ scaled_UMAP1: num [1:75] 0.0804 0.7386 0.8399 0.1672 0.2629 ...</span></span>
-<span><span class="co">#&gt;  $ scaled_UMAP2: num [1:75] 0.366 1.1464 1.2392 0.0494 0.4556 ...</span></span></code></pre></div>
+<span><span class="co">#&gt; Rows: 75</span></span>
+<span><span class="co">#&gt; Columns: 3</span></span>
+<span><span class="co">#&gt; $ UMAP1 <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 0.08044271, 0.73857864, 0.83992020, 0.16719939, 0.26292782, 0.83…</span></span>
+<span><span class="co">#&gt; $ UMAP2 <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 0.36599777, 1.14637143, 1.23921659, 0.04942248, 0.45564611, 2.29…</span></span>
+<span><span class="co">#&gt; $ ID    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 1, 2, 3, 4, 6, 7, 8, 9, 11, 12, 14, 15, 16, 17, 19, 20, 21, 22, …</span></span></code></pre></div>
 <p><code>gen_scaled_data</code> function preprocesses the 2D embedding
 data to obtain regular hexagons. The <code>hex_ratio</code> parameter
 determines the aspect ratio of the hexagons. By default, it’s set up to

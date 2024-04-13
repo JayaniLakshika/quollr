@@ -106,16 +106,16 @@ visualization.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_highd_model.html">fit_highd_model</a></span><span class="op">(</span>training_data<span class="op">=</span><span class="va">s_curve_noise_training</span>, </span>
 <span>                         nldr_df_with_id<span class="op">=</span><span class="va">s_curve_noise_umap_scaled</span>, x <span class="op">=</span> <span class="st">"UMAP1"</span>, </span>
-<span>                         y  <span class="op">=</span> <span class="st">"UMAP2"</span>, num_bins_x <span class="op">=</span> <span class="cn">NA</span>, num_bins_y <span class="op">=</span> <span class="cn">NA</span>, </span>
-<span>                         x_start <span class="op">=</span> <span class="cn">NA</span>, y_start <span class="op">=</span> <span class="cn">NA</span>, buffer_x <span class="op">=</span> <span class="cn">NA</span>, </span>
-<span>                         buffer_y <span class="op">=</span> <span class="cn">NA</span>,  hex_size <span class="op">=</span> <span class="cn">NA</span>, is_bin_centroid <span class="op">=</span> <span class="cn">TRUE</span>, </span>
-<span>                         is_rm_lwd_hex <span class="op">=</span> <span class="cn">FALSE</span>, benchmark_to_rm_lwd_hex <span class="op">=</span> <span class="cn">NA</span>, </span>
+<span>                         y  <span class="op">=</span> <span class="st">"UMAP2"</span>, num_bins_x <span class="op">=</span> <span class="fl">4</span>, num_bins_y <span class="op">=</span> <span class="fl">7</span>, </span>
+<span>                         x_start <span class="op">=</span> <span class="op">-</span><span class="fl">0.1732051</span>, y_start <span class="op">=</span> <span class="op">-</span><span class="fl">0.15</span>, buffer_x <span class="op">=</span> <span class="fl">0.346</span>, </span>
+<span>                         buffer_y <span class="op">=</span> <span class="fl">0.3</span>,  hex_size <span class="op">=</span> <span class="fl">0.2</span>, is_bin_centroid <span class="op">=</span> <span class="cn">TRUE</span>, </span>
+<span>                         is_rm_lwd_hex <span class="op">=</span> <span class="cn">FALSE</span>, </span>
 <span>                         col_start_2d <span class="op">=</span> <span class="st">"UMAP"</span>, col_start_highd <span class="op">=</span> <span class="st">"x"</span><span class="op">)</span></span>
 <span><span class="co">## 2D model</span></span>
 <span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="va">model</span><span class="op">$</span><span class="va">df_bin</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Rows: 10</span></span>
 <span><span class="co">#&gt; Columns: 8</span></span>
-<span><span class="co">#&gt; $ hb_id <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 2, 6, 7, 12, 13, 18, 24, 28, 29, 34</span></span>
+<span><span class="co">#&gt; $ hb_id <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 2, 5, 6, 10, 11, 15, 20, 23, 24, 28</span></span>
 <span><span class="co">#&gt; $ x1    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> -0.636602704, -0.498439940, 0.294457441, 0.309089774, 0.86761456…</span></span>
 <span><span class="co">#&gt; $ x2    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 1.74398667, 0.52443695, 1.40452199, 0.04212599, 0.74730061, 1.26…</span></span>
 <span><span class="co">#&gt; $ x3    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> -1.7641833, -1.7303881, -1.8845346, -1.8325686, -0.7811911, -0.1…</span></span>
@@ -128,8 +128,8 @@ visualization.</p>
 <span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="va">model</span><span class="op">$</span><span class="va">df_bin_centroids</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Rows: 10</span></span>
 <span><span class="co">#&gt; Columns: 4</span></span>
-<span><span class="co">#&gt; $ hexID      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 2, 6, 7, 12, 13, 18, 24, 28, 29, 34</span></span>
-<span><span class="co">#&gt; $ c_x        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 0.1732051, 0.0000000, 0.3464102, 0.1732051, 0.5196152, 0.69…</span></span>
+<span><span class="co">#&gt; $ hexID      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 2, 5, 6, 10, 11, 15, 20, 23, 24, 28</span></span>
+<span><span class="co">#&gt; $ c_x        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 1.732051e-01, -1.924311e-08, 3.464101e-01, 1.732051e-01, 5.…</span></span>
 <span><span class="co">#&gt; $ c_y        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> -0.15, 0.15, 0.15, 0.45, 0.45, 0.75, 1.05, 1.35, 1.35, 1.65</span></span>
 <span><span class="co">#&gt; $ std_counts <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 0.2352941, 0.5294118, 0.4117647, 0.1764706, 0.3529412, 0.70…</span></span></code></pre></div>
   </main>

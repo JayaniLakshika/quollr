@@ -19,7 +19,7 @@
 #' num_bins_y <- num_bins_list$num_y
 #' hb_obj <- hex_binning(data = s_curve_noise_umap_scaled,
 #' x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
-#' num_bins_y = num_bins_y, x_start = NA, y_start = NA, buffer_x = 0.346,
+#' num_bins_y = num_bins_y, x_start = -0.1732051, y_start = -0.15, buffer_x = 0.346,
 #' buffer_y = 0.3, hex_size = 0.2, col_start = "UMAP")
 #' umap_data_with_hb_id <- hb_obj$data_hb_id
 #' df_all <- dplyr::bind_cols(s_curve_noise_training, umap_data_with_hb_id)
@@ -65,7 +65,7 @@ avg_highd_data <- function(data, col_start = "x") {
 #' num_bins_y <- num_bins_list$num_y
 #' hb_obj <- hex_binning(data = s_curve_noise_umap_scaled,
 #' x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
-#' num_bins_y = num_bins_y, x_start = NA, y_start = NA, buffer_x = 0.346,
+#' num_bins_y = num_bins_y, x_start = -0.1732051, y_start = -0.15, buffer_x = 0.346,
 #' buffer_y = 0.3, hex_size = 0.2, col_start = "UMAP")
 #' all_centroids_df <- hb_obj$centroids
 #' counts_df <- hb_obj$std_cts
@@ -84,7 +84,7 @@ avg_highd_data <- function(data, col_start = "x") {
 #' use_default_benchmark_val = FALSE, col_start = "x")
 #'
 #' @export
-show_langevitour <- function(df, df_b, df_b_with_center_data, benchmark_value = NA,
+show_langevitour <- function(df, df_b, df_b_with_center_data, benchmark_value,
                              distance_df, distance_col, use_default_benchmark_val = FALSE,
                              col_start) {
 
@@ -106,7 +106,7 @@ show_langevitour <- function(df, df_b, df_b_with_center_data, benchmark_value = 
   df_exe <- dplyr::bind_rows(df_b, df)
 
 
-  if(is.na(benchmark_value)){
+  if(missing(benchmark_value)){
 
     if (isFALSE(use_default_benchmark_val)) {
 

@@ -3,9 +3,9 @@
     Code
       suppressMessages(fit_highd_model(training_data = s_curve_noise_training,
         nldr_df_with_id = s_curve_noise_umap_scaled, x = "UMAP1", y = "UMAP2",
-        num_bins_x = NA, num_bins_y = NA, x_start = NA, y_start = NA, buffer_x = 0.346,
-        buffer_y = 0.3, hex_size = 0.2, is_bin_centroid = TRUE, is_rm_lwd_hex = FALSE,
-        benchmark_to_rm_lwd_hex = NA, col_start_2d = "UMAP", col_start_highd = "x"))
+        num_bins_x = 4, num_bins_y = 7, x_start = -0.1732051, y_start = -0.15,
+        buffer_x = 0.346, buffer_y = 0.3, hex_size = 0.2, is_bin_centroid = TRUE,
+        is_rm_lwd_hex = FALSE, col_start_2d = "UMAP", col_start_highd = "x"))
     Output
       $df_bin
       # A tibble: 10 x 8
@@ -24,18 +24,18 @@
       
       $df_bin_centroids
       # A tibble: 10 x 4
-         hexID   c_x   c_y std_counts
-         <int> <dbl> <dbl>      <dbl>
-       1     2 0.173 -0.15      0.235
-       2     5 0      0.15      0.529
-       3     6 0.346  0.15      0.412
-       4    10 0.173  0.45      0.176
-       5    11 0.520  0.45      0.353
-       6    15 0.693  0.75      0.706
-       7    20 0.866  1.05      0.471
-       8    23 0.693  1.35      0.294
-       9    24 1.04   1.35      0.235
-      10    28 0.866  1.65      1    
+         hexID           c_x   c_y std_counts
+         <int>         <dbl> <dbl>      <dbl>
+       1     2  0.173        -0.15      0.235
+       2     5 -0.0000000192  0.15      0.529
+       3     6  0.346         0.15      0.412
+       4    10  0.173         0.45      0.176
+       5    11  0.520         0.45      0.353
+       6    15  0.693         0.75      0.706
+       7    20  0.866         1.05      0.471
+       8    23  0.693         1.35      0.294
+       9    24  1.04          1.35      0.235
+      10    28  0.866         1.65      1    
       
 
 ---
@@ -43,9 +43,9 @@
     Code
       suppressMessages(fit_highd_model(training_data = s_curve_noise_training,
         nldr_df_with_id = s_curve_noise_umap_scaled, x = "UMAP1", y = "UMAP2",
-        num_bins_x = 5, num_bins_y = 8, x_start = NA, y_start = NA, buffer_x = 0.346,
-        buffer_y = 0.3, hex_size = 0.2, is_bin_centroid = TRUE, is_rm_lwd_hex = FALSE,
-        benchmark_to_rm_lwd_hex = NA, col_start_2d = "UMAP", col_start_highd = "x"))
+        num_bins_x = 5, num_bins_y = 8, x_start = -0.1732051, y_start = -0.15,
+        buffer_x = 0.346, buffer_y = 0.3, hex_size = 0.2, is_bin_centroid = TRUE,
+        is_rm_lwd_hex = FALSE, col_start_2d = "UMAP", col_start_highd = "x"))
     Output
       $df_bin
       # A tibble: 10 x 8
@@ -64,18 +64,18 @@
       
       $df_bin_centroids
       # A tibble: 10 x 4
-         hexID   c_x   c_y std_counts
-         <int> <dbl> <dbl>      <dbl>
-       1     2 0.173 -0.15      0.235
-       2     6 0      0.15      0.529
-       3     7 0.346  0.15      0.412
-       4    12 0.173  0.45      0.176
-       5    13 0.520  0.45      0.353
-       6    18 0.693  0.75      0.706
-       7    24 0.866  1.05      0.471
-       8    28 0.693  1.35      0.294
-       9    29 1.04   1.35      0.235
-      10    34 0.866  1.65      1    
+         hexID           c_x   c_y std_counts
+         <int>         <dbl> <dbl>      <dbl>
+       1     2  0.173        -0.15      0.235
+       2     6 -0.0000000192  0.15      0.529
+       3     7  0.346         0.15      0.412
+       4    12  0.173         0.45      0.176
+       5    13  0.520         0.45      0.353
+       6    18  0.693         0.75      0.706
+       7    24  0.866         1.05      0.471
+       8    28  0.693         1.35      0.294
+       9    29  1.04          1.35      0.235
+      10    34  0.866         1.65      1    
       
 
 ---
@@ -83,9 +83,10 @@
     Code
       suppressMessages(fit_highd_model(training_data = s_curve_noise_training,
         nldr_df_with_id = s_curve_noise_umap_scaled, x = "UMAP1", y = "UMAP2",
-        num_bins_x = NA, num_bins_y = NA, x_start = NA, y_start = NA, buffer_x = 0.346,
-        buffer_y = 0.3, hex_size = 0.2, is_bin_centroid = TRUE, is_rm_lwd_hex = TRUE,
-        benchmark_to_rm_lwd_hex = NA, col_start_2d = "UMAP", col_start_highd = "x"))
+        num_bins_x = 4, num_bins_y = 7, x_start = -0.1732051, y_start = -0.15,
+        buffer_x = 0.346, buffer_y = 0.3, hex_size = 0.2, is_bin_centroid = TRUE,
+        is_rm_lwd_hex = TRUE, benchmark_to_rm_lwd_hex = 0.25, col_start_2d = "UMAP",
+        col_start_highd = "x"))
     Output
       $df_bin
       # A tibble: 10 x 8
@@ -104,18 +105,18 @@
       
       $df_bin_centroids
       # A tibble: 10 x 4
-         hexID   c_x   c_y std_counts
-         <int> <dbl> <dbl>      <dbl>
-       1     2 0.173 -0.15      0.235
-       2     5 0      0.15      0.529
-       3     6 0.346  0.15      0.412
-       4    10 0.173  0.45      0.176
-       5    11 0.520  0.45      0.353
-       6    15 0.693  0.75      0.706
-       7    20 0.866  1.05      0.471
-       8    23 0.693  1.35      0.294
-       9    24 1.04   1.35      0.235
-      10    28 0.866  1.65      1    
+         hexID           c_x   c_y std_counts
+         <int>         <dbl> <dbl>      <dbl>
+       1     2  0.173        -0.15      0.235
+       2     5 -0.0000000192  0.15      0.529
+       3     6  0.346         0.15      0.412
+       4    10  0.173         0.45      0.176
+       5    11  0.520         0.45      0.353
+       6    15  0.693         0.75      0.706
+       7    20  0.866         1.05      0.471
+       8    23  0.693         1.35      0.294
+       9    24  1.04          1.35      0.235
+      10    28  0.866         1.65      1    
       
 
 ---
@@ -123,9 +124,10 @@
     Code
       suppressMessages(fit_highd_model(training_data = s_curve_noise_training,
         nldr_df_with_id = s_curve_noise_umap_scaled, x = "UMAP1", y = "UMAP2",
-        num_bins_x = NA, num_bins_y = NA, x_start = NA, y_start = NA, buffer_x = 0.346,
-        buffer_y = 0.3, hex_size = 0.2, is_bin_centroid = TRUE, is_rm_lwd_hex = TRUE,
-        benchmark_to_rm_lwd_hex = 0.4, col_start_2d = "UMAP", col_start_highd = "x"))
+        num_bins_x = 4, num_bins_y = 7, x_start = -0.1732051, y_start = -0.15,
+        buffer_x = 0.346, buffer_y = 0.3, hex_size = 0.2, is_bin_centroid = TRUE,
+        is_rm_lwd_hex = TRUE, benchmark_to_rm_lwd_hex = 0.4, col_start_2d = "UMAP",
+        col_start_highd = "x"))
     Output
       $df_bin
       # A tibble: 10 x 8
@@ -144,18 +146,18 @@
       
       $df_bin_centroids
       # A tibble: 10 x 4
-         hexID   c_x   c_y std_counts
-         <int> <dbl> <dbl>      <dbl>
-       1     2 0.173 -0.15      0.235
-       2     5 0      0.15      0.529
-       3     6 0.346  0.15      0.412
-       4    10 0.173  0.45      0.176
-       5    11 0.520  0.45      0.353
-       6    15 0.693  0.75      0.706
-       7    20 0.866  1.05      0.471
-       8    23 0.693  1.35      0.294
-       9    24 1.04   1.35      0.235
-      10    28 0.866  1.65      1    
+         hexID           c_x   c_y std_counts
+         <int>         <dbl> <dbl>      <dbl>
+       1     2  0.173        -0.15      0.235
+       2     5 -0.0000000192  0.15      0.529
+       3     6  0.346         0.15      0.412
+       4    10  0.173         0.45      0.176
+       5    11  0.520         0.45      0.353
+       6    15  0.693         0.75      0.706
+       7    20  0.866         1.05      0.471
+       8    23  0.693         1.35      0.294
+       9    24  1.04          1.35      0.235
+      10    28  0.866         1.65      1    
       
 
 ---
@@ -163,9 +165,9 @@
     Code
       suppressMessages(fit_highd_model(training_data = s_curve_noise_training,
         nldr_df_with_id = s_curve_noise_umap_scaled, x = "UMAP1", y = "UMAP2",
-        num_bins_x = NA, num_bins_y = NA, x_start = NA, y_start = NA, buffer_x = 0.346,
-        buffer_y = 0.3, hex_size = 0.2, is_bin_centroid = FALSE, is_rm_lwd_hex = FALSE,
-        benchmark_to_rm_lwd_hex = NA, col_start_2d = "UMAP", col_start_highd = "x"))
+        num_bins_x = 4, num_bins_y = 7, x_start = -0.1732051, y_start = -0.15,
+        buffer_x = 0.346, buffer_y = 0.3, hex_size = 0.2, is_bin_centroid = FALSE,
+        is_rm_lwd_hex = FALSE, col_start_2d = "UMAP", col_start_highd = "x"))
     Output
       $df_bin
       # A tibble: 10 x 8
@@ -203,9 +205,9 @@
     Code
       suppressMessages(fit_highd_model(training_data = s_curve_noise_training,
         nldr_df_with_id = s_curve_noise_umap_scaled, x = "UMAP1", y = "UMAP2",
-        num_bins_x = 5, num_bins_y = 8, x_start = NA, y_start = NA, buffer_x = 0.346,
-        buffer_y = 0.3, hex_size = 0.2, is_bin_centroid = FALSE, is_rm_lwd_hex = FALSE,
-        benchmark_to_rm_lwd_hex = NA, col_start_2d = "UMAP", col_start_highd = "x"))
+        num_bins_x = 5, num_bins_y = 8, x_start = -0.1732051, y_start = -0.15,
+        buffer_x = 0.346, buffer_y = 0.3, hex_size = 0.2, is_bin_centroid = FALSE,
+        is_rm_lwd_hex = FALSE, col_start_2d = "UMAP", col_start_highd = "x"))
     Output
       $df_bin
       # A tibble: 10 x 8
@@ -243,9 +245,10 @@
     Code
       suppressMessages(fit_highd_model(training_data = s_curve_noise_training,
         nldr_df_with_id = s_curve_noise_umap_scaled, x = "UMAP1", y = "UMAP2",
-        num_bins_x = NA, num_bins_y = NA, x_start = NA, y_start = NA, buffer_x = 0.346,
-        buffer_y = 0.3, hex_size = 0.2, is_bin_centroid = FALSE, is_rm_lwd_hex = TRUE,
-        benchmark_to_rm_lwd_hex = NA, col_start_2d = "UMAP", col_start_highd = "x"))
+        num_bins_x = 4, num_bins_y = 7, x_start = -0.1732051, y_start = -0.15,
+        buffer_x = 0.346, buffer_y = 0.3, hex_size = 0.2, is_bin_centroid = FALSE,
+        is_rm_lwd_hex = TRUE, benchmark_to_rm_lwd_hex = 0.25, col_start_2d = "UMAP",
+        col_start_highd = "x"))
     Output
       $df_bin
       # A tibble: 10 x 8
@@ -283,9 +286,10 @@
     Code
       suppressMessages(fit_highd_model(training_data = s_curve_noise_training,
         nldr_df_with_id = s_curve_noise_umap_scaled, x = "UMAP1", y = "UMAP2",
-        num_bins_x = NA, num_bins_y = NA, x_start = NA, y_start = NA, buffer_x = 0.346,
-        buffer_y = 0.3, hex_size = 0.2, is_bin_centroid = FALSE, is_rm_lwd_hex = TRUE,
-        benchmark_to_rm_lwd_hex = 0.4, col_start_2d = "UMAP", col_start_highd = "x"))
+        num_bins_x = 4, num_bins_y = 7, x_start = -0.1732051, y_start = -0.15,
+        buffer_x = 0.346, buffer_y = 0.3, hex_size = 0.2, is_bin_centroid = FALSE,
+        is_rm_lwd_hex = TRUE, benchmark_to_rm_lwd_hex = 0.4, col_start_2d = "UMAP",
+        col_start_highd = "x"))
     Output
       $df_bin
       # A tibble: 10 x 8

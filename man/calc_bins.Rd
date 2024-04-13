@@ -4,7 +4,7 @@
 \alias{calc_bins}
 \title{Calculate the effective number of bins along x-axis and y-axis}
 \usage{
-calc_bins(data, x, y, hex_size = 0.2, buffer_x = 0.346, buffer_y = 0.3)
+calc_bins(data, x, y, hex_size, buffer_x, buffer_y)
 }
 \arguments{
 \item{data}{A tibble or data frame.}

@@ -19,7 +19,7 @@
 #' num_bins_y <- num_bins_list$num_y
 #' hb_obj <- hex_binning(data = s_curve_noise_umap_scaled,
 #' x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
-#' num_bins_y = num_bins_y, x_start = NA, y_start = NA, buffer_x = 0.346,
+#' num_bins_y = num_bins_y, x_start = -0.1732051, y_start = -0.15, buffer_x = 0.346,
 #' buffer_y = 0.3, hex_size = 0.2, col_start = "UMAP")
 #' all_centroids_df <- hb_obj$centroids
 #' counts_df <- hb_obj$std_cts
@@ -107,7 +107,7 @@ find_lg_benchmark <- function(distance_edges, distance_col) {
 #' num_bins_y <- num_bins_list$num_y
 #' hb_obj <- hex_binning(data = s_curve_noise_umap_scaled,
 #' x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
-#' num_bins_y = num_bins_y, x_start = NA, y_start = NA, buffer_x = 0.346,
+#' num_bins_y = num_bins_y, x_start = -0.1732051, y_start = -0.15, buffer_x = 0.346,
 #' buffer_y = 0.3, hex_size = 0.2, col_start = "UMAP")
 #' all_centroids_df <- hb_obj$centroids
 #' counts_df <- hb_obj$std_cts
@@ -116,9 +116,9 @@ find_lg_benchmark <- function(distance_edges, distance_col) {
 #' compute_mean_density_hex(df_bin_centroids, num_bins_x = num_bins_x)
 #'
 #' @export
-compute_mean_density_hex <- function(df_bin_centroids, num_bins_x = NA) {
+compute_mean_density_hex <- function(df_bin_centroids, num_bins_x) {
 
-  if (is.na(num_bins_x)) {
+  if (missing(num_bins_x)) {
     stop("Number of bins along x axis is not defined.")
   }
 
@@ -180,7 +180,7 @@ compute_mean_density_hex <- function(df_bin_centroids, num_bins_x = NA) {
 #' num_bins_y <- num_bins_list$num_y
 #' hb_obj <- hex_binning(data = s_curve_noise_umap_scaled,
 #' x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
-#' num_bins_y = num_bins_y, x_start = NA, y_start = NA, buffer_x = 0.346,
+#' num_bins_y = num_bins_y, x_start = -0.1732051, y_start = -0.15, buffer_x = 0.346,
 #' buffer_y = 0.3, hex_size = 0.2, col_start = "UMAP")
 #' all_centroids_df <- hb_obj$centroids
 #' counts_df <- hb_obj$std_cts
@@ -193,7 +193,7 @@ compute_mean_density_hex <- function(df_bin_centroids, num_bins_x = NA) {
 #'
 #' @export
 find_low_dens_hex <- function(df_bin_centroids_all, num_bins_x,
-                                      df_bin_centroids_low) {
+                              df_bin_centroids_low) {
 
   if (is.na(num_bins_x)) {
     stop("Number of bins along x-axis is not defined.")

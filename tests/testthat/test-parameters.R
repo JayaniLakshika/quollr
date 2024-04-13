@@ -34,7 +34,8 @@ test_that("compute_mean_density_hex() works", {
   num_bins_y <- num_bins_list$num_y
   suppressMessages(hb_obj <- hex_binning(data = s_curve_noise_umap_scaled,
                                          x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
-                                         num_bins_y = num_bins_y, x_start = NA, y_start = NA, buffer_x = 0.346,
+                                         num_bins_y = num_bins_y, x_start = -0.1732051,
+                                         y_start = -0.15, buffer_x = 0.346,
                                          buffer_y = 0.3, hex_size = 0.2, col_start = "UMAP"))
   all_centroids_df <- hb_obj$centroids
   counts_df <- hb_obj$std_cts
@@ -45,7 +46,7 @@ test_that("compute_mean_density_hex() works", {
                                                      num_bins_x = num_bins_x))
 
   testthat::expect_snapshot(compute_mean_density_hex(df_bin_centroids = df_bin_centroids,
-                                                     num_bins_x = NA), error = TRUE)
+                                                     num_bins_x))
 
   df_bin_centroids_na <- df_bin_centroids |>
     dplyr::mutate(std_counts = dplyr::if_else(dplyr::row_number() == 5, NA_integer_, std_counts))
@@ -63,7 +64,8 @@ test_that("find_low_dens_hex() works", {
   num_bins_y <- num_bins_list$num_y
   suppressMessages(hb_obj <- hex_binning(data = s_curve_noise_umap_scaled,
                                          x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
-                                         num_bins_y = num_bins_y, x_start = NA, y_start = NA, buffer_x = 0.346,
+                                         num_bins_y = num_bins_y, x_start = -0.1732051,
+                                         y_start = -0.15, buffer_x = 0.346,
                                          buffer_y = 0.3, hex_size = 0.2, col_start = "UMAP"))
   all_centroids_df <- hb_obj$centroids
   counts_df <- hb_obj$std_cts

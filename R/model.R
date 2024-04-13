@@ -32,15 +32,59 @@
 #' nldr_df_with_id = s_curve_noise_umap_scaled, col_start_2d = "UMAP", col_start_highd = "x")
 #'
 #' @export
-fit_highd_model <- function(training_data, nldr_df_with_id, x, y, num_bins_x = NA,
-                      num_bins_y = NA, x_start = NA, y_start = NA,
-                      buffer_x = 0.346, buffer_y = 0.3,  hex_size = 0.2,
+fit_highd_model <- function(training_data, nldr_df_with_id, x, y, num_bins_x,
+                      num_bins_y, x_start, y_start, buffer_x, buffer_y, hex_size,
                       is_bin_centroid = TRUE, is_rm_lwd_hex = FALSE,
-                      benchmark_to_rm_lwd_hex = NA, col_start_2d,
-                      col_start_highd) {
+                      benchmark_to_rm_lwd_hex, col_start_2d, col_start_highd) {
+
+  if (missing(hex_size)) {
+    hex_size <- 0.2
+  }
+
+  # Calculate horizontal and vertical spacing
+  hs <- sqrt(3) * hex_size
+  vs <- 1.5 * hex_size
+
+  if (missing(buffer_x)) {
+    buffer_x <- round(hs * 1.5, 3)
+
+    message(paste0("Buffer along the x-axis is set to ", buffer_x, "."))
+
+  } else {
+    if (buffer_x > round(hs * 1.5, 3)) {
+
+      stop(paste0("Buffer along the x-axis exceeds than ", hs, ".
+                     Need to assign a value less than or equal to ", hs, "."))
+
+    } else if (buffer_x <= 0 ) {
+
+      stop(paste0("Buffer along the x-axis is less than or equal to zero."))
+
+    }
+  }
+
+  if (missing(buffer_y)) {
+    buffer_y <- round(vs * 1.5, 3)
+
+    message(paste0("Buffer along the y-axis is set to ", buffer_y, "."))
+
+
+  } else {
+    if (buffer_y > round(vs * 1.5, 3)) {
+
+      stop(paste0("Buffer along the y-axis exceeds than ", vs, ".
+                     Need to assign a value less than or equal to ", vs, "."))
+
+    } else if (buffer_y <= 0) {
+
+      stop(paste0("Buffer along the y-axis is less than or equal to zero."))
+
+    }
+  }
+
 
   ## If number of bins along the x-axis and/or y-axis is not given
-  if (is.na(num_bins_x) | is.na(num_bins_y)) {
+  if (missing(num_bins_x) | missing(num_bins_y)) {
     ## compute the number of bins along the x-axis
     bin_list <- calc_bins(data = nldr_df_with_id, x = x, y = y, hex_size = hex_size,
                           buffer_x = buffer_x, buffer_y = buffer_y)
@@ -73,7 +117,7 @@ fit_highd_model <- function(training_data, nldr_df_with_id, x, y, num_bins_x = N
   }
 
   if (isFALSE(is_rm_lwd_hex)) {
-    if (!is.na(benchmark_to_rm_lwd_hex)) {
+    if (!missing(benchmark_to_rm_lwd_hex)) {
       stop("Need to initialise `is_rm_lwd_hex = TRUE`.")
     }
 
@@ -84,7 +128,7 @@ fit_highd_model <- function(training_data, nldr_df_with_id, x, y, num_bins_x = N
   if (isTRUE(is_rm_lwd_hex)) {
 
     ## if the benchmark value to remove low density hexagons is not provided
-    if (is.na(benchmark_to_rm_lwd_hex)) {
+    if (missing(benchmark_to_rm_lwd_hex)) {
       ## first quartile used as the default
       benchmark_to_rm_lwd_hex <- stats::quantile(df_bin_centroids$std_counts,
                                                  probs = c(0,0.25,0.5,0.75,1))[2]

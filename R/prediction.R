@@ -194,7 +194,8 @@ glance <- function(test_data, prediction_df, df_bin, col_start = "x") {
 #' col_start = "x")
 #'
 #' @export
-augment <- function(df_bin_centroids, df_bin, training_data, newdata = NULL, type_NLDR, col_start) {
+augment <- function(df_bin_centroids, df_bin, training_data, newdata = NULL,
+                    type_NLDR, col_start) {
 
   if(is.null(newdata)) {
     newdata <- training_data

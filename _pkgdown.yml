@@ -16,7 +16,6 @@ reference:
 - title: "Data preprocessing"
   desc: These are for data preprocessing.
   contents:
-  - calc_y_max
   - gen_scaled_data
 - title: "Hexagonal binning"
   desc: These are for hexagonal binning.
@@ -53,8 +52,9 @@ reference:
   desc: These are to obtain model summaries.
   contents:
   - compute_aic
-  - gen_summary
+  - glance
   - predict_emb
+  - augment
 - title: "Visualisation"
   desc: These are to visualise the model in 2D and high-dimensions.
   contents:

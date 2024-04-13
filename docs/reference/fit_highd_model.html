@@ -72,16 +72,16 @@ removal of low-density hexagons, and averaging of high-dimensional data.</p>
 <span>  <span class="va">nldr_df_with_id</span>,</span>
 <span>  <span class="va">x</span>,</span>
 <span>  <span class="va">y</span>,</span>
-<span>  num_bins_x <span class="op">=</span> <span class="cn">NA</span>,</span>
-<span>  num_bins_y <span class="op">=</span> <span class="cn">NA</span>,</span>
-<span>  x_start <span class="op">=</span> <span class="cn">NA</span>,</span>
-<span>  y_start <span class="op">=</span> <span class="cn">NA</span>,</span>
-<span>  buffer_x <span class="op">=</span> <span class="cn">NA</span>,</span>
-<span>  buffer_y <span class="op">=</span> <span class="cn">NA</span>,</span>
-<span>  hex_size <span class="op">=</span> <span class="cn">NA</span>,</span>
+<span>  <span class="va">num_bins_x</span>,</span>
+<span>  <span class="va">num_bins_y</span>,</span>
+<span>  <span class="va">x_start</span>,</span>
+<span>  <span class="va">y_start</span>,</span>
+<span>  <span class="va">buffer_x</span>,</span>
+<span>  <span class="va">buffer_y</span>,</span>
+<span>  <span class="va">hex_size</span>,</span>
 <span>  is_bin_centroid <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  is_rm_lwd_hex <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  benchmark_to_rm_lwd_hex <span class="op">=</span> <span class="cn">NA</span>,</span>
+<span>  <span class="va">benchmark_to_rm_lwd_hex</span>,</span>
 <span>  <span class="va">col_start_2d</span>,</span>
 <span>  <span class="va">col_start_highd</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -168,17 +168,14 @@ information about hexagonal bin centroids (<code>df_bin_centroids</code>) in 2D.
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">fit_highd_model</span><span class="op">(</span>training_data <span class="op">=</span> <span class="va">s_curve_noise_training</span>, x <span class="op">=</span> <span class="st">"UMAP1"</span>, y <span class="op">=</span> <span class="st">"UMAP2"</span>,</span></span>
 <span class="r-in"><span>nldr_df_with_id <span class="op">=</span> <span class="va">s_curve_noise_umap_scaled</span>, col_start_2d <span class="op">=</span> <span class="st">"UMAP"</span>, col_start_highd <span class="op">=</span> <span class="st">"x"</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Hex size is set to 0.2.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Buffer along the x-axis is set to 0.519615242270663.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Buffer along the x-axis is set to 0.52.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Buffer along the y-axis is set to 0.45.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Hex size is set to 0.2.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> x_start is set to -0.173205080756888.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> y_start is set to -0.15.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Hex size is set to 0.2.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $df_bin</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 10 × 8</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    hb_id       x1     x2     x3        x4        x5       x6        x7</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span>     2 -<span style="color: #BB0000;">0.637</span>   1.74   -<span style="color: #BB0000;">1.76</span>   0.009<span style="text-decoration: underline;">53</span>  -<span style="color: #BB0000;">0.001</span><span style="color: #BB0000; text-decoration: underline;">43</span>  -<span style="color: #BB0000;">0.011</span><span style="color: #BB0000; text-decoration: underline;">7</span>  -<span style="color: #BB0000;">0.001</span><span style="color: #BB0000; text-decoration: underline;">52</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span>     6 -<span style="color: #BB0000;">0.498</span>   0.524  -<span style="color: #BB0000;">1.73</span>  -<span style="color: #BB0000;">0.000</span><span style="color: #BB0000; text-decoration: underline;">237</span>  0.002<span style="text-decoration: underline;">34</span>  -<span style="color: #BB0000;">0.029</span><span style="color: #BB0000; text-decoration: underline;">7</span>  -<span style="color: #BB0000;">0.000</span><span style="color: #BB0000; text-decoration: underline;">242</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span>     7  0.294   1.40   -<span style="color: #BB0000;">1.88</span>   0.008<span style="text-decoration: underline;">90</span>  -<span style="color: #BB0000;">0.008</span><span style="color: #BB0000; text-decoration: underline;">03</span>  -<span style="color: #BB0000;">0.012</span><span style="color: #BB0000; text-decoration: underline;">3</span>  -<span style="color: #BB0000;">0.001</span><span style="color: #BB0000; text-decoration: underline;">20</span> </span>
@@ -191,17 +188,19 @@ information about hexagonal bin centroids (<code>df_bin_centroids</code>) in 2D.
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span>    34  0.622   1.21    1.64  -<span style="color: #BB0000;">0.000</span><span style="color: #BB0000; text-decoration: underline;">560</span>  0.005<span style="text-decoration: underline;">40</span>  -<span style="color: #BB0000;">0.007</span><span style="color: #BB0000; text-decoration: underline;">41</span> -<span style="color: #BB0000;">0.000</span><span style="color: #BB0000; text-decoration: underline;">886</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $df_bin_centroids</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    hexID       c_x   c_y std_counts</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1      2 0.1732051 -0.15  0.2352941</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2      6 0.0000000  0.15  0.5294118</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3      7 0.3464102  0.15  0.4117647</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4     12 0.1732051  0.45  0.1764706</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5     13 0.5196152  0.45  0.3529412</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6     18 0.6928203  0.75  0.7058824</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7     24 0.8660254  1.05  0.4705882</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8     28 0.6928203  1.35  0.2941176</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9     29 1.0392305  1.35  0.2352941</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10    34 0.8660254  1.65  1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 10 × 4</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    hexID   c_x   c_y std_counts</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span>     2 0.173 -<span style="color: #BB0000;">0.15</span>      0.235</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span>     6 0      0.15      0.529</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span>     7 0.346  0.15      0.412</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span>    12 0.173  0.45      0.176</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span>    13 0.520  0.45      0.353</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span>    18 0.693  0.75      0.706</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span>    24 0.866  1.05      0.471</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span>    28 0.693  1.35      0.294</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span>    29 1.04   1.35      0.235</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span>    34 0.866  1.65      1    </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 </code></pre></div>

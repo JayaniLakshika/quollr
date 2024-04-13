@@ -20,10 +20,21 @@
 ---
 
     Code
-      compute_mean_density_hex(df_bin_centroids = df_bin_centroids, num_bins_x = NA)
-    Condition
-      Error in `compute_mean_density_hex()`:
-      ! Number of bins along x axis is not defined.
+      compute_mean_density_hex(df_bin_centroids = df_bin_centroids, num_bins_x)
+    Output
+      # A tibble: 10 x 2
+         hb_id mean_density
+         <int>        <dbl>
+       1     2        0.412
+       2     5        0.294
+       3     6        0.324
+       4    10        0.5  
+       5    11        0.431
+       6    15        0.333
+       7    20        0.471
+       8    23        0.618
+       9    24        0.588
+      10    28        0.265
 
 # find_low_dens_hex() works
 

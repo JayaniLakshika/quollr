@@ -74,38 +74,35 @@
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>A list that contains hexagon IDs and the corresponding standardize counts.</p>
+<p>A tibble that contains hexagon IDs and the corresponding standardize counts.</p>
     </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">num_bins_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="calc_bins.html">calc_bins</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">s_curve_noise_umap_scaled</span>, x <span class="op">=</span> <span class="st">"UMAP1"</span>,</span></span>
-<span class="r-in"><span>y <span class="op">=</span> <span class="st">"UMAP2"</span>, hex_size <span class="op">=</span> <span class="cn">NA</span>, buffer_x <span class="op">=</span> <span class="cn">NA</span>, buffer_y <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Hex size is set to 0.2.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Buffer along the x-axis is set to 0.519615242270663.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Buffer along the y-axis is set to 0.45.</span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">num_bins_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="calc_bins.html">calc_bins</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">s_curve_noise_umap_scaled</span>, x <span class="op">=</span> <span class="st">"UMAP1"</span>, y <span class="op">=</span> <span class="st">"UMAP2"</span>,</span></span>
+<span class="r-in"><span>hex_size <span class="op">=</span> <span class="fl">0.2</span>, buffer_x <span class="op">=</span> <span class="fl">0.346</span>, buffer_y <span class="op">=</span> <span class="fl">0.3</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">num_bins_x</span> <span class="op">&lt;-</span> <span class="va">num_bins_list</span><span class="op">$</span><span class="va">num_x</span></span></span>
 <span class="r-in"><span><span class="va">num_bins_y</span> <span class="op">&lt;-</span> <span class="va">num_bins_list</span><span class="op">$</span><span class="va">num_y</span></span></span>
-<span class="r-in"><span><span class="va">centroid_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="gen_centroids.html">gen_centroids</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">s_curve_noise_umap_scaled</span>,</span></span>
+<span class="r-in"><span><span class="va">all_centroids_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="gen_centroids.html">gen_centroids</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">s_curve_noise_umap_scaled</span>,</span></span>
 <span class="r-in"><span>x <span class="op">=</span> <span class="st">"UMAP1"</span>, y <span class="op">=</span> <span class="st">"UMAP2"</span>, num_bins_x <span class="op">=</span> <span class="va">num_bins_x</span>,</span></span>
-<span class="r-in"><span>num_bins_y <span class="op">=</span> <span class="va">num_bins_y</span>, x_start <span class="op">=</span> <span class="cn">NA</span>, y_start <span class="op">=</span> <span class="cn">NA</span>, buffer_x <span class="op">=</span> <span class="cn">NA</span>,</span></span>
-<span class="r-in"><span>buffer_y <span class="op">=</span> <span class="cn">NA</span>, hex_size <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Hex size is set to 0.2.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> x_start is set to -0.173205080756888.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> y_start is set to -0.15.</span>
-<span class="r-in"><span><span class="va">all_centroids_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="va">cbind</span>, <span class="va">centroid_list</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">s_curve_noise_umap_scaled_rm_id</span> <span class="op">&lt;-</span> <span class="va">s_curve_noise_umap_scaled</span> <span class="op">|&gt;</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">ID</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">nldr_with_hb_id_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="assign_data.html">assign_data</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">s_curve_noise_umap_scaled_rm_id</span>,</span></span>
+<span class="r-in"><span>num_bins_y <span class="op">=</span> <span class="va">num_bins_y</span>, x_start <span class="op">=</span> <span class="op">-</span><span class="fl">0.1732051</span>, y_start <span class="op">=</span> <span class="op">-</span><span class="fl">0.15</span>, buffer_x <span class="op">=</span> <span class="fl">0.346</span>,</span></span>
+<span class="r-in"><span>buffer_y <span class="op">=</span> <span class="fl">0.3</span>, hex_size <span class="op">=</span> <span class="fl">0.2</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">umap_with_hb_id</span> <span class="op">&lt;-</span> <span class="fu"><a href="assign_data.html">assign_data</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">s_curve_noise_umap_scaled</span>,</span></span>
 <span class="r-in"><span>centroid_df <span class="op">=</span> <span class="va">all_centroids_df</span>, col_start <span class="op">=</span> <span class="st">"UMAP"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">umap_with_hb_id</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="va">cbind</span>, <span class="va">nldr_with_hb_id_list</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">compute_std_counts</span><span class="op">(</span>data_hex_id <span class="op">=</span> <span class="va">umap_with_hb_id</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $hb_id</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  2  6  7 12 13 18 24 28 29 34</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $std_counts</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.2352941 0.5294118 0.4117647 0.1764706 0.3529412 0.7058824 0.4705882</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 0.2941176 0.2352941 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 10 × 3</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    hb_id     n std_counts</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span>     2     4      0.235</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span>     5     9      0.529</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span>     6     7      0.412</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span>    10     3      0.176</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span>    11     6      0.353</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span>    15    12      0.706</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span>    20     8      0.471</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span>    23     5      0.294</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span>    24     4      0.235</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span>    28    17      1    </span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

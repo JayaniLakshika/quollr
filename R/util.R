@@ -22,7 +22,7 @@
 #' hex_size = 0.2, buffer_x = 0.346, buffer_y = 0.3)
 #'
 #' @export
-calc_bins <- function(data, x, y, hex_size = 0.2, buffer_x = 0.346, buffer_y = 0.3){
+calc_bins <- function(data, x, y, hex_size, buffer_x, buffer_y){
 
   ## Obtain values in x and y axes
   x_values <- data[[rlang::as_string(rlang::sym(x))]]
@@ -36,34 +36,53 @@ calc_bins <- function(data, x, y, hex_size = 0.2, buffer_x = 0.346, buffer_y = 0
     stop("Inf present")
   }
 
-  if ((hex_size <= 0) || (is.infinite(hex_size))) {
-    stop("Invalid hex size value.")
-
+  if (missing(hex_size)) {
+    hex_size <- 0.2
   }
 
-  ## Initialize horizontal and vertical spacing
+  # Calculate horizontal and vertical spacing
   hs <- sqrt(3) * hex_size
   vs <- 1.5 * hex_size
 
-  ## Buffer size is exceeds
-  if (buffer_x > round(hs, 3)) {
-    stop(paste0("Buffer along the x-axis exceeds than ", hs, ".
-                  Need to assign a value less than ", hs, "."))
+  if (missing(buffer_x)) {
+    buffer_x <- round(hs * 1.5, 3)
 
-  } else if (buffer_x <= 0) {
+    message(paste0("Buffer along the x-axis is set to ", buffer_x, "."))
 
-    stop(paste0("Buffer along the x-axis is less than or equal to zero."))
+  } else {
+    if (buffer_x > round(hs * 1.5, 3)) {
 
+      stop(paste0("Buffer along the x-axis exceeds than ", hs, ".
+                     Need to assign a value less than or equal to ", hs, "."))
+
+    } else if (buffer_x <= 0 ) {
+
+      stop(paste0("Buffer along the x-axis is less than or equal to zero."))
+
+    }
   }
 
-  ## Buffer size is exceeds
-  if (buffer_y > round(vs, 3)) {
-    stop(paste0("Buffer along the y-axis exceeds than ", vs, ".
-                  Need to assign a value less than ", vs, "."))
+  if (missing(buffer_y)) {
+    buffer_y <- round(vs * 1.5, 3)
 
-  } else if (buffer_y <= 0) {
+    message(paste0("Buffer along the y-axis is set to ", buffer_y, "."))
 
-    stop(paste0("Buffer along the y-axis is less than or equal to zero."))
+
+  } else {
+    if (buffer_y > round(vs * 1.5, 3)) {
+
+      stop(paste0("Buffer along the y-axis exceeds than ", vs, ".
+                     Need to assign a value less than or equal to ", vs, "."))
+
+    } else if (buffer_y <= 0 ) {
+
+      stop(paste0("Buffer along the y-axis is less than or equal to zero."))
+
+    }
+  }
+
+  if ((hex_size <= 0) || (is.infinite(hex_size))) {
+    stop("Invalid hex size value.")
 
   }
 

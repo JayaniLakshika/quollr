@@ -28,7 +28,7 @@ test_that("calc_bins() works", {
   testthat::expect_error(suppressMessages(calc_bins(data = s_curve_noise_umap_scaled,
                                                     x = "UMAP1", y = "UMAP2",
                                                     hex_size = 0.2, buffer_x = 0.5,
-                                                    buffer_y = 0.3))
+                                                    buffer_y = -0.3))
   )
   testthat::expect_error(suppressMessages(calc_bins(data = s_curve_noise_umap_scaled,
                                                     x = "UMAP1", y = "UMAP2",
