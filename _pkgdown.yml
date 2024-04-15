@@ -32,6 +32,7 @@ reference:
   - cal_2d_dist
   - extract_hexbin_centroids
   - extract_hexbin_mean
+  - extract_kmean_centers
   - tri_bin_centroids
   - gen_edges
 - title: "Parameters"

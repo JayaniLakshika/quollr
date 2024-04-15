@@ -92,6 +92,46 @@ fit_highd_model <- function(training_data, nldr_df_with_id, x, y, num_bins_x,
     num_bins_y <- bin_list$num_y
   }
 
+  ## If x_start and y_start not define
+  if (missing(x_start)) {
+    # Define starting point
+    x_start <- round(min(nldr_df_with_id[[rlang::as_string(rlang::sym(x))]]) - (sqrt(3) * hex_size/2), 3)
+
+    message(paste0("x_start is set to ", x_start, "."))
+
+  } else {
+    max_x_start <- min(nldr_df_with_id[[rlang::as_string(rlang::sym(x))]]) + (sqrt(3) * hex_size)
+    min_x_start <- min(nldr_df_with_id[[rlang::as_string(rlang::sym(x))]]) - (sqrt(3) * hex_size)
+
+    if ((x_start < min_x_start) | (x_start > max_x_start)){
+      stop(paste0("x_start value is not compatible.
+                  Need to use a value betweeen ", min_x_start," and ", max_x_start,"."))
+
+    }
+
+  }
+
+  if (missing(y_start)) {
+    # Define starting point
+    y_start <- round(min(nldr_df_with_id[[rlang::as_string(rlang::sym(y))]]) - (1.5 * hex_size/2), 3)
+
+    message(paste0("y_start is set to ", y_start, "."))
+
+
+  } else {
+
+    max_y_start <- min(nldr_df_with_id[[rlang::as_string(rlang::sym(y))]]) + (1.5 * hex_size)
+    min_y_start <- min(nldr_df_with_id[[rlang::as_string(rlang::sym(y))]]) - (1.5 * hex_size)
+
+    if ((y_start < min_y_start) | (y_start > max_y_start)){
+      stop(paste0("y_start value is not compatible.
+                  Need to use a value betweeen ", min_y_start," and ", max_y_start,"."))
+
+    }
+
+  }
+
+
   ## Obtain the hexbin object
   hb_obj <- hex_binning(data = nldr_df_with_id, x = x, y = y, num_bins_x = num_bins_x,
                         num_bins_y = num_bins_y, x_start = x_start,

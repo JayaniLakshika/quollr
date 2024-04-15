@@ -92,7 +92,7 @@ gen_centroids <- function(data, x, y, num_bins_x, num_bins_y, x_start,
   ## If x_start and y_start not define
   if (missing(x_start)) {
     # Define starting point
-    x_start <- min(data[[rlang::as_string(rlang::sym(x))]]) - (sqrt(3) * hex_size/2)
+    x_start <- round(min(data[[rlang::as_string(rlang::sym(x))]]) - (sqrt(3) * hex_size/2), 3)
 
     message(paste0("x_start is set to ", x_start, "."))
 
@@ -110,7 +110,7 @@ gen_centroids <- function(data, x, y, num_bins_x, num_bins_y, x_start,
 
   if (missing(y_start)) {
     # Define starting point
-    y_start <- min(data[[rlang::as_string(rlang::sym(y))]]) - (1.5 * hex_size/2)
+    y_start <- round(min(data[[rlang::as_string(rlang::sym(y))]]) - (1.5 * hex_size/2), 3)
 
     message(paste0("y_start is set to ", y_start, "."))
 
@@ -475,6 +475,46 @@ hex_binning <- function(data, x, y, num_bins_x, num_bins_y, x_start,
     num_bins_y <- bin_list$num_y
   }
 
+  ## If x_start and y_start not define
+  if (missing(x_start)) {
+    # Define starting point
+    x_start <- round(min(data[[rlang::as_string(rlang::sym(x))]]) - (sqrt(3) * hex_size/2), 3)
+
+    message(paste0("x_start is set to ", x_start, "."))
+
+  } else {
+    max_x_start <- min(data[[rlang::as_string(rlang::sym(x))]]) + (sqrt(3) * hex_size)
+    min_x_start <- min(data[[rlang::as_string(rlang::sym(x))]]) - (sqrt(3) * hex_size)
+
+    if ((x_start < min_x_start) | (x_start > max_x_start)){
+      stop(paste0("x_start value is not compatible.
+                  Need to use a value betweeen ", min_x_start," and ", max_x_start,"."))
+
+    }
+
+  }
+
+  if (missing(y_start)) {
+    # Define starting point
+    y_start <- round(min(data[[rlang::as_string(rlang::sym(y))]]) - (1.5 * hex_size/2), 3)
+
+    message(paste0("y_start is set to ", y_start, "."))
+
+
+  } else {
+
+    max_y_start <- min(data[[rlang::as_string(rlang::sym(y))]]) + (1.5 * hex_size)
+    min_y_start <- min(data[[rlang::as_string(rlang::sym(y))]]) - (1.5 * hex_size)
+
+    if ((y_start < min_y_start) | (y_start > max_y_start)){
+      stop(paste0("y_start value is not compatible.
+                  Need to use a value betweeen ", min_y_start," and ", max_y_start,"."))
+
+    }
+
+  }
+
+
   ## To generate all the centroids of the grid
   all_centroids_df <- gen_centroids(data = data, x = x, y = y, num_bins_x = num_bins_x,
                                num_bins_y = num_bins_y, x_start = x_start,
@@ -593,6 +633,51 @@ extract_hexbin_mean <- function(nldr_df_with_hex_id, counts_df) {
 
   return(hex_mean_df)
 }
+
+#' Extract k-mean center coordinates and the corresponding standardize counts.
+#'
+#' @param nldr_df A data frame with 2D embeddings.
+#' @param tot_bins Total number of bins.
+#'
+#' @return A tibble contains clustering ID, kmean center coordinates, and standardize counts.
+#' @importFrom dplyr mutate count bind_cols
+#' @importFrom stats kmeans fitted
+#' @importFrom tibble as_tibble
+#'
+#' @examples
+#' num_bins_list <- calc_bins(data = s_curve_noise_umap_scaled, x = "UMAP1", y = "UMAP2",
+#' hex_size = 0.2, buffer_x = 0.346, buffer_y = 0.3)
+#' num_bins_x <- num_bins_list$num_x
+#' num_bins_y <- num_bins_list$num_y
+#' extract_kmean_centers(nldr_df = s_curve_noise_umap |> dplyr::select(-ID),
+#' tot_bins = num_bins_x * num_bins_y)
+#'
+#' @export
+extract_kmean_centers <- function(nldr_df, tot_bins) {
+
+  ## To perform k-means clustering
+  kmean_list <- stats::kmeans(nldr_df, centers = tot_bins)
+
+  ## To extract centers of k-mean clusters
+  k_means <- kmean_list$centers |>
+    tibble::as_tibble() |>
+    dplyr::mutate(hexID = seq_len(NROW(kmean_list$centers)))
+
+  ## To compute standarzed count within each cluster
+  assign_data <- fitted(kmean_list) |>
+    tibble::as_tibble() |>
+    dplyr::mutate(hexID = kmean_list$cluster) |>
+    dplyr::count(hexID) |>
+    dplyr::mutate(std_counts = n/max(n))
+
+  ## To pepare the dataset
+  k_mean_df <- dplyr::bind_cols(k_means[, c(3, 1, 2)], assign_data[, 3])
+  names(k_mean_df) <- c("hexID", "c_x", "c_y", "std_counts")
+
+  return(k_mean_df)
+
+}
+
 
 
 #' Triangulate bin centroids
@@ -950,6 +1035,46 @@ find_non_empty_bins <- function(data, x, y, non_empty_bins, x_start, y_start,
 
     }
   }
+
+  ## If x_start and y_start not define
+  if (missing(x_start)) {
+    # Define starting point
+    x_start <- round(min(data[[rlang::as_string(rlang::sym(x))]]) - (sqrt(3) * hex_size/2), 3)
+
+    message(paste0("x_start is set to ", x_start, "."))
+
+  } else {
+    max_x_start <- min(data[[rlang::as_string(rlang::sym(x))]]) + (sqrt(3) * hex_size)
+    min_x_start <- min(data[[rlang::as_string(rlang::sym(x))]]) - (sqrt(3) * hex_size)
+
+    if ((x_start < min_x_start) | (x_start > max_x_start)){
+      stop(paste0("x_start value is not compatible.
+                  Need to use a value betweeen ", min_x_start," and ", max_x_start,"."))
+
+    }
+
+  }
+
+  if (missing(y_start)) {
+    # Define starting point
+    y_start <- round(min(data[[rlang::as_string(rlang::sym(y))]]) - (1.5 * hex_size/2), 3)
+
+    message(paste0("y_start is set to ", y_start, "."))
+
+
+  } else {
+
+    max_y_start <- min(data[[rlang::as_string(rlang::sym(y))]]) + (1.5 * hex_size)
+    min_y_start <- min(data[[rlang::as_string(rlang::sym(y))]]) - (1.5 * hex_size)
+
+    if ((y_start < min_y_start) | (y_start > max_y_start)){
+      stop(paste0("y_start value is not compatible.
+                  Need to use a value betweeen ", min_y_start," and ", max_y_start,"."))
+
+    }
+
+  }
+
 
 
   if (missing(non_empty_bins)) {
