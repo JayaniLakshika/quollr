@@ -663,14 +663,14 @@ extract_kmean_centers <- function(nldr_df, tot_bins) {
     tibble::as_tibble() |>
     dplyr::mutate(hexID = seq_len(NROW(kmean_list$centers)))
 
-  ## To compute standarzed count within each cluster
+  ## To compute standardized count within each cluster
   assign_data <- fitted(kmean_list) |>
     tibble::as_tibble() |>
     dplyr::mutate(hexID = kmean_list$cluster) |>
     dplyr::count(hexID) |>
     dplyr::mutate(std_counts = n/max(n))
 
-  ## To pepare the dataset
+  ## To prepare the dataset
   k_mean_df <- dplyr::bind_cols(k_means[, c(3, 1, 2)], assign_data[, 3])
   names(k_mean_df) <- c("hexID", "c_x", "c_y", "std_counts")
 
