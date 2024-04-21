@@ -24,9 +24,9 @@ In here, we use `fit_highd_model()` function to construct the model in 2D and hi
 ```{r, message=FALSE}
 model <- fit_highd_model(training_data=s_curve_noise_training, 
                          nldr_df_with_id=s_curve_noise_umap_scaled, x = "UMAP1", 
-                         y  = "UMAP2", num_bins_x = 4, num_bins_y = 7, 
-                         x_start = -0.1732051, y_start = -0.15, buffer_x = 0.346, 
-                         buffer_y = 0.3,  hex_size = 0.2, is_bin_centroid = TRUE, 
+                         y  = "UMAP2", num_bins_x = 5, num_bins_y = 8, 
+                         x_start = -0.1732051, y_start = -0.15, buffer_x = 0.52, 
+                         buffer_y = 0.45,  hex_size = 0.2, is_bin_centroid = TRUE, 
                          is_rm_lwd_hex = FALSE, 
                          col_start_2d = "UMAP", col_start_highd = "x")
 ## 2D model

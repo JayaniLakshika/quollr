@@ -19,7 +19,7 @@
 #'
 #' @examples
 #' calc_bins(data = s_curve_noise_umap_scaled, x = "UMAP1", y = "UMAP2",
-#' hex_size = 0.2, buffer_x = 0.346, buffer_y = 0.3)
+#' hex_size = 0.2, buffer_x = 0.52, buffer_y = 0.45)
 #'
 #' @export
 calc_bins <- function(data, x, y, hex_size, buffer_x, buffer_y){
