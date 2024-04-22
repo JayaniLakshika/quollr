@@ -26,7 +26,7 @@ gen_scaled_data <- function(data, x, y, hr = 2/sqrt(3)) {
 
   scaled_nldr <- data |>
     mutate(across(c({{ x }}, {{ y }}), ~ (. - min(.)) / (max(.) - min(.)))) |>
-    mutate({{ y }} := get(!!y) * (ar / hr) * hr)
+    mutate({{ y }} := get(!!y) * ceiling(ar / hr) * hr)
 
   return(scaled_nldr)
 

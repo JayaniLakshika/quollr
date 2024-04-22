@@ -109,16 +109,16 @@ are hexagonal grid’s starting coordinates.</p>
 <code class="sourceCode R"><span><span class="co">## Data set with all possible centroids in the hexagonal grid</span></span>
 <span><span class="va">all_centroids_df</span> <span class="op">&lt;-</span> <span class="va">hb_obj</span><span class="op">$</span><span class="va">centroids</span></span>
 <span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="va">all_centroids_df</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Rows: 40</span></span>
+<span><span class="co">#&gt; Rows: 28</span></span>
 <span><span class="co">#&gt; Columns: 3</span></span>
 <span><span class="co">#&gt; $ hexID <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 1…</span></span>
-<span><span class="co">#&gt; $ c_x   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> -1.732051e-01, 1.732051e-01, 5.196152e-01, 8.660254e-01, 1.21243…</span></span>
-<span><span class="co">#&gt; $ c_y   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> -0.15, -0.15, -0.15, -0.15, -0.15, 0.15, 0.15, 0.15, 0.15, 0.15,…</span></span>
+<span><span class="co">#&gt; $ c_x   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> -1.732051e-01, 1.732051e-01, 5.196152e-01, 8.660254e-01, -1.9243…</span></span>
+<span><span class="co">#&gt; $ c_y   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> -0.15, -0.15, -0.15, -0.15, 0.15, 0.15, 0.15, 0.15, 0.45, 0.45, …</span></span>
 <span></span>
 <span><span class="co">## Generate all coordinates of hexagons</span></span>
 <span><span class="va">hex_grid</span> <span class="op">&lt;-</span> <span class="va">hb_obj</span><span class="op">$</span><span class="va">hex_poly</span></span>
 <span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="va">hex_grid</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Rows: 240</span></span>
+<span><span class="co">#&gt; Rows: 168</span></span>
 <span><span class="co">#&gt; Columns: 3</span></span>
 <span><span class="co">#&gt; $ hex_poly_id <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 4, 4…</span></span>
 <span><span class="co">#&gt; $ x           <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> -1.924311e-08, -1.924311e-08, -1.732051e-01, -3.464102e-01…</span></span>
