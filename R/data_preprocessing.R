@@ -2,7 +2,7 @@
 #'
 #' This function scales first and second columns.
 #'
-#' @param data A tibble.
+#' @param data A tibble that contains embedding components in the first and second columns.
 #'
 #' @return A list of a tibble contains scaled first and second columns, and
 #' numeric vectors representing the limits of the original data.

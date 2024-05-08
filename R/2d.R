@@ -318,24 +318,17 @@ find_pts <- function(data) {
 
 #' Hexagonal binning
 #'
-#' This function generates a list which contains hexagonal binning information.
+#' This function generates the hexagonal object.
 #'
-#' @param data A tibble or data frame.
-#' @param x The name of the column that contains values along the x-axis.
-#' @param y The name of the column that contains values along the y-axis.
-#' @param num_bins_x Number of bins along the x-axis.
-#' @param num_bins_y Number of bins along the y-axis.
-#' @param x_start Starting point along the x-axis for hexagonal binning.
-#' @param y_start Starting point along the y-axis for hexagonal binning.
-#' @param buffer_x The buffer size along the x-axis.
-#' @param buffer_y The buffer size along the y-axis.
-#' @param hex_size A numeric value that initializes the radius of the outer
-#' circle surrounding the hexagon.
-#' @param col_start The text that begins the column name of x and y axes of data.
+#' @param data A tibble that contains embedding components.
+#' @param bin1 Number of bins along the x axis.
+#' @param s1 The x-coordinate of the hexagonal grid starting point.
+#' @param s2 The y-coordinate of the hexagonal grid starting point.
+#' @param r2 The range of the original second embedding component.
 #'
-#' @return A list contains all hexagonal bin centroids (centroids),
+#' @return A object that contains all hexagonal bin centroids (centroids),
 #' hexagonal coordinates of the full grid(hex_poly),
-#' 2D embeddings with corresponding hexagon IDs (data_hb_id),
+#' embedding components with their corresponding hexagon IDs (data_hb_id),
 #' hex bins with their corresponding standardise counts (std_cts),
 #' total number of hex bins(tot_bins), number of non-empty hex bins (non_bins)
 #' and points within each hexagon (pts_bins).
@@ -352,124 +345,30 @@ find_pts <- function(data) {
 #' buffer_y = 0.3, hex_size = 0.2, col_start = "UMAP")
 #'
 #' @export
-hex_binning <- function(data, x, y, num_bins_x, num_bins_y, x_start,
-                        y_start, buffer_x, buffer_y,
-                        hex_size, col_start) {
+hex_binning <- function(data, bin1 = 2, s1 = -0.1, s2 = -0.1, r2) {
 
-  if (missing(hex_size)) {
-    hex_size <- 0.2
-  }
+  ## To compute the number of bins along the y-axis
+  bin_obj <- calc_bins_y(bin1 = bin1, s1 = s1, s2 = s2, r2 = r2)
+  num_bins_y <- bin_obj$bin2
 
-  # Calculate horizontal and vertical spacing
-  hs <- sqrt(3) * hex_size
-  vs <- 1.5 * hex_size
-
-  if (missing(buffer_x)) {
-    buffer_x <- round(hs * 1.5, 3)
-
-    message(paste0("Buffer along the x-axis is set to ", buffer_x, "."))
-
-  } else {
-    if (buffer_x > round(hs * 1.5, 3)) {
-
-      message(paste0("Buffer along the x-axis exceeds than ", hs, ".
-                     Need to assign a value less than or equal to ", hs, "."))
-
-    } else if (buffer_x <= 0) {
-
-      message(paste0("Buffer along the x-axis is less than or equal to zero."))
-
-    }
-  }
-
-  if (missing(buffer_y)) {
-    buffer_y <- round(vs * 1.5, 3)
-
-    message(paste0("Buffer along the y-axis is set to ", buffer_y, "."))
-
-
-  } else {
-    if (buffer_y > round(vs * 1.5, 3)) {
-
-      message(paste0("Buffer along the y-axis exceeds than ", vs, ".
-                     Need to assign a value less than or equal to ", vs, "."))
-
-    } else if (buffer_y <= 0 ) {
-
-      message(paste0("Buffer along the y-axis is less than or equal to zero."))
-
-    }
-  }
-
-  ## If number of bins along the x-axis and/or y-axis is not given
-  if (missing(num_bins_x) | missing(num_bins_y)) {
-    ## compute the number of bins along the x-axis
-    bin_list <- calc_bins(data = data, x = x, y = y, hex_size = hex_size,
-                          buffer_x = buffer_x, buffer_y = buffer_y)
-    num_bins_x <- bin_list$num_x
-    num_bins_y <- bin_list$num_y
-  }
-
-  ## If x_start and y_start not define
-  if (missing(x_start)) {
-    # Define starting point
-    x_start <- round(min(data[[rlang::as_string(rlang::sym(x))]]) - (sqrt(3) * hex_size/2), 3)
-
-    message(paste0("x_start is set to ", x_start, "."))
-
-  } else {
-    max_x_start <- min(data[[rlang::as_string(rlang::sym(x))]]) + (sqrt(3) * hex_size)
-    min_x_start <- min(data[[rlang::as_string(rlang::sym(x))]]) - (sqrt(3) * hex_size)
-
-    if ((x_start < min_x_start) | (x_start > max_x_start)){
-      stop(paste0("x_start value is not compatible.
-                  Need to use a value betweeen ", min_x_start," and ", max_x_start,"."))
-
-    }
-
-  }
-
-  if (missing(y_start)) {
-    # Define starting point
-    y_start <- round(min(data[[rlang::as_string(rlang::sym(y))]]) - (1.5 * hex_size/2), 3)
-
-    message(paste0("y_start is set to ", y_start, "."))
-
-
-  } else {
-
-    max_y_start <- min(data[[rlang::as_string(rlang::sym(y))]]) + (1.5 * hex_size)
-    min_y_start <- min(data[[rlang::as_string(rlang::sym(y))]]) - (1.5 * hex_size)
-
-    if ((y_start < min_y_start) | (y_start > max_y_start)){
-      stop(paste0("y_start value is not compatible.
-                  Need to use a value betweeen ", min_y_start," and ", max_y_start,"."))
-
-    }
-
-  }
-
+  ## To obtain the width of the hexagon
+  w <- bin_obj$a1
 
   ## To generate all the centroids of the grid
-  all_centroids_df <- gen_centroids(data = data, x = x, y = y, num_bins_x = num_bins_x,
-                               num_bins_y = num_bins_y, x_start = x_start,
-                               y_start = y_start, buffer_x = buffer_x,
-                               buffer_y = buffer_y, hex_size = hex_size)
-
+  all_centroids_df <- gen_centroids(bin1 = bin1, bin2 = num_bins_y, s1 = s1,
+                                    s2 = s2, a1 = w)
 
   ## To generate the hexagon coordinates
-  all_hex_coord <- gen_hex_coord(centroids_df = all_centroids_df,
-                                            hex_size = hex_size)
+  all_hex_coord <- gen_hex_coord(centroids_df = all_centroids_df, a1 = w)
 
   ## To find which 2D embedding assigned to which hexagon
-  nldr_hex_id <- assign_data(data = data, centroid_df = all_centroids_df,
-                                      col_start = col_start)
+  nldr_hex_id <- assign_data(data = data, centroid_df = all_centroids_df)
 
   ## To generate standardize counts of each hexagon
-  std_df <- compute_std_counts(data_hex_id = nldr_hex_id)
+  std_df <- compute_std_counts(data = nldr_hex_id)
 
   ## To find which points are within each hexagon
-  pts_df <- find_pts(data_hex_id = nldr_hex_id)
+  pts_df <- find_pts(data = nldr_hex_id)
 
   ## To generate the object of hexagon info
   hex_bin_obj <- list(centroids = all_centroids_df,
@@ -478,7 +377,9 @@ hex_binning <- function(data, x, y, num_bins_x, num_bins_y, x_start,
                       std_cts = std_df,
                       tot_bins = NROW(all_centroids_df),
                       non_bins = length(std_df$hb_id),
-                      pts_bins = pts_df)
+                      pts_bins = pts_df
+  )
+  class(hex_bin_obj) <- "hex_bin_obj"
 
   return(hex_bin_obj)
 
