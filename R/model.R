@@ -20,7 +20,7 @@
 #' for 2D bin centroids (\code{df_bin}) and the data frame containing
 #' information about hexagonal bin centroids (\code{df_bin_centroids}) in 2D.
 #'
-#' @importFrom dplyr bind_cols filter select
+#' @importFrom dplyr bind_cols filter select between
 #' @importFrom stats quantile
 #'
 #' @examples

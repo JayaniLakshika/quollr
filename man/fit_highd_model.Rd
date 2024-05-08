@@ -6,46 +6,29 @@
 \usage{
 fit_highd_model(
   training_data,
-  nldr_df_with_id,
-  x,
-  y,
-  num_bins_x,
-  num_bins_y,
-  x_start,
-  y_start,
-  buffer_x,
-  buffer_y,
-  hex_size,
+  emb_df,
+  bin1 = 2,
+  s1 = -0.1,
+  s2 = -0.1,
+  r2,
   is_bin_centroid = TRUE,
   is_rm_lwd_hex = FALSE,
   benchmark_to_rm_lwd_hex,
-  col_start_2d,
-  col_start_highd
+  col_start_highd = "x"
 )
 }
 \arguments{
-\item{training_data}{A data frame containing the training high-dimensional data.}
+\item{training_data}{A tibble that contains the training high-dimensional data.}
 
-\item{nldr_df_with_id}{A data frame containing 2D embeddings with a unique identifier.}
+\item{emb_df}{A tibble that contains embedding with a unique identifier.}
 
-\item{x}{The name of the column that contains first 2D embeddings component.}
+\item{bin1}{Number of bins along the x axis.}
 
-\item{y}{The name of the column that contains second 2D embeddings component.}
+\item{s1}{The x-coordinate of the hexagonal grid starting point.}
 
-\item{num_bins_x}{Number of bins along the x-axis.}
+\item{s2}{The y-coordinate of the hexagonal grid starting point.}
 
-\item{num_bins_y}{Number of bins along the y-axis.}
-
-\item{x_start}{Starting point along the x-axis for hexagonal binning.}
-
-\item{y_start}{Starting point along the y-axis for hexagonal binning.}
-
-\item{buffer_x}{The buffer size along the x-axis.}
-
-\item{buffer_y}{The buffer size along the y-axis.}
-
-\item{hex_size}{A numeric value that initializes the radius of the outer circle
-surrounding the hexagon.}
+\item{r2}{The range of the original second embedding component.}
 
 \item{is_bin_centroid}{Logical, indicating whether to use bin centroids (default is TRUE).}
 
@@ -53,8 +36,6 @@ surrounding the hexagon.}
 (default is FALSE).}
 
 \item{benchmark_to_rm_lwd_hex}{The benchmark value to remove low-density hexagons.}
-
-\item{col_start_2d}{The text prefix for columns in the 2D embedding data.}
 
 \item{col_start_highd}{The text prefix for columns in the high-dimensional data.}
 }
@@ -69,7 +50,9 @@ to customize the modeling process, including the choice of bin centroids or bin 
 removal of low-density hexagons, and averaging of high-dimensional data.
 }
 \examples{
-fit_highd_model(training_data = s_curve_noise_training, x = "UMAP1", y = "UMAP2",
-nldr_df_with_id = s_curve_noise_umap_scaled, col_start_2d = "UMAP", col_start_highd = "x")
+range_umap2 <- diff(range(s_curve_noise_umap$UMAP2))
+fit_highd_model(training_data = s_curve_noise_training,
+emb_df = s_curve_noise_umap_scaled, bin1 = 3, r2 = range_umap2,
+col_start_highd = "x")
 
 }

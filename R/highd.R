@@ -68,6 +68,10 @@ avg_highd_data <- function(data, col_start = "x") {
 #' distance_df <- cal_2d_dist(tr_coord_df = tr_from_to_df, start_x = "x_from",
 #' start_y = "y_from", end_x = "x_to", end_y = "y_to",
 #' select_vars = c("from", "to", "distance"))
+#' umap_data_with_hb_id <- hb_obj$data_hb_id
+#' df_all <- dplyr::bind_cols(s_curve_noise_training |> dplyr::select(-ID),
+#' umap_data_with_hb_id)
+#' df_bin <- avg_highd_data(data = df_all, col_start = "x")
 #' show_langevitour(df = df_all, df_b = df_bin, df_b_with_center_data = df_bin_centroids,
 #' benchmark_value = 0.75, distance = distance_df, distance_col = "distance",
 #' use_default_benchmark_val = FALSE, col_start = "x")

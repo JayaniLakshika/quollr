@@ -4,63 +4,35 @@
 \alias{hex_binning}
 \title{Hexagonal binning}
 \usage{
-hex_binning(
-  data,
-  x,
-  y,
-  num_bins_x,
-  num_bins_y,
-  x_start,
-  y_start,
-  buffer_x,
-  buffer_y,
-  hex_size,
-  col_start
-)
+hex_binning(data, bin1 = 2, s1 = -0.1, s2 = -0.1, r2)
 }
 \arguments{
-\item{data}{A tibble or data frame.}
+\item{data}{A tibble that contains embedding components.}
 
-\item{x}{The name of the column that contains values along the x-axis.}
+\item{bin1}{Number of bins along the x axis.}
 
-\item{y}{The name of the column that contains values along the y-axis.}
+\item{s1}{The x-coordinate of the hexagonal grid starting point.}
 
-\item{num_bins_x}{Number of bins along the x-axis.}
+\item{s2}{The y-coordinate of the hexagonal grid starting point.}
 
-\item{num_bins_y}{Number of bins along the y-axis.}
-
-\item{x_start}{Starting point along the x-axis for hexagonal binning.}
-
-\item{y_start}{Starting point along the y-axis for hexagonal binning.}
-
-\item{buffer_x}{The buffer size along the x-axis.}
-
-\item{buffer_y}{The buffer size along the y-axis.}
-
-\item{hex_size}{A numeric value that initializes the radius of the outer
-circle surrounding the hexagon.}
-
-\item{col_start}{The text that begins the column name of x and y axes of data.}
+\item{r2}{The range of the original second embedding component.}
 }
 \value{
-A list contains all hexagonal bin centroids (centroids),
+A object that contains numeric vector that contains bins along the x and y axes respectively,
+all hexagonal bin centroids (centroids),
 hexagonal coordinates of the full grid(hex_poly),
-2D embeddings with corresponding hexagon IDs (data_hb_id),
+embedding components with their corresponding hexagon IDs (data_hb_id),
 hex bins with their corresponding standardise counts (std_cts),
 total number of hex bins(tot_bins), number of non-empty hex bins (non_bins)
 and points within each hexagon (pts_bins).
 }
 \description{
-This function generates a list which contains hexagonal binning information.
+This function generates the hexagonal object.
 }
 \examples{
-num_bins_list <- calc_bins(data = s_curve_noise_umap_scaled, x = "UMAP1", y = "UMAP2",
-hex_size = 0.2, buffer_x = 0.346, buffer_y = 0.3)
-num_bins_x <- num_bins_list$num_x
-num_bins_y <- num_bins_list$num_y
-hex_binning(data = s_curve_noise_umap_scaled,
-x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
-num_bins_y = num_bins_y, x_start = -0.1732051, y_start = -0.15, buffer_x = 0.346,
-buffer_y = 0.3, hex_size = 0.2, col_start = "UMAP")
+range_umap2 <- diff(range(s_curve_noise_umap$UMAP2))
+num_bins_x <- 3
+hex_binning(data = s_curve_noise_umap_scaled, bin1 = num_bins_x, s1 = -0.1,
+s2 = -0.1, r2 = range_umap2)
 
 }

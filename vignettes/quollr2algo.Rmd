@@ -36,6 +36,7 @@ The algorithm consists of two steps. First, construct the model in 2D space. Sec
 To construct the model in the 2D space, first you need to hexagonally bins the 2D layout. Discussed in details in [3. Algorithm for binning data](https://quollr.netlify.app/articles/visfullgrid).  
 
 ```{r}
+r2 <- diff(range(s_curve_noise_umap$UMAP2))
 hb_obj <- hex_binning(data = s_curve_noise_umap_scaled, bin1 = 3, s1 = -0.1, 
                       s2 = -0.1, r2 = r2)
 

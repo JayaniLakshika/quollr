@@ -3,10 +3,9 @@
 #' This function generates all possible centroids in the hexagonal grid.
 #'
 #' @param bin1 Number of bins along the x axis.
-#' @param bin2 Number of bins along the y axis.
 #' @param s1 The x-coordinate of the hexagonal grid starting point.
 #' @param s2 The y-coordinate of the hexagonal grid starting point.
-#' @param a1 The width of the hexagon.
+#' @param r2 The range of the original second embedding component.
 #'
 #' @return A tibble contains hexIDs, x and y coordinates (hexID, c_x, c_y respectively)
 #' of all hexagon bin centroids.
@@ -14,26 +13,19 @@
 #'
 #' @examples
 #' range_umap2 <- diff(range(s_curve_noise_umap$UMAP2))
-#' num_bins_x <- 3
-#' num_bins_list <- calc_bins_y(bin1 = num_bins_x, s1 = -0.1, s2 = -0.1,
-#' r2 = range_umap2)
-#' num_bins_y <- num_bins_list$bin2
-#' width <- num_bins_list$a1
-#' gen_centroids(bin1 = num_bins_x, bin2 = num_bins_y, s1 = -0.1, s2 = -0.1,
-#' a1 = width)
+#' gen_centroids(bin1 = 3, s1 = -0.1, s2 = -0.1, r2 = range_umap2)
 #'
 #' @export
-gen_centroids <- function(bin1 = 2, bin2, s1 = -0.1, s2 = -0.1, a1){
+gen_centroids <- function(bin1 = 2, s1 = -0.1, s2 = -0.1, r2){
 
-  # If the number of bins along the y axis is missing
-  if (missing(bin2)) {
-    stop("Need to initialize the number of bins along the x-axis.")
-  }
+  ## To compute hexagonal configurations
+  bin_obj <- calc_bins_y(bin1 = bin1, s1 = s1, s2 = s2, r2 = r2)
 
-  # If hexagonal width is missing
-  if (missing(a1)) {
-    stop("Need to initialize the width of the hexagon.")
-  }
+  # To obtain the bins along the y-axis
+  bin2 <- bin_obj$bin2
+
+  # To obtain the width of the hexagon
+  a1 <- bin_obj$a1
 
   # Generate x-coordinate of centroids for odd rows
   c_x_vec_odd <- seq(s1, (bin1 - 1) * a1, by = a1)
@@ -89,13 +81,9 @@ gen_centroids <- function(bin1 = 2, bin2, s1 = -0.1, s2 = -0.1, a1){
 #'
 #' @examples
 #' range_umap2 <- diff(range(s_curve_noise_umap$UMAP2))
-#' num_bins_x <- 3
-#' num_bins_list <- calc_bins_y(bin1 = num_bins_x, s1 = -0.1, s2 = -0.1,
-#' r2 = range_umap2)
-#' num_bins_y <- num_bins_list$bin2
+#' num_bins_list <- calc_bins_y(bin1 = 3, s1 = -0.1, s2 = -0.1, r2 = range_umap2)
 #' width <- num_bins_list$a1
-#' all_centroids_df <- gen_centroids(bin1 = num_bins_x, bin2 = num_bins_y,
-#' s1 = -0.1, s2 = -0.1, a1 = width)
+#' all_centroids_df <- gen_centroids(bin1 = 3, s1 = -0.1, s2 = -0.1, r2 = range_umap2)
 #' gen_hex_coord(centroids_df = all_centroids_df, a1 = width)
 #'
 #' @export
@@ -182,14 +170,7 @@ get_min_indices <- function(x) {
 #'
 #' @examples
 #' range_umap2 <- diff(range(s_curve_noise_umap$UMAP2))
-#' num_bins_x <- 3
-#' num_bins_list <- calc_bins_y(bin1 = num_bins_x, s1 = -0.1, s2 = -0.1,
-#' r2 = range_umap2)
-#' num_bins_y <- num_bins_list$num_y
-#' all_centroids_df <- gen_centroids(data = s_curve_noise_umap_scaled,
-#' x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
-#' num_bins_y = num_bins_y, x_start = -0.1732051, y_start = -0.15, buffer_x = 0.346,
-#' buffer_y = 0.3, hex_size = 0.2)
+#' all_centroids_df <- gen_centroids(bin1 = 3, s1 = -0.1, s2 = -0.1, r2 = range_umap2)
 #' assign_data(data = s_curve_noise_umap_scaled, centroid_df = all_centroids_df)
 #'
 #' @export
@@ -235,14 +216,8 @@ assign_data <- function(data, centroid_df) {
 #'
 #' @examples
 #' range_umap2 <- diff(range(s_curve_noise_umap$UMAP2))
-#' num_bins_x <- 3
-#' num_bins_list <- calc_bins_y(bin1 = num_bins_x, s1 = -0.1, s2 = -0.1,
+#' all_centroids_df <- gen_centroids(bin1 = 3, s1 = -0.1, s2 = -0.1,
 #' r2 = range_umap2)
-#' num_bins_y <- num_bins_list$num_y
-#' all_centroids_df <- gen_centroids(data = s_curve_noise_umap_scaled,
-#' x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
-#' num_bins_y = num_bins_y, x_start = -0.1732051, y_start = -0.15, buffer_x = 0.346,
-#' buffer_y = 0.3, hex_size = 0.2)
 #' umap_with_hb_id <- assign_data(data = s_curve_noise_umap_scaled,
 #' centroid_df = all_centroids_df)
 #' compute_std_counts(data_hb = umap_with_hb_id)
@@ -271,14 +246,8 @@ compute_std_counts <- function(data_hb) {
 #'
 #' @examples
 #' range_umap2 <- diff(range(s_curve_noise_umap$UMAP2))
-#' num_bins_x <- 3
-#' num_bins_list <- calc_bins_y(bin1 = num_bins_x, s1 = -0.1, s2 = -0.1,
+#' all_centroids_df <- gen_centroids(bin1 = 3, s1 = -0.1, s2 = -0.1,
 #' r2 = range_umap2)
-#' num_bins_y <- num_bins_list$num_y
-#' all_centroids_df <- gen_centroids(data = s_curve_noise_umap_scaled,
-#' x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
-#' num_bins_y = num_bins_y, x_start = -0.1732051, y_start = -0.15, buffer_x = 0.346,
-#' buffer_y = 0.3, hex_size = 0.2)
 #' umap_with_hb_id <- assign_data(data = s_curve_noise_umap_scaled,
 #' centroid_df = all_centroids_df)
 #' find_pts(data_hb = umap_with_hb_id)
@@ -349,14 +318,13 @@ hex_binning <- function(data, bin1 = 2, s1 = -0.1, s2 = -0.1, r2) {
   bin2 <- bin_obj$bin2
 
   ## To obtain the width of the hexagon
-  w <- bin_obj$a1
+  a1 <- bin_obj$a1
 
   ## To generate all the centroids of the grid
-  all_centroids_df <- gen_centroids(bin1 = bin1, bin2 = bin2, s1 = s1,
-                                    s2 = s2, a1 = w)
+  all_centroids_df <- gen_centroids(bin1 = bin1, s1 = s1, s2 = s2, r2 = r2)
 
   ## To generate the hexagon coordinates
-  all_hex_coord <- gen_hex_coord(centroids_df = all_centroids_df, a1 = w)
+  all_hex_coord <- gen_hex_coord(centroids_df = all_centroids_df, a1 = a1)
 
   ## To find which 2D embedding assigned to which hexagon
   nldr_hex_id <- assign_data(data = data, centroid_df = all_centroids_df)
@@ -446,7 +414,7 @@ extract_hexbin_mean <- function(data_hb, counts_df) {
     arrange(hb_id)
 
   ## To compute hexagonal bin means
-  hex_mean_df <- nldr_df_with_hex_id |>
+  hex_mean_df <- data_hb |>
     select(-ID) |>
     group_by(hb_id) |>
     summarise(across(everything(), mean)) |>
@@ -679,7 +647,7 @@ vis_lg_mesh <- function(distance_edges, benchmark_value,
 #' @return A ggplot object with the triangular mesh plot where long edges are removed.
 #'
 #' @importFrom dplyr distinct if_else mutate inner_join
-#' @importFrom ggplot2 ggplot geom_segment geom_point coord_equal scale_colour_manual aes
+#' @importFrom ggplot2 ggplot geom_segment geom_point coord_equal scale_colour_manual aes labs
 #' @importFrom tibble tibble
 #'
 #' @examples
@@ -732,15 +700,26 @@ vis_rmlg_mesh <- function(distance_edges, benchmark_value, tr_coord_df,
 #' to obtain a specific number of non-empty bins.
 #'
 #' @param data A tibble that contains the embedding.
+#' @param non_empty_bins The desired number of non-empty bins.
+#' @param s1 The x-coordinate of the hexagonal grid starting point.
+#' @param s2 The y-coordinate of the hexagonal grid starting point.
+#' @param r2 The range of the original second embedding component.
 #'
 #' @return The number of bins along the x and y axes
 #' needed to achieve a specific number of non-empty bins.
 #'
 #' @examples
-#' find_non_empty_bins(data = s_curve_noise_umap_scaled)
+#' range_umap2 <- diff(range(s_curve_noise_umap$UMAP2))
+#' find_non_empty_bins(data = s_curve_noise_umap_scaled, non_empty_bins = 6,
+#' r2 = range_umap2)
 #'
 #' @export
-find_non_empty_bins <- function(data) {
+find_non_empty_bins <- function(data, non_empty_bins, s1 = -0.1, s2 = -0.1, r2) {
+
+  ## To check whether s1, s2 is between a specific range
+  if (!between(s1, -0.1, -0.05) | !between(s1, -0.1, -0.05)) {
+    stop("Starting point coordinates should be within -0.1 and -0.05.")
+  }
 
   if (missing(non_empty_bins)) {
     stop("Required number of non-empty bins is not defined.")
@@ -751,8 +730,11 @@ find_non_empty_bins <- function(data) {
   ## Since having 1 bin along x or y-axis is not obvious therefore started from 2
   num_bins_x_vec <- 2:max_bins_along_axis
 
-  ## To initialise the number of bins along the axes
+  ## To initialise the number of bins along the x-axis
   bin1 <- num_bins_x_vec[1]
+
+  ## To compute the number of bins along the y-axis
+  bin2 <- calc_bins_y(bin1 = bin1, s1 = s1, s2 = s2, r2 = r2)$bin2
 
   ### Generate the full grid
   hb_obj <- hex_binning(data = data, bin1 = bin1, s1 = s1, s2 = s2, r2 = r2)
@@ -765,15 +747,18 @@ find_non_empty_bins <- function(data) {
 
     i <- i + 1
 
-    if (NROW(num_bins_comb_df) < i) {
+    if (length(num_bins_x_vec) < i) {
       stop("There is no matching number of bins along the x and y axes
            for the required number of non empty bins.")
     }
 
     bin1 <- num_bins_x_vec[2]
 
+    ## To compute the number of bins along the y-axis
+    bin2 <- calc_bins_y(bin1 = bin1, s1 = s1, s2 = s2, r2 = r2)$bin2
+
     ### Generate the full grid
-    hb_obj <- hex_binning(data = emb_df, bin1 = bin1, s1 = s1, s2 = s2, r2 = r2)
+    hb_obj <- hex_binning(data = data, bin1 = bin1, s1 = s1, s2 = s2, r2 = r2)
 
     num_of_non_empty_bins <- hb_obj$non_bins
 

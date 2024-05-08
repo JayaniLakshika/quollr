@@ -7,7 +7,7 @@
 tri_bin_centroids(hex_df, x, y)
 }
 \arguments{
-\item{hex_df}{The data frame containing the bin centroids.}
+\item{hex_df}{The tibble containing the bin centroids.}
 
 \item{x}{The name of the column that contains x coordinates of bin centroids.}
 
@@ -21,17 +21,14 @@ This function triangulates the bin centroids using the x and y coordinates
 provided in the input data frame and returns the triangular object.
 }
 \examples{
-num_bins_list <- calc_bins(data = s_curve_noise_umap_scaled, x = "UMAP1", y = "UMAP2",
-hex_size = 0.2, buffer_x = 0.346, buffer_y = 0.3)
-num_bins_x <- num_bins_list$num_x
-num_bins_y <- num_bins_list$num_y
-hb_obj <- hex_binning(data = s_curve_noise_umap_scaled,
-x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
-num_bins_y = num_bins_y, x_start = -0.1732051, y_start = -0.15, buffer_x = 0.346,
-buffer_y = 0.3, hex_size = 0.2, col_start = "UMAP")
+range_umap2 <- diff(range(s_curve_noise_umap$UMAP2))
+num_bins_x <- 3
+hb_obj <- hex_binning(data = s_curve_noise_umap_scaled, bin1 = num_bins_x,
+s1 = -0.1, s2 = -0.1, r2 = range_umap2)
 all_centroids_df <- hb_obj$centroids
 counts_df <- hb_obj$std_cts
-df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df, counts_df = counts_df)
+df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df,
+counts_df = counts_df)
 tri_bin_centroids(hex_df = df_bin_centroids, x = "c_x", y = "c_y")
 
 }

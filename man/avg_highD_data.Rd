@@ -7,26 +7,22 @@
 avg_highd_data(data, col_start = "x")
 }
 \arguments{
-\item{data}{A data frame containing the high-dimensional data and 2D embeddings
+\item{data}{A tibble that contains the high-dimensional data and embedding
 with hexagonal bin IDs.}
 
 \item{col_start}{The text that begin the column name of the high-dimensional data}
 }
 \value{
-A data frame with the average values of the high-dimensional data within each hexagonal bin.
+A tibble with the average values of the high-dimensional data within each hexagonal bin.
 }
 \description{
 This function calculates the average values of high-dimensional data within each hexagonal bin.
 }
 \examples{
-num_bins_list <- calc_bins(data = s_curve_noise_umap_scaled, x = "UMAP1", y = "UMAP2",
-hex_size = 0.2, buffer_x = 0.346, buffer_y = 0.3)
-num_bins_x <- num_bins_list$num_x
-num_bins_y <- num_bins_list$num_y
-hb_obj <- hex_binning(data = s_curve_noise_umap_scaled,
-x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
-num_bins_y = num_bins_y, x_start = -0.1732051, y_start = -0.15, buffer_x = 0.346,
-buffer_y = 0.3, hex_size = 0.2, col_start = "UMAP")
+range_umap2 <- diff(range(s_curve_noise_umap$UMAP2))
+num_bins_x <- 3
+hb_obj <- hex_binning(data = s_curve_noise_umap_scaled, bin1 = num_bins_x,
+s1 = -0.1, s2 = -0.1, r2 = range_umap2)
 umap_data_with_hb_id <- hb_obj$data_hb_id
 df_all <- dplyr::bind_cols(s_curve_noise_training, umap_data_with_hb_id)
 avg_highd_data(data = df_all, col_start = "x")

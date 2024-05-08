@@ -23,8 +23,10 @@ Given a test dataset, the centroid coordinates of hexagonal bins in  2D and high
 predict the 2D embeddings for each data point in the test dataset.
 }
 \examples{
-model <- fit_highd_model(training_data = s_curve_noise_training, x = "UMAP1", y = "UMAP2",
-nldr_df_with_id = s_curve_noise_umap_scaled, col_start_2d = "UMAP", col_start_highd = "x")
+range_umap2 <- diff(range(s_curve_noise_umap$UMAP2))
+model <- fit_highd_model(training_data = s_curve_noise_training,
+emb_df = s_curve_noise_umap_scaled, bin1 = 3, r2 = range_umap2,
+col_start_highd = "x")
 df_bin_centroids <- model$df_bin_centroids
 df_bin <- model$df_bin
 predict_emb(test_data = s_curve_noise_training, df_bin_centroids = df_bin_centroids,

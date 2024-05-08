@@ -7,8 +7,8 @@
 cal_2d_dist(tr_coord_df, start_x, start_y, end_x, end_y, select_vars)
 }
 \arguments{
-\item{tr_coord_df}{A data frame containing columns for the
-x and y coordinates of start and end points.}
+\item{tr_coord_df}{A tibble that contains the x and y coordinates of start
+and end points.}
 
 \item{start_x}{Column name for the x-coordinate of the starting point.}
 
@@ -22,24 +22,21 @@ x and y coordinates of start and end points.}
 selected in the resulting data frame.}
 }
 \value{
-A data frame with columns for the starting point, ending point,
+A tibble with columns for the starting point, ending point,
 and calculated distances.
 }
 \description{
 This function calculates the 2D distances between pairs of points in a data frame.
 }
 \examples{
-num_bins_list <- calc_bins(data = s_curve_noise_umap_scaled, x = "UMAP1", y = "UMAP2",
-hex_size = 0.2, buffer_x = 0.346, buffer_y = 0.3)
-num_bins_x <- num_bins_list$num_x
-num_bins_y <- num_bins_list$num_y
-hb_obj <- hex_binning(data = s_curve_noise_umap_scaled,
-x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
-num_bins_y = num_bins_y, x_start = -0.1732051, y_start = -0.15, buffer_x = 0.346,
-buffer_y = 0.3, hex_size = 0.2, col_start = "UMAP")
+range_umap2 <- diff(range(s_curve_noise_umap$UMAP2))
+num_bins_x <- 3
+hb_obj <- hex_binning(data = s_curve_noise_umap_scaled, bin1 = num_bins_x,
+s1 = -0.1, s2 = -0.1, r2 = range_umap2)
 all_centroids_df <- hb_obj$centroids
 counts_df <- hb_obj$std_cts
-df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df, counts_df = counts_df)
+df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df,
+counts_df = counts_df)
 tr1_object <- tri_bin_centroids(hex_df = df_bin_centroids, x = "c_x", y = "c_y")
 tr_from_to_df <- gen_edges(tri_object = tr1_object)
 cal_2d_dist(tr_coord_df = tr_from_to_df, start_x = "x_from", start_y = "y_from",

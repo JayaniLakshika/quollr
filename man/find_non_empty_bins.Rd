@@ -4,40 +4,18 @@
 \alias{find_non_empty_bins}
 \title{Find the number of bins required to achieve required number of non-empty bins.}
 \usage{
-find_non_empty_bins(
-  data,
-  x,
-  y,
-  non_empty_bins,
-  x_start,
-  y_start,
-  buffer_x,
-  buffer_y,
-  hex_size,
-  col_start
-)
+find_non_empty_bins(data, non_empty_bins, s1 = -0.1, s2 = -0.1, r2)
 }
 \arguments{
-\item{data}{A tibble or data frame.}
-
-\item{x}{The name of the column that contains values along the x-axis.}
-
-\item{y}{The name of the column that contains values along the y-axis.}
+\item{data}{A tibble that contains the embedding.}
 
 \item{non_empty_bins}{The desired number of non-empty bins.}
 
-\item{x_start}{Starting point along the x-axis for hexagonal binning.}
+\item{s1}{The x-coordinate of the hexagonal grid starting point.}
 
-\item{y_start}{Starting point along the y-axis for hexagonal binning.}
+\item{s2}{The y-coordinate of the hexagonal grid starting point.}
 
-\item{buffer_x}{The buffer size along the x-axis.}
-
-\item{buffer_y}{The buffer size along the y-axis.}
-
-\item{hex_size}{A numeric value that initializes the radius of the outer
-circle surrounding the hexagon.}
-
-\item{col_start}{The text that begins the column name of x and y axes of data.}
+\item{r2}{The range of the original second embedding component.}
 }
 \value{
 The number of bins along the x and y axes
@@ -48,8 +26,8 @@ This function determines the number of bins along the x and y axes
 to obtain a specific number of non-empty bins.
 }
 \examples{
-find_non_empty_bins(data = s_curve_noise_umap_scaled,
-x = "UMAP1", y = "UMAP2", non_empty_bins = 10, x_start = -0.1732051, y_start = -0.15,
-buffer_x = 0.346, buffer_y = 0.3, hex_size = 0.2, col_start = "UMAP")
+range_umap2 <- diff(range(s_curve_noise_umap$UMAP2))
+find_non_empty_bins(data = s_curve_noise_umap_scaled, non_empty_bins = 6,
+r2 = range_umap2)
 
 }

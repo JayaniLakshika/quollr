@@ -4,28 +4,23 @@
 \alias{find_pts}
 \title{Find points in hexagonal bins}
 \usage{
-find_pts(data_hex_id)
+find_pts(data_hb)
 }
 \arguments{
-\item{data_hex_id}{A data frame with data, ID and hexagonal bin IDs.}
+\item{data_hb}{A data frame with data, ID and hexagonal bin IDs.}
 }
 \value{
-A data frame with hexagonal bin IDs and the corresponding points.
+A tibble with hexagonal bin IDs and the corresponding points.
 }
 \description{
 This function maps points to their corresponding hexagonal bins.
 }
 \examples{
-num_bins_list <- calc_bins(data = s_curve_noise_umap_scaled, x = "UMAP1", y = "UMAP2",
-hex_size = 0.2, buffer_x = 0.346, buffer_y = 0.3)
-num_bins_x <- num_bins_list$num_x
-num_bins_y <- num_bins_list$num_y
-all_centroids_df <- gen_centroids(data = s_curve_noise_umap_scaled,
-x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
-num_bins_y = num_bins_y, x_start = -0.1732051, y_start = -0.15, buffer_x = 0.346,
-buffer_y = 0.3, hex_size = 0.2)
+range_umap2 <- diff(range(s_curve_noise_umap$UMAP2))
+all_centroids_df <- gen_centroids(bin1 = 3, s1 = -0.1, s2 = -0.1,
+r2 = range_umap2)
 umap_with_hb_id <- assign_data(data = s_curve_noise_umap_scaled,
-centroid_df = all_centroids_df, col_start = "UMAP")
-find_pts(data_hex_id = umap_with_hb_id)
+centroid_df = all_centroids_df)
+find_pts(data_hb = umap_with_hb_id)
 
 }

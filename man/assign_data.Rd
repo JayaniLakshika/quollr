@@ -4,32 +4,22 @@
 \alias{assign_data}
 \title{Assign data to hexagons}
 \usage{
-assign_data(data, centroid_df, col_start)
+assign_data(data, centroid_df)
 }
 \arguments{
 \item{data}{data A tibble or data frame.}
 
-\item{centroid_df}{The dataset with centroid coordinates only.}
-
-\item{col_start}{The text that begins the column name of x and y axes of data.}
+\item{centroid_df}{The dataset with centroid coordinates.}
 }
 \value{
-A tibble contains x and y coordinates and corresponding hexagon ID
-(emb_1, emb_2, and hb_id respectively).
+A tibble contains embedding components and corresponding hexagon ID.
 }
 \description{
 This function assigns the data to hexagons.
 }
 \examples{
-num_bins_list <- calc_bins(data = s_curve_noise_umap_scaled, x = "UMAP1", y = "UMAP2",
-hex_size = 0.2, buffer_x = 0.346, buffer_y = 0.3)
-num_bins_x <- num_bins_list$num_x
-num_bins_y <- num_bins_list$num_y
-all_centroids_df <- gen_centroids(data = s_curve_noise_umap_scaled,
-x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
-num_bins_y = num_bins_y, x_start = -0.1732051, y_start = -0.15, buffer_x = 0.346,
-buffer_y = 0.3, hex_size = 0.2)
-assign_data(data = s_curve_noise_umap_scaled,
-centroid_df = all_centroids_df, col_start = "UMAP")
+range_umap2 <- diff(range(s_curve_noise_umap$UMAP2))
+all_centroids_df <- gen_centroids(bin1 = 3, s1 = -0.1, s2 = -0.1, r2 = range_umap2)
+assign_data(data = s_curve_noise_umap_scaled, centroid_df = all_centroids_df)
 
 }

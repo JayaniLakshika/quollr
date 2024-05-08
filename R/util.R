@@ -10,6 +10,7 @@
 #'
 #' @return A list of numeric values that represents the effective number of
 #' bins along the y axis and width of the hexagon.
+#' @importFrom dplyr between
 #'
 #' @examples
 #' range_umap2 <- diff(range(s_curve_noise_umap$UMAP2))

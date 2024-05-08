@@ -16,15 +16,15 @@ show_langevitour(
 )
 }
 \arguments{
-\item{df}{A data frame containing the high-dimensional data.}
+\item{df}{A tibble that contains the high-dimensional data.}
 
-\item{df_b}{A data frame containing the high-dimensional coordinates of bin centroids.}
+\item{df_b}{A tibble that contains the high-dimensional coordinates of bin centroids.}
 
-\item{df_b_with_center_data}{The dataset with hexbin centroids.}
+\item{df_b_with_center_data}{The dataset with hexagonal bin centroids.}
 
 \item{benchmark_value}{The benchmark value used to remove long edges (optional).}
 
-\item{distance_df}{The distance dataframe.}
+\item{distance_df}{The tibble with distance.}
 
 \item{distance_col}{The name of the distance column.}
 
@@ -41,19 +41,12 @@ This function generates a LangeviTour visualization based on different
 conditions and input parameters.
 }
 \examples{
-num_bins_list <- calc_bins(data = s_curve_noise_umap_scaled, x = "UMAP1", y = "UMAP2",
-hex_size = 0.2, buffer_x = 0.346, buffer_y = 0.3)
-num_bins_x <- num_bins_list$num_x
-num_bins_y <- num_bins_list$num_y
-hb_obj <- hex_binning(data = s_curve_noise_umap_scaled,
-x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
-num_bins_y = num_bins_y, x_start = -0.1732051, y_start = -0.15, buffer_x = 0.346,
-buffer_y = 0.3, hex_size = 0.2, col_start = "UMAP")
+range_umap2 <- diff(range(s_curve_noise_umap$UMAP2))
+num_bins_x <- 3
+hb_obj <- hex_binning(data = s_curve_noise_umap_scaled, bin1 = num_bins_x,
+s1 = -0.1, s2 = -0.1, r2 = range_umap2)
 all_centroids_df <- hb_obj$centroids
 counts_df <- hb_obj$std_cts
-umap_data_with_hb_id <- hb_obj$data_hb_id
-df_all <- dplyr::bind_cols(s_curve_noise_training |> dplyr::select(-ID), umap_data_with_hb_id)
-df_bin <- avg_highd_data(data = df_all, col_start = "x")
 df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df,
 counts_df = counts_df)
 tr1_object <- tri_bin_centroids(hex_df = df_bin_centroids, x = "c_x", y = "c_y")
@@ -61,6 +54,10 @@ tr_from_to_df <- gen_edges(tri_object = tr1_object)
 distance_df <- cal_2d_dist(tr_coord_df = tr_from_to_df, start_x = "x_from",
 start_y = "y_from", end_x = "x_to", end_y = "y_to",
 select_vars = c("from", "to", "distance"))
+umap_data_with_hb_id <- hb_obj$data_hb_id
+df_all <- dplyr::bind_cols(s_curve_noise_training |> dplyr::select(-ID),
+umap_data_with_hb_id)
+df_bin <- avg_highd_data(data = df_all, col_start = "x")
 show_langevitour(df = df_all, df_b = df_bin, df_b_with_center_data = df_bin_centroids,
 benchmark_value = 0.75, distance = distance_df, distance_col = "distance",
 use_default_benchmark_val = FALSE, col_start = "x")

@@ -2,27 +2,21 @@
 % Please edit documentation in R/data_preprocessing.R
 \name{gen_scaled_data}
 \alias{gen_scaled_data}
-\title{Scaling the data}
+\title{Scaling the NLDR data}
 \usage{
-gen_scaled_data(data, x, y, hr = 2/sqrt(3))
+gen_scaled_data(data)
 }
 \arguments{
-\item{data}{A tibble or data frame.}
-
-\item{x}{The name of the column that contains values along the x-axis.}
-
-\item{y}{The name of the column that contains values along the y-axis.}
-
-\item{hr}{Numeric value representing the ratio of the hexagon size.
-Default is 2/sqrt(3).}
+\item{data}{A tibble that contains embedding components in the first and second columns.}
 }
 \value{
-A tibble contains scaled x and y coordinates.
+A list of a tibble contains scaled first and second columns, and
+numeric vectors representing the limits of the original data.
 }
 \description{
-This function scales the x and y coordinates.
+This function scales first and second columns.
 }
 \examples{
-gen_scaled_data(data = s_curve_noise_umap, x = "UMAP1", y = "UMAP2", hr = 2/sqrt(3))
+gen_scaled_data(data = s_curve_noise_umap)
 
 }

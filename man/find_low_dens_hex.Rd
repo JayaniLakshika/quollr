@@ -4,14 +4,14 @@
 \alias{find_low_dens_hex}
 \title{Find low-density Hexagons}
 \usage{
-find_low_dens_hex(df_bin_centroids_all, num_bins_x, df_bin_centroids_low)
+find_low_dens_hex(df_bin_centroids_all, bin1, df_bin_centroids_low)
 }
 \arguments{
-\item{df_bin_centroids_all}{The data frame containing all hexagonal bin centroids.}
+\item{df_bin_centroids_all}{The tibble that contains all hexagonal bin centroids.}
 
-\item{num_bins_x}{Number of bins along the x-axis for hexagon binning.}
+\item{bin1}{Number of bins along the x-axis for hexagon binning.}
 
-\item{df_bin_centroids_low}{The data frame containing identified low-density hexagonal bin centroids.}
+\item{df_bin_centroids_low}{The tibble that contains identified low-density hexagonal bin centroids.}
 }
 \value{
 A vector containing the IDs of hexagons to be removed after investigating their neighboring bins.
@@ -21,21 +21,17 @@ This function identifies hexagons with low density based on the mean density
 of their neighboring hexagons.
 }
 \examples{
-num_bins_list <- calc_bins(data = s_curve_noise_umap_scaled, x = "UMAP1", y = "UMAP2",
-hex_size = 0.2, buffer_x = 0.346, buffer_y = 0.3)
-num_bins_x <- num_bins_list$num_x
-num_bins_y <- num_bins_list$num_y
-hb_obj <- hex_binning(data = s_curve_noise_umap_scaled,
-x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
-num_bins_y = num_bins_y, x_start = -0.1732051, y_start = -0.15, buffer_x = 0.346,
-buffer_y = 0.3, hex_size = 0.2, col_start = "UMAP")
+range_umap2 <- diff(range(s_curve_noise_umap$UMAP2))
+num_bins_x <- 3
+hb_obj <- hex_binning(data = s_curve_noise_umap_scaled, bin1 = num_bins_x,
+s1 = -0.1, s2 = -0.1, r2 = range_umap2)
 all_centroids_df <- hb_obj$centroids
 counts_df <- hb_obj$std_cts
 df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df,
 counts_df = counts_df)
 df_bin_centroids_low <- df_bin_centroids |>
 dplyr::filter(std_counts <= 0.43)
-find_low_dens_hex(df_bin_centroids_all = df_bin_centroids, num_bins_x = num_bins_x,
+find_low_dens_hex(df_bin_centroids_all = df_bin_centroids, bin1 = num_bins_x,
 df_bin_centroids_low = df_bin_centroids_low)
 
 }

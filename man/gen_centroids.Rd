@@ -4,40 +4,16 @@
 \alias{gen_centroids}
 \title{Generate centroid coordinate}
 \usage{
-gen_centroids(
-  data,
-  x,
-  y,
-  num_bins_x,
-  num_bins_y,
-  x_start,
-  y_start,
-  buffer_x,
-  buffer_y,
-  hex_size
-)
+gen_centroids(bin1 = 2, s1 = -0.1, s2 = -0.1, r2)
 }
 \arguments{
-\item{data}{A tibble or data frame.}
+\item{bin1}{Number of bins along the x axis.}
 
-\item{x}{The name of the column that contains values along the x-axis.}
+\item{s1}{The x-coordinate of the hexagonal grid starting point.}
 
-\item{y}{The name of the column that contains values along the y-axis.}
+\item{s2}{The y-coordinate of the hexagonal grid starting point.}
 
-\item{num_bins_x}{Number of bins along the x-axis.}
-
-\item{num_bins_y}{Number of bins along the y-axis.}
-
-\item{x_start}{Starting point along the x-axis for hexagonal binning.}
-
-\item{y_start}{Starting point along the y-axis for hexagonal binning.}
-
-\item{buffer_x}{The buffer size along the x-axis.}
-
-\item{buffer_y}{The buffer size along the y-axis.}
-
-\item{hex_size}{A numeric value that initializes the radius of the outer
-circle surrounding the hexagon.}
+\item{r2}{The range of the original second embedding component.}
 }
 \value{
 A tibble contains hexIDs, x and y coordinates (hexID, c_x, c_y respectively)
@@ -47,13 +23,7 @@ of all hexagon bin centroids.
 This function generates all possible centroids in the hexagonal grid.
 }
 \examples{
-num_bins_list <- calc_bins(data = s_curve_noise_umap_scaled, x = "UMAP1", y = "UMAP2",
-hex_size = 0.2, buffer_x = 0.346, buffer_y = 0.3)
-num_bins_x <- num_bins_list$num_x
-num_bins_y <- num_bins_list$num_y
-gen_centroids(data = s_curve_noise_umap_scaled,
-x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
-num_bins_y = num_bins_y, x_start = -0.1732051, y_start = -0.15, buffer_x = 0.346,
-buffer_y = 0.3, hex_size = 0.2)
+range_umap2 <- diff(range(s_curve_noise_umap$UMAP2))
+gen_centroids(bin1 = 3, s1 = -0.1, s2 = -0.1, r2 = range_umap2)
 
 }

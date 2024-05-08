@@ -7,7 +7,7 @@
 find_lg_benchmark(distance_edges, distance_col)
 }
 \arguments{
-\item{distance_edges}{The data frame containing the distances.}
+\item{distance_edges}{The tibble contains the distances.}
 
 \item{distance_col}{The name of the column containing the distances.}
 }
@@ -19,17 +19,14 @@ This function finds the benchmark value to remove long edges based on
 the differences in a distance column.
 }
 \examples{
-num_bins_list <- calc_bins(data = s_curve_noise_umap_scaled, x = "UMAP1", y = "UMAP2",
-hex_size = 0.2, buffer_x = 0.346, buffer_y = 0.3)
-num_bins_x <- num_bins_list$num_x
-num_bins_y <- num_bins_list$num_y
-hb_obj <- hex_binning(data = s_curve_noise_umap_scaled,
-x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
-num_bins_y = num_bins_y, x_start = -0.1732051, y_start = -0.15, buffer_x = 0.346,
-buffer_y = 0.3, hex_size = 0.2, col_start = "UMAP")
+range_umap2 <- diff(range(s_curve_noise_umap$UMAP2))
+num_bins_x <- 3
+hb_obj <- hex_binning(data = s_curve_noise_umap_scaled, bin1 = num_bins_x,
+s1 = -0.1, s2 = -0.1, r2 = range_umap2)
 all_centroids_df <- hb_obj$centroids
 counts_df <- hb_obj$std_cts
-df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df, counts_df = counts_df)
+df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df,
+counts_df = counts_df)
 tr1_object <- tri_bin_centroids(hex_df = df_bin_centroids, x = "c_x", y = "c_y")
 tr_from_to_df <- gen_edges(tri_object = tr1_object)
 distance_df <- cal_2d_dist(tr_coord_df = tr_from_to_df, start_x = "x_from",
