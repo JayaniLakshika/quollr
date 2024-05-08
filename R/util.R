@@ -3,99 +3,46 @@
 #' This function calculates the effective number of bins along the x and y axes
 #' of a hexagonal grid.
 #'
-#' @param data A tibble or data frame.
-#' @param x The name of the column that contains values along the x-axis.
-#' @param y The name of the column that contains values along the y-axis.
-#' @param hex_size A numeric value that initializes the radius of the outer
-#' circle surrounded by the hexagon.
-#' @param buffer_x The buffer size along the x-axis.
-#' @param buffer_y The buffer size along the y-axis.
+#' @param bin1 Number of bins along the x axis.
+#' @param s1 The x-coordinate of the hexagonal grid starting point.
+#' @param s2 The y-coordinate of the hexagonal grid starting point.
+#' @param r2 The range of the original second embedding component.
 #'
 #' @return A list of numeric values that represents the effective number of
-#' bins along the x and y axes of a hexagonal grid.
-#'
-#' @importFrom rlang sym as_string
-#' @importFrom dplyr across summarise mutate pull
+#' bins along the y axis and width of the hexagon.
 #'
 #' @examples
-#' calc_bins(data = s_curve_noise_umap_scaled, x = "UMAP1", y = "UMAP2",
-#' hex_size = 0.2, buffer_x = 0.346, buffer_y = 0.3)
+#' range_umap2 <- diff(range(s_curve_noise_umap$UMAP2))
+#' calc_bins(bin1 = 2, s1 = -0.1, s2 = -0.1, r2 = range_umap2)
 #'
 #' @export
-calc_bins <- function(data, x, y, hex_size, buffer_x, buffer_y){
+calc_bins_y <- function(bin1 = 2, s1 = -0.1, s2 = -0.1, r2) {
 
-  ## Obtain values in x and y axes
-  x_values <- data[[rlang::as_string(rlang::sym(x))]]
-  y_values <- data[[rlang::as_string(rlang::sym(y))]]
-
-  if (anyNA(x_values) | anyNA(y_values)) {
-    stop("NAs present")
+  ## To check whether bin2 greater than 2
+  if (bin1 < 2) {
+    stop("Number of bins along the x-axis at least should be 2.")
   }
 
-  if (any(is.infinite(x_values)) | any(is.infinite(y_values))) {
-    stop("Inf present")
+  ## To check whether s1, s2 is between a specific range
+  if (!between(s1, -0.1, -0.05) | !between(s1, -0.1, -0.05)) {
+    stop("Starting point coordinates should be within -0.1 and -0.05.")
   }
 
-  if (missing(hex_size)) {
-    hex_size <- 0.2
-  }
+  ## To compute the number of bins along the x-axis
+  bin2 <- ceiling(1 + (2 * (r2-s2) * (bin1 - 1))/(sqrt(3) * (1-s1)))
 
-  # Calculate horizontal and vertical spacing
-  hs <- sqrt(3) * hex_size
-  vs <- 1.5 * hex_size
+  ## Validating and compute horizontal spacing
+  check_factor <- (sqrt(3) * (1 - s1) * (bin2 - 1))/(2 * (bin1 - 1))
 
-  if (missing(buffer_x)) {
-    buffer_x <- round(hs * 1.5, 3)
+  if (r2 > check_factor) {
 
-    message(paste0("Buffer along the x-axis is set to ", buffer_x, "."))
+    a1 <- (1-s1)/(bin1 - 1)
 
   } else {
-    if (buffer_x > round(hs * 1.5, 3)) {
 
-      stop(paste0("Buffer along the x-axis exceeds than ", hs, ".
-                     Need to assign a value less than or equal to ", hs, "."))
-
-    } else if (buffer_x <= 0 ) {
-
-      stop(paste0("Buffer along the x-axis is less than or equal to zero."))
-
-    }
-  }
-
-  if (missing(buffer_y)) {
-    buffer_y <- round(vs * 1.5, 3)
-
-    message(paste0("Buffer along the y-axis is set to ", buffer_y, "."))
-
-
-  } else {
-    if (buffer_y > round(vs * 1.5, 3)) {
-
-      stop(paste0("Buffer along the y-axis exceeds than ", vs, ".
-                     Need to assign a value less than or equal to ", vs, "."))
-
-    } else if (buffer_y <= 0 ) {
-
-      stop(paste0("Buffer along the y-axis is less than or equal to zero."))
-
-    }
-  }
-
-  if ((hex_size <= 0) || (is.infinite(hex_size))) {
-    stop("Invalid hex size value.")
+    a1 <- (2 * (r2-s2))/(sqrt(3) * (bin2 - 1))
 
   }
 
-  bins_data <- data |>
-    summarise(across(c({{ x }}, {{ y }}), ~ max(.) - min(.))) |>
-    mutate(num_x = ceiling((get(!!x) + buffer_x) /hs),
-           num_y = ceiling((get(!!y) + buffer_y) /vs))
-
-  num_x <- bins_data |>
-    pull(num_x)
-
-  num_y <- bins_data |>
-    pull(num_y)
-
-  return(list(num_x = num_x, num_y = num_y))
+  return(list(bin2 = bin2, a1 = a1))
 }
