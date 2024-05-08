@@ -24,8 +24,10 @@
 #' @importFrom stats quantile
 #'
 #' @examples
+#' range_umap2 <- diff(range(s_curve_noise_umap$UMAP2))
 #' fit_highd_model(training_data = s_curve_noise_training,
-#' emb_df = s_curve_noise_umap_scaled, col_start_highd = "x")
+#' emb_df = s_curve_noise_umap_scaled, bin1 = 3, r2 = range_umap2,
+#' col_start_highd = "x")
 #'
 #' @export
 fit_highd_model <- function(training_data, emb_df, bin1 = 2, s1 = -0.1,

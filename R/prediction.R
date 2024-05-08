@@ -14,8 +14,10 @@
 #' @importFrom tibble tibble
 #'
 #' @examples
+#' range_umap2 <- diff(range(s_curve_noise_umap$UMAP2))
 #' model <- fit_highd_model(training_data = s_curve_noise_training,
-#' emb_df = s_curve_noise_umap_scaled, bin1 = 3, col_start_highd = "x")
+#' emb_df = s_curve_noise_umap_scaled, bin1 = 3, r2 = range_umap2,
+#' col_start_highd = "x")
 #' df_bin_centroids <- model$df_bin_centroids
 #' df_bin <- model$df_bin
 #' predict_emb(test_data = s_curve_noise_training, df_bin_centroids = df_bin_centroids,
@@ -72,8 +74,10 @@ predict_emb <- function(test_data, df_bin_centroids, df_bin, type_NLDR) {
 #' @importFrom tibble tibble
 #'
 #' @examples
+#' range_umap2 <- diff(range(s_curve_noise_umap$UMAP2))
 #' model <- fit_highd_model(training_data = s_curve_noise_training,
-#' emb_df = s_curve_noise_umap_scaled, bin1 = 3, col_start_highd = "x")
+#' emb_df = s_curve_noise_umap_scaled, bin1 = 3, r2 = range_umap2,
+#' col_start_highd = "x")
 #' df_bin_centroids <- model$df_bin_centroids
 #' df_bin <- model$df_bin
 #' pred_df_test <- predict_emb(test_data = s_curve_noise_training,
@@ -137,8 +141,10 @@ glance <- function(test_data, prediction_df, df_bin, col_start = "x") {
 #' @importFrom tidyselect starts_with
 #'
 #' @examples
+#' range_umap2 <- diff(range(s_curve_noise_umap$UMAP2))
 #' model <- fit_highd_model(training_data = s_curve_noise_training,
-#' emb_df = s_curve_noise_umap_scaled, bin1 = 3, col_start_highd = "x")
+#' emb_df = s_curve_noise_umap_scaled, bin1 = 3, r2 = range_umap2,
+#' col_start_highd = "x")
 #' df_bin_centroids <- model$df_bin_centroids
 #' df_bin <- model$df_bin
 #' augment(df_bin_centroids = df_bin_centroids, df_bin = df_bin,
