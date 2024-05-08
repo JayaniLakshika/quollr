@@ -1,9 +1,11 @@
 test_that("predict_emb() works", {
 
-  suppressMessages(model <- fit_highd_model(training_data = s_curve_noise_training,
-                                            x = "UMAP1", y = "UMAP2",
-                                            nldr_df_with_id = s_curve_noise_umap_scaled,
-                                            col_start_2d = "UMAP", col_start_highd = "x"))
+  range_umap2 <- diff(range(s_curve_noise_umap$UMAP2))
+  model <- fit_highd_model(training_data = s_curve_noise_training,
+                           emb_df = s_curve_noise_umap_scaled,
+                           r2 = range_umap2,
+                           col_start_highd = "x")
+
   df_bin_centroids <- model$df_bin_centroids
   df_bin <- model$df_bin
 
@@ -17,34 +19,14 @@ test_that("predict_emb() works", {
 
 })
 
-test_that("compute_aic() works", {
-
-  p <- 5
-  mse <- 1500
-  num_bins <- 10
-  num_obs <- 100
-
-  testthat::expect_equal(compute_aic(p, mse, num_bins, num_obs), 3756.6102)
-
-  testthat::expect_error(compute_aic(p = Inf, mse, num_bins, num_obs))
-
-  testthat::expect_error(compute_aic(p = 0, mse, num_bins, num_obs))
-
-  testthat::expect_error(compute_aic(p = NA, mse, num_bins, num_obs))
-
-  testthat::expect_error(compute_aic(p, mse, num_bins = NA, num_obs))
-
-  testthat::expect_error(compute_aic(p, mse, num_bins, num_obs = NA))
-
-  testthat::expect_error(compute_aic(p, mse = NA, num_bins, num_obs))
-})
-
 test_that("glance() works", {
 
-  suppressMessages(model <- fit_highd_model(training_data = s_curve_noise_training,
-                                            x = "UMAP1", y = "UMAP2",
-                                            nldr_df_with_id = s_curve_noise_umap_scaled,
-                                            col_start_2d = "UMAP", col_start_highd = "x"))
+  range_umap2 <- diff(range(s_curve_noise_umap$UMAP2))
+  model <- fit_highd_model(training_data = s_curve_noise_training,
+                           emb_df = s_curve_noise_umap_scaled,
+                           r2 = range_umap2,
+                           col_start_highd = "x")
+
   df_bin_centroids <- model$df_bin_centroids
   df_bin <- model$df_bin
   pred_df_training <- predict_emb(test_data = s_curve_noise_training,
@@ -69,10 +51,12 @@ test_that("glance() works", {
 
 test_that("augment() works", {
 
-  suppressMessages(model <- fit_highd_model(training_data = s_curve_noise_training,
-                                            x = "UMAP1", y = "UMAP2",
-                                            nldr_df_with_id = s_curve_noise_umap_scaled,
-                                            col_start_2d = "UMAP", col_start_highd = "x"))
+  range_umap2 <- diff(range(s_curve_noise_umap$UMAP2))
+  model <- fit_highd_model(training_data = s_curve_noise_training,
+                           emb_df = s_curve_noise_umap_scaled,
+                           r2 = range_umap2,
+                           col_start_highd = "x")
+
   df_bin_centroids <- model$df_bin_centroids
   df_bin <- model$df_bin
   testthat::expect_snapshot(augment(df_bin_centroids = df_bin_centroids,

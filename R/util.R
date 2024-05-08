@@ -25,8 +25,13 @@ calc_bins_y <- function(bin1 = 2, s1 = -0.1, s2 = -0.1, r2) {
   }
 
   ## To check whether s1, s2 is between a specific range
-  if (!between(s1, -0.1, -0.05) | !between(s1, -0.1, -0.05)) {
+  if (!between(s1, -0.1, -0.05) | !between(s2, -0.1, -0.05)) {
     stop("Starting point coordinates should be within -0.1 and -0.05.")
+  }
+
+  ## To check original data range of embedding component 2 is initialized or not
+  if (missing(r2)) {
+    stop("The range of the original second embedding component is not initialised.")
   }
 
   ## To compute the number of bins along the x-axis

@@ -1,14 +1,8 @@
 test_that("geom_trimesh() works", {
-  suppressMessages(num_bins_list <- calc_bins(data = s_curve_noise_umap_scaled, x = "UMAP1",
-                             y = "UMAP2", hex_size = 0.2, buffer_x = 0.346, buffer_y = 0.3))
-  num_bins_x <- num_bins_list$num_x
-  num_bins_y <- num_bins_list$num_y
-  suppressMessages(hb_obj <- hex_binning(data = s_curve_noise_umap_scaled,
-                                         x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
-                                         num_bins_y = num_bins_y, x_start = -0.1732051,
-                                         y_start = -0.15, buffer_x = 0.346,
-                                         buffer_y = 0.3, hex_size = 0.2,
-                                         col_start = "UMAP"))
+
+  range_umap2 <- diff(range(s_curve_noise_umap$UMAP2))
+  hb_obj <- hex_binning(data = s_curve_noise_umap_scaled, bin1 = 3, s1 = -0.1,
+                        s2 = -0.1, r2 = range_umap2)
 
   all_centroids_df <- hb_obj$centroids
   counts_df <- hb_obj$std_cts

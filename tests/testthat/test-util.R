@@ -1,97 +1,24 @@
-test_that("calc_bins() works", {
+test_that("calc_bins_y() works", {
 
-  testthat::expect_length(suppressMessages(calc_bins(data = s_curve_noise_umap_scaled,
-                                                     x = "UMAP1", y = "UMAP2", hex_size = 0.2,
-                                                     buffer_x = 0.346,
-                                                     buffer_y = 0.3)), 2)
+  range_umap2 <- diff(range(s_curve_noise_umap$UMAP2))
+  testthat::expect_length(calc_bins_y(bin1 = 3, s1 = -0.1, s2 = -0.1,
+                                      r2 = range_umap2), 2)
 
-  testthat::expect_error(suppressMessages(calc_bins(data = s_curve_noise_umap_scaled,
-                                                    x = "UMAP1", y = "UMAP2",
-                                                    hex_size = -0.1, buffer_x = 0.346,
-                                                    buffer_y = 0.3)))
-  testthat::expect_error(suppressMessages(calc_bins(data = s_curve_noise_umap_scaled,
-                                                    x = "UMAP1", y = "UMAP2",
-                                                    hex_size = 0, buffer_x = 0.346,
-                                                    buffer_y = 0.3))
-  )
-  testthat::expect_error(suppressMessages(calc_bins(data = s_curve_noise_umap_scaled,
-                                                    x = "UMAP1", y = "UMAP2",
-                                                    hex_size = Inf, buffer_x = 0.346,
-                                                    buffer_y = 0.3))
-  )
-  testthat::expect_error(suppressMessages(calc_bins(data = s_curve_noise_umap_scaled,
-                                                    x = "UMAP1", y = "UMAP2",
-                                                    hex_size = -Inf, buffer_x = 0.346,
-                                                    buffer_y = 0.3))
-  )
+  testthat::expect_error(calc_bins_y(bin1 = 1, s1 = -0.1, s2 = -0.1,
+                                     r2 = range_umap2))
 
-  testthat::expect_error(suppressMessages(calc_bins(data = s_curve_noise_umap_scaled,
-                                                    x = "UMAP1", y = "UMAP2",
-                                                    hex_size = 0.2, buffer_x = 0.5,
-                                                    buffer_y = -0.3))
-  )
-  testthat::expect_error(suppressMessages(calc_bins(data = s_curve_noise_umap_scaled,
-                                                    x = "UMAP1", y = "UMAP2",
-                                                    hex_size = 0.2, buffer_x = -0.3,
-                                                    buffer_y = 0.3))
-  )
+  testthat::expect_error(calc_bins_y(bin1 = 3, s1 = -0.3, s2 = -0.1,
+                                     r2 = range_umap2))
+  testthat::expect_error(calc_bins_y(bin1 = 3, s1 = -0.1, s2 = -0.3,
+                                     r2 = range_umap2))
+  testthat::expect_error(calc_bins_y(bin1 = 3, s1 = -0.4, s2 = -0.3,
+                                     r2 = range_umap2))
 
-  testthat::expect_error(suppressMessages(calc_bins(data = s_curve_noise_umap_scaled,
-                                                    x = "UMAP1", y = "UMAP2",
-                                                    hex_size = 0.2, buffer_x = 0.346,
-                                                    buffer_y = 0.5))
-  )
-  testthat::expect_error(suppressMessages(calc_bins(data = s_curve_noise_umap_scaled,
-                                                    x = "UMAP1", y = "UMAP2",
-                                                    hex_size = 0.2, buffer_x = 0.346,
-                                                    buffer_y = -0.3))
-  )
-
-  testthat::expect_error(suppressMessages(calc_bins(data = s_curve_noise_umap_scaled,
-                                                    x = "UMAP1", y = "UMAP2",
-                                                    hex_size = 0.2, buffer_x = -0.4,
-                                                    buffer_y = -0.3))
-  )
-
-  testthat::expect_error(suppressMessages(calc_bins(data = s_curve_noise_umap_scaled,
-                                                    x = "UMAP1", y = "UMAP2",
-                                                    hex_size = NA, buffer_x = 0.5,
-                                                    buffer_y = 0.8))
-  )
-
-  umap_df1 <- s_curve_noise_umap_scaled |> dplyr::bind_rows(data.frame(UMAP1 = NA,
-                                                                      UMAP2 = 2.5, ID = 76))
-  testthat::expect_error(suppressMessages(calc_bins(data = umap_df1,
-                                                    x = "UMAP1", y = "UMAP2",
-                                                    hex_size = 0.2,
-                                                    buffer_x = 0.346,
-                                                    buffer_y = 0.3)))
-
-  umap_df2 <- s_curve_noise_umap_scaled |> dplyr::bind_rows(data.frame(UMAP1 = 2.5,
-                                                                       UMAP2 = NA, ID = 76))
-  testthat::expect_error(suppressMessages(calc_bins(data = umap_df2,
-                                                    x = "UMAP1", y = "UMAP2",
-                                                    hex_size = 0.2,
-                                                    buffer_x = 0.346,
-                                                    buffer_y = 0.3)))
-
-  umap_df3 <- s_curve_noise_umap_scaled |>
-    dplyr::filter(dplyr::row_number() != NROW(s_curve_noise_umap_scaled)) |>
-    dplyr::bind_rows(data.frame(UMAP1 = Inf, UMAP2 = 2.5, ID = 76))
-  testthat::expect_error(suppressMessages(calc_bins(data = umap_df3,
-                                                    x = "UMAP1", y = "UMAP2",
-                                                    hex_size = 0.2,
-                                                    buffer_x = 0.346,
-                                                    buffer_y = 0.3)))
-
-  umap_df4 <- s_curve_noise_umap_scaled |>
-    dplyr::filter(dplyr::row_number() != NROW(s_curve_noise_umap_scaled)) |>
-    dplyr::bind_rows(data.frame(UMAP1 = 2.5, UMAP2 = Inf, ID = 76))
-  testthat::expect_error(suppressMessages(calc_bins(data = umap_df4,
-                                                    x = "UMAP1", y = "UMAP2",
-                                                    hex_size = 0.2,
-                                                    buffer_x = 0.346,
-                                                    buffer_y = 0.3)))
-
+  testthat::expect_error(calc_bins_y(bin1 = 3, s1 = -0.01, s2 = -0.1,
+                                     r2 = range_umap2))
+  testthat::expect_error(calc_bins_y(bin1 = 3, s1 = -0.1, s2 = -0.01,
+                                     r2 = range_umap2))
+  testthat::expect_error(calc_bins_y(bin1 = 3, s1 = -0.01, s2 = -0.01,
+                                     r2 = range_umap2))
 
 })
