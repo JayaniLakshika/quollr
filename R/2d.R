@@ -326,7 +326,8 @@ find_pts <- function(data_hb) {
 #' @param s2 The y-coordinate of the hexagonal grid starting point.
 #' @param r2 The range of the original second embedding component.
 #'
-#' @return A object that contains all hexagonal bin centroids (centroids),
+#' @return A object that contains numeric vector that contains bins along the x and y axes respectively,
+#' all hexagonal bin centroids (centroids),
 #' hexagonal coordinates of the full grid(hex_poly),
 #' embedding components with their corresponding hexagon IDs (data_hb_id),
 #' hex bins with their corresponding standardise counts (std_cts),
@@ -345,13 +346,13 @@ hex_binning <- function(data, bin1 = 2, s1 = -0.1, s2 = -0.1, r2) {
 
   ## To compute the number of bins along the y-axis
   bin_obj <- calc_bins_y(bin1 = bin1, s1 = s1, s2 = s2, r2 = r2)
-  num_bins_y <- bin_obj$bin2
+  bin2 <- bin_obj$bin2
 
   ## To obtain the width of the hexagon
   w <- bin_obj$a1
 
   ## To generate all the centroids of the grid
-  all_centroids_df <- gen_centroids(bin1 = bin1, bin2 = num_bins_y, s1 = s1,
+  all_centroids_df <- gen_centroids(bin1 = bin1, bin2 = bin2, s1 = s1,
                                     s2 = s2, a1 = w)
 
   ## To generate the hexagon coordinates
@@ -367,7 +368,8 @@ hex_binning <- function(data, bin1 = 2, s1 = -0.1, s2 = -0.1, r2) {
   pts_df <- find_pts(data_hb = nldr_hex_id)
 
   ## To generate the object of hexagon info
-  hex_bin_obj <- list(centroids = all_centroids_df,
+  hex_bin_obj <- list(bins = c(bin1, bin2),
+                      centroids = all_centroids_df,
                       hex_poly = all_hex_coord,
                       data_hb_id = nldr_hex_id,
                       std_cts = std_df,
@@ -729,115 +731,16 @@ vis_rmlg_mesh <- function(distance_edges, benchmark_value, tr_coord_df,
 #' This function determines the number of bins along the x and y axes
 #' to obtain a specific number of non-empty bins.
 #'
-#' @param data A tibble or data frame.
-#' @param x The name of the column that contains values along the x-axis.
-#' @param y The name of the column that contains values along the y-axis.
-#' @param non_empty_bins The desired number of non-empty bins.
-#' @param x_start Starting point along the x-axis for hexagonal binning.
-#' @param y_start Starting point along the y-axis for hexagonal binning.
-#' @param buffer_x The buffer size along the x-axis.
-#' @param buffer_y The buffer size along the y-axis.
-#' @param hex_size A numeric value that initializes the radius of the outer
-#' circle surrounding the hexagon.
-#' @param col_start The text that begins the column name of x and y axes of data.
+#' @param data A tibble that contains the embedding.
 #'
 #' @return The number of bins along the x and y axes
 #' needed to achieve a specific number of non-empty bins.
 #'
 #' @examples
-#' find_non_empty_bins(data = s_curve_noise_umap_scaled,
-#' x = "UMAP1", y = "UMAP2", non_empty_bins = 10, x_start = -0.1732051, y_start = -0.15,
-#' buffer_x = 0.346, buffer_y = 0.3, hex_size = 0.2, col_start = "UMAP")
+#' find_non_empty_bins(data = s_curve_noise_umap_scaled)
 #'
 #' @export
-find_non_empty_bins <- function(data, x, y, non_empty_bins, x_start, y_start,
-                                buffer_x, buffer_y, hex_size, col_start) {
-
-  if (missing(hex_size)) {
-    hex_size <- 0.2
-  }
-
-  # Calculate horizontal and vertical spacing
-  hs <- sqrt(3) * hex_size
-  vs <- 1.5 * hex_size
-
-  if (missing(buffer_x)) {
-    buffer_x <- round(hs * 1.5, 3)
-
-    message(paste0("Buffer along the x-axis is set to ", buffer_x, "."))
-
-  } else {
-    if (buffer_x > round(hs, 3)) {
-
-      message(paste0("Buffer along the x-axis exceeds than ", hs, ".
-                     Need to assign a value less than or equal to ", hs, "."))
-
-    } else if (buffer_x <= 0 ) {
-
-      message(paste0("Buffer along the x-axis is less than or equal to zero."))
-
-    }
-  }
-
-  if (missing(buffer_y)) {
-    buffer_y <- round(vs * 1.5, 3)
-
-    message(paste0("Buffer along the y-axis is set to ", buffer_y, "."))
-
-
-  } else {
-    if (buffer_y > round(vs, 3)) {
-
-      message(paste0("Buffer along the y-axis exceeds than ", vs, ".
-                     Need to assign a value less than or equal to ", vs, "."))
-
-    } else if (buffer_y <= 0 ) {
-
-      message(paste0("Buffer along the y-axis is less than or equal to zero."))
-
-    }
-  }
-
-  ## If x_start and y_start not define
-  if (missing(x_start)) {
-    # Define starting point
-    x_start <- round(min(data[[rlang::as_string(rlang::sym(x))]]) - (sqrt(3) * hex_size/2), 3)
-
-    message(paste0("x_start is set to ", x_start, "."))
-
-  } else {
-    max_x_start <- min(data[[rlang::as_string(rlang::sym(x))]]) + (sqrt(3) * hex_size)
-    min_x_start <- min(data[[rlang::as_string(rlang::sym(x))]]) - (sqrt(3) * hex_size)
-
-    if ((x_start < min_x_start) | (x_start > max_x_start)){
-      stop(paste0("x_start value is not compatible.
-                  Need to use a value betweeen ", min_x_start," and ", max_x_start,"."))
-
-    }
-
-  }
-
-  if (missing(y_start)) {
-    # Define starting point
-    y_start <- round(min(data[[rlang::as_string(rlang::sym(y))]]) - (1.5 * hex_size/2), 3)
-
-    message(paste0("y_start is set to ", y_start, "."))
-
-
-  } else {
-
-    max_y_start <- min(data[[rlang::as_string(rlang::sym(y))]]) + (1.5 * hex_size)
-    min_y_start <- min(data[[rlang::as_string(rlang::sym(y))]]) - (1.5 * hex_size)
-
-    if ((y_start < min_y_start) | (y_start > max_y_start)){
-      stop(paste0("y_start value is not compatible.
-                  Need to use a value betweeen ", min_y_start," and ", max_y_start,"."))
-
-    }
-
-  }
-
-
+find_non_empty_bins <- function(data) {
 
   if (missing(non_empty_bins)) {
     stop("Required number of non-empty bins is not defined.")
@@ -846,24 +749,13 @@ find_non_empty_bins <- function(data, x, y, non_empty_bins, x_start, y_start,
   max_bins_along_axis <- ceiling(sqrt(NROW(data)))
 
   ## Since having 1 bin along x or y-axis is not obvious therefore started from 2
-  num_bins_comb_df <- expand.grid(num_bins_x_vec = 2:max_bins_along_axis,
-                                  num_bins_y_vec = 2:max_bins_along_axis) |>
-    dplyr::mutate(num_x = pmin(num_bins_x_vec, num_bins_y_vec),
-                  num_y = pmax(num_bins_x_vec, num_bins_y_vec)) |>
-    dplyr::distinct(num_x, num_y) |>
-    dplyr::mutate(num_bins = num_x * num_y) |>
-    dplyr::filter(num_bins >= non_empty_bins)
+  num_bins_x_vec <- 2:max_bins_along_axis
 
-  num_bins_x <- num_bins_comb_df$num_x[1]
-  num_bins_y <- num_bins_comb_df$num_y[1]
+  ## To initialise the number of bins along the axes
+  bin1 <- num_bins_x_vec[1]
 
   ### Generate the full grid
-  hb_obj <- hex_binning(data = data, x = x, y = y, num_bins_x = num_bins_x,
-                        num_bins_y = num_bins_y, x_start = x_start,
-                        y_start = y_start, buffer_x = buffer_x,
-                        buffer_y = buffer_y, hex_size = hex_size,
-                        col_start = col_start)
-
+  hb_obj <- hex_binning(data = data, bin1 = bin1, s1 = s1, s2 = s2, r2 = r2)
 
   num_of_non_empty_bins <- hb_obj$non_bins
 
@@ -878,24 +770,19 @@ find_non_empty_bins <- function(data, x, y, non_empty_bins, x_start, y_start,
            for the required number of non empty bins.")
     }
 
-    num_bins_x <- num_bins_comb_df$num_x[i]
-    num_bins_y <- num_bins_comb_df$num_y[i]
+    bin1 <- num_bins_x_vec[2]
 
     ### Generate the full grid
-    hb_obj <- hex_binning(data = data, x = x, y = y, num_bins_x = num_bins_x,
-                          num_bins_y = num_bins_y, x_start = x_start,
-                          y_start = y_start, buffer_x = buffer_x,
-                          buffer_y = buffer_y, hex_size = hex_size,
-                          col_start = col_start)
-
+    hb_obj <- hex_binning(data = emb_df, bin1 = bin1, s1 = s1, s2 = s2, r2 = r2)
 
     num_of_non_empty_bins <- hb_obj$non_bins
 
     if (num_of_non_empty_bins >= non_empty_bins) {
-      return(list(num_bins_x = num_bins_x, num_bins_y = num_bins_y))
+      return(list(bin1 = bin1, bin2 = bin2))
       break
     } else {
       next
     }
   }
 }
+
