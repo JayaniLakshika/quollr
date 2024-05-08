@@ -20,7 +20,7 @@ reference:
 - title: "Hexagonal binning"
   desc: These are for hexagonal binning.
   contents:
-  - calc_bins
+  - calc_bins_y
   - gen_centroids
   - gen_hex_coord
   - assign_data
@@ -32,7 +32,6 @@ reference:
   - cal_2d_dist
   - extract_hexbin_centroids
   - extract_hexbin_mean
-  - extract_kmean_centers
   - tri_bin_centroids
   - gen_edges
 - title: "Parameters"
@@ -52,7 +51,6 @@ reference:
 - title: "Model summaries"
   desc: These are to obtain model summaries.
   contents:
-  - compute_aic
   - glance
   - predict_emb
   - augment
@@ -70,3 +68,4 @@ reference:
   contents:
   - find_pts
   - find_non_empty_bins
+  - get_min_indices
