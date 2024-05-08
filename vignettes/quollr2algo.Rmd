@@ -23,39 +23,29 @@ In here, we'll walk through the algorithm for preprocessing 2D embedding data to
 library(quollr)
 library(ggplot2)
 library(tibble)
+library(dplyr)
+library(stats)
 ```
 
 The algorithm consists of two steps. First, construct the model in 2D space. Second, lift the model into high-dimensions. Therefore, to begin the process, first you need to know how the 2D model is constructed.
 
 ## Construct the 2D model
 
-### Compute hexagonal grid configurations
+### Binning the data
 
-To construct the model in the 2D space, first you need to decide hexagonal grid configurations, which means that the number of bins along the x and y axes. You can begin by calculating default number of bins along the axes with default settings for `hex_size`, `buffer_x`, and `buffer_y`.
-
-```{r}
-num_bins_list <- calc_bins(data = s_curve_noise_umap_scaled, x = "UMAP1", 
-                           y = "UMAP2", hex_size = 0.2, buffer_x = 0.346, 
-                           buffer_y = 0.3)
-num_bins_x <- num_bins_list$num_x
-num_bins_y <- num_bins_list$num_y
-```
-
-### Obtain bin centroids
-
-Next, you need to hexagonally bins the 2D layout and obtain the bin centroids. Discussed in details in [3. Algorithm for binning data](https://quollr.netlify.app/articles/visfullgrid). 
+To construct the model in the 2D space, first you need to hexagonally bins the 2D layout. Discussed in details in [3. Algorithm for binning data](https://quollr.netlify.app/articles/visfullgrid).  
 
 ```{r}
-hb_obj <- hex_binning(data = s_curve_noise_umap_scaled, x = "UMAP1", y = "UMAP2", 
-                      num_bins_x = num_bins_x, num_bins_y = num_bins_y, 
-                      x_start = -0.1732051, y_start = -0.15, buffer_x = 0.346, 
-                      buffer_y = 0.3, hex_size = 0.2, col_start = "UMAP")
+hb_obj <- hex_binning(data = s_curve_noise_umap_scaled, bin1 = 3, s1 = -0.1, 
+                      s2 = -0.1, r2 = r2)
 
 all_centroids_df <- hb_obj$centroids
 counts_df <- hb_obj$std_cts
 ```
 
-After obtaining the hexagonal bin centroid coordinates (`all_centroids_df`) and standard number of points within each hexagon (`counts_df`), you can generate a data frame or tibble which gives hexagonal ID, centroid coordinates and standard counts where data exists.
+### Obtain bin centroids
+
+Nest step is to obtain the hexagonal bin centroid coordinates (`all_centroids_df`) and standard number of points within each hexagon (`counts_df`). Then, you can generate tibble which gives hexagonal ID, centroid coordinates and standard counts where data exists.
 
 ```{r}
 df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df,
@@ -68,7 +58,7 @@ glimpse(df_bin_centroids)
 One of the parameters that you need to control is that the benchmark value to remove low density hexagons. The default value is the first quartile of the standardise counts.
 
 ```{r}
-benchmark_value_rm_lwd <- stats::quantile(df_bin_centroids$std_counts, 
+benchmark_value_rm_lwd <- quantile(df_bin_centroids$std_counts, 
                 probs = c(0,0.25,0.5,0.75,1), names = FALSE)[2]
 
 benchmark_value_rm_lwd
@@ -80,7 +70,7 @@ Here, you need to obtain the low density hexagons.
 
 ```{r}
 df_bin_centroids_low <- df_bin_centroids |>
-  dplyr::filter(std_counts <= benchmark_value_rm_lwd)
+  filter(std_counts <= benchmark_value_rm_lwd)
 
 glimpse(df_bin_centroids_low)
 ```
@@ -89,7 +79,7 @@ Next, check the neighboring bins of low-density hexagons and decide which should
 
 ```{r}
 identify_rm_bins <- find_low_dens_hex(df_bin_centroids_all = df_bin_centroids, 
-                                      num_bins_x = num_bins_x, 
+                                      bin1 = 3, 
                                       df_bin_centroids_low = df_bin_centroids_low)
 identify_rm_bins
 ```
