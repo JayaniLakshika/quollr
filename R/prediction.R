@@ -14,8 +14,8 @@
 #' @importFrom tibble tibble
 #'
 #' @examples
-#' model <- fit_highd_model(training_data = s_curve_noise_training, x = "UMAP1", y = "UMAP2",
-#' nldr_df_with_id = s_curve_noise_umap_scaled, col_start_2d = "UMAP", col_start_highd = "x")
+#' model <- fit_highd_model(training_data = s_curve_noise_training,
+#' emb_df = s_curve_noise_umap_scaled, bin1 = 3, col_start_highd = "x")
 #' df_bin_centroids <- model$df_bin_centroids
 #' df_bin <- model$df_bin
 #' predict_emb(test_data = s_curve_noise_training, df_bin_centroids = df_bin_centroids,
@@ -25,15 +25,15 @@
 predict_emb <- function(test_data, df_bin_centroids, df_bin, type_NLDR) {
 
   test_data_matrix <- test_data |>
-    dplyr::select(-ID) |>
+    select(-ID) |>
     as.matrix()
 
   df_bin_matrix <- df_bin |>
-    dplyr::select(-hb_id) |>
+    select(-hb_id) |>
     as.matrix()
 
   ## Compute distances between nldr coordinates and hex bin centroids
-  dist_df <- proxy::dist(test_data_matrix, df_bin_matrix, method = "Euclidean")
+  dist_df <- dist(test_data_matrix, df_bin_matrix, method = "Euclidean")
 
   ## Columns that gives minimum distances
   min_column <- apply(dist_df, 1, which.min)
@@ -46,7 +46,7 @@ predict_emb <- function(test_data, df_bin_centroids, df_bin, type_NLDR) {
   pred_emb1 = df_bin_centroids$c_x[match_indices]
   pred_emb2 = df_bin_centroids$c_y[match_indices]
 
-  pred_obj <- tibble::tibble(pred_emb1 = pred_emb1, pred_emb2 = pred_emb2,
+  pred_obj <- tibble(pred_emb1 = pred_emb1, pred_emb2 = pred_emb2,
                    ID = test_data$ID, pred_hb_id = pred_hb_id)
 
   ## Rename column names
@@ -56,54 +56,6 @@ predict_emb <- function(test_data, df_bin_centroids, df_bin, type_NLDR) {
 
 }
 
-
-#' Compute the Akaike Information Criterion (AIC) for a given model.
-#'
-#' @param p Number of dimensions of the data set.
-#' @param mse Mean squared error (MSE) of the model.
-#' @param num_bins Total number of bins without empty bins used in the model.
-#' @param num_obs Total number of observations in the training or test set.
-#'
-#' @return The AIC value for the specified model.
-#'
-#' @examples
-#' # Example usage of compute_aic function
-#' p <- 5
-#' mse <- 1500
-#' num_bins <- 10
-#' num_obs <- 100
-#' aic_value <- compute_aic(p, mse, num_bins, num_obs)
-#' cat("AIC Value:", aic_value, "\n")
-#'
-#' @export
-compute_aic <- function(p, mse, num_bins, num_obs) {
-  if (is.infinite(p)) {
-    stop("Inf present.")
-  }
-
-  if (p == 0) {
-    stop("No high_D diensions.")
-  }
-
-  if (is.na(p)) {
-    stop("Should assign number of dimensions in high-D data.")
-  }
-
-  if (is.na(num_bins)) {
-    stop("Should assign number of non-emty bins.")
-  }
-
-  if (is.na(num_obs)) {
-    stop("Should assign number of observations in high-D data.")
-  }
-
-  if (is.na(mse)) {
-    stop("Total error is missing.")
-  }
-
-  aic <- 2*num_bins*p + num_obs*p*log(mse)
-  return(aic)
-}
 
 #' Generate evaluation metrics
 #'
@@ -120,8 +72,8 @@ compute_aic <- function(p, mse, num_bins, num_obs) {
 #' @importFrom tibble tibble
 #'
 #' @examples
-#' model <- fit_highd_model(training_data = s_curve_noise_training, x = "UMAP1", y = "UMAP2",
-#' nldr_df_with_id = s_curve_noise_umap_scaled, col_start_2d = "UMAP", col_start_highd = "x")
+#' model <- fit_highd_model(training_data = s_curve_noise_training,
+#' emb_df = s_curve_noise_umap_scaled, bin1 = 3, col_start_highd = "x")
 #' df_bin_centroids <- model$df_bin_centroids
 #' df_bin <- model$df_bin
 #' pred_df_test <- predict_emb(test_data = s_curve_noise_training,
@@ -137,10 +89,10 @@ glance <- function(test_data, prediction_df, df_bin, col_start = "x") {
 
   ## Map high-D averaged mean coordinates
   prediction_df <- prediction_df |>
-    dplyr::left_join(df_bin, by = c("pred_hb_id" = "hb_id"))
+    left_join(df_bin, by = c("pred_hb_id" = "hb_id"))
 
   prediction_df <- prediction_df |>
-    dplyr::left_join(test_data, by = c("ID" = "ID")) ## Map high-D data
+    left_join(test_data, by = c("ID" = "ID")) ## Map high-D data
 
   cols <- paste0(col_start, 1:(NCOL(df_bin) - 1))
   high_d_model_cols <- paste0("model_high_d_", col_start, 1:(NCOL(df_bin) - 1))
@@ -159,9 +111,7 @@ glance <- function(test_data, prediction_df, df_bin, col_start = "x") {
 
   mse <-  mean(row_wise_total_error)
 
-  aic <-  compute_aic((NCOL(df_bin) - 1), mse,
-                      NROW(df_bin), NROW(test_data))
-  summary_df <- tibble::tibble(Error = error, MSE = mse, AIC = aic)
+  summary_df <- tibble(Error = error, MSE = mse)
 
   return(summary_df)
 
@@ -182,11 +132,13 @@ glance <- function(test_data, prediction_df, df_bin, col_start = "x") {
 #'
 #' @return A tibble containing the augmented data with predictions,
 #' error metrics, and absolute error metrics.
+#'
 #' @importFrom dplyr left_join select bind_cols
+#' @importFrom tidyselect starts_with
 #'
 #' @examples
-#' model <- fit_highd_model(training_data = s_curve_noise_training, x = "UMAP1", y = "UMAP2",
-#' nldr_df_with_id = s_curve_noise_umap_scaled, col_start_2d = "UMAP", col_start_highd = "x")
+#' model <- fit_highd_model(training_data = s_curve_noise_training,
+#' emb_df = s_curve_noise_umap_scaled, bin1 = 3, col_start_highd = "x")
 #' df_bin_centroids <- model$df_bin_centroids
 #' df_bin <- model$df_bin
 #' augment(df_bin_centroids = df_bin_centroids, df_bin = df_bin,
@@ -209,14 +161,14 @@ augment <- function(df_bin_centroids, df_bin, training_data, newdata = NULL,
                                df_bin = df_bin, type_NLDR = type_NLDR)
 
   prediction_df <- prediction_df |>
-    dplyr::left_join(df_bin, by = c("pred_hb_id" = "hb_id"))
+    left_join(df_bin, by = c("pred_hb_id" = "hb_id"))
 
   prediction_df <- prediction_df |>
-    dplyr::left_join(newdata, by = c("ID" = "ID")) ## Map high-D data
+    left_join(newdata, by = c("ID" = "ID")) ## Map high-D data
 
   prediction_df <- prediction_df |>
-    dplyr::select("ID", tidyselect::starts_with(col_start),
-                  "pred_hb_id", tidyselect::starts_with("model_high_d_"))
+    select("ID", starts_with(col_start),
+           "pred_hb_id", starts_with("model_high_d_"))
 
   cols <- paste0(col_start, 1:(NCOL(df_bin) - 1))
   high_d_model_cols <- paste0("model_high_d_", col_start, 1:(NCOL(df_bin) - 1))
