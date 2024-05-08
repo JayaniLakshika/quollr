@@ -245,51 +245,77 @@ gen_hex_coord <- function(centroids_df, hex_size = 0.2){
 }
 
 
+#' Get indices of all minimum distances
+#'
+#' This function returns the indices of all minimum distances.
+#'
+#' @param x A numeric vector.
+#' @return A numeric vector containing the indices of all minimum distances.
+#' @examples
+#' x <- c(1, 2, 1, 3)
+#' get_min_indices(x)
+#' @export
+get_min_indices <- function(x) {
+  min_indices <- which(abs(x - min(x)) < 0.00001, arr.ind = TRUE)
+  # If there are multiple minimum values, return the minimum index
+  if (length(min_indices) > 1) {
+    min_indices <- min(min_indices)
+  }
+  return(min_indices)
+}
+
+
 #' Assign data to hexagons
 #'
 #' This function assigns the data to hexagons.
 #'
 #' @param data data A tibble or data frame.
-#' @param centroid_df The dataset with centroid coordinates only.
-#' @param col_start The text that begins the column name of x and y axes of data.
+#' @param centroid_df The dataset with centroid coordinates.
 #'
-#' @return A tibble contains x and y coordinates and corresponding hexagon ID
-#' (emb_1, emb_2, and hb_id respectively).
+#' @return A tibble contains embedding components and corresponding hexagon ID.
 #'
 #'
 #' @examples
-#' num_bins_list <- calc_bins(data = s_curve_noise_umap_scaled, x = "UMAP1", y = "UMAP2",
-#' hex_size = 0.2, buffer_x = 0.346, buffer_y = 0.3)
-#' num_bins_x <- num_bins_list$num_x
+#' range_umap2 <- diff(range(s_curve_noise_umap$UMAP2))
+#' num_bins_x <- 3
+#' num_bins_list <- calc_bins(bin1 = num_bins_x, s1 = -0.1, s2 = -0.1, r2 = range_umap2)
 #' num_bins_y <- num_bins_list$num_y
 #' all_centroids_df <- gen_centroids(data = s_curve_noise_umap_scaled,
 #' x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
 #' num_bins_y = num_bins_y, x_start = -0.1732051, y_start = -0.15, buffer_x = 0.346,
 #' buffer_y = 0.3, hex_size = 0.2)
-#' assign_data(data = s_curve_noise_umap_scaled,
-#' centroid_df = all_centroids_df, col_start = "UMAP")
+#' assign_data(data = s_curve_noise_umap_scaled, centroid_df = all_centroids_df)
 #'
 #' @export
-assign_data <- function(data, centroid_df, col_start) {
+assign_data <- function(data, centroid_df) {
 
+  ## To select first and second embedding components
   select_emb <- data |>
-    dplyr::select(tidyselect::starts_with(col_start))
+    dplyr::select(c(1, 2))
 
-  ## Convert to matrix
+  ## To select coordinates for the centroids
+  select_centroid <- centroid_df |>
+    select(c(2, 3))
+
+  ## Convert to a matrix
   matrix_nldr <- as.matrix(select_emb)
-  centroid_matrix <- as.matrix(centroid_df[, c(2, 3)])
+  centroid_matrix <- as.matrix(select_centroid)
 
-  ## Compute distances between nldr coordinates and hex bin centroids
+  ## Compute distances between embedding points and hex bin centroids
   dist_df <- proxy::dist(matrix_nldr, centroid_matrix, method = "Euclidean")
 
-  ## Columns that gives minimum distances
-  min_column <- apply(dist_df, 1, which.min)
+  # Get the column indices of minimum distances (if there are multiple minimum,
+  # get the minimum indicies)
+  min_column <- apply(dist_df, 1, get_min_indices)
 
+  # Extract hex bin IDs corresponding to minimum distances
+  hb_ids <- centroid_df$hexID[min_column]
+
+  # Add hex bin IDs to the data
   data <- data |>
-    dplyr::mutate(hb_id = centroid_df$hexID[min_column])
+    mutate(hb_id = hb_ids)
 
   return(data)
-
 }
 
 #' Compute standardize counts in hexagons
