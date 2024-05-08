@@ -1,34 +1,38 @@
-#' Scaling the data
+#' Scaling the NLDR data
 #'
-#' This function scales the x and y coordinates.
+#' This function scales first and second columns.
 #'
-#' @param data A tibble or data frame.
-#' @param x The name of the column that contains values along the x-axis.
-#' @param y The name of the column that contains values along the y-axis.
-#' @param hr Numeric value representing the ratio of the hexagon size.
-#' Default is 2/sqrt(3).
+#' @param data A tibble.
 #'
-#' @return A tibble contains scaled x and y coordinates.
+#' @return A list of a tibble contains scaled first and second columns, and
+#' numeric vectors representing the limits of the original data.
 #'
 #' @importFrom dplyr across summarise mutate pull
 #'
 #' @examples
-#' gen_scaled_data(data = s_curve_noise_umap, x = "UMAP1", y = "UMAP2", hr = 2/sqrt(3))
+#' gen_scaled_data(data = s_curve_noise_umap)
 #'
 #' @export
-gen_scaled_data <- function(data, x, y, hr = 2/sqrt(3)) {
+gen_scaled_data <- function(data) {
 
-  ## To compute the aspect ratio
-  ar <- data |>
-    summarise(across(c({{ x }}, {{ y }}), ~ max(.) - min(.))) |>
-    mutate(ar = get(!!y)/get(!!x)) |>
-    pull(ar)
+  ## To compute limits along each embedding component
+  limits <- data |>
+    summarise(across(c(1, 2), list(min = min, max = max)))
 
-  scaled_nldr <- data |>
-    mutate(across(c({{ x }}, {{ y }}), ~ (. - min(.)) / (max(.) - min(.)))) |>
-    mutate({{ y }} := get(!!y) * ceiling(ar / hr) * hr)
+  min_x1 <- limits |> pull(1)
+  max_x1 <- limits |> pull(2)
+  min_x2 <- limits |> pull(3)
+  max_x2 <- limits |> pull(4)
 
-  return(scaled_nldr)
+  lim1 <- c(min_x1, max_x1)
+  lim2 <- c(min_x2, max_x2)
+
+  ## To scale the data
+  data <- data |>
+    mutate(across(1, ~ (. - min_x1) / (max_x1 - min_x1)), ## scale: 0-1
+           across(2, ~ (. - min_x2) / (max_x1 - min_x1))) ## scale: 0-ymax
+
+  return(list(scaled_nldr = data, lim1 = lim1, lim2 = lim2))
 
 }
 
