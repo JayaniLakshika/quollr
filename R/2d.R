@@ -76,54 +76,50 @@ gen_centroids <- function(bin1 = 2, bin2, s1 = -0.1, s2 = -0.1, a1){
 
 #' Generate hexagonal polygon coordinates
 #'
-#' This function generates the coordinates of hexagons after passing hexagonal centroids.
+#' This function generates the coordinates of hexagons after passing
+#' hexagonal centroids.
 #'
-#' @param centroids_df The dataset with all hexbin ID and centroid coordinates.
-#' @param hex_size A numeric value that initializes the radius of the outer
-#' circle surrounding the hexagon.
+#' @param centroids_df The dataset with all hexagonal bin IDs
+#' and centroid coordinates.
+#' @param a1 The width of the hexagon.
 #'
 #' @return A tibble contains polygon id, x and y coordinates (hex_poly_id, x,
 #' and y respectively) of hexagons.
 #'
 #'
 #' @examples
-#' num_bins_list <- calc_bins(data = s_curve_noise_umap_scaled, x = "UMAP1", y = "UMAP2",
-#' hex_size = 0.2, buffer_x = 0.346, buffer_y = 0.3)
-#' num_bins_x <- num_bins_list$num_x
-#' num_bins_y <- num_bins_list$num_y
-#' all_centroids_df <- gen_centroids(data = s_curve_noise_umap_scaled,
-#' x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
-#' num_bins_y = num_bins_y, x_start = -0.1732051, y_start = -0.15, buffer_x = 0.346,
-#' buffer_y = 0.3, hex_size = 0.2)
-#' gen_hex_coord(centroids_df = all_centroids_df, hex_size = 0.2)
+#' range_umap2 <- diff(range(s_curve_noise_umap$UMAP2))
+#' num_bins_x <- 3
+#' num_bins_list <- calc_bins_y(bin1 = num_bins_x, s1 = -0.1, s2 = -0.1,
+#' r2 = range_umap2)
+#' num_bins_y <- num_bins_list$bin2
+#' width <- num_bins_list$a1
+#' all_centroids_df <- gen_centroids(bin1 = num_bins_x, bin2 = num_bins_y,
+#' s1 = -0.1, s2 = -0.1, a1 = width)
+#' gen_hex_coord(centroids_df = all_centroids_df, a1 = width)
 #'
 #' @export
-gen_hex_coord <- function(centroids_df, hex_size = 0.2){
+gen_hex_coord <- function(centroids_df, a1){
+
+  # If the hexagonal width is missing
+  if (missing(a1)) {
+    stop("Need to initialize the width of the hexagon.")
+  }
 
   ## Obtain centroid info
   hex_ids <- centroids_df$hexID
   c_x_vec <- centroids_df$c_x
   c_y_vec <- centroids_df$c_y
 
-  ## Compute the distance for hexagonal coordinates from the centroids
-  if ((length(unique(c_x_vec)) == 1) || (length(unique(c_y_vec)) == 1)) {
+  ## To compute vertical spacing factor
+  vs_factor <- a1/(2 * sqrt(3))
 
-    ## If there is only one hexagon along the x and y axis
-    dx <- 2 * hex_size
-    dy <- sqrt(3) * hex_size
-
-  } else {
-
-    ## If there is only more than one hexagon along the x and y axis
-    dx <- (c_x_vec[2] - c_x_vec[1])/2
-    dy <- (unique(c_y_vec)[2] - unique(c_y_vec)[1])/ sqrt(3) / 2 * 1.15
-
-
-  }
+  dx <- a1/2
+  dy <- a1/sqrt(3)
 
   ## Assign coordinates for 6 directions
-  x_add_factor <- c(dx, dx, 0, -dx, -dx, 0)
-  y_add_factor <- c(dy, -dy, -2 * dy, -dy, dy, 2 * dy)
+  x_add_factor <- c(0, -dx, -dx, 0, dx, dx)
+  y_add_factor <- c(dy, vs_factor, -vs_factor, -dy, -vs_factor, vs_factor)
 
   ## Initialize vectors to store hexagonal coordinates
   hex_poly_id <- integer(0)
@@ -148,11 +144,10 @@ gen_hex_coord <- function(centroids_df, hex_size = 0.2){
 
   }
 
-  hex_coord_df <- tibble::tibble(hex_poly_id = hex_poly_id, x = x, y = y)
+  hex_coord_df <- tibble(hex_poly_id = hex_poly_id, x = x, y = y)
 
   return(hex_coord_df)
 }
-
 
 #' Get indices of all minimum distances
 #'
