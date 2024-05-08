@@ -4,140 +4,52 @@
 #' to customize the modeling process, including the choice of bin centroids or bin means,
 #' removal of low-density hexagons, and averaging of high-dimensional data.
 #'
-#' @param training_data A data frame containing the training high-dimensional data.
-#' @param nldr_df_with_id A data frame containing 2D embeddings with a unique identifier.
-#' @param x The name of the column that contains first 2D embeddings component.
-#' @param y The name of the column that contains second 2D embeddings component.
-#' @param num_bins_x Number of bins along the x-axis.
-#' @param num_bins_y Number of bins along the y-axis.
-#' @param x_start Starting point along the x-axis for hexagonal binning.
-#' @param y_start Starting point along the y-axis for hexagonal binning.
-#' @param buffer_x The buffer size along the x-axis.
-#' @param buffer_y The buffer size along the y-axis.
-#' @param hex_size A numeric value that initializes the radius of the outer circle
-#' surrounding the hexagon.
+#' @param training_data A tibble that contains the training high-dimensional data.
+#' @param emb_df A tibble that contains embedding with a unique identifier.
+#' @param bin1 Number of bins along the x axis.
+#' @param s1 The x-coordinate of the hexagonal grid starting point.
+#' @param s2 The y-coordinate of the hexagonal grid starting point.
+#' @param r2 The range of the original second embedding component.
 #' @param is_bin_centroid Logical, indicating whether to use bin centroids (default is TRUE).
 #' @param is_rm_lwd_hex Logical, indicating whether to remove low-density hexagons
 #' (default is FALSE).
 #' @param benchmark_to_rm_lwd_hex The benchmark value to remove low-density hexagons.
-#' @param col_start_2d The text prefix for columns in the 2D embedding data.
 #' @param col_start_highd The text prefix for columns in the high-dimensional data.
 #'
 #' @return A list containing the data frame with high-dimensional coordinates
 #' for 2D bin centroids (\code{df_bin}) and the data frame containing
 #' information about hexagonal bin centroids (\code{df_bin_centroids}) in 2D.
 #'
+#' @importFrom dplyr bind_cols filter select
+#' @importFrom stats quantile
+#'
 #' @examples
-#' fit_highd_model(training_data = s_curve_noise_training, x = "UMAP1", y = "UMAP2",
-#' nldr_df_with_id = s_curve_noise_umap_scaled, col_start_2d = "UMAP", col_start_highd = "x")
+#' fit_highd_model(training_data = s_curve_noise_training,
+#' emb_df = s_curve_noise_umap_scaled, col_start_highd = "x")
 #'
 #' @export
-fit_highd_model <- function(training_data, nldr_df_with_id, x, y, num_bins_x,
-                      num_bins_y, x_start, y_start, buffer_x, buffer_y, hex_size,
-                      is_bin_centroid = TRUE, is_rm_lwd_hex = FALSE,
-                      benchmark_to_rm_lwd_hex, col_start_2d, col_start_highd) {
+fit_highd_model <- function(training_data, emb_df, bin1 = 2, s1 = -0.1,
+                            s2 = -0.1, r2, is_bin_centroid = TRUE,
+                            is_rm_lwd_hex = FALSE, benchmark_to_rm_lwd_hex,
+                            col_start_highd = "x") {
 
-  if (missing(hex_size)) {
-    hex_size <- 0.2
+  ## To check whether bin2 greater than 2
+  if (bin1 < 2) {
+    stop("Number of bins along the x-axis at least should be 2.")
   }
 
-  # Calculate horizontal and vertical spacing
-  hs <- sqrt(3) * hex_size
-  vs <- 1.5 * hex_size
-
-  if (missing(buffer_x)) {
-    buffer_x <- round(hs * 1.5, 3)
-
-    message(paste0("Buffer along the x-axis is set to ", buffer_x, "."))
-
-  } else {
-    if (buffer_x > round(hs * 1.5, 3)) {
-
-      stop(paste0("Buffer along the x-axis exceeds than ", hs, ".
-                     Need to assign a value less than or equal to ", hs, "."))
-
-    } else if (buffer_x <= 0 ) {
-
-      stop(paste0("Buffer along the x-axis is less than or equal to zero."))
-
-    }
+  ## To check whether s1, s2 is between a specific range
+  if (!between(s1, -0.1, -0.05) | !between(s1, -0.1, -0.05)) {
+    stop("Starting point coordinates should be within -0.1 and -0.05.")
   }
 
-  if (missing(buffer_y)) {
-    buffer_y <- round(vs * 1.5, 3)
-
-    message(paste0("Buffer along the y-axis is set to ", buffer_y, "."))
-
-
-  } else {
-    if (buffer_y > round(vs * 1.5, 3)) {
-
-      stop(paste0("Buffer along the y-axis exceeds than ", vs, ".
-                     Need to assign a value less than or equal to ", vs, "."))
-
-    } else if (buffer_y <= 0) {
-
-      stop(paste0("Buffer along the y-axis is less than or equal to zero."))
-
-    }
+  ## To check original data range of embedding component 2 is initialized or not
+  if (missing(r2)) {
+    stop("The range of the original second embedding component is not initialised.")
   }
-
-
-  ## If number of bins along the x-axis and/or y-axis is not given
-  if (missing(num_bins_x) | missing(num_bins_y)) {
-    ## compute the number of bins along the x-axis
-    bin_list <- calc_bins(data = nldr_df_with_id, x = x, y = y, hex_size = hex_size,
-                          buffer_x = buffer_x, buffer_y = buffer_y)
-    num_bins_x <- bin_list$num_x
-    num_bins_y <- bin_list$num_y
-  }
-
-  ## If x_start and y_start not define
-  if (missing(x_start)) {
-    # Define starting point
-    x_start <- round(min(nldr_df_with_id[[rlang::as_string(rlang::sym(x))]]) - (sqrt(3) * hex_size/2), 3)
-
-    message(paste0("x_start is set to ", x_start, "."))
-
-  } else {
-    max_x_start <- min(nldr_df_with_id[[rlang::as_string(rlang::sym(x))]]) + (sqrt(3) * hex_size)
-    min_x_start <- min(nldr_df_with_id[[rlang::as_string(rlang::sym(x))]]) - (sqrt(3) * hex_size)
-
-    if ((x_start < min_x_start) | (x_start > max_x_start)){
-      stop(paste0("x_start value is not compatible.
-                  Need to use a value betweeen ", min_x_start," and ", max_x_start,"."))
-
-    }
-
-  }
-
-  if (missing(y_start)) {
-    # Define starting point
-    y_start <- round(min(nldr_df_with_id[[rlang::as_string(rlang::sym(y))]]) - (1.5 * hex_size/2), 3)
-
-    message(paste0("y_start is set to ", y_start, "."))
-
-
-  } else {
-
-    max_y_start <- min(nldr_df_with_id[[rlang::as_string(rlang::sym(y))]]) + (1.5 * hex_size)
-    min_y_start <- min(nldr_df_with_id[[rlang::as_string(rlang::sym(y))]]) - (1.5 * hex_size)
-
-    if ((y_start < min_y_start) | (y_start > max_y_start)){
-      stop(paste0("y_start value is not compatible.
-                  Need to use a value betweeen ", min_y_start," and ", max_y_start,"."))
-
-    }
-
-  }
-
 
   ## Obtain the hexbin object
-  hb_obj <- hex_binning(data = nldr_df_with_id, x = x, y = y, num_bins_x = num_bins_x,
-                        num_bins_y = num_bins_y, x_start = x_start,
-                        y_start = y_start, buffer_x = buffer_x,
-                        buffer_y = buffer_y, hex_size = hex_size,
-                        col_start = col_start_2d)
+  hb_obj <- hex_binning(data = emb_df, bin1 = bin1, s1 = s1, s2 = s2, r2 = r2)
 
   all_centroids_df <- hb_obj$centroids
   counts_df <- hb_obj$std_cts
@@ -151,7 +63,7 @@ fit_highd_model <- function(training_data, nldr_df_with_id, x, y, num_bins_x,
 
   } else {
     ## For bin means
-    df_bin_centroids <- extract_hexbin_mean(nldr_df_with_hex_id = nldr_df_with_hex_id,
+    df_bin_centroids <- extract_hexbin_mean(data_hb = nldr_df_with_hex_id,
                                             counts_df = counts_df)
 
   }
@@ -170,7 +82,7 @@ fit_highd_model <- function(training_data, nldr_df_with_id, x, y, num_bins_x,
     ## if the benchmark value to remove low density hexagons is not provided
     if (missing(benchmark_to_rm_lwd_hex)) {
       ## first quartile used as the default
-      benchmark_to_rm_lwd_hex <- stats::quantile(df_bin_centroids$std_counts,
+      benchmark_to_rm_lwd_hex <- quantile(df_bin_centroids$std_counts,
                                                  probs = c(0,0.25,0.5,0.75,1))[2]
     }
 
@@ -185,11 +97,11 @@ fit_highd_model <- function(training_data, nldr_df_with_id, x, y, num_bins_x,
 
     ## To identify low density hexagons
     df_bin_centroids_low <- df_bin_centroids |>
-      dplyr::filter(std_counts <= benchmark_to_rm_lwd_hex)
+      filter(std_counts <= benchmark_to_rm_lwd_hex)
 
     ## To identify low-density hexagons needed to remove by investigating neighbouring mean density
     identify_rm_bins <- find_low_dens_hex(df_bin_centroids_all = df_bin_centroids,
-                                          num_bins_x = num_bins_x,
+                                          bin1 = bin1,
                                           df_bin_centroids_low = df_bin_centroids_low)
 
     ## To remove low-density hexagons
@@ -199,15 +111,16 @@ fit_highd_model <- function(training_data, nldr_df_with_id, x, y, num_bins_x,
   }
 
   ## To generate a data set with high-D and 2D training data
-  df_all <- dplyr::bind_cols(training_data |> dplyr::select(-ID), nldr_df_with_hex_id)
+  df_all <- bind_cols(training_data |> select(-ID), nldr_df_with_hex_id)
 
   ## averaged high-D data
   df_bin <- avg_highd_data(data = df_all, col_start = col_start_highd)
 
   ## high-D model only contains the bins in 2D
   df_bin <- df_bin |>
-    dplyr::filter(hb_id %in% df_bin_centroids$hexID)
+    filter(hb_id %in% df_bin_centroids$hexID)
 
   return(list(df_bin = df_bin, df_bin_centroids = df_bin_centroids))
 
 }
+
