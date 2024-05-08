@@ -2,25 +2,21 @@
 #'
 #' This function calculates the average values of high-dimensional data within each hexagonal bin.
 #'
-#' @param data A data frame containing the high-dimensional data and 2D embeddings
+#' @param data A tibble that contains the high-dimensional data and embedding
 #' with hexagonal bin IDs.
 #' @param col_start The text that begin the column name of the high-dimensional data
 #'
-#' @return A data frame with the average values of the high-dimensional data within each hexagonal bin.
+#' @return A tibble with the average values of the high-dimensional data within each hexagonal bin.
 #'
 #' @importFrom dplyr group_by summarise across select
 #' @importFrom rsample starts_with
 #' @importFrom tidyselect everything
 #'
 #' @examples
-#' num_bins_list <- calc_bins(data = s_curve_noise_umap_scaled, x = "UMAP1", y = "UMAP2",
-#' hex_size = 0.2, buffer_x = 0.346, buffer_y = 0.3)
-#' num_bins_x <- num_bins_list$num_x
-#' num_bins_y <- num_bins_list$num_y
-#' hb_obj <- hex_binning(data = s_curve_noise_umap_scaled,
-#' x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
-#' num_bins_y = num_bins_y, x_start = -0.1732051, y_start = -0.15, buffer_x = 0.346,
-#' buffer_y = 0.3, hex_size = 0.2, col_start = "UMAP")
+#' range_umap2 <- diff(range(s_curve_noise_umap$UMAP2))
+#' num_bins_x <- 3
+#' hb_obj <- hex_binning(data = s_curve_noise_umap_scaled, bin1 = num_bins_x,
+#' s1 = -0.1, s2 = -0.1, r2 = range_umap2)
 #' umap_data_with_hb_id <- hb_obj$data_hb_id
 #' df_all <- dplyr::bind_cols(s_curve_noise_training, umap_data_with_hb_id)
 #' avg_highd_data(data = df_all, col_start = "x")
@@ -29,9 +25,9 @@
 avg_highd_data <- function(data, col_start = "x") {
 
   df_b <- data |>
-    dplyr::select(rsample::starts_with(col_start), hb_id) |>
-    dplyr::group_by(hb_id) |>
-    dplyr::summarise(dplyr::across(tidyselect::everything(), mean))
+    select(starts_with(col_start), hb_id) |>
+    group_by(hb_id) |>
+    summarise(across(everything(), mean))
 
   return(df_b)
 }
@@ -42,11 +38,11 @@ avg_highd_data <- function(data, col_start = "x") {
 #' This function generates a LangeviTour visualization based on different
 #' conditions and input parameters.
 #'
-#' @param df A data frame containing the high-dimensional data.
-#' @param df_b A data frame containing the high-dimensional coordinates of bin centroids.
-#' @param df_b_with_center_data The dataset with hexbin centroids.
+#' @param df A tibble that contains the high-dimensional data.
+#' @param df_b A tibble that contains the high-dimensional coordinates of bin centroids.
+#' @param df_b_with_center_data The dataset with hexagonal bin centroids.
 #' @param benchmark_value The benchmark value used to remove long edges (optional).
-#' @param distance_df The distance dataframe.
+#' @param distance_df The tibble with distance.
 #' @param distance_col The name of the distance column.
 #' @param use_default_benchmark_val Logical, indicating whether to use default
 #' benchmark value  to remove long edges (default is FALSE).
@@ -59,19 +55,12 @@ avg_highd_data <- function(data, col_start = "x") {
 #' @importFrom langevitour langevitour
 #'
 #' @examples
-#' num_bins_list <- calc_bins(data = s_curve_noise_umap_scaled, x = "UMAP1", y = "UMAP2",
-#' hex_size = 0.2, buffer_x = 0.346, buffer_y = 0.3)
-#' num_bins_x <- num_bins_list$num_x
-#' num_bins_y <- num_bins_list$num_y
-#' hb_obj <- hex_binning(data = s_curve_noise_umap_scaled,
-#' x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
-#' num_bins_y = num_bins_y, x_start = -0.1732051, y_start = -0.15, buffer_x = 0.346,
-#' buffer_y = 0.3, hex_size = 0.2, col_start = "UMAP")
+#' range_umap2 <- diff(range(s_curve_noise_umap$UMAP2))
+#' num_bins_x <- 3
+#' hb_obj <- hex_binning(data = s_curve_noise_umap_scaled, bin1 = num_bins_x,
+#' s1 = -0.1, s2 = -0.1, r2 = range_umap2)
 #' all_centroids_df <- hb_obj$centroids
 #' counts_df <- hb_obj$std_cts
-#' umap_data_with_hb_id <- hb_obj$data_hb_id
-#' df_all <- dplyr::bind_cols(s_curve_noise_training |> dplyr::select(-ID), umap_data_with_hb_id)
-#' df_bin <- avg_highd_data(data = df_all, col_start = "x")
 #' df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df,
 #' counts_df = counts_df)
 #' tr1_object <- tri_bin_centroids(hex_df = df_bin_centroids, x = "c_x", y = "c_y")
@@ -88,22 +77,20 @@ show_langevitour <- function(df, df_b, df_b_with_center_data, benchmark_value,
                              distance_df, distance_col, use_default_benchmark_val = FALSE,
                              col_start) {
 
-
-
   ### Define type column
   df <- df |>
-    dplyr::select(tidyselect::starts_with(col_start)) |>
-    dplyr::mutate(type = "data") ## original dataset
+    select(starts_with(col_start)) |>
+    mutate(type = "data") ## original dataset
 
   df_b <- df_b |>
-    dplyr::filter(hb_id %in% df_b_with_center_data$hexID) |>
-    dplyr::mutate(type = "model") ## Data with summarized mean
+    filter(hb_id %in% df_b_with_center_data$hexID) |>
+    mutate(type = "model") ## Data with summarized mean
 
   ## Reorder the rows of df_b according to the hexID order in df_b_with_center_data
   df_b <- df_b[match(df_b_with_center_data$hexID, df_b$hb_id),] |>
-    dplyr::select(-hb_id)
+    select(-hb_id)
 
-  df_exe <- dplyr::bind_rows(df_b, df)
+  df_exe <- bind_rows(df_b, df)
 
 
   if(missing(benchmark_value)){
@@ -113,7 +100,7 @@ show_langevitour <- function(df, df_b, df_b_with_center_data, benchmark_value,
       tr1 <- tri_bin_centroids(hex_df = df_b_with_center_data, x = "c_x", y = "c_y")
       tr_from_to_df <- gen_edges(tri_object = tr1)
 
-      langevitour::langevitour(df_exe[1:(length(df_exe)-1)], lineFrom = tr_from_to_df$from,
+      langevitour(df_exe[1:(length(df_exe)-1)], lineFrom = tr_from_to_df$from,
                                lineTo = tr_from_to_df$to, group = df_exe$type, pointSize = 3,
                                levelColors = c("#6a3d9a", "#33a02c"))
 
@@ -124,8 +111,8 @@ show_langevitour <- function(df, df_b, df_b_with_center_data, benchmark_value,
 
       ## Set the maximum difference as the criteria
       distance_df_small_edges <- distance_df |>
-        dplyr::filter(!!as.name(distance_col) < benchmark_value)
-      ## Since erase brushing is considerd.
+        filter(!!as.name(distance_col) < benchmark_value)
+      ## Since erase brushing is considered.
 
       langevitour::langevitour(df_exe[1:(length(df_exe)-1)],
                                lineFrom = distance_df_small_edges$from,

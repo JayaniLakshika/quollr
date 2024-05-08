@@ -463,7 +463,7 @@ extract_hexbin_mean <- function(data_hb, counts_df) {
 #' This function triangulates the bin centroids using the x and y coordinates
 #' provided in the input data frame and returns the triangular object.
 #'
-#' @param hex_df The data frame containing the bin centroids.
+#' @param hex_df The tibble containing the bin centroids.
 #' @param x The name of the column that contains x coordinates of bin centroids.
 #' @param y The name of the column that contains y coordinates of bin centroids.
 #'
@@ -472,23 +472,20 @@ extract_hexbin_mean <- function(data_hb, counts_df) {
 #' @importFrom rlang sym as_string
 #'
 #' @examples
-#' num_bins_list <- calc_bins(data = s_curve_noise_umap_scaled, x = "UMAP1", y = "UMAP2",
-#' hex_size = 0.2, buffer_x = 0.346, buffer_y = 0.3)
-#' num_bins_x <- num_bins_list$num_x
-#' num_bins_y <- num_bins_list$num_y
-#' hb_obj <- hex_binning(data = s_curve_noise_umap_scaled,
-#' x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
-#' num_bins_y = num_bins_y, x_start = -0.1732051, y_start = -0.15, buffer_x = 0.346,
-#' buffer_y = 0.3, hex_size = 0.2, col_start = "UMAP")
+#' range_umap2 <- diff(range(s_curve_noise_umap$UMAP2))
+#' num_bins_x <- 3
+#' hb_obj <- hex_binning(data = s_curve_noise_umap_scaled, bin1 = num_bins_x,
+#' s1 = -0.1, s2 = -0.1, r2 = range_umap2)
 #' all_centroids_df <- hb_obj$centroids
 #' counts_df <- hb_obj$std_cts
-#' df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df, counts_df = counts_df)
+#' df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df,
+#' counts_df = counts_df)
 #' tri_bin_centroids(hex_df = df_bin_centroids, x = "c_x", y = "c_y")
 #'
 #' @export
 tri_bin_centroids <- function(hex_df, x, y){
-  tr1 <- interp::tri.mesh(hex_df[[rlang::as_string(rlang::sym(x))]],
-                          hex_df[[rlang::as_string(rlang::sym(y))]])
+  tr1 <- tri.mesh(hex_df[[rlang::as_string(rlang::sym(x))]],
+                  hex_df[[rlang::as_string(rlang::sym(y))]])
   return(tr1)
 }
 
@@ -501,24 +498,21 @@ tri_bin_centroids <- function(hex_df, x, y){
 #'
 #' @param tri_object The triangular object from which to generate edge information.
 #'
-#' @return A data frame containing the edge information, including the from-to
+#' @return A tibble that contains the edge information, including the from-to
 #' relationships and the corresponding x and y coordinates.
 #' @importFrom tibble tibble as_tibble
 #' @importFrom dplyr mutate filter rename distinct left_join
 #' @importFrom interp triangles
 #'
 #' @examples
-#' num_bins_list <- calc_bins(data = s_curve_noise_umap_scaled, x = "UMAP1", y = "UMAP2",
-#' hex_size = 0.2, buffer_x = 0.346, buffer_y = 0.3)
-#' num_bins_x <- num_bins_list$num_x
-#' num_bins_y <- num_bins_list$num_y
-#' hb_obj <- hex_binning(data = s_curve_noise_umap_scaled,
-#' x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
-#' num_bins_y = num_bins_y, x_start = -0.1732051, y_start = -0.15, buffer_x = 0.346,
-#' buffer_y = 0.3, hex_size = 0.2, col_start = "UMAP")
+#' range_umap2 <- diff(range(s_curve_noise_umap$UMAP2))
+#' num_bins_x <- 3
+#' hb_obj <- hex_binning(data = s_curve_noise_umap_scaled, bin1 = num_bins_x,
+#' s1 = -0.1, s2 = -0.1, r2 = range_umap2)
 #' all_centroids_df <- hb_obj$centroids
 #' counts_df <- hb_obj$std_cts
-#' df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df, counts_df = counts_df)
+#' df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df,
+#' counts_df = counts_df)
 #' tr1_object <- tri_bin_centroids(hex_df = df_bin_centroids, x = "c_x", y = "c_y")
 #' gen_edges(tri_object = tr1_object)
 #'
@@ -526,29 +520,29 @@ tri_bin_centroids <- function(hex_df, x, y){
 gen_edges <- function(tri_object) {
 
   # Create a data frame with x and y coordinate values from the triangular object
-  tr_df <- tibble::tibble(x = tri_object$x, y = tri_object$y,
-                          ID = 1:length(tri_object$x))
+  tr_df <- tibble(x = tri_object$x, y = tri_object$y,
+                  ID = 1:length(tri_object$x))
   # Add ID numbers for joining with from and to points in tr_arcs
 
   # Extract the triangles from the triangular object
-  trang <- interp::triangles(tri_object)
-  trang <- tibble::as_tibble(trang)
+  trang <- triangles(tri_object)
+  trang <- as_tibble(trang)
 
   # Create data frames with from-to edges
-  tr_arcs_df <- tibble::tibble(from = c(trang$node1, trang$node1, trang$node2),
-                               to = c(trang$node2, trang$node3, trang$node3))
+  tr_arcs_df <- tibble(from = c(trang$node1, trang$node1, trang$node2),
+                       to = c(trang$node2, trang$node3, trang$node3))
 
   ## To extract unique combinations
   tr_arcs_df <- tr_arcs_df |>
-    dplyr::mutate(x = pmin(from, to), y = pmax(from, to)) |>
-    dplyr::distinct(x, y) |>
-    dplyr::rename(c("from" = "x", "to" = "y"))
+    mutate(x = pmin(from, to), y = pmax(from, to)) |>
+    distinct(x, y) |>
+    rename(c("from" = "x", "to" = "y"))
 
   ## Map from and to coordinates
-  tr_from_to_df_coord <- dplyr::left_join(tr_arcs_df, tr_df, by = c("from" = "ID")) |>
-    dplyr::rename(c("x_from" = "x", "y_from" = "y"))
-  tr_from_to_df_coord <- dplyr::left_join(tr_from_to_df_coord, tr_df, by = c("to" = "ID"))|>
-    dplyr::rename(c("x_to" = "x", "y_to" = "y"))
+  tr_from_to_df_coord <- left_join(tr_arcs_df, tr_df, by = c("from" = "ID")) |>
+    rename(c("x_from" = "x", "y_from" = "y"))
+  tr_from_to_df_coord <- left_join(tr_from_to_df_coord, tr_df, by = c("to" = "ID"))|>
+    rename(c("x_to" = "x", "y_to" = "y"))
 
   return(tr_from_to_df_coord)
 
@@ -559,8 +553,8 @@ gen_edges <- function(tri_object) {
 #'
 #' This function calculates the 2D distances between pairs of points in a data frame.
 #'
-#' @param tr_coord_df A data frame containing columns for the
-#' x and y coordinates of start and end points.
+#' @param tr_coord_df A tibble that contains the x and y coordinates of start
+#' and end points.
 #' @param start_x Column name for the x-coordinate of the starting point.
 #' @param start_y Column name for the y-coordinate of the starting point.
 #' @param end_x Column name for the x-coordinate of the ending point.
@@ -568,23 +562,20 @@ gen_edges <- function(tri_object) {
 #' @param select_vars A character vector specifying the columns to be
 #' selected in the resulting data frame.
 #'
-#' @return A data frame with columns for the starting point, ending point,
+#' @return A tibble with columns for the starting point, ending point,
 #' and calculated distances.
 #' @importFrom dplyr select
 #' @importFrom tidyselect all_of
 #'
 #' @examples
-#' num_bins_list <- calc_bins(data = s_curve_noise_umap_scaled, x = "UMAP1", y = "UMAP2",
-#' hex_size = 0.2, buffer_x = 0.346, buffer_y = 0.3)
-#' num_bins_x <- num_bins_list$num_x
-#' num_bins_y <- num_bins_list$num_y
-#' hb_obj <- hex_binning(data = s_curve_noise_umap_scaled,
-#' x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
-#' num_bins_y = num_bins_y, x_start = -0.1732051, y_start = -0.15, buffer_x = 0.346,
-#' buffer_y = 0.3, hex_size = 0.2, col_start = "UMAP")
+#' range_umap2 <- diff(range(s_curve_noise_umap$UMAP2))
+#' num_bins_x <- 3
+#' hb_obj <- hex_binning(data = s_curve_noise_umap_scaled, bin1 = num_bins_x,
+#' s1 = -0.1, s2 = -0.1, r2 = range_umap2)
 #' all_centroids_df <- hb_obj$centroids
 #' counts_df <- hb_obj$std_cts
-#' df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df, counts_df = counts_df)
+#' df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df,
+#' counts_df = counts_df)
 #' tr1_object <- tri_bin_centroids(hex_df = df_bin_centroids, x = "c_x", y = "c_y")
 #' tr_from_to_df <- gen_edges(tri_object = tr1_object)
 #' cal_2d_dist(tr_coord_df = tr_from_to_df, start_x = "x_from", start_y = "y_from",
@@ -603,7 +594,7 @@ cal_2d_dist <- function(tr_coord_df, start_x, start_y, end_x, end_y,
 
   # Create a data frame with the from-to relationships and distances
   tr_coord_df <- tr_coord_df |>
-    dplyr::select(tidyselect::all_of(select_vars))
+    select(all_of(select_vars))
 
   # Convert the distances to a vector and return the data frame
   tr_coord_df$distance <- unlist(tr_coord_df$distance, use.names = FALSE)
@@ -615,9 +606,9 @@ cal_2d_dist <- function(tr_coord_df, start_x, start_y, end_x, end_y,
 #'
 #' This function visualize triangular mesh with coloured long edges.
 #'
-#' @param distance_edges The data frame containing the edge information.
+#' @param distance_edges The tibble that contains the edge information.
 #' @param benchmark_value The threshold value to determine long edges.
-#' @param tr_coord_df A data frame containing columns for the x and y coordinates of start and end points.
+#' @param tr_coord_df A tibble that contains the x and y coordinates of start and end points.
 #' @param distance_col The column name in `distance_edges` representing the distances.
 #'
 #' @return A ggplot object with the triangular mesh plot where long edges are
@@ -628,17 +619,14 @@ cal_2d_dist <- function(tr_coord_df, start_x, start_y, end_x, end_y,
 #' @importFrom tibble tibble
 #'
 #' @examples
-#' num_bins_list <- calc_bins(data = s_curve_noise_umap_scaled, x = "UMAP1", y = "UMAP2",
-#' hex_size = 0.2, buffer_x = 0.346, buffer_y = 0.3)
-#' num_bins_x <- num_bins_list$num_x
-#' num_bins_y <- num_bins_list$num_y
-#' hb_obj <- hex_binning(data = s_curve_noise_umap_scaled,
-#' x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
-#' num_bins_y = num_bins_y, x_start = -0.1732051, y_start = -0.15, buffer_x = 0.346,
-#' buffer_y = 0.3, hex_size = 0.2, col_start = "UMAP")
+#' range_umap2 <- diff(range(s_curve_noise_umap$UMAP2))
+#' num_bins_x <- 3
+#' hb_obj <- hex_binning(data = s_curve_noise_umap_scaled, bin1 = num_bins_x,
+#' s1 = -0.1, s2 = -0.1, r2 = range_umap2)
 #' all_centroids_df <- hb_obj$centroids
 #' counts_df <- hb_obj$std_cts
-#' df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df, counts_df = counts_df)
+#' df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df,
+#' counts_df = counts_df)
 #' tr1_object <- tri_bin_centroids(hex_df = df_bin_centroids, x = "c_x", y = "c_y")
 #' tr_from_to_df <- gen_edges(tri_object = tr1_object)
 #' distance_df <- cal_2d_dist(tr_coord_df = tr_from_to_df, start_x = "x_from",
@@ -652,28 +640,27 @@ vis_lg_mesh <- function(distance_edges, benchmark_value,
                          tr_coord_df, distance_col) {
 
   # Create the tibble with x and y coordinates
-  tr_df <- tibble::tibble(x = c(tr_coord_df[["x_from"]], tr_coord_df[["x_to"]]),
-                          y = c(tr_coord_df[["y_from"]], tr_coord_df[["y_to"]])) |>
-    dplyr::distinct()
+  tr_df <- tibble(x = c(tr_coord_df[["x_from"]], tr_coord_df[["x_to"]]),
+                  y = c(tr_coord_df[["y_from"]], tr_coord_df[["y_to"]])) |>
+    distinct()
 
   # label small and long edges
   distance_edges <- distance_edges |>
-    dplyr::mutate(type = dplyr::if_else(!!as.name(distance_col) < benchmark_value,
+    mutate(type = if_else(!!as.name(distance_col) < benchmark_value,
                                         "small_edges", "long_edges"))
 
   # Merge edge information with distance data
-  tr_coord_df <- dplyr::inner_join(tr_coord_df, distance_edges,
-                                           by = c("from", "to"))
+  tr_coord_df <- inner_join(tr_coord_df, distance_edges, by = c("from", "to"))
 
   # Create the triangular mesh plot with colored long edges
-  tri_mesh_plot <- ggplot2::ggplot(tr_df, ggplot2::aes(x = x, y = y)) +
-    ggplot2::geom_segment(
-      ggplot2::aes(x = x_from, y = y_from, xend = x_to, yend = y_to, color = type),
+  tri_mesh_plot <- ggplot(tr_df, aes(x = x, y = y)) +
+    geom_segment(
+      aes(x = x_from, y = y_from, xend = x_to, yend = y_to, color = type),
       data = tr_coord_df
     ) +
-    ggplot2::geom_point(size = 1, colour = "#33a02c") +
-    ggplot2::coord_equal() +
-    ggplot2::scale_colour_manual(values = c("#de2d26", "#636363"))
+    geom_point(size = 1, colour = "#33a02c") +
+    coord_equal() +
+    scale_colour_manual(values = c("#de2d26", "#636363"))
 
   return(tri_mesh_plot)
 }
@@ -682,9 +669,9 @@ vis_lg_mesh <- function(distance_edges, benchmark_value,
 #'
 #' This function visualize the triangular mesh after removing the long edges.
 #'
-#' @param distance_edges The data frame containing the edge information.
+#' @param distance_edges The tibble that contains the edge information.
 #' @param benchmark_value The threshold value to determine long edges.
-#' @param tr_coord_df A data frame containing columns for the x and y coordinates of start and end points.
+#' @param tr_coord_df A tibble that contains the x and y coordinates of start and end points.
 #' @param distance_col The column name in `distance_edges` representing the distances.
 #'
 #' @return A ggplot object with the triangular mesh plot where long edges are removed.
@@ -694,17 +681,14 @@ vis_lg_mesh <- function(distance_edges, benchmark_value,
 #' @importFrom tibble tibble
 #'
 #' @examples
-#' num_bins_list <- calc_bins(data = s_curve_noise_umap_scaled, x = "UMAP1", y = "UMAP2",
-#' hex_size = 0.2, buffer_x = 0.346, buffer_y = 0.3)
-#' num_bins_x <- num_bins_list$num_x
-#' num_bins_y <- num_bins_list$num_y
-#' hb_obj <- hex_binning(data = s_curve_noise_umap_scaled,
-#' x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
-#' num_bins_y = num_bins_y, x_start = -0.1732051, y_start = -0.15, buffer_x = 0.346,
-#' buffer_y = 0.3, hex_size = 0.2, col_start = "UMAP")
+#' range_umap2 <- diff(range(s_curve_noise_umap$UMAP2))
+#' num_bins_x <- 3
+#' hb_obj <- hex_binning(data = s_curve_noise_umap_scaled, bin1 = num_bins_x,
+#' s1 = -0.1, s2 = -0.1, r2 = range_umap2)
 #' all_centroids_df <- hb_obj$centroids
 #' counts_df <- hb_obj$std_cts
-#' df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df, counts_df = counts_df)
+#' df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df,
+#' counts_df = counts_df)
 #' tr1_object <- tri_bin_centroids(hex_df = df_bin_centroids, x = "c_x", y = "c_y")
 #' tr_from_to_df <- gen_edges(tri_object = tr1_object)
 #' distance_df <- cal_2d_dist(tr_coord_df = tr_from_to_df, start_x = "x_from",
@@ -719,23 +703,23 @@ vis_rmlg_mesh <- function(distance_edges, benchmark_value, tr_coord_df,
   # Create the tibble with x and y coordinates
   tr_df <- tibble::tibble(x = c(tr_coord_df[["x_from"]], tr_coord_df[["x_to"]]),
                           y = c(tr_coord_df[["y_from"]], tr_coord_df[["y_to"]])) |>
-    dplyr::distinct()
+    distinct()
 
   # Filter small edges
   distance_df_small_edges <- distance_edges |>
-    dplyr::filter(!!as.name(distance_col) < benchmark_value)
+    filter(!!as.name(distance_col) < benchmark_value)
 
   # Merge edge information with distance data
-  tr_coord_df <- dplyr::inner_join(tr_coord_df, distance_df_small_edges,
+  tr_coord_df <- inner_join(tr_coord_df, distance_df_small_edges,
                                            by = c("from", "to"))
 
   ## Create the triangular mesh plot after removing the long edges
-  tri_mesh_plot <- ggplot2::ggplot(tr_df, ggplot2::aes(x = x, y = y)) +
-    ggplot2::geom_segment(ggplot2::aes(x = x_from, y = y_from, xend = x_to, yend = y_to),
+  tri_mesh_plot <- ggplot(tr_df, aes(x = x, y = y)) +
+    geom_segment(aes(x = x_from, y = y_from, xend = x_to, yend = y_to),
                           data = tr_coord_df) +
-    ggplot2::geom_point(size = 1, colour = "#33a02c") +
-    ggplot2::coord_equal() +
-    ggplot2::labs(color=NULL)
+    geom_point(size = 1, colour = "#33a02c") +
+    coord_equal() +
+    labs(color=NULL)
   return(tri_mesh_plot)
 
 }
