@@ -228,7 +228,7 @@ assign_data <- function(data, centroid_df) {
 #'
 #' This function computes the standardize number of points within each hexagon.
 #'
-#' @param data A tibble with embedding and hexagonal bin IDs.
+#' @param data_hb A tibble with embedding and hexagonal bin IDs.
 #'
 #' @return A tibble that contains hexagon IDs and the corresponding standardize counts.
 #' @importFrom dplyr count mutate
@@ -245,13 +245,13 @@ assign_data <- function(data, centroid_df) {
 #' buffer_y = 0.3, hex_size = 0.2)
 #' umap_with_hb_id <- assign_data(data = s_curve_noise_umap_scaled,
 #' centroid_df = all_centroids_df)
-#' compute_std_counts(data = umap_with_hb_id)
+#' compute_std_counts(data_hb = umap_with_hb_id)
 #'
 #' @export
-compute_std_counts <- function(data) {
+compute_std_counts <- function(data_hb) {
 
   ## Group by hexagon IDs
-  std_df <- data |>
+  std_df <- data_hb |>
     count(hb_id) |>
     mutate(std_counts = n/max(n))
 
@@ -263,7 +263,7 @@ compute_std_counts <- function(data) {
 #'
 #' This function maps points to their corresponding hexagonal bins.
 #'
-#' @param data A data frame with data, ID and hexagonal bin IDs.
+#' @param data_hb A data frame with data, ID and hexagonal bin IDs.
 #'
 #' @return A tibble with hexagonal bin IDs and the corresponding points.
 #' @importFrom dplyr filter pull
@@ -281,21 +281,21 @@ compute_std_counts <- function(data) {
 #' buffer_y = 0.3, hex_size = 0.2)
 #' umap_with_hb_id <- assign_data(data = s_curve_noise_umap_scaled,
 #' centroid_df = all_centroids_df)
-#' find_pts(data = umap_with_hb_id)
+#' find_pts(data_hb = umap_with_hb_id)
 #'
 #' @export
-find_pts <- function(data) {
+find_pts <- function(data_hb) {
 
   ## A vector to store points info
   pts_list <- list()
   hexID <- integer(0)
 
-  hexID_vec <- unique(data$hb_id)
+  hexID_vec <- unique(data_hb$hb_id)
 
   for (hb_id in hexID_vec) {
 
     ## Filter a hexagon and find the point within that hexagon
-    pts_vec <- data |>
+    pts_vec <- data_hb |>
       filter(hb_id == hb_id) |>
       pull(ID) |>
       list()
@@ -361,10 +361,10 @@ hex_binning <- function(data, bin1 = 2, s1 = -0.1, s2 = -0.1, r2) {
   nldr_hex_id <- assign_data(data = data, centroid_df = all_centroids_df)
 
   ## To generate standardize counts of each hexagon
-  std_df <- compute_std_counts(data = nldr_hex_id)
+  std_df <- compute_std_counts(data_hb = nldr_hex_id)
 
   ## To find which points are within each hexagon
-  pts_df <- find_pts(data = nldr_hex_id)
+  pts_df <- find_pts(data_hb = nldr_hex_id)
 
   ## To generate the object of hexagon info
   hex_bin_obj <- list(centroids = all_centroids_df,
@@ -419,95 +419,44 @@ extract_hexbin_centroids <- function(centroids_df, counts_df) {
 
 #' Extract hexagonal bin mean coordinates and the corresponding standardize counts.
 #'
-#' @param nldr_df_with_hex_id A data frame with 2D embeddings and hexagonal bin IDs.
-#' @param counts_df A data frame contains hexagon IDs with the standardize number of points within each hexagon.
+#' @param data_hb A tibble with embedding components and hexagonal bin IDs.
+#' @param counts_df A tibble that contains hexagon IDs with the standardise
+#' number of points within each hexagon.
 #'
 #' @return A tibble contains hexagon ID, bin mean coordinates, and standardize counts.
-#' @importFrom dplyr arrange group_by summarise filter mutate
+#' @importFrom dplyr select arrange group_by summarise filter mutate across
 #' @importFrom tidyselect everything
 #'
 #' @examples
-#' num_bins_list <- calc_bins(data = s_curve_noise_umap_scaled, x = "UMAP1", y = "UMAP2",
-#' hex_size = 0.2, buffer_x = 0.346, buffer_y = 0.3)
-#' num_bins_x <- num_bins_list$num_x
-#' num_bins_y <- num_bins_list$num_y
-#' hb_obj <- hex_binning(data = s_curve_noise_umap_scaled,
-#' x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
-#' num_bins_y = num_bins_y, x_start = -0.1732051, y_start = -0.15, buffer_x = 0.346,
-#' buffer_y = 0.3, hex_size = 0.2, col_start = "UMAP")
-#' all_centroids_df <- hb_obj$centroids
+#' range_umap2 <- diff(range(s_curve_noise_umap$UMAP2))
+#' num_bins_x <- 3
+#' hb_obj <- hex_binning(data = s_curve_noise_umap_scaled, bin1 = num_bins_x,
+#' s1 = -0.1, s2 = -0.1, r2 = range_umap2)
+#' umap_with_hb_id <- hb_obj$data_hb_id
 #' counts_df <- hb_obj$std_cts
-#' umap_with_hb_id <- assign_data(data = s_curve_noise_umap_scaled,
-#' centroid_df = all_centroids_df, col_start = "UMAP")
-#' extract_hexbin_mean(nldr_df_with_hex_id = umap_with_hb_id, counts_df = counts_df)
+#' extract_hexbin_mean(data_hb = umap_with_hb_id, counts_df = counts_df)
 #'
 #' @export
-extract_hexbin_mean <- function(nldr_df_with_hex_id, counts_df) {
+extract_hexbin_mean <- function(data_hb, counts_df) {
 
   ## To arrange the hexagon IDs
   counts_df <- counts_df |>
-    dplyr::arrange(hb_id)
+    arrange(hb_id)
 
   ## To compute hexagonal bin means
   hex_mean_df <- nldr_df_with_hex_id |>
-    dplyr::select(-ID) |>
-    dplyr::group_by(hb_id) |>
-    dplyr::summarise(dplyr::across(tidyselect::everything(), mean)) |>
-    dplyr::arrange(hb_id) |>
-    dplyr::filter(hb_id %in% counts_df$hb_id) |>
-    dplyr::mutate(std_counts = counts_df$std_counts)
+    select(-ID) |>
+    group_by(hb_id) |>
+    summarise(across(everything(), mean)) |>
+    arrange(hb_id) |>
+    filter(hb_id %in% counts_df$hb_id) |>
+    mutate(std_counts = counts_df$std_counts)
 
   ## Rename columns
   names(hex_mean_df) <- c("hexID", "c_x", "c_y", "std_counts")
 
   return(hex_mean_df)
 }
-
-#' Extract k-mean center coordinates and the corresponding standardize counts.
-#'
-#' @param nldr_df A data frame with 2D embeddings.
-#' @param tot_bins Total number of bins.
-#'
-#' @return A tibble contains clustering ID, kmean center coordinates, and standardize counts.
-#' @importFrom dplyr mutate count bind_cols
-#' @importFrom stats kmeans fitted
-#' @importFrom tibble as_tibble
-#'
-#' @examples
-#' num_bins_list <- calc_bins(data = s_curve_noise_umap_scaled, x = "UMAP1", y = "UMAP2",
-#' hex_size = 0.2, buffer_x = 0.346, buffer_y = 0.3)
-#' num_bins_x <- num_bins_list$num_x
-#' num_bins_y <- num_bins_list$num_y
-#' extract_kmean_centers(nldr_df = s_curve_noise_umap |> dplyr::select(-ID),
-#' tot_bins = num_bins_x * num_bins_y)
-#'
-#' @export
-extract_kmean_centers <- function(nldr_df, tot_bins) {
-
-  ## To perform k-means clustering
-  kmean_list <- stats::kmeans(nldr_df, centers = tot_bins)
-
-  ## To extract centers of k-mean clusters
-  k_means <- kmean_list$centers |>
-    tibble::as_tibble() |>
-    dplyr::mutate(hexID = seq_len(NROW(kmean_list$centers)))
-
-  ## To compute standardized count within each cluster
-  assign_data <- fitted(kmean_list) |>
-    tibble::as_tibble() |>
-    dplyr::mutate(hexID = kmean_list$cluster) |>
-    dplyr::count(hexID) |>
-    dplyr::mutate(std_counts = n/max(n))
-
-  ## To prepare the dataset
-  k_mean_df <- dplyr::bind_cols(k_means[, c(3, 1, 2)], assign_data[, 3])
-  names(k_mean_df) <- c("hexID", "c_x", "c_y", "std_counts")
-
-  return(k_mean_df)
-
-}
-
-
 
 #' Triangulate bin centroids
 #'
