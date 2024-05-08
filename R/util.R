@@ -13,7 +13,7 @@
 #'
 #' @examples
 #' range_umap2 <- diff(range(s_curve_noise_umap$UMAP2))
-#' calc_bins(bin1 = 2, s1 = -0.1, s2 = -0.1, r2 = range_umap2)
+#' calc_bins_y(bin1 = 2, s1 = -0.1, s2 = -0.1, r2 = range_umap2)
 #'
 #' @export
 calc_bins_y <- function(bin1 = 2, s1 = -0.1, s2 = -0.1, r2) {

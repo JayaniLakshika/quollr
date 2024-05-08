@@ -2,164 +2,73 @@
 #'
 #' This function generates all possible centroids in the hexagonal grid.
 #'
-#' @param data A tibble or data frame.
-#' @param x The name of the column that contains values along the x-axis.
-#' @param y The name of the column that contains values along the y-axis.
-#' @param num_bins_x Number of bins along the x-axis.
-#' @param num_bins_y Number of bins along the y-axis.
-#' @param x_start Starting point along the x-axis for hexagonal binning.
-#' @param y_start Starting point along the y-axis for hexagonal binning.
-#' @param buffer_x The buffer size along the x-axis.
-#' @param buffer_y The buffer size along the y-axis.
-#' @param hex_size A numeric value that initializes the radius of the outer
-#' circle surrounding the hexagon.
+#' @param bin1 Number of bins along the x axis.
+#' @param bin2 Number of bins along the y axis.
+#' @param s1 The x-coordinate of the hexagonal grid starting point.
+#' @param s2 The y-coordinate of the hexagonal grid starting point.
+#' @param a1 The width of the hexagon.
 #'
 #' @return A tibble contains hexIDs, x and y coordinates (hexID, c_x, c_y respectively)
 #' of all hexagon bin centroids.
-#' @importFrom rlang sym as_string
 #' @importFrom tibble tibble
 #'
 #' @examples
-#' num_bins_list <- calc_bins(data = s_curve_noise_umap_scaled, x = "UMAP1", y = "UMAP2",
-#' hex_size = 0.2, buffer_x = 0.346, buffer_y = 0.3)
-#' num_bins_x <- num_bins_list$num_x
-#' num_bins_y <- num_bins_list$num_y
-#' gen_centroids(data = s_curve_noise_umap_scaled,
-#' x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
-#' num_bins_y = num_bins_y, x_start = -0.1732051, y_start = -0.15, buffer_x = 0.346,
-#' buffer_y = 0.3, hex_size = 0.2)
+#' range_umap2 <- diff(range(s_curve_noise_umap$UMAP2))
+#' num_bins_x <- 3
+#' num_bins_list <- calc_bins_y(bin1 = num_bins_x, s1 = -0.1, s2 = -0.1,
+#' r2 = range_umap2)
+#' num_bins_y <- num_bins_list$bin2
+#' width <- num_bins_list$a1
+#' gen_centroids(bin1 = num_bins_x, bin2 = num_bins_y, s1 = -0.1, s2 = -0.1,
+#' a1 = width)
 #'
 #' @export
-gen_centroids <- function(data, x, y, num_bins_x, num_bins_y, x_start,
-                          y_start, buffer_x, buffer_y, hex_size){
+gen_centroids <- function(bin1 = 2, bin2, s1 = -0.1, s2 = -0.1, a1){
 
-  if (missing(hex_size)) {
-    hex_size <- 0.2
+  # If the number of bins along the y axis is missing
+  if (missing(bin2)) {
+    stop("Need to initialize the number of bins along the x-axis.")
   }
 
-  # Calculate horizontal and vertical spacing
-  hs <- sqrt(3) * hex_size
-  vs <- 1.5 * hex_size
-
-  if (missing(buffer_x)) {
-    buffer_x <- round(hs * 1.5, 3)
-
-    message(paste0("Buffer along the x-axis is set to ", buffer_x, "."))
-
-  } else {
-    if (buffer_x > round(hs * 1.5, 3)) {
-
-      stop(paste0("Buffer along the x-axis exceeds than ", hs, ".
-                     Need to assign a value less than or equal to ", hs, "."))
-
-    } else if (buffer_x <= 0 ) {
-
-      stop(paste0("Buffer along the x-axis is less than or equal to zero."))
-
-    }
+  # If hexagonal width is missing
+  if (missing(a1)) {
+    stop("Need to initialize the width of the hexagon.")
   }
-
-  if (missing(buffer_y)) {
-    buffer_y <- round(vs * 1.5, 3)
-
-    message(paste0("Buffer along the y-axis is set to ", buffer_y, "."))
-
-
-  } else {
-    if (buffer_y > round(vs * 1.5, 3)) {
-
-      stop(paste0("Buffer along the y-axis exceeds than ", vs, ".
-                     Need to assign a value less than or equal to ", vs, "."))
-
-    } else if (buffer_y <= 0 ) {
-
-      stop(paste0("Buffer along the y-axis is less than or equal to zero."))
-
-    }
-  }
-
-
-  ## If number of bins along the x-axis and/or y-axis is not given
-  if (missing(num_bins_x) | missing(num_bins_y)) {
-    ## compute the number of bins along the x-axis
-    bin_list <- calc_bins(data = data, x = x, y = y, hex_size = hex_size,
-                          buffer_x = buffer_x, buffer_y = buffer_y)
-    num_bins_x <- bin_list$num_x
-    num_bins_y <- bin_list$num_y
-  }
-
-
-  ## If x_start and y_start not define
-  if (missing(x_start)) {
-    # Define starting point
-    x_start <- round(min(data[[rlang::as_string(rlang::sym(x))]]) - (sqrt(3) * hex_size/2), 3)
-
-    message(paste0("x_start is set to ", x_start, "."))
-
-  } else {
-    max_x_start <- min(data[[rlang::as_string(rlang::sym(x))]]) + (sqrt(3) * hex_size)
-    min_x_start <- min(data[[rlang::as_string(rlang::sym(x))]]) - (sqrt(3) * hex_size)
-
-    if ((x_start < min_x_start) | (x_start > max_x_start)){
-      stop(paste0("x_start value is not compatible.
-                  Need to use a value betweeen ", min_x_start," and ", max_x_start,"."))
-
-    }
-
-  }
-
-  if (missing(y_start)) {
-    # Define starting point
-    y_start <- round(min(data[[rlang::as_string(rlang::sym(y))]]) - (1.5 * hex_size/2), 3)
-
-    message(paste0("y_start is set to ", y_start, "."))
-
-
-  } else {
-
-    max_y_start <- min(data[[rlang::as_string(rlang::sym(y))]]) + (1.5 * hex_size)
-    min_y_start <- min(data[[rlang::as_string(rlang::sym(y))]]) - (1.5 * hex_size)
-
-    if ((y_start < min_y_start) | (y_start > max_y_start)){
-      stop(paste0("y_start value is not compatible.
-                  Need to use a value betweeen ", min_y_start," and ", max_y_start,"."))
-
-    }
-
-  }
-
 
   # Generate x-coordinate of centroids for odd rows
-  c_x_vec_odd <- seq(x_start, (num_bins_x - 1) * hs, by = hs)
+  c_x_vec_odd <- seq(s1, (bin1 - 1) * a1, by = a1)
 
   # Generate x-coordinate of centroids for even rows
-  c_x_vec_even <- c_x_vec_odd + hs/2
+  c_x_vec_even <- c_x_vec_odd + a1/2
   c_x_vec <- c(c_x_vec_odd, c_x_vec_even)
 
+  # To compute vertical spacing
+  a2 <- sqrt(3) * a1/2
+
   # Generate y-coordinate of centroids
-  c_y_vec <- seq(y_start, (num_bins_y - 1) * vs, by = vs)
-  c_y <- rep(c_y_vec, each = num_bins_x)
+  c_y_vec <- seq(s2, (bin2 - 1) * a2, by = a2)
+  c_y <- rep(c_y_vec, each = bin1)
 
   ## Do the number of belongs y axis is even or odd and adjust the x-coordinates
-  if ((num_bins_y %% 2) == 0) {
+  if ((bin2 %% 2) == 0) {
 
-    c_x <- rep(c_x_vec, num_bins_y/2)
+    c_x <- rep(c_x_vec, bin2/2)
 
   } else {
 
-    if ((ceiling(num_bins_y/2) %% 2) == 0) {
+    if ((ceiling(bin2/2) %% 2) == 0) {
 
-      c_x <- append(rep(c_x_vec, floor(num_bins_y/2)), c_x_vec_odd)
+      c_x <- append(rep(c_x_vec, floor(bin2/2)), c_x_vec_odd)
 
     } else{
 
-      c_x <- append(rep(c_x_vec, floor(num_bins_y/2)), c_x_vec_even)
+      c_x <- append(rep(c_x_vec, floor(bin2/2)), c_x_vec_even)
 
     }
 
   }
 
-  centroid_df <- tibble::tibble(hexID = 1:length(c_x), c_x = c_x, c_y = c_y)
+  centroid_df <- tibble(hexID = 1:length(c_x), c_x = c_x, c_y = c_y)
 
   return(centroid_df)
 
@@ -278,7 +187,8 @@ get_min_indices <- function(x) {
 #' @examples
 #' range_umap2 <- diff(range(s_curve_noise_umap$UMAP2))
 #' num_bins_x <- 3
-#' num_bins_list <- calc_bins(bin1 = num_bins_x, s1 = -0.1, s2 = -0.1, r2 = range_umap2)
+#' num_bins_list <- calc_bins_y(bin1 = num_bins_x, s1 = -0.1, s2 = -0.1,
+#' r2 = range_umap2)
 #' num_bins_y <- num_bins_list$num_y
 #' all_centroids_df <- gen_centroids(data = s_curve_noise_umap_scaled,
 #' x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
