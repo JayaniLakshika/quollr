@@ -18,8 +18,8 @@ A tibble contains embedding components and corresponding hexagon ID.
 This function assigns the data to hexagons.
 }
 \examples{
-range_umap2 <- diff(range(s_curve_noise_umap$UMAP2))
-all_centroids_df <- gen_centroids(bin1 = 3, s1 = -0.1, s2 = -0.1, r2 = range_umap2)
+r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
+all_centroids_df <- gen_centroids(bin1 = 3, s1 = -0.1, s2 = -0.1, r2 = r2)
 assign_data(data = s_curve_noise_umap_scaled, centroid_df = all_centroids_df)
 
 }

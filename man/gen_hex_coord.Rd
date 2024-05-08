@@ -21,10 +21,10 @@ This function generates the coordinates of hexagons after passing
 hexagonal centroids.
 }
 \examples{
-range_umap2 <- diff(range(s_curve_noise_umap$UMAP2))
-num_bins_list <- calc_bins_y(bin1 = 3, s1 = -0.1, s2 = -0.1, r2 = range_umap2)
+r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
+num_bins_list <- calc_bins_y(bin1 = 3, s1 = -0.1, s2 = -0.1, r2 = r2)
 width <- num_bins_list$a1
-all_centroids_df <- gen_centroids(bin1 = 3, s1 = -0.1, s2 = -0.1, r2 = range_umap2)
+all_centroids_df <- gen_centroids(bin1 = 3, s1 = -0.1, s2 = -0.1, r2 = r2)
 gen_hex_coord(centroids_df = all_centroids_df, a1 = width)
 
 }

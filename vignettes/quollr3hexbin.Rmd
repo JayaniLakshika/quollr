@@ -28,7 +28,7 @@ library(dplyr)
 By passing the preprocessed 2D embedding data and hexagonal grid configurations, you can obtain the hexagonal binning information like centroid coordinates, hexagonal polygon coordinates, the standardise counts within each hexagon etc.  
 
 ```{r}
-r2 <- diff(range(s_curve_noise_umap$UMAP2))
+r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
 hb_obj <- hex_binning(data = s_curve_noise_umap_scaled, bin1 = 3, s1 = -0.1, 
                       s2 = -0.1, r2 = r2)
 ```

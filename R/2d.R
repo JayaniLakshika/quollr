@@ -5,15 +5,15 @@
 #' @param bin1 Number of bins along the x axis.
 #' @param s1 The x-coordinate of the hexagonal grid starting point.
 #' @param s2 The y-coordinate of the hexagonal grid starting point.
-#' @param r2 The range of the original second embedding component.
+#' @param r2 The ratio of the ranges of the original embedding components.
 #'
 #' @return A tibble contains hexIDs, x and y coordinates (hexID, c_x, c_y respectively)
 #' of all hexagon bin centroids.
 #' @importFrom tibble tibble
 #'
 #' @examples
-#' range_umap2 <- diff(range(s_curve_noise_umap$UMAP2))
-#' gen_centroids(bin1 = 3, s1 = -0.1, s2 = -0.1, r2 = range_umap2)
+#' r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
+#' gen_centroids(bin1 = 3, s1 = -0.1, s2 = -0.1, r2 = r2)
 #'
 #' @export
 gen_centroids <- function(bin1 = 2, s1 = -0.1, s2 = -0.1, r2){
@@ -80,10 +80,10 @@ gen_centroids <- function(bin1 = 2, s1 = -0.1, s2 = -0.1, r2){
 #' @importFrom tibble tibble
 #'
 #' @examples
-#' range_umap2 <- diff(range(s_curve_noise_umap$UMAP2))
-#' num_bins_list <- calc_bins_y(bin1 = 3, s1 = -0.1, s2 = -0.1, r2 = range_umap2)
+#' r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
+#' num_bins_list <- calc_bins_y(bin1 = 3, s1 = -0.1, s2 = -0.1, r2 = r2)
 #' width <- num_bins_list$a1
-#' all_centroids_df <- gen_centroids(bin1 = 3, s1 = -0.1, s2 = -0.1, r2 = range_umap2)
+#' all_centroids_df <- gen_centroids(bin1 = 3, s1 = -0.1, s2 = -0.1, r2 = r2)
 #' gen_hex_coord(centroids_df = all_centroids_df, a1 = width)
 #'
 #' @export
@@ -169,8 +169,8 @@ get_min_indices <- function(x) {
 #' @importFrom dplyr mutate select
 #'
 #' @examples
-#' range_umap2 <- diff(range(s_curve_noise_umap$UMAP2))
-#' all_centroids_df <- gen_centroids(bin1 = 3, s1 = -0.1, s2 = -0.1, r2 = range_umap2)
+#' r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
+#' all_centroids_df <- gen_centroids(bin1 = 3, s1 = -0.1, s2 = -0.1, r2 = r2)
 #' assign_data(data = s_curve_noise_umap_scaled, centroid_df = all_centroids_df)
 #'
 #' @export
@@ -215,9 +215,8 @@ assign_data <- function(data, centroid_df) {
 #' @importFrom dplyr count mutate
 #'
 #' @examples
-#' range_umap2 <- diff(range(s_curve_noise_umap$UMAP2))
-#' all_centroids_df <- gen_centroids(bin1 = 3, s1 = -0.1, s2 = -0.1,
-#' r2 = range_umap2)
+#' r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
+#' all_centroids_df <- gen_centroids(bin1 = 3, s1 = -0.1, s2 = -0.1, r2 = r2)
 #' umap_with_hb_id <- assign_data(data = s_curve_noise_umap_scaled,
 #' centroid_df = all_centroids_df)
 #' compute_std_counts(data_hb = umap_with_hb_id)
@@ -245,9 +244,8 @@ compute_std_counts <- function(data_hb) {
 #' @importFrom tibble tibble
 #'
 #' @examples
-#' range_umap2 <- diff(range(s_curve_noise_umap$UMAP2))
-#' all_centroids_df <- gen_centroids(bin1 = 3, s1 = -0.1, s2 = -0.1,
-#' r2 = range_umap2)
+#' r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
+#' all_centroids_df <- gen_centroids(bin1 = 3, s1 = -0.1, s2 = -0.1, r2 = r2)
 #' umap_with_hb_id <- assign_data(data = s_curve_noise_umap_scaled,
 #' centroid_df = all_centroids_df)
 #' find_pts(data_hb = umap_with_hb_id)
@@ -293,7 +291,7 @@ find_pts <- function(data_hb) {
 #' @param bin1 Number of bins along the x axis.
 #' @param s1 The x-coordinate of the hexagonal grid starting point.
 #' @param s2 The y-coordinate of the hexagonal grid starting point.
-#' @param r2 The range of the original second embedding component.
+#' @param r2 The ratio of the ranges of the original embedding components.
 #'
 #' @return A object that contains numeric vector that contains bins along the x and y axes respectively,
 #' all hexagonal bin centroids (centroids),
@@ -305,10 +303,10 @@ find_pts <- function(data_hb) {
 #'
 #'
 #' @examples
-#' range_umap2 <- diff(range(s_curve_noise_umap$UMAP2))
+#' r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
 #' num_bins_x <- 3
 #' hex_binning(data = s_curve_noise_umap_scaled, bin1 = num_bins_x, s1 = -0.1,
-#' s2 = -0.1, r2 = range_umap2)
+#' s2 = -0.1, r2 = r2)
 #'
 #' @export
 hex_binning <- function(data, bin1 = 2, s1 = -0.1, s2 = -0.1, r2) {
@@ -363,10 +361,10 @@ hex_binning <- function(data, bin1 = 2, s1 = -0.1, s2 = -0.1, r2) {
 #' @importFrom dplyr arrange mutate filter
 #'
 #' @examples
-#' range_umap2 <- diff(range(s_curve_noise_umap$UMAP2))
+#' r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
 #' num_bins_x <- 3
 #' hb_obj <- hex_binning(data = s_curve_noise_umap_scaled, bin1 = num_bins_x,
-#' s1 = -0.1, s2 = -0.1, r2 = range_umap2)
+#' s1 = -0.1, s2 = -0.1, r2 = r2)
 #' all_centroids_df <- hb_obj$centroids
 #' counts_df <- hb_obj$std_cts
 #' extract_hexbin_centroids(centroids_df = all_centroids_df,
@@ -398,10 +396,10 @@ extract_hexbin_centroids <- function(centroids_df, counts_df) {
 #' @importFrom tidyselect everything
 #'
 #' @examples
-#' range_umap2 <- diff(range(s_curve_noise_umap$UMAP2))
+#' r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
 #' num_bins_x <- 3
 #' hb_obj <- hex_binning(data = s_curve_noise_umap_scaled, bin1 = num_bins_x,
-#' s1 = -0.1, s2 = -0.1, r2 = range_umap2)
+#' s1 = -0.1, s2 = -0.1, r2 = r2)
 #' umap_with_hb_id <- hb_obj$data_hb_id
 #' counts_df <- hb_obj$std_cts
 #' extract_hexbin_mean(data_hb = umap_with_hb_id, counts_df = counts_df)
@@ -442,10 +440,10 @@ extract_hexbin_mean <- function(data_hb, counts_df) {
 #' @importFrom rlang sym as_string
 #'
 #' @examples
-#' range_umap2 <- diff(range(s_curve_noise_umap$UMAP2))
+#' r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
 #' num_bins_x <- 3
 #' hb_obj <- hex_binning(data = s_curve_noise_umap_scaled, bin1 = num_bins_x,
-#' s1 = -0.1, s2 = -0.1, r2 = range_umap2)
+#' s1 = -0.1, s2 = -0.1, r2 = r2)
 #' all_centroids_df <- hb_obj$centroids
 #' counts_df <- hb_obj$std_cts
 #' df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df,
@@ -475,10 +473,10 @@ tri_bin_centroids <- function(hex_df, x, y){
 #' @importFrom interp triangles
 #'
 #' @examples
-#' range_umap2 <- diff(range(s_curve_noise_umap$UMAP2))
+#' r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
 #' num_bins_x <- 3
 #' hb_obj <- hex_binning(data = s_curve_noise_umap_scaled, bin1 = num_bins_x,
-#' s1 = -0.1, s2 = -0.1, r2 = range_umap2)
+#' s1 = -0.1, s2 = -0.1, r2 = r2)
 #' all_centroids_df <- hb_obj$centroids
 #' counts_df <- hb_obj$std_cts
 #' df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df,
@@ -538,10 +536,10 @@ gen_edges <- function(tri_object) {
 #' @importFrom tidyselect all_of
 #'
 #' @examples
-#' range_umap2 <- diff(range(s_curve_noise_umap$UMAP2))
+#' r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
 #' num_bins_x <- 3
 #' hb_obj <- hex_binning(data = s_curve_noise_umap_scaled, bin1 = num_bins_x,
-#' s1 = -0.1, s2 = -0.1, r2 = range_umap2)
+#' s1 = -0.1, s2 = -0.1, r2 = r2)
 #' all_centroids_df <- hb_obj$centroids
 #' counts_df <- hb_obj$std_cts
 #' df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df,
@@ -589,10 +587,10 @@ cal_2d_dist <- function(tr_coord_df, start_x, start_y, end_x, end_y,
 #' @importFrom tibble tibble
 #'
 #' @examples
-#' range_umap2 <- diff(range(s_curve_noise_umap$UMAP2))
+#' r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
 #' num_bins_x <- 3
 #' hb_obj <- hex_binning(data = s_curve_noise_umap_scaled, bin1 = num_bins_x,
-#' s1 = -0.1, s2 = -0.1, r2 = range_umap2)
+#' s1 = -0.1, s2 = -0.1, r2 = r2)
 #' all_centroids_df <- hb_obj$centroids
 #' counts_df <- hb_obj$std_cts
 #' df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df,
@@ -651,10 +649,10 @@ vis_lg_mesh <- function(distance_edges, benchmark_value,
 #' @importFrom tibble tibble
 #'
 #' @examples
-#' range_umap2 <- diff(range(s_curve_noise_umap$UMAP2))
+#' r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
 #' num_bins_x <- 3
 #' hb_obj <- hex_binning(data = s_curve_noise_umap_scaled, bin1 = num_bins_x,
-#' s1 = -0.1, s2 = -0.1, r2 = range_umap2)
+#' s1 = -0.1, s2 = -0.1, r2 = r2)
 #' all_centroids_df <- hb_obj$centroids
 #' counts_df <- hb_obj$std_cts
 #' df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df,
@@ -709,9 +707,9 @@ vis_rmlg_mesh <- function(distance_edges, benchmark_value, tr_coord_df,
 #' needed to achieve a specific number of non-empty bins.
 #'
 #' @examples
-#' range_umap2 <- diff(range(s_curve_noise_umap$UMAP2))
+#' r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
 #' find_non_empty_bins(data = s_curve_noise_umap_scaled, non_empty_bins = 6,
-#' r2 = range_umap2)
+#' r2 = r2)
 #'
 #' @export
 find_non_empty_bins <- function(data, non_empty_bins, s1 = -0.1, s2 = -0.1, r2) {

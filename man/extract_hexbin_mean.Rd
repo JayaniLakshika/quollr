@@ -19,10 +19,10 @@ A tibble contains hexagon ID, bin mean coordinates, and standardize counts.
 Extract hexagonal bin mean coordinates and the corresponding standardize counts.
 }
 \examples{
-range_umap2 <- diff(range(s_curve_noise_umap$UMAP2))
+r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
 num_bins_x <- 3
 hb_obj <- hex_binning(data = s_curve_noise_umap_scaled, bin1 = num_bins_x,
-s1 = -0.1, s2 = -0.1, r2 = range_umap2)
+s1 = -0.1, s2 = -0.1, r2 = r2)
 umap_with_hb_id <- hb_obj$data_hb_id
 counts_df <- hb_obj$std_cts
 extract_hexbin_mean(data_hb = umap_with_hb_id, counts_df = counts_df)

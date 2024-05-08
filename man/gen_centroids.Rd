@@ -13,7 +13,7 @@ gen_centroids(bin1 = 2, s1 = -0.1, s2 = -0.1, r2)
 
 \item{s2}{The y-coordinate of the hexagonal grid starting point.}
 
-\item{r2}{The range of the original second embedding component.}
+\item{r2}{The ratio of the ranges of the original embedding components.}
 }
 \value{
 A tibble contains hexIDs, x and y coordinates (hexID, c_x, c_y respectively)
@@ -23,7 +23,7 @@ of all hexagon bin centroids.
 This function generates all possible centroids in the hexagonal grid.
 }
 \examples{
-range_umap2 <- diff(range(s_curve_noise_umap$UMAP2))
-gen_centroids(bin1 = 3, s1 = -0.1, s2 = -0.1, r2 = range_umap2)
+r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
+gen_centroids(bin1 = 3, s1 = -0.1, s2 = -0.1, r2 = r2)
 
 }

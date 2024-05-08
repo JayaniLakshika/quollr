@@ -26,7 +26,7 @@ library(ggplot2)
 To obtain the model summaries, first you need to obtain the 2D hexagonal bin centroids which is the 2D model (`df_bin_centroids`) and the high-dimensional coordinates of bin centroids which represents the lifted model in high-dimensions (`df_bin`).
 
 ```{r}
-r2 <- diff(range(s_curve_noise_umap$UMAP2))
+r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
 model <- fit_highd_model(training_data = s_curve_noise_training, 
                          emb_df = s_curve_noise_umap_scaled,
                          bin1 = 3, r2 = r2,

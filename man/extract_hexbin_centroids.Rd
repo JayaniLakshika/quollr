@@ -20,10 +20,10 @@ A tibble contains hexagon ID, centroid coordinates, and standardise counts.
 Extract hexagonal bin centroids coordinates and the corresponding standardise counts.
 }
 \examples{
-range_umap2 <- diff(range(s_curve_noise_umap$UMAP2))
+r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
 num_bins_x <- 3
 hb_obj <- hex_binning(data = s_curve_noise_umap_scaled, bin1 = num_bins_x,
-s1 = -0.1, s2 = -0.1, r2 = range_umap2)
+s1 = -0.1, s2 = -0.1, r2 = r2)
 all_centroids_df <- hb_obj$centroids
 counts_df <- hb_obj$std_cts
 extract_hexbin_centroids(centroids_df = all_centroids_df,

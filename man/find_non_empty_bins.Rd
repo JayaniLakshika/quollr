@@ -26,8 +26,8 @@ This function determines the number of bins along the x and y axes
 to obtain a specific number of non-empty bins.
 }
 \examples{
-range_umap2 <- diff(range(s_curve_noise_umap$UMAP2))
+r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
 find_non_empty_bins(data = s_curve_noise_umap_scaled, non_empty_bins = 6,
-r2 = range_umap2)
+r2 = r2)
 
 }

@@ -103,7 +103,7 @@ such as hexagonal binning parameters (<code>bin1</code>,
 <code>s1</code>, <code>s2</code>, `r2``), and options for binning and
 hexagon visualization.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">r2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/diff.html" class="external-link">diff</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/range.html" class="external-link">range</a></span><span class="op">(</span><span class="va">s_curve_noise_umap</span><span class="op">$</span><span class="va">UMAP2</span><span class="op">)</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">r2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/diff.html" class="external-link">diff</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/range.html" class="external-link">range</a></span><span class="op">(</span><span class="va">s_curve_noise_umap</span><span class="op">$</span><span class="va">UMAP2</span><span class="op">)</span><span class="op">)</span><span class="op">/</span><span class="fu"><a href="https://rdrr.io/r/base/diff.html" class="external-link">diff</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/range.html" class="external-link">range</a></span><span class="op">(</span><span class="va">s_curve_noise_umap</span><span class="op">$</span><span class="va">UMAP1</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_highd_model.html">fit_highd_model</a></span><span class="op">(</span>training_data <span class="op">=</span> <span class="va">s_curve_noise_training</span>, </span>
 <span>                         emb_df <span class="op">=</span> <span class="va">s_curve_noise_umap_scaled</span>, bin1 <span class="op">=</span> <span class="fl">2</span>, s1 <span class="op">=</span> <span class="op">-</span><span class="fl">0.1</span>,</span>
@@ -111,25 +111,25 @@ hexagon visualization.</p>
 <span>                         is_rm_lwd_hex <span class="op">=</span> <span class="cn">FALSE</span>, col_start_highd <span class="op">=</span> <span class="st">"x"</span><span class="op">)</span></span>
 <span><span class="co">## 2D model</span></span>
 <span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="va">model</span><span class="op">$</span><span class="va">df_bin</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Rows: 3</span></span>
+<span><span class="co">#&gt; Rows: 5</span></span>
 <span><span class="co">#&gt; Columns: 8</span></span>
-<span><span class="co">#&gt; $ hb_id <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 1, 3, 6</span></span>
-<span><span class="co">#&gt; $ x1    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> -0.2683064, 0.1694030, 0.2910717</span></span>
-<span><span class="co">#&gt; $ x2    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 0.9855997, 1.0951044, 1.0521815</span></span>
-<span><span class="co">#&gt; $ x3    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> -1.8147345, -0.2076273, 1.7067914</span></span>
-<span><span class="co">#&gt; $ x4    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 0.0047022347, 0.0021887455, -0.0001409137</span></span>
-<span><span class="co">#&gt; $ x5    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> -0.0001830444, 0.0004060918, 0.0031403582</span></span>
-<span><span class="co">#&gt; $ x6    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> -0.024444671, 0.018131791, -0.006937446</span></span>
-<span><span class="co">#&gt; $ x7    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> -0.001457852, 0.001428469, -0.001052482</span></span>
+<span><span class="co">#&gt; $ hb_id <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 1, 3, 4, 6, 8</span></span>
+<span><span class="co">#&gt; $ x1    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> -0.37027011, 0.54780799, -0.02847416, -0.15486748, 0.94560776</span></span>
+<span><span class="co">#&gt; $ x2    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 1.2060619, 0.9074247, 0.7249165, 1.0615823, 1.2339481</span></span>
+<span><span class="co">#&gt; $ x3    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> -1.768891193, -0.939781649, 0.000970043, 1.406508954, 1.283265704</span></span>
+<span><span class="co">#&gt; $ x4    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 0.0049525635, 0.0016112871, 0.0123580092, -0.0002367242, 0.00218…</span></span>
+<span><span class="co">#&gt; $ x5    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 0.0002350542, -0.0004228393, -0.0002478873, 0.0029248798, 0.0017…</span></span>
+<span><span class="co">#&gt; $ x6    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> -0.02943948, 0.01756471, 0.04393751, -0.01305079, 0.02713524</span></span>
+<span><span class="co">#&gt; $ x7    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> -0.0009911891, 0.0007025037, 0.0017407368, -0.0002923452, -0.002…</span></span>
 <span></span>
 <span><span class="co">## high-D model</span></span>
 <span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="va">model</span><span class="op">$</span><span class="va">df_bin_centroids</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Rows: 3</span></span>
+<span><span class="co">#&gt; Rows: 5</span></span>
 <span><span class="co">#&gt; Columns: 4</span></span>
-<span><span class="co">#&gt; $ hexID      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 1, 3, 6</span></span>
-<span><span class="co">#&gt; $ c_x        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> -0.1000000, 0.4179752, 0.9359504</span></span>
-<span><span class="co">#&gt; $ c_y        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> -0.1000000, 0.7971593, 1.6943187</span></span>
-<span><span class="co">#&gt; $ std_counts <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 0.7500000, 1.0000000, 0.9285714</span></span></code></pre></div>
+<span><span class="co">#&gt; $ hexID      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 1, 3, 4, 6, 8</span></span>
+<span><span class="co">#&gt; $ c_x        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> -0.1000000, 0.3078815, 1.1236445, 0.7157630, 1.1236445</span></span>
+<span><span class="co">#&gt; $ c_y        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> -0.1000000, 0.6064715, 0.6064715, 1.3129430, 2.0194144</span></span>
+<span><span class="co">#&gt; $ std_counts <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 0.5517241, 0.7241379, 0.1034483, 1.0000000, 0.2068966</span></span></code></pre></div>
   </main>
 </div>
 

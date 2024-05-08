@@ -1,6 +1,6 @@
 test_that("fit_highd_model() works", {
 
-  r2 <- diff(range(s_curve_noise_umap$UMAP2))
+  r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
 
   testthat::expect_snapshot(fit_highd_model(training_data = s_curve_noise_training,
                                             emb_df = s_curve_noise_umap_scaled,

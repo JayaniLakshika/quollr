@@ -1,9 +1,9 @@
 test_that("find_lg_benchmark() works", {
 
-  range_umap2 <- diff(range(s_curve_noise_umap$UMAP2))
+  r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
   model <- fit_highd_model(training_data = s_curve_noise_training,
                            emb_df = s_curve_noise_umap_scaled,
-                           r2 = range_umap2,
+                           r2 = r2,
                            col_start_highd = "x")
 
   df_bin_centroids <- model$df_bin_centroids
@@ -18,9 +18,9 @@ test_that("find_lg_benchmark() works", {
                              select_vars = c("from", "to", "distance"))
 
   testthat::expect_equal(find_lg_benchmark(distance_edges = distance_df,
-                                              distance_col = "distance"), 1.295)
+                                              distance_col = "distance"), 0.96525)
 
-  distance_df_n <- distance_df |> dplyr::add_row(from = 1, to = 4,
+  distance_df_n <- distance_df |> dplyr::add_row(from = 5, to = 6,
                                                 distance = NA_integer_)
   testthat::expect_error(find_lg_benchmark(distance_df_n, "distance"))
 
@@ -29,9 +29,9 @@ test_that("find_lg_benchmark() works", {
 
 test_that("compute_mean_density_hex() works", {
 
-  range_umap2 <- diff(range(s_curve_noise_umap$UMAP2))
+  r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
   hb_obj <- hex_binning(data = s_curve_noise_umap_scaled, bin1 = 3, s1 = -0.1,
-                        s2 = -0.1, r2 = range_umap2)
+                        s2 = -0.1, r2 = r2)
 
   all_centroids_df <- hb_obj$centroids
   counts_df <- hb_obj$std_cts
@@ -54,9 +54,9 @@ test_that("compute_mean_density_hex() works", {
 
 test_that("find_low_dens_hex() works", {
 
-  range_umap2 <- diff(range(s_curve_noise_umap$UMAP2))
+  r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
   hb_obj <- hex_binning(data = s_curve_noise_umap_scaled, bin1 = 3, s1 = -0.1,
-                        s2 = -0.1, r2 = range_umap2)
+                        s2 = -0.1, r2 = r2)
 
   all_centroids_df <- hb_obj$centroids
   counts_df <- hb_obj$std_cts

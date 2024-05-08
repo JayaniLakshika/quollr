@@ -90,28 +90,29 @@ provided in the input data frame and returns the triangular object.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">range_umap2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/diff.html" class="external-link">diff</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/range.html" class="external-link">range</a></span><span class="op">(</span><span class="va">s_curve_noise_umap</span><span class="op">$</span><span class="va">UMAP2</span><span class="op">)</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">r2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/diff.html" class="external-link">diff</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/range.html" class="external-link">range</a></span><span class="op">(</span><span class="va">s_curve_noise_umap</span><span class="op">$</span><span class="va">UMAP2</span><span class="op">)</span><span class="op">)</span><span class="op">/</span><span class="fu"><a href="https://rdrr.io/r/base/diff.html" class="external-link">diff</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/range.html" class="external-link">range</a></span><span class="op">(</span><span class="va">s_curve_noise_umap</span><span class="op">$</span><span class="va">UMAP1</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">num_bins_x</span> <span class="op">&lt;-</span> <span class="fl">3</span></span></span>
 <span class="r-in"><span><span class="va">hb_obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="hex_binning.html">hex_binning</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">s_curve_noise_umap_scaled</span>, bin1 <span class="op">=</span> <span class="va">num_bins_x</span>,</span></span>
-<span class="r-in"><span>s1 <span class="op">=</span> <span class="op">-</span><span class="fl">0.1</span>, s2 <span class="op">=</span> <span class="op">-</span><span class="fl">0.1</span>, r2 <span class="op">=</span> <span class="va">range_umap2</span><span class="op">)</span></span></span>
+<span class="r-in"><span>s1 <span class="op">=</span> <span class="op">-</span><span class="fl">0.1</span>, s2 <span class="op">=</span> <span class="op">-</span><span class="fl">0.1</span>, r2 <span class="op">=</span> <span class="va">r2</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">all_centroids_df</span> <span class="op">&lt;-</span> <span class="va">hb_obj</span><span class="op">$</span><span class="va">centroids</span></span></span>
 <span class="r-in"><span><span class="va">counts_df</span> <span class="op">&lt;-</span> <span class="va">hb_obj</span><span class="op">$</span><span class="va">std_cts</span></span></span>
 <span class="r-in"><span><span class="va">df_bin_centroids</span> <span class="op">&lt;-</span> <span class="fu"><a href="extract_hexbin_centroids.html">extract_hexbin_centroids</a></span><span class="op">(</span>centroids_df <span class="op">=</span> <span class="va">all_centroids_df</span>,</span></span>
 <span class="r-in"><span>counts_df <span class="op">=</span> <span class="va">counts_df</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">tri_bin_centroids</span><span class="op">(</span>hex_df <span class="op">=</span> <span class="va">df_bin_centroids</span>, x <span class="op">=</span> <span class="st">"c_x"</span>, y <span class="op">=</span> <span class="st">"c_y"</span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>triangle collapsed!</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>three points coincide or are collinear!</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Delaunay triangulation, node and triangle indices:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> triangle: nodes (a,b,c), neighbour triangles [i,j,k] </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1: (1,2,3), [2,7,0]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2: (4,3,2), [1,0,4]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3: (3,5,8), [8,7,4]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1: (1,2,3), [2,3,0]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2: (4,3,2), [1,6,4]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3: (5,1,3), [1,4,0]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4: (5,3,4), [2,5,3]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5: (6,5,4), [4,0,6]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6: (7,5,6), [5,10,8]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7: (3,8,1), [0,1,3]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8: (8,5,7), [6,9,3]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9: (9,8,7), [8,10,0]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10: (9,7,6), [6,0,9]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> boundary nodes:  1 2 4 6 9 8 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5: (6,5,4), [4,6,7]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6: (6,4,2), [2,0,5]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7: (7,5,6), [5,9,8]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8: (8,7,5), [7,0,9]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9: (8,7,6), [7,0,8]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> boundary nodes:  1 2 6 8 6 </span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

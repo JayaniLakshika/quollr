@@ -22,10 +22,9 @@ A tibble contains Error, MSE and AIC values.
 This function generates an evaluation data frame based on the provided data and predictions.
 }
 \examples{
-range_umap2 <- diff(range(s_curve_noise_umap$UMAP2))
+r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
 model <- fit_highd_model(training_data = s_curve_noise_training,
-emb_df = s_curve_noise_umap_scaled, bin1 = 3, r2 = range_umap2,
-col_start_highd = "x")
+emb_df = s_curve_noise_umap_scaled, bin1 = 3, r2 = r2, col_start_highd = "x")
 df_bin_centroids <- model$df_bin_centroids
 df_bin <- model$df_bin
 pred_df_test <- predict_emb(test_data = s_curve_noise_training,

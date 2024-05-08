@@ -9,7 +9,7 @@
 #' @param bin1 Number of bins along the x axis.
 #' @param s1 The x-coordinate of the hexagonal grid starting point.
 #' @param s2 The y-coordinate of the hexagonal grid starting point.
-#' @param r2 The range of the original second embedding component.
+#' @param r2 The ratio of the ranges of the original embedding components.
 #' @param is_bin_centroid Logical, indicating whether to use bin centroids (default is TRUE).
 #' @param is_rm_lwd_hex Logical, indicating whether to remove low-density hexagons
 #' (default is FALSE).
@@ -24,9 +24,9 @@
 #' @importFrom stats quantile
 #'
 #' @examples
-#' range_umap2 <- diff(range(s_curve_noise_umap$UMAP2))
+#' r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
 #' fit_highd_model(training_data = s_curve_noise_training,
-#' emb_df = s_curve_noise_umap_scaled, bin1 = 3, r2 = range_umap2,
+#' emb_df = s_curve_noise_umap_scaled, bin1 = 3, r2 = r2,
 #' col_start_highd = "x")
 #'
 #' @export

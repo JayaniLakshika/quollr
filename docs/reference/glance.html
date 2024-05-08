@@ -91,10 +91,9 @@
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">range_umap2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/diff.html" class="external-link">diff</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/range.html" class="external-link">range</a></span><span class="op">(</span><span class="va">s_curve_noise_umap</span><span class="op">$</span><span class="va">UMAP2</span><span class="op">)</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">r2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/diff.html" class="external-link">diff</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/range.html" class="external-link">range</a></span><span class="op">(</span><span class="va">s_curve_noise_umap</span><span class="op">$</span><span class="va">UMAP2</span><span class="op">)</span><span class="op">)</span><span class="op">/</span><span class="fu"><a href="https://rdrr.io/r/base/diff.html" class="external-link">diff</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/range.html" class="external-link">range</a></span><span class="op">(</span><span class="va">s_curve_noise_umap</span><span class="op">$</span><span class="va">UMAP1</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="fit_highd_model.html">fit_highd_model</a></span><span class="op">(</span>training_data <span class="op">=</span> <span class="va">s_curve_noise_training</span>,</span></span>
-<span class="r-in"><span>emb_df <span class="op">=</span> <span class="va">s_curve_noise_umap_scaled</span>, bin1 <span class="op">=</span> <span class="fl">3</span>, r2 <span class="op">=</span> <span class="va">range_umap2</span>,</span></span>
-<span class="r-in"><span>col_start_highd <span class="op">=</span> <span class="st">"x"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>emb_df <span class="op">=</span> <span class="va">s_curve_noise_umap_scaled</span>, bin1 <span class="op">=</span> <span class="fl">3</span>, r2 <span class="op">=</span> <span class="va">r2</span>, col_start_highd <span class="op">=</span> <span class="st">"x"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">df_bin_centroids</span> <span class="op">&lt;-</span> <span class="va">model</span><span class="op">$</span><span class="va">df_bin_centroids</span></span></span>
 <span class="r-in"><span><span class="va">df_bin</span> <span class="op">&lt;-</span> <span class="va">model</span><span class="op">$</span><span class="va">df_bin</span></span></span>
 <span class="r-in"><span><span class="va">pred_df_test</span> <span class="op">&lt;-</span> <span class="fu"><a href="predict_emb.html">predict_emb</a></span><span class="op">(</span>test_data <span class="op">=</span> <span class="va">s_curve_noise_training</span>,</span></span>
@@ -104,7 +103,7 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1 × 2</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Error   MSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span>  69.3 0.405</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span>  75.3 0.495</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

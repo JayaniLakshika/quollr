@@ -1,9 +1,9 @@
 test_that("predict_emb() works", {
 
-  range_umap2 <- diff(range(s_curve_noise_umap$UMAP2))
+  r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
   model <- fit_highd_model(training_data = s_curve_noise_training,
                            emb_df = s_curve_noise_umap_scaled,
-                           r2 = range_umap2,
+                           r2 = r2,
                            col_start_highd = "x")
 
   df_bin_centroids <- model$df_bin_centroids
@@ -21,10 +21,10 @@ test_that("predict_emb() works", {
 
 test_that("glance() works", {
 
-  range_umap2 <- diff(range(s_curve_noise_umap$UMAP2))
+  r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
   model <- fit_highd_model(training_data = s_curve_noise_training,
                            emb_df = s_curve_noise_umap_scaled,
-                           r2 = range_umap2,
+                           r2 = r2,
                            col_start_highd = "x")
 
   df_bin_centroids <- model$df_bin_centroids
@@ -51,10 +51,10 @@ test_that("glance() works", {
 
 test_that("augment() works", {
 
-  range_umap2 <- diff(range(s_curve_noise_umap$UMAP2))
+  r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
   model <- fit_highd_model(training_data = s_curve_noise_training,
                            emb_df = s_curve_noise_umap_scaled,
-                           r2 = range_umap2,
+                           r2 = r2,
                            col_start_highd = "x")
 
   df_bin_centroids <- model$df_bin_centroids

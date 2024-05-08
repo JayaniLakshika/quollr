@@ -15,7 +15,7 @@ hex_binning(data, bin1 = 2, s1 = -0.1, s2 = -0.1, r2)
 
 \item{s2}{The y-coordinate of the hexagonal grid starting point.}
 
-\item{r2}{The range of the original second embedding component.}
+\item{r2}{The ratio of the ranges of the original embedding components.}
 }
 \value{
 A object that contains numeric vector that contains bins along the x and y axes respectively,
@@ -30,9 +30,9 @@ and points within each hexagon (pts_bins).
 This function generates the hexagonal object.
 }
 \examples{
-range_umap2 <- diff(range(s_curve_noise_umap$UMAP2))
+r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
 num_bins_x <- 3
 hex_binning(data = s_curve_noise_umap_scaled, bin1 = num_bins_x, s1 = -0.1,
-s2 = -0.1, r2 = range_umap2)
+s2 = -0.1, r2 = r2)
 
 }

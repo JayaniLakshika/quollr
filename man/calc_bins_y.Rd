@@ -13,7 +13,7 @@ calc_bins_y(bin1 = 2, s1 = -0.1, s2 = -0.1, r2)
 
 \item{s2}{The y-coordinate of the hexagonal grid starting point.}
 
-\item{r2}{The range of the original second embedding component.}
+\item{r2}{The ratio of the ranges of the original embedding components.}
 }
 \value{
 A list of numeric values that represents the effective number of
@@ -24,7 +24,7 @@ This function calculates the effective number of bins along the x and y axes
 of a hexagonal grid.
 }
 \examples{
-range_umap2 <- diff(range(s_curve_noise_umap$UMAP2))
-calc_bins_y(bin1 = 2, s1 = -0.1, s2 = -0.1, r2 = range_umap2)
+r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
+calc_bins_y(bin1 = 2, s1 = -0.1, s2 = -0.1, r2 = r2)
 
 }
