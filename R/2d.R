@@ -85,7 +85,7 @@ gen_centroids <- function(bin1 = 2, bin2, s1 = -0.1, s2 = -0.1, a1){
 #'
 #' @return A tibble contains polygon id, x and y coordinates (hex_poly_id, x,
 #' and y respectively) of hexagons.
-#'
+#' @importFrom tibble tibble
 #'
 #' @examples
 #' range_umap2 <- diff(range(s_curve_noise_umap$UMAP2))
@@ -177,7 +177,8 @@ get_min_indices <- function(x) {
 #' @param centroid_df The dataset with centroid coordinates.
 #'
 #' @return A tibble contains embedding components and corresponding hexagon ID.
-#'
+#' @importFrom proxy dist
+#' @importFrom dplyr mutate select
 #'
 #' @examples
 #' range_umap2 <- diff(range(s_curve_noise_umap$UMAP2))
@@ -196,7 +197,7 @@ assign_data <- function(data, centroid_df) {
 
   ## To select first and second embedding components
   select_emb <- data |>
-    dplyr::select(c(1, 2))
+    select(c(1, 2))
 
   ## To select coordinates for the centroids
   select_centroid <- centroid_df |>
@@ -207,7 +208,7 @@ assign_data <- function(data, centroid_df) {
   centroid_matrix <- as.matrix(select_centroid)
 
   ## Compute distances between embedding points and hex bin centroids
-  dist_df <- proxy::dist(matrix_nldr, centroid_matrix, method = "Euclidean")
+  dist_df <- dist(matrix_nldr, centroid_matrix, method = "Euclidean")
 
   # Get the column indices of minimum distances (if there are multiple minimum,
   # get the minimum indicies)
@@ -227,31 +228,32 @@ assign_data <- function(data, centroid_df) {
 #'
 #' This function computes the standardize number of points within each hexagon.
 #'
-#' @param data_hex_id A data frame with x and y coordinates and hexagonal bin IDs.
+#' @param data A tibble with embedding and hexagonal bin IDs.
 #'
 #' @return A tibble that contains hexagon IDs and the corresponding standardize counts.
 #' @importFrom dplyr count mutate
 #'
 #' @examples
-#' num_bins_list <- calc_bins(data = s_curve_noise_umap_scaled, x = "UMAP1", y = "UMAP2",
-#' hex_size = 0.2, buffer_x = 0.346, buffer_y = 0.3)
-#' num_bins_x <- num_bins_list$num_x
+#' range_umap2 <- diff(range(s_curve_noise_umap$UMAP2))
+#' num_bins_x <- 3
+#' num_bins_list <- calc_bins_y(bin1 = num_bins_x, s1 = -0.1, s2 = -0.1,
+#' r2 = range_umap2)
 #' num_bins_y <- num_bins_list$num_y
 #' all_centroids_df <- gen_centroids(data = s_curve_noise_umap_scaled,
 #' x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
 #' num_bins_y = num_bins_y, x_start = -0.1732051, y_start = -0.15, buffer_x = 0.346,
 #' buffer_y = 0.3, hex_size = 0.2)
 #' umap_with_hb_id <- assign_data(data = s_curve_noise_umap_scaled,
-#' centroid_df = all_centroids_df, col_start = "UMAP")
+#' centroid_df = all_centroids_df)
 #' compute_std_counts(data_hex_id = umap_with_hb_id)
 #'
 #' @export
-compute_std_counts <- function(data_hex_id) {
+compute_std_counts <- function(data) {
 
   ## Group by hexagon IDs
-  std_df <- data_hex_id |>
-    dplyr::count(hb_id) |>
-    dplyr::mutate(std_counts = n/max(n))
+  std_df <- data |>
+    count(hb_id) |>
+    mutate(std_counts = n/max(n))
 
   return(std_df)
 
