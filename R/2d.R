@@ -245,7 +245,7 @@ assign_data <- function(data, centroid_df) {
 #' buffer_y = 0.3, hex_size = 0.2)
 #' umap_with_hb_id <- assign_data(data = s_curve_noise_umap_scaled,
 #' centroid_df = all_centroids_df)
-#' compute_std_counts(data_hex_id = umap_with_hb_id)
+#' compute_std_counts(data = umap_with_hb_id)
 #'
 #' @export
 compute_std_counts <- function(data) {
@@ -263,39 +263,41 @@ compute_std_counts <- function(data) {
 #'
 #' This function maps points to their corresponding hexagonal bins.
 #'
-#' @param data_hex_id A data frame with data, ID and hexagonal bin IDs.
+#' @param data A data frame with data, ID and hexagonal bin IDs.
 #'
-#' @return A data frame with hexagonal bin IDs and the corresponding points.
+#' @return A tibble with hexagonal bin IDs and the corresponding points.
 #' @importFrom dplyr filter pull
+#' @importFrom tibble tibble
 #'
 #' @examples
-#' num_bins_list <- calc_bins(data = s_curve_noise_umap_scaled, x = "UMAP1", y = "UMAP2",
-#' hex_size = 0.2, buffer_x = 0.346, buffer_y = 0.3)
-#' num_bins_x <- num_bins_list$num_x
+#' range_umap2 <- diff(range(s_curve_noise_umap$UMAP2))
+#' num_bins_x <- 3
+#' num_bins_list <- calc_bins_y(bin1 = num_bins_x, s1 = -0.1, s2 = -0.1,
+#' r2 = range_umap2)
 #' num_bins_y <- num_bins_list$num_y
 #' all_centroids_df <- gen_centroids(data = s_curve_noise_umap_scaled,
 #' x = "UMAP1", y = "UMAP2", num_bins_x = num_bins_x,
 #' num_bins_y = num_bins_y, x_start = -0.1732051, y_start = -0.15, buffer_x = 0.346,
 #' buffer_y = 0.3, hex_size = 0.2)
 #' umap_with_hb_id <- assign_data(data = s_curve_noise_umap_scaled,
-#' centroid_df = all_centroids_df, col_start = "UMAP")
-#' find_pts(data_hex_id = umap_with_hb_id)
+#' centroid_df = all_centroids_df)
+#' find_pts(data = umap_with_hb_id)
 #'
 #' @export
-find_pts <- function(data_hex_id) {
+find_pts <- function(data) {
 
   ## A vector to store points info
   pts_list <- list()
   hexID <- integer(0)
 
-  hexID_vec <- unique(data_hex_id$hb_id)
+  hexID_vec <- unique(data$hb_id)
 
   for (hb_id in hexID_vec) {
 
     ## Filter a hexagon and find the point within that hexagon
-    pts_vec <- data_hex_id |>
-      dplyr::filter(hb_id == hb_id) |>
-      dplyr::pull(ID) |>
+    pts_vec <- data |>
+      filter(hb_id == hb_id) |>
+      pull(ID) |>
       list()
 
     ## Rename the list
@@ -307,7 +309,7 @@ find_pts <- function(data_hex_id) {
 
   }
 
-  pts_df <- tibble::tibble(hexID = hexID, pts_list = pts_list)
+  pts_df <- tibble(hexID = hexID, pts_list = pts_list)
 
   return(pts_df)
 
