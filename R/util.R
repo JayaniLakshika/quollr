@@ -38,7 +38,7 @@ calc_bins_y <- function(bin1 = 2, s1 = -0.1, s2 = -0.1, r2) {
   bin2 <- ceiling(1 + (2 * (r2-s2) * (bin1 - 1))/(sqrt(3) * (1-s1)))
 
   ## Validating and compute horizontal spacing
-  check_factor <- (sqrt(3) * (1 - s1) * (bin2 - 1))/(2 * (bin1 - 1))
+  check_factor <- (sqrt(3) * (bin2 - 1) * (1-s1))/(2 * (bin1 - 1)) + s2
 
   if (r2 > check_factor) {
 
