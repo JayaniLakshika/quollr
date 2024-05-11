@@ -51,15 +51,7 @@ gen_centroids <- function(bin1 = 2, q = 0.1, r2){
 
   } else {
 
-    if ((ceiling(bin2/2) %% 2) == 0) {
-
-      c_x <- append(rep(c_x_vec, floor(bin2/2)), c_x_vec_odd)
-
-    } else{
-
-      c_x <- append(rep(c_x_vec, floor(bin2/2)), c_x_vec_even)
-
-    }
+    c_x <- append(rep(c_x_vec, floor(bin2/2)), c_x_vec_odd)
 
   }
 
