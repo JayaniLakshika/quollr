@@ -4,22 +4,21 @@
 \alias{hex_binning}
 \title{Hexagonal binning}
 \usage{
-hex_binning(data, bin1 = 2, s1 = -0.1, s2 = -0.1, r2)
+hex_binning(data, bin1 = 2, q = 0.1, r2)
 }
 \arguments{
 \item{data}{A tibble that contains embedding components.}
 
 \item{bin1}{Number of bins along the x axis.}
 
-\item{s1}{The x-coordinate of the hexagonal grid starting point.}
-
-\item{s2}{The y-coordinate of the hexagonal grid starting point.}
+\item{q}{The buffer amount as proportion of data range 0.05-0.1.}
 
 \item{r2}{The ratio of the ranges of the original embedding components.}
 }
 \value{
-A object that contains numeric vector that contains bins along the x and y axes respectively,
-all hexagonal bin centroids (centroids),
+A object that contains numeric vector that contains bins along
+the x and y axes respectively (bins), numeric vector that contains hexagonal
+starting point coordinates all hexagonal bin centroids (centroids),
 hexagonal coordinates of the full grid(hex_poly),
 embedding components with their corresponding hexagon IDs (data_hb_id),
 hex bins with their corresponding standardise counts (std_cts),
@@ -32,7 +31,7 @@ This function generates the hexagonal object.
 \examples{
 r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
 num_bins_x <- 3
-hex_binning(data = s_curve_noise_umap_scaled, bin1 = num_bins_x, s1 = -0.1,
-s2 = -0.1, r2 = r2)
+hex_binning(data = s_curve_noise_umap_scaled, bin1 = num_bins_x, q = 0.1,
+r2 = r2)
 
 }

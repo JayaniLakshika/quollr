@@ -1,8 +1,8 @@
 test_that("avg_highd_data() works", {
 
   r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
-  hb_obj <- hex_binning(data = s_curve_noise_umap_scaled, bin1 = 3, s1 = -0.1,
-                        s2 = -0.1, r2 = r2)
+  hb_obj <- hex_binning(data = s_curve_noise_umap_scaled, bin1 = 3, q = 0.1,
+                        r2 = r2)
 
   umap_with_hb_id <- hb_obj$data_hb_id
   df_all <- dplyr::bind_cols(s_curve_noise_training |> dplyr::select(-ID), umap_with_hb_id)
@@ -14,8 +14,8 @@ test_that("avg_highd_data() works", {
 test_that("show_langevitour() works", {
 
   r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
-  hb_obj <- hex_binning(data = s_curve_noise_umap_scaled, bin1 = 3, s1 = -0.1,
-                        s2 = -0.1, r2 = r2)
+  hb_obj <- hex_binning(data = s_curve_noise_umap_scaled, bin1 = 3, q = 0.1,
+                        r2 = r2)
 
   all_centroids_df <- hb_obj$centroids
   counts_df <- hb_obj$std_cts

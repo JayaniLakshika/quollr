@@ -17,7 +17,7 @@ This function computes the standardize number of points within each hexagon.
 }
 \examples{
 r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
-all_centroids_df <- gen_centroids(bin1 = 3, s1 = -0.1, s2 = -0.1, r2 = r2)
+all_centroids_df <- gen_centroids(bin1 = 3, q = 0.1, r2 = r2)
 umap_with_hb_id <- assign_data(data = s_curve_noise_umap_scaled,
 centroid_df = all_centroids_df)
 compute_std_counts(data_hb = umap_with_hb_id)

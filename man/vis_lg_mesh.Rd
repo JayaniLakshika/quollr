@@ -26,7 +26,7 @@ This function visualize triangular mesh with coloured long edges.
 r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
 num_bins_x <- 3
 hb_obj <- hex_binning(data = s_curve_noise_umap_scaled, bin1 = num_bins_x,
-s1 = -0.1, s2 = -0.1, r2 = r2)
+q = 0.1, r2 = r2)
 all_centroids_df <- hb_obj$centroids
 counts_df <- hb_obj$std_cts
 df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df,
