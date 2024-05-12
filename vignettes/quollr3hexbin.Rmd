@@ -29,7 +29,7 @@ By passing the preprocessed 2D embedding data and hexagonal grid configurations,
 
 ```{r}
 r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
-hb_obj <- hex_binning(data = s_curve_noise_umap_scaled, bin1 = 3, q = 0.1, 
+hb_obj <- hex_binning(data = s_curve_noise_umap_scaled, bin1 = 6, q = 0.1, 
                       r2 = r2)
 ```
 

@@ -25,7 +25,7 @@ In here, we use `fit_highd_model()` function to construct the model in 2D and hi
 r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
 
 model <- fit_highd_model(training_data = s_curve_noise_training, 
-                         emb_df = s_curve_noise_umap_scaled, bin1 = 2, q = 0.1,
+                         emb_df = s_curve_noise_umap_scaled, bin1 = 6, q = 0.1,
                          r2 = r2, is_bin_centroid = TRUE, 
                          is_rm_lwd_hex = FALSE, col_start_highd = "x")
 ## 2D model
