@@ -10,7 +10,7 @@ augment(
   training_data,
   newdata = NULL,
   type_NLDR,
-  col_start
+  col_start = "x"
 )
 }
 \arguments{

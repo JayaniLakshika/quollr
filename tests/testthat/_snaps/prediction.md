@@ -43,8 +43,8 @@
 # glance() works
 
     Code
-      glance(test_data = s_curve_noise_training, prediction_df = pred_df_training,
-        df_bin = df_bin, col_start = "x")
+      glance(df_bin_centroids = df_bin_centroids, df_bin = df_bin, training_data = s_curve_noise_training,
+        newdata = NULL, type_NLDR = "UMAP", col_start = "x")
     Output
       # A tibble: 1 x 2
         Error   MSE
@@ -54,8 +54,8 @@
 ---
 
     Code
-      glance(test_data = s_curve_noise_test, prediction_df = pred_df_test, df_bin = df_bin,
-        col_start = "x")
+      glance(df_bin_centroids = df_bin_centroids, df_bin = df_bin, training_data = s_curve_noise_training,
+        newdata = s_curve_noise_test, type_NLDR = "UMAP", col_start = "x")
     Output
       # A tibble: 1 x 2
         Error   MSE

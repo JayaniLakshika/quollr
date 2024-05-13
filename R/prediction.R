@@ -62,12 +62,15 @@ predict_emb <- function(test_data, df_bin_centroids, df_bin, type_NLDR) {
 #'
 #' This function generates an evaluation data frame based on the provided data and predictions.
 #'
-#' @param test_data The data set containing high-dimensional data along with an unique identifier.
-#' @param prediction_df The data set with 2D embeddings, IDs, and predicted hexagonal IDs.
-#' @param df_bin The data set with averaged/weighted high-dimensional data.
+#' @param df_bin_centroids Centroid coordinates of hexagonal bins in 2D space.
+#' @param df_bin Centroid coordinates of hexagonal bins in high dimensions.
+#' @param training_data Training data used to fit the model.
+#' @param newdata Data to be augmented with predictions and error metrics.
+#' If NULL, the training data is used (default is NULL).
+#' @param type_NLDR The type of non-linear dimensionality reduction (NLDR) used.
 #' @param col_start The text that begin the column name of the high-dimensional data.
 #'
-#' @return A tibble contains Error, MSE and AIC values.
+#' @return A tibble contains Error, and MSE values.
 #'
 #' @importFrom dplyr left_join
 #' @importFrom tibble tibble
@@ -78,23 +81,32 @@ predict_emb <- function(test_data, df_bin_centroids, df_bin, type_NLDR) {
 #' emb_df = s_curve_noise_umap_scaled, bin1 = 3, r2 = r2, col_start_highd = "x")
 #' df_bin_centroids <- model$df_bin_centroids
 #' df_bin <- model$df_bin
-#' pred_df_test <- predict_emb(test_data = s_curve_noise_training,
-#' df_bin_centroids = df_bin_centroids, df_bin = df_bin, type_NLDR = "UMAP")
-#' glance(test_data = s_curve_noise_training, prediction_df = pred_df_test,
-#' df_bin = df_bin, col_start = "x")
+#' glance(df_bin_centroids = df_bin_centroids, df_bin = df_bin,
+#' training_data = s_curve_noise_training, newdata = NULL, type_NLDR = "UMAP",
+#' col_start = "x")
 #'
 #' @export
-glance <- function(test_data, prediction_df, df_bin, col_start = "x") {
+glance <- function(df_bin_centroids, df_bin, training_data, newdata = NULL,
+                   type_NLDR, col_start = "x") {
+
+  if(is.null(newdata)) {
+    newdata <- training_data
+  }
 
   ## Rename columns to avoid conflicts
   names(df_bin)[-1] <- paste0("model_high_d_", names(df_bin)[-1])
+
+  ## Map high-D averaged mean coordinates
+  prediction_df <- predict_emb(test_data = newdata,
+                               df_bin_centroids = df_bin_centroids,
+                               df_bin = df_bin, type_NLDR = type_NLDR)
 
   ## Map high-D averaged mean coordinates
   prediction_df <- prediction_df |>
     left_join(df_bin, by = c("pred_hb_id" = "hb_id"))
 
   prediction_df <- prediction_df |>
-    left_join(test_data, by = c("ID" = "ID")) ## Map high-D data
+    left_join(newdata, by = c("ID" = "ID")) ## Map high-D data
 
   cols <- paste0(col_start, 1:(NCOL(df_bin) - 1))
   high_d_model_cols <- paste0("model_high_d_", col_start, 1:(NCOL(df_bin) - 1))
@@ -150,7 +162,7 @@ glance <- function(test_data, prediction_df, df_bin, col_start = "x") {
 #'
 #' @export
 augment <- function(df_bin_centroids, df_bin, training_data, newdata = NULL,
-                    type_NLDR, col_start) {
+                    type_NLDR, col_start = "x") {
 
   if(is.null(newdata)) {
     newdata <- training_data

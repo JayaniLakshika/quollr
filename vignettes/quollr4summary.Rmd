@@ -61,8 +61,9 @@ s_curve_noise_umap_scaled |>
 Next, you can use the generated 2D embedding to compute model summaries.
 
 ```{r}
-glance(test_data = s_curve_noise_training, prediction_df = pred_df_training,
-df_bin = df_bin, col_start = "x")
+glance(df_bin_centroids = df_bin_centroids, df_bin = df_bin, 
+        training_data = s_curve_noise_training, newdata = NULL, 
+        type_NLDR = "UMAP", col_start = "x")
 ```
 
 To obtain a dataframe with the high-dimensional data, the fitted model data, the predicted NLDR data, and summary information, you can use the following function.
@@ -97,8 +98,9 @@ s_curve_noise_umap_scaled |>
 ```
 
 ```{r}
-glance(test_data = s_curve_noise_test, prediction_df = pred_df_test,
-df_bin = df_bin, col_start = "x")
+glance(df_bin_centroids = df_bin_centroids, df_bin = df_bin, 
+        training_data = s_curve_noise_training, newdata = s_curve_noise_test, 
+        type_NLDR = "UMAP", col_start = "x")
 ```
 
 ```{r}
