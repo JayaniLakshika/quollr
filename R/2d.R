@@ -31,7 +31,7 @@ gen_centroids <- function(bin1 = 2, q = 0.1, r2){
   s2 <- -q * r2
 
   # Generate x-coordinate of centroids for odd rows
-  c_x_vec_odd <- seq(s1, 1, by = a1) ## since x range is 0-1
+  c_x_vec_odd <- seq(s1, by = a1, length.out = bin1) ## since x range is 0-1
 
   # Generate x-coordinate of centroids for even rows
   c_x_vec_even <- c_x_vec_odd + a1/2
@@ -41,7 +41,7 @@ gen_centroids <- function(bin1 = 2, q = 0.1, r2){
   a2 <- sqrt(3) * a1/2
 
   # Generate y-coordinate of centroids
-  c_y_vec <- seq(s2, r2, by = a2)
+  c_y_vec <- seq(s2, by = a2, length.out = bin2)
   c_y <- rep(c_y_vec, each = bin1)
 
   ## Do the number of belongs y axis is even or odd and adjust the x-coordinates
