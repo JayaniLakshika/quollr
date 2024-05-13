@@ -187,7 +187,7 @@ augment <- function(df_bin_centroids, df_bin, training_data, newdata = NULL,
   abs_summary_df <- abs(prediction_df[, cols] - prediction_df[, high_d_model_cols])
   names(abs_summary_df) <- abs_error_cols
 
-  abs_summary_df$row_wise_abs_error <- sum(rowSums(abs_summary_df[, abs_error_cols]))
+  abs_summary_df$row_wise_abs_error <- rowSums(abs_summary_df[, abs_error_cols])
 
   fit_data <- dplyr::bind_cols(prediction_df, summary_df, abs_summary_df)
   return(fit_data)
