@@ -3,7 +3,6 @@
 #' This function generates all possible centroids in the hexagonal grid.
 #'
 #' @param bin1 Number of bins along the x axis.
-#' @param q The buffer amount as proportion of data range 0.05-0.1.
 #' @param r2 The ratio of the ranges of the original embedding components.
 #'
 #' @return A tibble contains hexIDs, x and y coordinates (hexID, c_x, c_y respectively)
@@ -12,19 +11,22 @@
 #'
 #' @examples
 #' r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
-#' gen_centroids(bin1 = 3, q = 0.1, r2 = r2)
+#' gen_centroids(bin1 = 3, r2 = r2)
 #'
 #' @export
-gen_centroids <- function(bin1 = 2, q = 0.1, r2){
+gen_centroids <- function(bin1 = 2, r2){
 
   ## To compute hexagonal configurations
-  bin_obj <- calc_bins_y(bin1 = bin1, q = q, r2 = r2)
+  bin_obj <- calc_bins_y(bin1 = bin1, r2 = r2)
 
   # To obtain the bins along the y-axis
   bin2 <- bin_obj$bin2
 
   # To obtain the width of the hexagon
   a1 <- bin_obj$a1
+
+  ## To initialise the buffer amount
+  q <- 0.1
 
   ## To initialise starting point coordinates
   s1 <- -q
@@ -76,9 +78,9 @@ gen_centroids <- function(bin1 = 2, q = 0.1, r2){
 #'
 #' @examples
 #' r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
-#' num_bins_list <- calc_bins_y(bin1 = 3, q = 0.1, r2 = r2)
+#' num_bins_list <- calc_bins_y(bin1 = 3, r2 = r2)
 #' width <- num_bins_list$a1
-#' all_centroids_df <- gen_centroids(bin1 = 3, q = 0.1, r2 = r2)
+#' all_centroids_df <- gen_centroids(bin1 = 3, r2 = r2)
 #' gen_hex_coord(centroids_df = all_centroids_df, a1 = width)
 #'
 #' @export
@@ -165,7 +167,7 @@ get_min_indices <- function(x) {
 #'
 #' @examples
 #' r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
-#' all_centroids_df <- gen_centroids(bin1 = 3, q = 0.1, r2 = r2)
+#' all_centroids_df <- gen_centroids(bin1 = 3, r2 = r2)
 #' assign_data(data = s_curve_noise_umap_scaled, centroid_df = all_centroids_df)
 #'
 #' @export
@@ -211,7 +213,7 @@ assign_data <- function(data, centroid_df) {
 #'
 #' @examples
 #' r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
-#' all_centroids_df <- gen_centroids(bin1 = 3, q = 0.1, r2 = r2)
+#' all_centroids_df <- gen_centroids(bin1 = 3, r2 = r2)
 #' umap_with_hb_id <- assign_data(data = s_curve_noise_umap_scaled,
 #' centroid_df = all_centroids_df)
 #' compute_std_counts(data_hb = umap_with_hb_id)
@@ -240,7 +242,7 @@ compute_std_counts <- function(data_hb) {
 #'
 #' @examples
 #' r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
-#' all_centroids_df <- gen_centroids(bin1 = 3, q = 0.1, r2 = r2)
+#' all_centroids_df <- gen_centroids(bin1 = 3, r2 = r2)
 #' umap_with_hb_id <- assign_data(data = s_curve_noise_umap_scaled,
 #' centroid_df = all_centroids_df)
 #' find_pts(data_hb = umap_with_hb_id)
@@ -284,7 +286,6 @@ find_pts <- function(data_hb) {
 #'
 #' @param data A tibble that contains embedding components.
 #' @param bin1 Number of bins along the x axis.
-#' @param q The buffer amount as proportion of data range 0.05-0.1.
 #' @param r2 The ratio of the ranges of the original embedding components.
 #'
 #' @return A object that contains numeric vector that contains bins along
@@ -300,25 +301,24 @@ find_pts <- function(data_hb) {
 #' @examples
 #' r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
 #' num_bins_x <- 3
-#' hex_binning(data = s_curve_noise_umap_scaled, bin1 = num_bins_x, q = 0.1,
-#' r2 = r2)
+#' hex_binning(data = s_curve_noise_umap_scaled, bin1 = num_bins_x, r2 = r2)
 #'
 #' @export
-hex_binning <- function(data, bin1 = 2, q = 0.1, r2) {
+hex_binning <- function(data, bin1 = 2, r2) {
 
   ## To initialise starting point coordinates
-  s1 <- -q
-  s2 <- -q * r2
+  s1 <- -0.1
+  s2 <- -0.1 * r2
 
   ## To compute the number of bins along the y-axis
-  bin_obj <- calc_bins_y(bin1 = bin1, q = q, r2 = r2)
+  bin_obj <- calc_bins_y(bin1 = bin1, r2 = r2)
   bin2 <- bin_obj$bin2
 
   ## To obtain the width of the hexagon
   a1 <- bin_obj$a1
 
   ## To generate all the centroids of the grid
-  all_centroids_df <- gen_centroids(bin1 = bin1, q = q, r2 = r2)
+  all_centroids_df <- gen_centroids(bin1 = bin1, r2 = r2)
 
   ## To generate the hexagon coordinates
   all_hex_coord <- gen_hex_coord(centroids_df = all_centroids_df, a1 = a1)
@@ -364,7 +364,7 @@ hex_binning <- function(data, bin1 = 2, q = 0.1, r2) {
 #' r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
 #' num_bins_x <- 3
 #' hb_obj <- hex_binning(data = s_curve_noise_umap_scaled, bin1 = num_bins_x,
-#' q = 0.1, r2 = r2)
+#' r2 = r2)
 #' all_centroids_df <- hb_obj$centroids
 #' counts_df <- hb_obj$std_cts
 #' extract_hexbin_centroids(centroids_df = all_centroids_df,
@@ -399,7 +399,7 @@ extract_hexbin_centroids <- function(centroids_df, counts_df) {
 #' r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
 #' num_bins_x <- 3
 #' hb_obj <- hex_binning(data = s_curve_noise_umap_scaled, bin1 = num_bins_x,
-#' q = 0.1, r2 = r2)
+#' r2 = r2)
 #' umap_with_hb_id <- hb_obj$data_hb_id
 #' counts_df <- hb_obj$std_cts
 #' extract_hexbin_mean(data_hb = umap_with_hb_id, counts_df = counts_df)
@@ -443,7 +443,7 @@ extract_hexbin_mean <- function(data_hb, counts_df) {
 #' r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
 #' num_bins_x <- 3
 #' hb_obj <- hex_binning(data = s_curve_noise_umap_scaled, bin1 = num_bins_x,
-#' q = 0.1, r2 = r2)
+#' r2 = r2)
 #' all_centroids_df <- hb_obj$centroids
 #' counts_df <- hb_obj$std_cts
 #' df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df,
@@ -476,7 +476,7 @@ tri_bin_centroids <- function(hex_df, x, y){
 #' r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
 #' num_bins_x <- 3
 #' hb_obj <- hex_binning(data = s_curve_noise_umap_scaled, bin1 = num_bins_x,
-#' q = 0.1, r2 = r2)
+#' r2 = r2)
 #' all_centroids_df <- hb_obj$centroids
 #' counts_df <- hb_obj$std_cts
 #' df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df,
@@ -539,7 +539,7 @@ gen_edges <- function(tri_object) {
 #' r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
 #' num_bins_x <- 3
 #' hb_obj <- hex_binning(data = s_curve_noise_umap_scaled, bin1 = num_bins_x,
-#' q = 0.1, r2 = r2)
+#' r2 = r2)
 #' all_centroids_df <- hb_obj$centroids
 #' counts_df <- hb_obj$std_cts
 #' df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df,
@@ -590,7 +590,7 @@ cal_2d_dist <- function(tr_coord_df, start_x, start_y, end_x, end_y,
 #' r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
 #' num_bins_x <- 3
 #' hb_obj <- hex_binning(data = s_curve_noise_umap_scaled, bin1 = num_bins_x,
-#' q = 0.1, r2 = r2)
+#' r2 = r2)
 #' all_centroids_df <- hb_obj$centroids
 #' counts_df <- hb_obj$std_cts
 #' df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df,
@@ -652,7 +652,7 @@ vis_lg_mesh <- function(distance_edges, benchmark_value,
 #' r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
 #' num_bins_x <- 3
 #' hb_obj <- hex_binning(data = s_curve_noise_umap_scaled, bin1 = num_bins_x,
-#' q = 0.1, r2 = r2)
+#' r2 = r2)
 #' all_centroids_df <- hb_obj$centroids
 #' counts_df <- hb_obj$std_cts
 #' df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df,
@@ -699,7 +699,6 @@ vis_rmlg_mesh <- function(distance_edges, benchmark_value, tr_coord_df,
 #'
 #' @param data A tibble that contains the embedding.
 #' @param non_empty_bins The desired number of non-empty bins.
-#' @param q The buffer amount as proportion of data range 0.05-0.1.
 #' @param r2 The range of the original second embedding component.
 #'
 #' @return The number of bins along the x and y axes
@@ -708,23 +707,18 @@ vis_rmlg_mesh <- function(distance_edges, benchmark_value, tr_coord_df,
 #' @examples
 #' r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
 #' find_non_empty_bins(data = s_curve_noise_umap_scaled, non_empty_bins = 5,
-#' q = 0.1, r2 = r2)
+#' r2 = r2)
 #'
 #' @export
-find_non_empty_bins <- function(data, non_empty_bins, q = 0.1, r2) {
-
-  ## To check whether q is between a specific range
-  if (!between(q, 0.05, 0.1)) {
-    stop("The buffer should be within 0.05 and 0.1.")
-  }
+find_non_empty_bins <- function(data, non_empty_bins, r2) {
 
   if (missing(non_empty_bins)) {
     stop("Required number of non-empty bins is not defined.")
   }
 
   ## To initialise starting point coordinates
-  s1 <- -q
-  s2 <- -q * r2
+  s1 <- -0.1
+  s2 <- -0.1 * r2
 
   max_bins_along_axis <- ceiling(sqrt(NROW(data)))
 
@@ -735,10 +729,10 @@ find_non_empty_bins <- function(data, non_empty_bins, q = 0.1, r2) {
   bin1 <- num_bins_x_vec[1]
 
   ## To compute the number of bins along the y-axis
-  bin2 <- calc_bins_y(bin1 = bin1, q = q, r2 = r2)$bin2
+  bin2 <- calc_bins_y(bin1 = bin1, r2 = r2)$bin2
 
   ### Generate the full grid
-  hb_obj <- hex_binning(data = data, bin1 = bin1, q = q, r2 = r2)
+  hb_obj <- hex_binning(data = data, bin1 = bin1, r2 = r2)
 
   num_of_non_empty_bins <- hb_obj$non_bins
 
@@ -756,10 +750,10 @@ find_non_empty_bins <- function(data, non_empty_bins, q = 0.1, r2) {
     bin1 <- num_bins_x_vec[2]
 
     ## To compute the number of bins along the y-axis
-    bin2 <- calc_bins_y(bin1 = bin1, q = q, r2 = r2)$bin2
+    bin2 <- calc_bins_y(bin1 = bin1, r2 = r2)$bin2
 
     ### Generate the full grid
-    hb_obj <- hex_binning(data = data, bin1 = bin1, q = q, r2 = r2)
+    hb_obj <- hex_binning(data = data, bin1 = bin1, r2 = r2)
 
     num_of_non_empty_bins <- hb_obj$non_bins
 

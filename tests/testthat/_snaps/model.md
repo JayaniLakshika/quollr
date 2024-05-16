@@ -2,7 +2,7 @@
 
     Code
       fit_highd_model(training_data = s_curve_noise_training, emb_df = s_curve_noise_umap_scaled,
-        bin1 = 3, q = 0.1, r2 = r2, is_bin_centroid = TRUE, is_rm_lwd_hex = FALSE,
+        bin1 = 3, r2 = r2, is_bin_centroid = TRUE, is_rm_lwd_hex = FALSE,
         col_start_highd = "x")
     Output
       $df_bin
@@ -30,7 +30,7 @@
 
     Code
       fit_highd_model(training_data = s_curve_noise_training, emb_df = s_curve_noise_umap_scaled,
-        bin1 = 3, q = 0.1, r2 = r2, is_bin_centroid = TRUE, is_rm_lwd_hex = TRUE,
+        bin1 = 3, r2 = r2, is_bin_centroid = TRUE, is_rm_lwd_hex = TRUE,
         benchmark_to_rm_lwd_hex = 0.4, col_start_highd = "x")
     Output
       $df_bin
@@ -58,7 +58,7 @@
 
     Code
       fit_highd_model(training_data = s_curve_noise_training, emb_df = s_curve_noise_umap_scaled,
-        bin1 = 3, q = 0.1, r2 = r2, is_bin_centroid = FALSE, is_rm_lwd_hex = FALSE,
+        bin1 = 3, r2 = r2, is_bin_centroid = FALSE, is_rm_lwd_hex = FALSE,
         col_start_highd = "x")
     Output
       $df_bin
@@ -86,7 +86,7 @@
 
     Code
       fit_highd_model(training_data = s_curve_noise_training, emb_df = s_curve_noise_umap_scaled,
-        bin1 = 3, q = 0.1, r2 = r2, is_bin_centroid = FALSE, is_rm_lwd_hex = TRUE,
+        bin1 = 3, r2 = r2, is_bin_centroid = FALSE, is_rm_lwd_hex = TRUE,
         benchmark_to_rm_lwd_hex = 0.4, col_start_highd = "x")
     Output
       $df_bin

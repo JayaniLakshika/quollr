@@ -16,7 +16,7 @@
 #' r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
 #' num_bins_x <- 3
 #' hb_obj <- hex_binning(data = s_curve_noise_umap_scaled, bin1 = num_bins_x,
-#' q = 0.1, r2 = r2)
+#' r2 = r2)
 #' all_centroids_df <- hb_obj$centroids
 #' counts_df <- hb_obj$std_cts
 #' df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df,
@@ -102,7 +102,7 @@ find_lg_benchmark <- function(distance_edges, distance_col) {
 #' r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
 #' num_bins_x <- 3
 #' hb_obj <- hex_binning(data = s_curve_noise_umap_scaled, bin1 = num_bins_x,
-#' q = 0.1, r2 = r2)
+#' r2 = r2)
 #' all_centroids_df <- hb_obj$centroids
 #' counts_df <- hb_obj$std_cts
 #' df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df,
@@ -170,7 +170,7 @@ compute_mean_density_hex <- function(df_bin_centroids, bin1) {
 #' r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
 #' num_bins_x <- 3
 #' hb_obj <- hex_binning(data = s_curve_noise_umap_scaled, bin1 = num_bins_x,
-#' q = 0.1, r2 = r2)
+#' r2 = r2)
 #' all_centroids_df <- hb_obj$centroids
 #' counts_df <- hb_obj$std_cts
 #' df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df,

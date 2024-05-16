@@ -4,12 +4,10 @@
 \alias{calc_bins_y}
 \title{Calculate the effective number of bins along x-axis and y-axis}
 \usage{
-calc_bins_y(bin1 = 2, q = 0.1, r2)
+calc_bins_y(bin1 = 2, r2)
 }
 \arguments{
 \item{bin1}{Number of bins along the x axis.}
-
-\item{q}{The buffer amount as proportion of data range 0.05-0.1.}
 
 \item{r2}{The ratio of the ranges of the original embedding components.}
 }
@@ -23,6 +21,6 @@ of a hexagonal grid.
 }
 \examples{
 r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
-calc_bins_y(bin1 = 2, q = 0.1, r2 = r2)
+calc_bins_y(bin1 = 2, r2 = r2)
 
 }

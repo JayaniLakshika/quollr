@@ -64,7 +64,7 @@ to obtain a specific number of non-empty bins.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">find_non_empty_bins</span><span class="op">(</span><span class="va">data</span>, <span class="va">non_empty_bins</span>, q <span class="op">=</span> <span class="fl">0.1</span>, <span class="va">r2</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">find_non_empty_bins</span><span class="op">(</span><span class="va">data</span>, <span class="va">non_empty_bins</span>, <span class="va">r2</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -75,10 +75,6 @@ to obtain a specific number of non-empty bins.</p>
 
 <dt>non_empty_bins</dt>
 <dd><p>The desired number of non-empty bins.</p></dd>
-
-
-<dt>q</dt>
-<dd><p>The buffer amount as proportion of data range 0.05-0.1.</p></dd>
 
 
 <dt>r2</dt>
@@ -97,7 +93,7 @@ needed to achieve a specific number of non-empty bins.</p>
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">r2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/diff.html" class="external-link">diff</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/range.html" class="external-link">range</a></span><span class="op">(</span><span class="va">s_curve_noise_umap</span><span class="op">$</span><span class="va">UMAP2</span><span class="op">)</span><span class="op">)</span><span class="op">/</span><span class="fu"><a href="https://rdrr.io/r/base/diff.html" class="external-link">diff</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/range.html" class="external-link">range</a></span><span class="op">(</span><span class="va">s_curve_noise_umap</span><span class="op">$</span><span class="va">UMAP1</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">find_non_empty_bins</span><span class="op">(</span>data <span class="op">=</span> <span class="va">s_curve_noise_umap_scaled</span>, non_empty_bins <span class="op">=</span> <span class="fl">5</span>,</span></span>
-<span class="r-in"><span>q <span class="op">=</span> <span class="fl">0.1</span>, r2 <span class="op">=</span> <span class="va">r2</span><span class="op">)</span></span></span>
+<span class="r-in"><span>r2 <span class="op">=</span> <span class="va">r2</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $bin1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 3</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>

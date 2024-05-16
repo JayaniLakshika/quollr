@@ -4,14 +4,12 @@
 \alias{find_non_empty_bins}
 \title{Find the number of bins required to achieve required number of non-empty bins.}
 \usage{
-find_non_empty_bins(data, non_empty_bins, q = 0.1, r2)
+find_non_empty_bins(data, non_empty_bins, r2)
 }
 \arguments{
 \item{data}{A tibble that contains the embedding.}
 
 \item{non_empty_bins}{The desired number of non-empty bins.}
-
-\item{q}{The buffer amount as proportion of data range 0.05-0.1.}
 
 \item{r2}{The range of the original second embedding component.}
 }
@@ -26,6 +24,6 @@ to obtain a specific number of non-empty bins.
 \examples{
 r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
 find_non_empty_bins(data = s_curve_noise_umap_scaled, non_empty_bins = 5,
-q = 0.1, r2 = r2)
+r2 = r2)
 
 }

@@ -8,7 +8,6 @@ fit_highd_model(
   training_data,
   emb_df,
   bin1 = 2,
-  q = 0.1,
   r2,
   is_bin_centroid = TRUE,
   is_rm_lwd_hex = FALSE,
@@ -22,8 +21,6 @@ fit_highd_model(
 \item{emb_df}{A tibble that contains embedding with a unique identifier.}
 
 \item{bin1}{Number of bins along the x axis.}
-
-\item{q}{The buffer amount as proportion of data range 0.05-0.1.}
 
 \item{r2}{The ratio of the ranges of the original embedding components.}
 

@@ -7,7 +7,6 @@
 #' @param training_data A tibble that contains the training high-dimensional data.
 #' @param emb_df A tibble that contains embedding with a unique identifier.
 #' @param bin1 Number of bins along the x axis.
-#' @param q The buffer amount as proportion of data range 0.05-0.1.
 #' @param r2 The ratio of the ranges of the original embedding components.
 #' @param is_bin_centroid Logical, indicating whether to use bin centroids (default is TRUE).
 #' @param is_rm_lwd_hex Logical, indicating whether to remove low-density hexagons
@@ -29,13 +28,13 @@
 #' col_start_highd = "x")
 #'
 #' @export
-fit_highd_model <- function(training_data, emb_df, bin1 = 2, q = 0.1,
-                            r2, is_bin_centroid = TRUE,
+fit_highd_model <- function(training_data, emb_df, bin1 = 2, r2,
+                            is_bin_centroid = TRUE,
                             is_rm_lwd_hex = FALSE, benchmark_to_rm_lwd_hex,
                             col_start_highd = "x") {
 
   ## Obtain the hexbin object
-  hb_obj <- hex_binning(data = emb_df, bin1 = bin1, q = q, r2 = r2)
+  hb_obj <- hex_binning(data = emb_df, bin1 = bin1, r2 = r2)
 
   all_centroids_df <- hb_obj$centroids
   counts_df <- hb_obj$std_cts

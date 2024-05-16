@@ -16,7 +16,7 @@
 #' r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
 #' num_bins_x <- 3
 #' hb_obj <- hex_binning(data = s_curve_noise_umap_scaled, bin1 = num_bins_x,
-#' q = 0.1, r2 = r2)
+#' r2 = r2)
 #' umap_data_with_hb_id <- hb_obj$data_hb_id
 #' df_all <- dplyr::bind_cols(s_curve_noise_training, umap_data_with_hb_id)
 #' avg_highd_data(data = df_all, col_start = "x")
@@ -58,7 +58,7 @@ avg_highd_data <- function(data, col_start = "x") {
 #' r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
 #' num_bins_x <- 3
 #' hb_obj <- hex_binning(data = s_curve_noise_umap_scaled, bin1 = num_bins_x,
-#' q = 0.1, r2 = r2)
+#' r2 = r2)
 #' all_centroids_df <- hb_obj$centroids
 #' counts_df <- hb_obj$std_cts
 #' df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df,

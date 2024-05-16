@@ -1,8 +1,7 @@
 test_that("geom_trimesh() works", {
 
   r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
-  hb_obj <- hex_binning(data = s_curve_noise_umap_scaled, bin1 = 3, q = 0.1,
-                        r2 = r2)
+  hb_obj <- hex_binning(data = s_curve_noise_umap_scaled, bin1 = 3, r2 = r2)
 
   all_centroids_df <- hb_obj$centroids
   counts_df <- hb_obj$std_cts
