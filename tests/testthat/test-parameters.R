@@ -34,7 +34,8 @@ test_that("compute_mean_density_hex() works", {
   all_centroids_df <- hb_obj$centroids
   counts_df <- hb_obj$std_cts
   df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df,
-                                               counts_df = counts_df)
+                                               counts_df = counts_df) |>
+    dplyr::filter(drop_empty == FALSE)
 
   testthat::expect_snapshot(compute_mean_density_hex(df_bin_centroids = df_bin_centroids,
                                                      bin1 = 3))
@@ -58,7 +59,9 @@ test_that("find_low_dens_hex() works", {
   all_centroids_df <- hb_obj$centroids
   counts_df <- hb_obj$std_cts
   df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df,
-                                               counts_df = counts_df)
+                                               counts_df = counts_df) |>
+    dplyr::filter(drop_empty == FALSE)
+
   df_bin_centroids_low <- df_bin_centroids |>
     dplyr::filter(std_counts <= 0.3)
 

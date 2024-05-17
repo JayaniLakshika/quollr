@@ -358,7 +358,7 @@ hex_binning <- function(data, bin1 = 2, r2) {
 #' number of points within each hexagon.
 #'
 #' @return A tibble contains hexagon ID, centroid coordinates, and standardise counts.
-#' @importFrom dplyr arrange mutate filter
+#' @importFrom dplyr arrange mutate if_else full_join
 #'
 #' @examples
 #' r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
@@ -377,10 +377,13 @@ extract_hexbin_centroids <- function(centroids_df, counts_df) {
   counts_df <- counts_df |>
     arrange(hb_id)
 
+  ## To join the datasets
+  centroids_df <- full_join(centroids_df, counts_df, by = c("hexID" = "hb_id"))
+
   ## Map the standardize counts
   centroids_df <- centroids_df |>
-    filter(hexID %in% counts_df$hb_id) |>
-    mutate(std_counts = counts_df$std_counts)
+    mutate(drop_empty = if_else(!(is.na(std_counts)), FALSE, TRUE)) |>
+    select(-n)
 
   return(centroids_df)
 }
@@ -390,9 +393,11 @@ extract_hexbin_centroids <- function(centroids_df, counts_df) {
 #' @param data_hb A tibble with embedding components and hexagonal bin IDs.
 #' @param counts_df A tibble that contains hexagon IDs with the standardise
 #' number of points within each hexagon.
+#' @param centroids_df A tibble that contains all hexagonal bin centroid
+#' coordinates with hexagon IDs.
 #'
 #' @return A tibble contains hexagon ID, bin mean coordinates, and standardize counts.
-#' @importFrom dplyr select arrange group_by summarise filter mutate across
+#' @importFrom dplyr select arrange group_by summarise filter mutate across full_join
 #' @importFrom tidyselect everything
 #'
 #' @examples
@@ -400,30 +405,39 @@ extract_hexbin_centroids <- function(centroids_df, counts_df) {
 #' num_bins_x <- 3
 #' hb_obj <- hex_binning(data = s_curve_noise_umap_scaled, bin1 = num_bins_x,
 #' r2 = r2)
+#' all_centroids_df <- hb_obj$centroids
 #' umap_with_hb_id <- hb_obj$data_hb_id
 #' counts_df <- hb_obj$std_cts
-#' extract_hexbin_mean(data_hb = umap_with_hb_id, counts_df = counts_df)
+#' extract_hexbin_mean(data_hb = umap_with_hb_id, counts_df = counts_df,
+#' centroids_df = all_centroids_df)
 #'
 #' @export
-extract_hexbin_mean <- function(data_hb, counts_df) {
+extract_hexbin_mean <- function(data_hb, counts_df, centroids_df) {
 
   ## To arrange the hexagon IDs
   counts_df <- counts_df |>
     arrange(hb_id)
+
+  ## To join the datasets
+  centroids_df <- full_join(centroids_df, counts_df, by = c("hexID" = "hb_id")) |>
+    select(-c(c_x, c_y))
 
   ## To compute hexagonal bin means
   hex_mean_df <- data_hb |>
     select(-ID) |>
     group_by(hb_id) |>
     summarise(across(everything(), mean)) |>
-    arrange(hb_id) |>
-    filter(hb_id %in% counts_df$hb_id) |>
-    mutate(std_counts = counts_df$std_counts)
+    arrange(hb_id)
 
   ## Rename columns
-  names(hex_mean_df) <- c("hexID", "c_x", "c_y", "std_counts")
+  names(hex_mean_df) <- c("hexID", "c_x", "c_y")
 
-  return(hex_mean_df)
+  centroids_df <- full_join(centroids_df, hex_mean_df, by = c("hexID" = "hexID")) |>
+    mutate(drop_empty = if_else(!(is.na(std_counts)), FALSE, TRUE)) |>
+    select(-n) |>
+    select(hexID, c_x, c_y, std_counts, drop_empty)
+
+  return(centroids_df)
 }
 
 #' Triangulate bin centroids
@@ -480,7 +494,8 @@ tri_bin_centroids <- function(hex_df, x, y){
 #' all_centroids_df <- hb_obj$centroids
 #' counts_df <- hb_obj$std_cts
 #' df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df,
-#' counts_df = counts_df)
+#' counts_df = counts_df) |>
+#' dplyr::filter(drop_empty == FALSE)
 #' tr1_object <- tri_bin_centroids(hex_df = df_bin_centroids, x = "c_x", y = "c_y")
 #' gen_edges(tri_object = tr1_object)
 #'
@@ -543,7 +558,8 @@ gen_edges <- function(tri_object) {
 #' all_centroids_df <- hb_obj$centroids
 #' counts_df <- hb_obj$std_cts
 #' df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df,
-#' counts_df = counts_df)
+#' counts_df = counts_df) |>
+#' dplyr::filter(drop_empty == FALSE)
 #' tr1_object <- tri_bin_centroids(hex_df = df_bin_centroids, x = "c_x", y = "c_y")
 #' tr_from_to_df <- gen_edges(tri_object = tr1_object)
 #' cal_2d_dist(tr_coord_df = tr_from_to_df, start_x = "x_from", start_y = "y_from",
@@ -594,7 +610,8 @@ cal_2d_dist <- function(tr_coord_df, start_x, start_y, end_x, end_y,
 #' all_centroids_df <- hb_obj$centroids
 #' counts_df <- hb_obj$std_cts
 #' df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df,
-#' counts_df = counts_df)
+#' counts_df = counts_df) |>
+#' dplyr::filter(drop_empty == FALSE)
 #' tr1_object <- tri_bin_centroids(hex_df = df_bin_centroids, x = "c_x", y = "c_y")
 #' tr_from_to_df <- gen_edges(tri_object = tr1_object)
 #' distance_df <- cal_2d_dist(tr_coord_df = tr_from_to_df, start_x = "x_from",
@@ -656,7 +673,8 @@ vis_lg_mesh <- function(distance_edges, benchmark_value,
 #' all_centroids_df <- hb_obj$centroids
 #' counts_df <- hb_obj$std_cts
 #' df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df,
-#' counts_df = counts_df)
+#' counts_df = counts_df) |>
+#' dplyr::filter(drop_empty == FALSE)
 #' tr1_object <- tri_bin_centroids(hex_df = df_bin_centroids, x = "c_x", y = "c_y")
 #' tr_from_to_df <- gen_edges(tri_object = tr1_object)
 #' distance_df <- cal_2d_dist(tr_coord_df = tr_from_to_df, start_x = "x_from",

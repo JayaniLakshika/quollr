@@ -94,11 +94,13 @@ test_that("extract_hexbin_mean() works", {
   r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
   hb_obj <- hex_binning(data = s_curve_noise_umap_scaled, bin1 = 3, r2 = r2)
 
+  all_centroids_df <- hb_obj$centroids
   umap_with_hb_id <- hb_obj$data_hb_id
   counts_df <- hb_obj$std_cts
 
   testthat::expect_snapshot(extract_hexbin_mean(data_hb = umap_with_hb_id,
-                                                counts_df = counts_df))
+                                                counts_df = counts_df,
+                                                centroids_df = all_centroids_df))
 
 })
 
@@ -110,7 +112,9 @@ test_that("tri_bin_centroids() works", {
   all_centroids_df <- hb_obj$centroids
   counts_df <- hb_obj$std_cts
   df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df,
-                                               counts_df = counts_df)
+                                               counts_df = counts_df) |>
+    dplyr::filter(drop_empty == FALSE)
+
   testthat::expect_snapshot(suppressWarnings(tri_bin_centroids(hex_df = df_bin_centroids,
                                                                x = "c_x", y = "c_y")))
 
@@ -124,7 +128,9 @@ test_that("gen_edges() works", {
   all_centroids_df <- hb_obj$centroid
   counts_df <- hb_obj$std_cts
   df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df,
-                                               counts_df = counts_df)
+                                               counts_df = counts_df) |>
+    dplyr::filter(drop_empty == FALSE)
+
   suppressWarnings(tr1_object <- tri_bin_centroids(hex_df = df_bin_centroids,
                                                    x = "c_x", y = "c_y"))
   testthat::expect_snapshot(gen_edges(tri_object = tr1_object))
@@ -138,7 +144,9 @@ test_that("cal_2d_dist() works", {
   all_centroids_df <- hb_obj$centroids
   counts_df <- hb_obj$std_cts
   df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df,
-                                               counts_df = counts_df)
+                                               counts_df = counts_df) |>
+    dplyr::filter(drop_empty == FALSE)
+
   suppressWarnings(tr1_object <- tri_bin_centroids(hex_df = df_bin_centroids,
                                                    x = "c_x", y = "c_y"))
   tr_from_to_df <- gen_edges(tri_object = tr1_object)
@@ -160,7 +168,9 @@ test_that("vis_lg_mesh() works", {
   all_centroids_df <- hb_obj$centroids
   counts_df <- hb_obj$std_cts
   df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df,
-                                               counts_df = counts_df)
+                                               counts_df = counts_df) |>
+    dplyr::filter(drop_empty == FALSE)
+
   suppressWarnings(tr1_object <- tri_bin_centroids(hex_df = df_bin_centroids,
                                                    x = "c_x", y = "c_y"))
   tr_from_to_df <- gen_edges(tri_object = tr1_object)
@@ -186,7 +196,9 @@ test_that("vis_rmlg_mesh() works", {
   all_centroids_df <- hb_obj$centroids
   counts_df <- hb_obj$std_cts
   df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df,
-                                               counts_df = counts_df)
+                                               counts_df = counts_df) |>
+    dplyr::filter(drop_empty == FALSE)
+
   suppressWarnings(tr1_object <- tri_bin_centroids(hex_df = df_bin_centroids,
                                                    x = "c_x", y = "c_y"))
   tr_from_to_df <- gen_edges(tri_object = tr1_object)

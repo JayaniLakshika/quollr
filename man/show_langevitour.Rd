@@ -48,7 +48,8 @@ r2 = r2)
 all_centroids_df <- hb_obj$centroids
 counts_df <- hb_obj$std_cts
 df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df,
-counts_df = counts_df)
+counts_df = counts_df) |>
+dplyr::filter(drop_empty == FALSE)
 tr1_object <- tri_bin_centroids(hex_df = df_bin_centroids, x = "c_x", y = "c_y")
 tr_from_to_df <- gen_edges(tri_object = tr1_object)
 distance_df <- cal_2d_dist(tr_coord_df = tr_from_to_df, start_x = "x_from",

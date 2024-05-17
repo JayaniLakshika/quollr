@@ -44,12 +44,15 @@ fit_highd_model <- function(training_data, emb_df, bin1 = 2, r2,
   if (isTRUE(is_bin_centroid)) {
     ## For bin centroids
     df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df,
-                                                 counts_df = counts_df)
+                                                 counts_df = counts_df) |>
+      filter(drop_empty == FALSE)
 
   } else {
     ## For bin means
     df_bin_centroids <- extract_hexbin_mean(data_hb = nldr_df_with_hex_id,
-                                            counts_df = counts_df)
+                                            counts_df = counts_df,
+                                            centroids_df = all_centroids_df) |>
+      filter(drop_empty == FALSE)
 
   }
 

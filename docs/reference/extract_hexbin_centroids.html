@@ -93,14 +93,27 @@ number of points within each hexagon.</p></dd>
 <span class="r-in"><span><span class="va">counts_df</span> <span class="op">&lt;-</span> <span class="va">hb_obj</span><span class="op">$</span><span class="va">std_cts</span></span></span>
 <span class="r-in"><span><span class="fu">extract_hexbin_centroids</span><span class="op">(</span>centroids_df <span class="op">=</span> <span class="va">all_centroids_df</span>,</span></span>
 <span class="r-in"><span>counts_df <span class="op">=</span> <span class="va">counts_df</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 5 × 4</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   hexID   c_x   c_y std_counts</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span>     4 0.157 0.242      0.962</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span>     8 0.413 0.687      0.385</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span>     9 0.926 0.687      0.269</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span>    11 0.670 1.13       0.269</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span>    15 0.926 1.58       1    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 18 × 5</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    hexID    c_x    c_y std_counts drop_empty</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span>     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span>     1 -<span style="color: #BB0000;">0.1</span>   -<span style="color: #BB0000;">0.202</span>     <span style="color: #BB0000;">NA</span>     TRUE      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span>     2  0.413 -<span style="color: #BB0000;">0.202</span>     <span style="color: #BB0000;">NA</span>     TRUE      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span>     3  0.926 -<span style="color: #BB0000;">0.202</span>     <span style="color: #BB0000;">NA</span>     TRUE      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span>     4  0.157  0.242      0.962 FALSE     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span>     5  0.670  0.242     <span style="color: #BB0000;">NA</span>     TRUE      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span>     6  1.18   0.242     <span style="color: #BB0000;">NA</span>     TRUE      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span>     7 -<span style="color: #BB0000;">0.1</span>    0.687     <span style="color: #BB0000;">NA</span>     TRUE      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span>     8  0.413  0.687      0.385 FALSE     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span>     9  0.926  0.687      0.269 FALSE     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span>    10  0.157  1.13      <span style="color: #BB0000;">NA</span>     TRUE      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">11</span>    11  0.670  1.13       0.269 FALSE     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">12</span>    12  1.18   1.13      <span style="color: #BB0000;">NA</span>     TRUE      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">13</span>    13 -<span style="color: #BB0000;">0.1</span>    1.58      <span style="color: #BB0000;">NA</span>     TRUE      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">14</span>    14  0.413  1.58      <span style="color: #BB0000;">NA</span>     TRUE      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">15</span>    15  0.926  1.58       1     FALSE     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">16</span>    16  0.157  2.02      <span style="color: #BB0000;">NA</span>     TRUE      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">17</span>    17  0.670  2.02      <span style="color: #BB0000;">NA</span>     TRUE      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">18</span>    18  1.18   2.02      <span style="color: #BB0000;">NA</span>     TRUE      </span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

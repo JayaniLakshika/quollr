@@ -16,14 +16,14 @@
       5    15  0.291  1.05   1.71   -0.000141  0.00314   -0.00694 -0.00105 
       
       $df_bin_centroids
-      # A tibble: 5 x 4
-        hexID   c_x   c_y std_counts
-        <int> <dbl> <dbl>      <dbl>
-      1     4 0.157 0.242      0.962
-      2     8 0.413 0.687      0.385
-      3     9 0.926 0.687      0.269
-      4    11 0.670 1.13       0.269
-      5    15 0.926 1.58       1    
+      # A tibble: 5 x 5
+        hexID   c_x   c_y std_counts drop_empty
+        <int> <dbl> <dbl>      <dbl> <lgl>     
+      1     4 0.157 0.242      0.962 FALSE     
+      2     8 0.413 0.687      0.385 FALSE     
+      3     9 0.926 0.687      0.269 FALSE     
+      4    11 0.670 1.13       0.269 FALSE     
+      5    15 0.926 1.58       1     FALSE     
       
 
 ---
@@ -44,14 +44,14 @@
       5    15  0.291  1.05   1.71   -0.000141  0.00314   -0.00694 -0.00105 
       
       $df_bin_centroids
-      # A tibble: 5 x 4
-        hexID   c_x   c_y std_counts
-        <int> <dbl> <dbl>      <dbl>
-      1     4 0.157 0.242      0.962
-      2     8 0.413 0.687      0.385
-      3     9 0.926 0.687      0.269
-      4    11 0.670 1.13       0.269
-      5    15 0.926 1.58       1    
+      # A tibble: 5 x 5
+        hexID   c_x   c_y std_counts drop_empty
+        <int> <dbl> <dbl>      <dbl> <lgl>     
+      1     4 0.157 0.242      0.962 FALSE     
+      2     8 0.413 0.687      0.385 FALSE     
+      3     9 0.926 0.687      0.269 FALSE     
+      4    11 0.670 1.13       0.269 FALSE     
+      5    15 0.926 1.58       1     FALSE     
       
 
 ---
@@ -72,14 +72,14 @@
       5    15  0.291  1.05   1.71   -0.000141  0.00314   -0.00694 -0.00105 
       
       $df_bin_centroids
-      # A tibble: 5 x 4
-        hexID   c_x   c_y std_counts
-        <int> <dbl> <dbl>      <dbl>
-      1     4 0.173 0.187      0.962
-      2     8 0.584 0.623      0.385
-      3     9 0.757 0.844      0.269
-      4    11 0.783 0.995      0.269
-      5    15 0.842 1.57       1    
+      # A tibble: 5 x 5
+        hexID   c_x   c_y std_counts drop_empty
+        <int> <dbl> <dbl>      <dbl> <lgl>     
+      1     4 0.173 0.187      0.962 FALSE     
+      2     8 0.584 0.623      0.385 FALSE     
+      3     9 0.757 0.844      0.269 FALSE     
+      4    11 0.783 0.995      0.269 FALSE     
+      5    15 0.842 1.57       1     FALSE     
       
 
 ---
@@ -100,13 +100,13 @@
       5    15  0.291  1.05   1.71   -0.000141  0.00314   -0.00694 -0.00105 
       
       $df_bin_centroids
-      # A tibble: 5 x 4
-        hexID   c_x   c_y std_counts
-        <int> <dbl> <dbl>      <dbl>
-      1     4 0.173 0.187      0.962
-      2     8 0.584 0.623      0.385
-      3     9 0.757 0.844      0.269
-      4    11 0.783 0.995      0.269
-      5    15 0.842 1.57       1    
+      # A tibble: 5 x 5
+        hexID   c_x   c_y std_counts drop_empty
+        <int> <dbl> <dbl>      <dbl> <lgl>     
+      1     4 0.173 0.187      0.962 FALSE     
+      2     8 0.584 0.623      0.385 FALSE     
+      3     9 0.757 0.844      0.269 FALSE     
+      4    11 0.783 0.995      0.269 FALSE     
+      5    15 0.842 1.57       1     FALSE     
       
 

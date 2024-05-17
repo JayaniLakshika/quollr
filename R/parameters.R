@@ -20,7 +20,8 @@
 #' all_centroids_df <- hb_obj$centroids
 #' counts_df <- hb_obj$std_cts
 #' df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df,
-#' counts_df = counts_df)
+#' counts_df = counts_df) |>
+#' dplyr::filter(drop_empty == FALSE)
 #' tr1_object <- tri_bin_centroids(hex_df = df_bin_centroids, x = "c_x", y = "c_y")
 #' tr_from_to_df <- gen_edges(tri_object = tr1_object)
 #' distance_df <- cal_2d_dist(tr_coord_df = tr_from_to_df, start_x = "x_from",
@@ -106,7 +107,8 @@ find_lg_benchmark <- function(distance_edges, distance_col) {
 #' all_centroids_df <- hb_obj$centroids
 #' counts_df <- hb_obj$std_cts
 #' df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df,
-#' counts_df = counts_df)
+#' counts_df = counts_df) |>
+#' dplyr::filter(drop_empty == FALSE)
 #' compute_mean_density_hex(df_bin_centroids, bin1 = num_bins_x)
 #'
 #' @export
@@ -174,7 +176,8 @@ compute_mean_density_hex <- function(df_bin_centroids, bin1) {
 #' all_centroids_df <- hb_obj$centroids
 #' counts_df <- hb_obj$std_cts
 #' df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df,
-#' counts_df = counts_df)
+#' counts_df = counts_df) |>
+#' dplyr::filter(drop_empty == FALSE)
 #' df_bin_centroids_low <- df_bin_centroids |>
 #' dplyr::filter(std_counts <= 0.43)
 #' find_low_dens_hex(df_bin_centroids_all = df_bin_centroids, bin1 = num_bins_x,

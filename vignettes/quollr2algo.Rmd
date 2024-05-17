@@ -49,7 +49,9 @@ Nest step is to obtain the hexagonal bin centroid coordinates (`all_centroids_df
 
 ```{r}
 df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df,
-                                             counts_df = counts_df)
+                                             counts_df = counts_df) |>
+      filter(drop_empty == FALSE)
+
 glimpse(df_bin_centroids) 
 ```
 
@@ -196,7 +198,6 @@ tour1 <- show_langevitour(df = df_all, df_b = df_bin,
                           benchmark_value = 0.75, 
                           distance_df = distance_df, distance_col = "distance", 
                           use_default_benchmark_val = FALSE, col_start = "x")
+
 tour1
-
-
 ```

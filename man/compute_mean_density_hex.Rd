@@ -27,7 +27,8 @@ r2 = r2)
 all_centroids_df <- hb_obj$centroids
 counts_df <- hb_obj$std_cts
 df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df,
-counts_df = counts_df)
+counts_df = counts_df) |>
+dplyr::filter(drop_empty == FALSE)
 compute_mean_density_hex(df_bin_centroids, bin1 = num_bins_x)
 
 }

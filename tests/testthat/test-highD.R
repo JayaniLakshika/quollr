@@ -18,7 +18,8 @@ test_that("show_langevitour() works", {
   all_centroids_df <- hb_obj$centroids
   counts_df <- hb_obj$std_cts
   df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df,
-                                               counts_df = counts_df)
+                                               counts_df = counts_df) |>
+    dplyr::filter(drop_empty == FALSE)
 
   umap_with_hb_id <- hb_obj$data_hb_id
   df_all <- dplyr::bind_cols(s_curve_noise_training |> dplyr::select(-ID), umap_with_hb_id)

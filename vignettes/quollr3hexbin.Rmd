@@ -44,7 +44,8 @@ glimpse(hex_grid)
 ## To obtain the standardise counts within hexbins
 counts_df <- hb_obj$std_cts
 df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df, 
-                                             counts_df = counts_df)
+                                             counts_df = counts_df) |>
+      filter(drop_empty == FALSE)
 ```
 
 ```{r}
