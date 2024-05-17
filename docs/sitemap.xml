@@ -67,6 +67,9 @@
     <loc>https://jayanilakshika.github.io/quollr/news/index.html</loc>
   </url>
   <url>
+    <loc>https://jayanilakshika.github.io/quollr/reference/GeomHexgrid.html</loc>
+  </url>
+  <url>
     <loc>https://jayanilakshika.github.io/quollr/reference/GeomTrimesh.html</loc>
   </url>
   <url>
@@ -193,6 +196,9 @@
     <loc>https://jayanilakshika.github.io/quollr/reference/generate_scaled_data.html</loc>
   </url>
   <url>
+    <loc>https://jayanilakshika.github.io/quollr/reference/geom_hexgrid.html</loc>
+  </url>
+  <url>
     <loc>https://jayanilakshika.github.io/quollr/reference/geom_trimesh.html</loc>
   </url>
   <url>
@@ -245,6 +251,9 @@
   </url>
   <url>
     <loc>https://jayanilakshika.github.io/quollr/reference/show_langevitour.html</loc>
+  </url>
+  <url>
+    <loc>https://jayanilakshika.github.io/quollr/reference/stat_hexgrid.html</loc>
   </url>
   <url>
     <loc>https://jayanilakshika.github.io/quollr/reference/stat_trimesh.html</loc>

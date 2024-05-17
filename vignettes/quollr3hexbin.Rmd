@@ -78,3 +78,15 @@ ggplot(data = hex_grid_with_counts, aes(x = x, y = y)) +
   scale_fill_viridis_c(direction = -1, na.value = "#ffffff") +
   coord_fixed()
 ```
+
+You can also use `geom_hexgrid` to visualise the hexagonal grid rather than `geom_polygon`.
+
+```{r}
+ggplot(data = all_centroids_df, aes(x = c_x, y = c_y)) +
+  geom_hexgrid() +
+  coord_equal() +
+  xlab("x") + ylab("y") +
+  theme(axis.text = element_text(size = 5),
+        axis.title = element_text(size = 7))
+
+```

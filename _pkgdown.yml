@@ -57,6 +57,9 @@ reference:
 - title: "Visualisation"
   desc: These are to visualise the model in 2D and high-dimensions.
   contents:
+  - GeomHexgrid
+  - stat_hexgrid
+  - geom_hexgrid
   - GeomTrimesh
   - stat_trimesh
   - geom_trimesh
