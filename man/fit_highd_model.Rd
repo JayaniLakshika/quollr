@@ -11,7 +11,7 @@ fit_highd_model(
   r2,
   is_bin_centroid = TRUE,
   is_rm_lwd_hex = FALSE,
-  benchmark_to_rm_lwd_hex,
+  benchmark_to_rm_lwd_hex = NULL,
   col_start_highd = "x"
 )
 }

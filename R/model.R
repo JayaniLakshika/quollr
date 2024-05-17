@@ -29,8 +29,8 @@
 #'
 #' @export
 fit_highd_model <- function(training_data, emb_df, bin1 = 2, r2,
-                            is_bin_centroid = TRUE,
-                            is_rm_lwd_hex = FALSE, benchmark_to_rm_lwd_hex,
+                            is_bin_centroid = TRUE, is_rm_lwd_hex = FALSE,
+                            benchmark_to_rm_lwd_hex = NULL,
                             col_start_highd = "x") {
 
   ## Obtain the hexbin object
@@ -68,7 +68,7 @@ fit_highd_model <- function(training_data, emb_df, bin1 = 2, r2,
   if (isTRUE(is_rm_lwd_hex)) {
 
     ## if the benchmark value to remove low density hexagons is not provided
-    if (missing(benchmark_to_rm_lwd_hex)) {
+    if (is.null(benchmark_to_rm_lwd_hex)) {
       ## first quartile used as the default
       benchmark_to_rm_lwd_hex <- quantile(df_bin_centroids$std_counts,
                                                  probs = c(0,0.25,0.5,0.75,1))[2]
