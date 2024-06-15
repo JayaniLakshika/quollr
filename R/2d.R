@@ -27,8 +27,8 @@ gen_centroids <- function(bin1 = 2, r2, q = 0.1){
   a1 <- bin_obj$a1
 
   ## To check whether q is between a specific range
-  if (!between(q, 0.05, 0.2)) {
-    stop("The buffer should be within 0.05 and 0.2.")
+  if (!between(q, 0.05, 0.1)) {
+    stop("The buffer should be within 0.05 and 0.1.")
   }
 
   ## To initialise starting point coordinates
