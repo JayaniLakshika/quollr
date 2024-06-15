@@ -25,7 +25,7 @@ Extract hexagonal bin mean coordinates and the corresponding standardize counts.
 r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
 num_bins_x <- 3
 hb_obj <- hex_binning(data = s_curve_noise_umap_scaled, bin1 = num_bins_x,
-r2 = r2)
+r2 = r2, q = 0.1)
 all_centroids_df <- hb_obj$centroids
 umap_with_hb_id <- hb_obj$data_hb_id
 counts_df <- hb_obj$std_cts

@@ -9,6 +9,7 @@ fit_highd_model(
   emb_df,
   bin1 = 2,
   r2,
+  q = 0.1,
   is_bin_centroid = TRUE,
   is_rm_lwd_hex = FALSE,
   benchmark_to_rm_lwd_hex = NULL,
@@ -23,6 +24,8 @@ fit_highd_model(
 \item{bin1}{Number of bins along the x axis.}
 
 \item{r2}{The ratio of the ranges of the original embedding components.}
+
+\item{q}{The buffer amount as proportion of data range.}
 
 \item{is_bin_centroid}{Logical, indicating whether to use bin centroids (default is TRUE).}
 

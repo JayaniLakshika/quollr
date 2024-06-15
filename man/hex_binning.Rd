@@ -4,7 +4,7 @@
 \alias{hex_binning}
 \title{Hexagonal binning}
 \usage{
-hex_binning(data, bin1 = 2, r2)
+hex_binning(data, bin1 = 2, r2, q = 0.1)
 }
 \arguments{
 \item{data}{A tibble that contains embedding components.}
@@ -12,6 +12,8 @@ hex_binning(data, bin1 = 2, r2)
 \item{bin1}{Number of bins along the x axis.}
 
 \item{r2}{The ratio of the ranges of the original embedding components.}
+
+\item{q}{The buffer amount as proportion of data range.}
 }
 \value{
 A object that contains numeric vector that contains bins along
@@ -29,6 +31,7 @@ This function generates the hexagonal object.
 \examples{
 r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
 num_bins_x <- 3
-hex_binning(data = s_curve_noise_umap_scaled, bin1 = num_bins_x, r2 = r2)
+hex_binning(data = s_curve_noise_umap_scaled, bin1 = num_bins_x,
+r2 = r2, q = 0.1)
 
 }
