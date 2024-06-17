@@ -723,6 +723,7 @@ vis_rmlg_mesh <- function(distance_edges, benchmark_value, tr_coord_df,
 #' @param data A tibble that contains the embedding.
 #' @param non_empty_bins The desired number of non-empty bins.
 #' @param r2 The range of the original second embedding component.
+#' @param q The buffer amount as proportion of data range.
 #'
 #' @return The number of bins along the x and y axes
 #' needed to achieve a specific number of non-empty bins.
@@ -733,15 +734,15 @@ vis_rmlg_mesh <- function(distance_edges, benchmark_value, tr_coord_df,
 #' r2 = r2)
 #'
 #' @export
-find_non_empty_bins <- function(data, non_empty_bins, r2) {
+find_non_empty_bins <- function(data, non_empty_bins, r2, q = 0.1) {
 
   if (missing(non_empty_bins)) {
     stop("Required number of non-empty bins is not defined.")
   }
 
   ## To initialise starting point coordinates
-  s1 <- -0.1
-  s2 <- -0.1 * r2
+  s1 <- -q
+  s2 <- -q * r2
 
   max_bins_along_axis <- ceiling(sqrt(NROW(data)))
 
@@ -752,10 +753,10 @@ find_non_empty_bins <- function(data, non_empty_bins, r2) {
   bin1 <- num_bins_x_vec[1]
 
   ## To compute the number of bins along the y-axis
-  bin2 <- calc_bins_y(bin1 = bin1, r2 = r2)$bin2
+  bin2 <- calc_bins_y(bin1 = bin1, r2 = r2, q = q)$bin2
 
   ### Generate the full grid
-  hb_obj <- hex_binning(data = data, bin1 = bin1, r2 = r2)
+  hb_obj <- hex_binning(data = data, bin1 = bin1, r2 = r2, q = q)
 
   num_of_non_empty_bins <- hb_obj$non_bins
 
@@ -773,10 +774,10 @@ find_non_empty_bins <- function(data, non_empty_bins, r2) {
     bin1 <- num_bins_x_vec[2]
 
     ## To compute the number of bins along the y-axis
-    bin2 <- calc_bins_y(bin1 = bin1, r2 = r2)$bin2
+    bin2 <- calc_bins_y(bin1 = bin1, r2 = r2, q = q)$bin2
 
     ### Generate the full grid
-    hb_obj <- hex_binning(data = data, bin1 = bin1, r2 = r2)
+    hb_obj <- hex_binning(data = data, bin1 = bin1, r2 = r2, q = q)
 
     num_of_non_empty_bins <- hb_obj$non_bins
 

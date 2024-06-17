@@ -4,7 +4,7 @@
 \alias{find_non_empty_bins}
 \title{Find the number of bins required to achieve required number of non-empty bins.}
 \usage{
-find_non_empty_bins(data, non_empty_bins, r2)
+find_non_empty_bins(data, non_empty_bins, r2, q = 0.1)
 }
 \arguments{
 \item{data}{A tibble that contains the embedding.}
@@ -12,6 +12,8 @@ find_non_empty_bins(data, non_empty_bins, r2)
 \item{non_empty_bins}{The desired number of non-empty bins.}
 
 \item{r2}{The range of the original second embedding component.}
+
+\item{q}{The buffer amount as proportion of data range.}
 }
 \value{
 The number of bins along the x and y axes
