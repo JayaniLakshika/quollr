@@ -18,7 +18,7 @@
 gen_centroids <- function(bin1 = 2, r2, q = 0.1){
 
   ## To compute hexagonal configurations
-  bin_obj <- calc_bins_y(bin1 = bin1, r2 = r2)
+  bin_obj <- calc_bins_y(bin1 = bin1, r2 = r2, q = q)
 
   # To obtain the bins along the y-axis
   bin2 <- bin_obj$bin2

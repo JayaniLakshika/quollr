@@ -41,7 +41,7 @@ calc_bins_y <- function(bin1 = 2, r2, q = 0.1) {
 
   if (r2 > check_factor) {
 
-    a1 <- (1+ q)/(bin1 - 1)
+    a1 <- (1 + q)/(bin1 - 1)
 
   } else {
 
