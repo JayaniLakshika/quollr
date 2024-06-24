@@ -34,18 +34,18 @@ calc_bins_y <- function(bin1 = 2, r2, q = 0.1) {
   }
 
   ## To compute the number of bins along the x-axis
-  bin2 <- ceiling(1 + (2 * r2 * (bin1 - 1))/sqrt(3))
+  bin2 <- ceiling((2 * r2 * bin1)/sqrt(3))
 
   ## Validating and compute horizontal spacing
-  check_factor <- (sqrt(3) * (bin2 - 1))/(2 * (bin1 - 1))
+  check_factor <- (sqrt(3) * bin2)/(2 * bin1)
 
   if (r2 > check_factor) {
 
-    a1 <- (1 + q)/(bin1 - 1)
+    a1 <- (1 + q)/bin1
 
   } else {
 
-    a1 <- (2 * r2 * (1 + q))/(sqrt(3) * (bin2 - 1))
+    a1 <- (2 * r2 * (1 + q))/(sqrt(3) * bin2)
 
   }
 

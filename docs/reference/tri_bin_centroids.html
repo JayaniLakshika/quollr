@@ -12,7 +12,7 @@ provided in the input data frame and returns the triangular object."><meta prope
     
     <a class="navbar-brand me-2" href="../index.html">quollr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -101,31 +101,36 @@ provided in the input data frame and returns the triangular object.</p>
 <span class="r-in"><span><span class="fu">tri_bin_centroids</span><span class="op">(</span>hex_df <span class="op">=</span> <span class="va">df_bin_centroids</span>, x <span class="op">=</span> <span class="st">"c_x"</span>, y <span class="op">=</span> <span class="st">"c_y"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Delaunay triangulation, node and triangle indices:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> triangle: nodes (a,b,c), neighbour triangles [i,j,k] </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1: (1,2,4), [2,6,0]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2: (5,4,2), [1,5,3]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3: (8,4,5), [2,8,7]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4: (5,3,6), [0,9,5]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5: (3,5,2), [2,0,4]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6: (7,1,4), [1,7,0]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7: (7,4,8), [3,10,6]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8: (5,9,8), [12,3,9]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9: (5,6,9), [14,8,4]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10: (10,7,8), [7,11,15]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1: (1,2,4), [2,3,0]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2: (5,4,2), [1,6,5]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3: (7,1,4), [1,4,0]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4: (4,8,7), [10,3,5]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5: (4,5,8), [7,4,2]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6: (3,5,2), [2,0,9]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7: (9,8,5), [5,8,12]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8: (5,6,9), [14,7,9]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9: (5,3,6), [0,8,6]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10: (10,7,8), [4,11,15]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 11: (8,11,10), [17,10,12]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12: (8,9,11), [13,11,8]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13: (12,11,9), [12,14,18]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14: (12,9,6), [9,0,13]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12: (8,9,11), [13,11,7]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13: (9,12,11), [18,12,14]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14: (9,6,12), [0,13,8]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 15: (13,7,10), [10,16,0]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 16: (14,13,10), [15,17,20]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 17: (14,10,11), [11,19,16]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 18: (11,12,15), [24,19,13]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 19: (11,15,14), [22,17,18]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20: (16,13,14), [16,21,0]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 21: (14,17,16), [0,20,22]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20: (16,13,14), [16,21,25]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21: (14,17,16), [27,20,22]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 22: (14,15,17), [23,21,19]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 23: (18,17,15), [22,24,0]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 24: (18,15,12), [18,0,23]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> boundary nodes:  1 2 3 6 12 18 17 16 13 7 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23: (15,18,17), [28,22,24]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 24: (15,12,18), [0,23,18]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 25: (19,13,16), [20,26,0]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 26: (20,19,16), [25,27,0]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 27: (20,16,17), [21,29,26]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28: (17,18,21), [0,29,23]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 29: (17,21,20), [0,27,28]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> boundary nodes:  1 2 3 6 12 18 21 20 19 13 7 </span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

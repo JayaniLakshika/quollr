@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">quollr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -107,21 +107,21 @@ counts within each hexagon etc.</p>
 <code class="sourceCode R"><span><span class="co">## Data set with all possible centroids in the hexagonal grid</span></span>
 <span><span class="va">all_centroids_df</span> <span class="op">&lt;-</span> <span class="va">hb_obj</span><span class="op">$</span><span class="va">centroids</span></span>
 <span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="va">all_centroids_df</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Rows: 78</span></span>
+<span><span class="co">#&gt; Rows: 84</span></span>
 <span><span class="co">#&gt; Columns: 3</span></span>
 <span><span class="co">#&gt; $ hexID <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 1…</span></span>
-<span><span class="co">#&gt; $ c_x   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> -0.100000000, 0.113750068, 0.327500137, 0.541250205, 0.755000273…</span></span>
+<span><span class="co">#&gt; $ c_x   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> -0.100000000, 0.083214344, 0.266428689, 0.449643033, 0.632857377…</span></span>
 <span><span class="co">#&gt; $ c_y   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> -0.20194144, -0.20194144, -0.20194144, -0.20194144, -0.20194144,…</span></span></code></pre></div>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="co">## Generate all coordinates of hexagons</span></span>
 <span><span class="va">hex_grid</span> <span class="op">&lt;-</span> <span class="va">hb_obj</span><span class="op">$</span><span class="va">hex_poly</span></span>
 <span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="va">hex_grid</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Rows: 468</span></span>
+<span><span class="co">#&gt; Rows: 504</span></span>
 <span><span class="co">#&gt; Columns: 3</span></span>
 <span><span class="co">#&gt; $ hex_poly_id <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 4, 4…</span></span>
-<span><span class="co">#&gt; $ x           <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> -0.100000000, -0.206875034, -0.206875034, -0.100000000, 0.…</span></span>
-<span><span class="co">#&gt; $ y           <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> -0.07853278, -0.14023711, -0.26364577, -0.32535010, -0.263…</span></span></code></pre></div>
+<span><span class="co">#&gt; $ x           <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> -0.100000000, -0.191607172, -0.191607172, -0.100000000, -0…</span></span>
+<span><span class="co">#&gt; $ y           <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> -0.09616259, -0.14905202, -0.25483087, -0.30772029, -0.254…</span></span></code></pre></div>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="co">## To obtain the standardise counts within hexbins</span></span>

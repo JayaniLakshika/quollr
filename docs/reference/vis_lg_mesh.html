@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">quollr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -102,6 +102,8 @@ coloured differently.</p>
 <span class="r-in"><span>counts_df <span class="op">=</span> <span class="va">counts_df</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">drop_empty</span> <span class="op">==</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">tr1_object</span> <span class="op">&lt;-</span> <span class="fu"><a href="tri_bin_centroids.html">tri_bin_centroids</a></span><span class="op">(</span>hex_df <span class="op">=</span> <span class="va">df_bin_centroids</span>, x <span class="op">=</span> <span class="st">"c_x"</span>, y <span class="op">=</span> <span class="st">"c_y"</span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>triangle collapsed!</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>three points coincide or are collinear!</span>
 <span class="r-in"><span><span class="va">tr_from_to_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="gen_edges.html">gen_edges</a></span><span class="op">(</span>tri_object <span class="op">=</span> <span class="va">tr1_object</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">distance_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="cal_2d_dist.html">cal_2d_dist</a></span><span class="op">(</span>tr_coord_df <span class="op">=</span> <span class="va">tr_from_to_df</span>, start_x <span class="op">=</span> <span class="st">"x_from"</span>,</span></span>
 <span class="r-in"><span>start_y <span class="op">=</span> <span class="st">"y_from"</span>, end_x <span class="op">=</span> <span class="st">"x_to"</span>, end_y <span class="op">=</span> <span class="st">"y_to"</span>,</span></span>
