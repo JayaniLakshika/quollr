@@ -4,7 +4,7 @@
 \alias{calc_bins_y}
 \title{Calculate the effective number of bins along x-axis and y-axis}
 \usage{
-calc_bins_y(bin1 = 2, r2, q = 0.1)
+calc_bins_y(bin1 = 4, r2, q = 0.1)
 }
 \arguments{
 \item{bin1}{Number of bins along the x axis.}
@@ -23,6 +23,6 @@ of a hexagonal grid.
 }
 \examples{
 r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
-calc_bins_y(bin1 = 2, r2 = r2, q = 0.1)
+calc_bins_y(bin1 = 4, r2 = r2, q = 0.1)
 
 }

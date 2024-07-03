@@ -1,7 +1,7 @@
 test_that("gen_centroids() works", {
 
   r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
-  all_centroids_df <- gen_centroids(bin1 = 3, r2 = r2)
+  all_centroids_df <- gen_centroids(bin1 = 4, r2 = r2)
 
   testthat::expect_snapshot(all_centroids_df)
 
@@ -10,10 +10,10 @@ test_that("gen_centroids() works", {
 test_that("gen_hex_coord() works", {
 
   r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
-  num_bins_list <- calc_bins_y(bin1 = 3, r2 = r2)
+  num_bins_list <- calc_bins_y(bin1 = 4, r2 = r2)
   width <- num_bins_list$a1
 
-  all_centroids_df <- gen_centroids(bin1 = 3, r2 = r2)
+  all_centroids_df <- gen_centroids(bin1 = 4, r2 = r2)
 
   all_hex_coord <- gen_hex_coord(centroids_df = all_centroids_df, a1 = width)
   testthat::expect_snapshot(all_hex_coord)
@@ -23,7 +23,7 @@ test_that("gen_hex_coord() works", {
 test_that("assign_data() works", {
 
   r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
-  all_centroids_df <- gen_centroids(bin1 = 3, r2 = r2)
+  all_centroids_df <- gen_centroids(bin1 = 4, r2 = r2)
 
   umap_with_hb_id <- assign_data(data = s_curve_noise_umap_scaled,
   centroid_df = all_centroids_df)
@@ -34,7 +34,7 @@ test_that("assign_data() works", {
 test_that("compute_std_counts() works", {
 
   r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
-  all_centroids_df <- gen_centroids(bin1 = 3, r2 = r2)
+  all_centroids_df <- gen_centroids(bin1 = 4, r2 = r2)
 
   umap_with_hb_id <- assign_data(data = s_curve_noise_umap_scaled,
                                  centroid_df = all_centroids_df)
@@ -46,7 +46,7 @@ test_that("compute_std_counts() works", {
 test_that("find_pts() works", {
 
   r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
-  all_centroids_df <- gen_centroids(bin1 = 3, r2 = r2)
+  all_centroids_df <- gen_centroids(bin1 = 4, r2 = r2)
 
   umap_with_hb_id <- assign_data(data = s_curve_noise_umap_scaled,
                                  centroid_df = all_centroids_df)
@@ -60,7 +60,7 @@ test_that("hex_binning() works", {
   r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
 
   testthat::expect_snapshot(hb_obj <- hex_binning(data = s_curve_noise_umap_scaled,
-                                                  bin1 = 3, r2 = r2))
+                                                  bin1 = 4, r2 = r2))
 
 })
 
@@ -80,7 +80,7 @@ test_that("find_non_empty_bins() works", {
 test_that("extract_hexbin_centroids() works", {
 
   r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
-  hb_obj <- hex_binning(data = s_curve_noise_umap_scaled, bin1 = 3, r2 = r2)
+  hb_obj <- hex_binning(data = s_curve_noise_umap_scaled, bin1 = 4, r2 = r2)
   all_centroids_df <- hb_obj$centroids
   counts_df <- hb_obj$std_cts
 
@@ -92,7 +92,7 @@ test_that("extract_hexbin_centroids() works", {
 test_that("extract_hexbin_mean() works", {
 
   r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
-  hb_obj <- hex_binning(data = s_curve_noise_umap_scaled, bin1 = 3, r2 = r2)
+  hb_obj <- hex_binning(data = s_curve_noise_umap_scaled, bin1 = 4, r2 = r2)
 
   all_centroids_df <- hb_obj$centroids
   umap_with_hb_id <- hb_obj$data_hb_id
@@ -107,7 +107,7 @@ test_that("extract_hexbin_mean() works", {
 test_that("tri_bin_centroids() works", {
 
   r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
-  hb_obj <- hex_binning(data = s_curve_noise_umap_scaled, bin1 = 3, r2 = r2)
+  hb_obj <- hex_binning(data = s_curve_noise_umap_scaled, bin1 = 4, r2 = r2)
 
   all_centroids_df <- hb_obj$centroids
   counts_df <- hb_obj$std_cts
@@ -123,7 +123,7 @@ test_that("tri_bin_centroids() works", {
 test_that("gen_edges() works", {
 
   r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
-  hb_obj <- hex_binning(data = s_curve_noise_umap_scaled, bin1 = 3, r2 = r2)
+  hb_obj <- hex_binning(data = s_curve_noise_umap_scaled, bin1 = 4, r2 = r2)
 
   all_centroids_df <- hb_obj$centroid
   counts_df <- hb_obj$std_cts
@@ -139,7 +139,7 @@ test_that("gen_edges() works", {
 test_that("cal_2d_dist() works", {
 
   r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
-  hb_obj <- hex_binning(data = s_curve_noise_umap_scaled, bin1 = 3, r2 = r2)
+  hb_obj <- hex_binning(data = s_curve_noise_umap_scaled, bin1 = 4, r2 = r2)
 
   all_centroids_df <- hb_obj$centroids
   counts_df <- hb_obj$std_cts
@@ -163,7 +163,7 @@ test_that("cal_2d_dist() works", {
 test_that("vis_lg_mesh() works", {
 
   r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
-  hb_obj <- hex_binning(data = s_curve_noise_umap_scaled, bin1 = 3, r2 = r2)
+  hb_obj <- hex_binning(data = s_curve_noise_umap_scaled, bin1 = 4, r2 = r2)
 
   all_centroids_df <- hb_obj$centroids
   counts_df <- hb_obj$std_cts
@@ -191,7 +191,7 @@ test_that("vis_lg_mesh() works", {
 test_that("vis_rmlg_mesh() works", {
 
   r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
-  hb_obj <- hex_binning(data = s_curve_noise_umap_scaled, bin1 = 3, r2 = r2)
+  hb_obj <- hex_binning(data = s_curve_noise_umap_scaled, bin1 = 4, r2 = r2)
 
   all_centroids_df <- hb_obj$centroids
   counts_df <- hb_obj$std_cts

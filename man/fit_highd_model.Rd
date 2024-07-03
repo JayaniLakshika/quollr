@@ -7,7 +7,7 @@
 fit_highd_model(
   training_data,
   emb_df,
-  bin1 = 2,
+  bin1 = 4,
   r2,
   q = 0.1,
   is_bin_centroid = TRUE,
@@ -49,7 +49,7 @@ removal of low-density hexagons, and averaging of high-dimensional data.
 \examples{
 r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
 fit_highd_model(training_data = s_curve_noise_training,
-emb_df = s_curve_noise_umap_scaled, bin1 = 3, r2 = r2,
+emb_df = s_curve_noise_umap_scaled, bin1 = 4, r2 = r2,
 col_start_highd = "x")
 
 }

@@ -1,7 +1,7 @@
 test_that("avg_highd_data() works", {
 
   r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
-  hb_obj <- hex_binning(data = s_curve_noise_umap_scaled, bin1 = 3, r2 = r2)
+  hb_obj <- hex_binning(data = s_curve_noise_umap_scaled, bin1 = 4, r2 = r2)
 
   umap_with_hb_id <- hb_obj$data_hb_id
   df_all <- dplyr::bind_cols(s_curve_noise_training |> dplyr::select(-ID), umap_with_hb_id)
@@ -13,7 +13,7 @@ test_that("avg_highd_data() works", {
 test_that("show_langevitour() works", {
 
   r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
-  hb_obj <- hex_binning(data = s_curve_noise_umap_scaled, bin1 = 3, r2 = r2)
+  hb_obj <- hex_binning(data = s_curve_noise_umap_scaled, bin1 = 4, r2 = r2)
 
   all_centroids_df <- hb_obj$centroids
   counts_df <- hb_obj$std_cts
@@ -35,7 +35,7 @@ test_that("show_langevitour() works", {
                              select_vars = c("from", "to", "distance"))
   tour_widget <- show_langevitour(df = df_all, df_b = df_bin,
                                   df_b_with_center_data = df_bin_centroids,
-                                  benchmark_value = 0.75, distance = distance_df,
+                                  benchmark_value = 1.168, distance = distance_df,
                                   distance_col = "distance",
                                   use_default_benchmark_val = FALSE,
                                   col_start = "x")

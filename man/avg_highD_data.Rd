@@ -20,7 +20,7 @@ This function calculates the average values of high-dimensional data within each
 }
 \examples{
 r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
-num_bins_x <- 3
+num_bins_x <- 4
 hb_obj <- hex_binning(data = s_curve_noise_umap_scaled, bin1 = num_bins_x,
 r2 = r2)
 umap_data_with_hb_id <- hb_obj$data_hb_id

@@ -42,7 +42,7 @@ conditions and input parameters.
 }
 \examples{
 r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
-num_bins_x <- 3
+num_bins_x <- 4
 hb_obj <- hex_binning(data = s_curve_noise_umap_scaled, bin1 = num_bins_x,
 r2 = r2)
 all_centroids_df <- hb_obj$centroids
@@ -60,7 +60,7 @@ df_all <- dplyr::bind_cols(s_curve_noise_training |> dplyr::select(-ID),
 umap_data_with_hb_id)
 df_bin <- avg_highd_data(data = df_all, col_start = "x")
 show_langevitour(df = df_all, df_b = df_bin, df_b_with_center_data = df_bin_centroids,
-benchmark_value = 0.75, distance = distance_df, distance_col = "distance",
+benchmark_value = 1.16, distance = distance_df, distance_col = "distance",
 use_default_benchmark_val = FALSE, col_start = "x")
 
 }

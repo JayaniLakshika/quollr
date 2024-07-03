@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">quollr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.3</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -111,26 +111,26 @@ hexagon visualization.</p>
 <span>                         is_rm_lwd_hex <span class="op">=</span> <span class="cn">FALSE</span>, col_start_highd <span class="op">=</span> <span class="st">"x"</span><span class="op">)</span></span>
 <span><span class="co">## 2D model</span></span>
 <span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="va">model</span><span class="op">$</span><span class="va">df_bin</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Rows: 19</span></span>
+<span><span class="co">#&gt; Rows: 12</span></span>
 <span><span class="co">#&gt; Columns: 8</span></span>
-<span><span class="co">#&gt; $ hb_id <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 8, 14, 15, 19, 20, 21, 27, 28, 34, 35, 41, 47, 48, 54, 65, 66, 7…</span></span>
-<span><span class="co">#&gt; $ x1    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> -0.63660270, -0.72723723, 0.21472714, -0.38896838, 0.06956750, 0…</span></span>
-<span><span class="co">#&gt; $ x2    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 1.7439867, 1.0698598, 1.4856964, 0.1640111, 0.3069117, 0.9997942…</span></span>
-<span><span class="co">#&gt; $ x3    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> -1.76418335, -1.43336238, -1.92619007, -1.87789008, -1.96406103,…</span></span>
-<span><span class="co">#&gt; $ x4    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 0.009530460, 0.007212386, 0.007600669, -0.004741853, 0.010917518…</span></span>
-<span><span class="co">#&gt; $ x5    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> -0.0014349303, 0.0137568025, -0.0070315967, -0.0044406041, 0.014…</span></span>
-<span><span class="co">#&gt; $ x6    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> -0.011690348, -0.052851357, -0.022655251, -0.024067288, -0.01384…</span></span>
-<span><span class="co">#&gt; $ x7    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> -0.0015190610, -0.0004733684, -0.0030685063, 0.0008626653, -0.00…</span></span></code></pre></div>
+<span><span class="co">#&gt; $ hb_id <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 8, 9, 14, 15, 21, 22, 28, 29, 34, 40, 41, 46</span></span>
+<span><span class="co">#&gt; $ x1    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> -0.4581000, 0.5199579, -0.3398708, 0.7058062, 0.7535255, 0.77408…</span></span>
+<span><span class="co">#&gt; $ x2    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 1.13463111, 1.71686640, 0.06818098, 0.60743415, 0.96465484, 1.70…</span></span>
+<span><span class="co">#&gt; $ x3    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> -1.7766922, -1.8397522, -1.9031319, -1.6166117, -0.4085461, -0.4…</span></span>
+<span><span class="co">#&gt; $ x4    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 0.0044362309, 0.0096276216, -0.0001685478, 0.0037825857, -0.0017…</span></span>
+<span><span class="co">#&gt; $ x5    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> -5.316922e-05, -1.301760e-02, 3.037123e-03, -8.151838e-04, 3.703…</span></span>
+<span><span class="co">#&gt; $ x6    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> -0.026464526, -0.028636289, -0.013011079, 0.032597515, 0.0216672…</span></span>
+<span><span class="co">#&gt; $ x7    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> -0.0014280043, 0.0036954436, -0.0028806506, -0.0004139301, 0.001…</span></span></code></pre></div>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="co">## high-D model</span></span>
 <span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="va">model</span><span class="op">$</span><span class="va">df_bin_centroids</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Rows: 19</span></span>
+<span><span class="co">#&gt; Rows: 12</span></span>
 <span><span class="co">#&gt; Columns: 5</span></span>
-<span><span class="co">#&gt; $ hexID      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 8, 14, 15, 19, 20, 21, 27, 28, 34, 35, 41, 47, 48, 54, 65, …</span></span>
-<span><span class="co">#&gt; $ c_x        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 0.174821516, 0.083214344, 0.266428689, -0.008392828, 0.1748…</span></span>
-<span><span class="co">#&gt; $ c_y        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> -0.04327317, 0.11539511, 0.11539511, 0.27406339, 0.27406339…</span></span>
-<span><span class="co">#&gt; $ std_counts <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 0.4444444, 0.3333333, 0.6666667, 0.6666667, 0.2222222, 0.22…</span></span>
+<span><span class="co">#&gt; $ hexID      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 8, 9, 14, 15, 21, 22, 28, 29, 34, 40, 41, 46</span></span>
+<span><span class="co">#&gt; $ c_x        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 0.08321434, 0.44964303, -0.10000000, 0.26642869, 0.44964303…</span></span>
+<span><span class="co">#&gt; $ c_y        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 0.1153951, 0.1153951, 0.4327317, 0.4327317, 0.7500682, 0.75…</span></span>
+<span><span class="co">#&gt; $ std_counts <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 1.0000000, 0.1428571, 0.2142857, 0.4285714, 0.5000000, 0.21…</span></span>
 <span><span class="co">#&gt; $ drop_empty <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span> FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FAL…</span></span></code></pre></div>
   </main>
 </div>

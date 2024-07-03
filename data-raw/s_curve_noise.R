@@ -88,8 +88,7 @@ s_curve_noise_umap_scaled$UMAP1 <- ((s_curve_noise_umap_scaled$UMAP1 - min(s_cur
                                       (max(s_curve_noise_umap_scaled$UMAP1) - min(s_curve_noise_umap_scaled$UMAP1))) * (1 - 0)
 y_min <- 0
 
-hex_size <- 0.2
-y_max <- ceiling(aspect_ratio/(2/sqrt(3))) * 2/sqrt(3)
+y_max <- aspect_ratio
 
 s_curve_noise_umap_scaled$UMAP2 <- ((s_curve_noise_umap_scaled$UMAP2 - min(s_curve_noise_umap_scaled$UMAP2))/
 (max(s_curve_noise_umap_scaled$UMAP2) - min(s_curve_noise_umap_scaled$UMAP2))) * (y_max - y_min)

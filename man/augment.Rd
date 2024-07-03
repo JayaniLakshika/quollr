@@ -38,7 +38,7 @@ from a nonlinear dimension reduction (NLDR) model.
 \examples{
 r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
 model <- fit_highd_model(training_data = s_curve_noise_training,
-emb_df = s_curve_noise_umap_scaled, bin1 = 3, r2 = r2, col_start_highd = "x")
+emb_df = s_curve_noise_umap_scaled, bin1 = 4, r2 = r2, col_start_highd = "x")
 df_bin_centroids <- model$df_bin_centroids
 df_bin <- model$df_bin
 augment(df_bin_centroids = df_bin_centroids, df_bin = df_bin,

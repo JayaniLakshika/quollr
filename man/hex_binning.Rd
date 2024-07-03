@@ -4,7 +4,7 @@
 \alias{hex_binning}
 \title{Hexagonal binning}
 \usage{
-hex_binning(data, bin1 = 2, r2, q = 0.1)
+hex_binning(data, bin1 = 4, r2, q = 0.1)
 }
 \arguments{
 \item{data}{A tibble that contains embedding components.}
@@ -30,7 +30,7 @@ This function generates the hexagonal object.
 }
 \examples{
 r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
-num_bins_x <- 3
+num_bins_x <- 4
 hex_binning(data = s_curve_noise_umap_scaled, bin1 = num_bins_x,
 r2 = r2, q = 0.1)
 

@@ -12,7 +12,7 @@
 #'
 #' @examples
 #' r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
-#' gen_centroids(bin1 = 3, r2 = r2, q = 0.1)
+#' gen_centroids(bin1 = 4, r2 = r2, q = 0.1)
 #'
 #' @export
 gen_centroids <- function(bin1 = 2, r2, q = 0.1){
@@ -32,7 +32,7 @@ gen_centroids <- function(bin1 = 2, r2, q = 0.1){
   }
 
   ## To initialise starting point coordinates
-  s1 <- -q
+  s1 <- -q - a1
   s2 <- -q * r2
 
   # Generate x-coordinate of centroids for odd rows
@@ -81,9 +81,9 @@ gen_centroids <- function(bin1 = 2, r2, q = 0.1){
 #'
 #' @examples
 #' r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
-#' num_bins_list <- calc_bins_y(bin1 = 3, r2 = r2, q = 0.1)
+#' num_bins_list <- calc_bins_y(bin1 = 4, r2 = r2, q = 0.1)
 #' width <- num_bins_list$a1
-#' all_centroids_df <- gen_centroids(bin1 = 3, r2 = r2, q = 0.1)
+#' all_centroids_df <- gen_centroids(bin1 = 4, r2 = r2, q = 0.1)
 #' gen_hex_coord(centroids_df = all_centroids_df, a1 = width)
 #'
 #' @export
@@ -170,7 +170,7 @@ get_min_indices <- function(x) {
 #'
 #' @examples
 #' r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
-#' all_centroids_df <- gen_centroids(bin1 = 3, r2 = r2, q = 0.1)
+#' all_centroids_df <- gen_centroids(bin1 = 4, r2 = r2, q = 0.1)
 #' assign_data(data = s_curve_noise_umap_scaled, centroid_df = all_centroids_df)
 #'
 #' @export
@@ -216,7 +216,7 @@ assign_data <- function(data, centroid_df) {
 #'
 #' @examples
 #' r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
-#' all_centroids_df <- gen_centroids(bin1 = 3, r2 = r2, q = 0.1)
+#' all_centroids_df <- gen_centroids(bin1 = 4, r2 = r2, q = 0.1)
 #' umap_with_hb_id <- assign_data(data = s_curve_noise_umap_scaled,
 #' centroid_df = all_centroids_df)
 #' compute_std_counts(data_hb = umap_with_hb_id)
@@ -245,7 +245,7 @@ compute_std_counts <- function(data_hb) {
 #'
 #' @examples
 #' r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
-#' all_centroids_df <- gen_centroids(bin1 = 3, r2 = r2, q = 0.1)
+#' all_centroids_df <- gen_centroids(bin1 = 4, r2 = r2, q = 0.1)
 #' umap_with_hb_id <- assign_data(data = s_curve_noise_umap_scaled,
 #' centroid_df = all_centroids_df)
 #' find_pts(data_hb = umap_with_hb_id)
@@ -304,16 +304,12 @@ find_pts <- function(data_hb) {
 #'
 #' @examples
 #' r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
-#' num_bins_x <- 3
+#' num_bins_x <- 4
 #' hex_binning(data = s_curve_noise_umap_scaled, bin1 = num_bins_x,
 #' r2 = r2, q = 0.1)
 #'
 #' @export
-hex_binning <- function(data, bin1 = 2, r2, q = 0.1) {
-
-  ## To initialise starting point coordinates
-  s1 <- -q
-  s2 <- -q * r2
+hex_binning <- function(data, bin1 = 4, r2, q = 0.1) {
 
   ## To compute the number of bins along the y-axis
   bin_obj <- calc_bins_y(bin1 = bin1, r2 = r2, q = q)
@@ -321,6 +317,10 @@ hex_binning <- function(data, bin1 = 2, r2, q = 0.1) {
 
   ## To obtain the width of the hexagon
   a1 <- bin_obj$a1
+
+  ## To initialise starting point coordinates
+  s1 <- -q - a1
+  s2 <- -q * r2
 
   ## To generate all the centroids of the grid
   all_centroids_df <- gen_centroids(bin1 = bin1, r2 = r2, q = q)
@@ -367,7 +367,7 @@ hex_binning <- function(data, bin1 = 2, r2, q = 0.1) {
 #'
 #' @examples
 #' r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
-#' num_bins_x <- 3
+#' num_bins_x <- 4
 #' hb_obj <- hex_binning(data = s_curve_noise_umap_scaled, bin1 = num_bins_x,
 #' r2 = r2, q = 0.1)
 #' all_centroids_df <- hb_obj$centroids
@@ -407,7 +407,7 @@ extract_hexbin_centroids <- function(centroids_df, counts_df) {
 #'
 #' @examples
 #' r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
-#' num_bins_x <- 3
+#' num_bins_x <- 4
 #' hb_obj <- hex_binning(data = s_curve_noise_umap_scaled, bin1 = num_bins_x,
 #' r2 = r2, q = 0.1)
 #' all_centroids_df <- hb_obj$centroids
@@ -460,7 +460,7 @@ extract_hexbin_mean <- function(data_hb, counts_df, centroids_df) {
 #'
 #' @examples
 #' r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
-#' num_bins_x <- 3
+#' num_bins_x <- 4
 #' hb_obj <- hex_binning(data = s_curve_noise_umap_scaled, bin1 = num_bins_x,
 #' r2 = r2)
 #' all_centroids_df <- hb_obj$centroids
@@ -493,7 +493,7 @@ tri_bin_centroids <- function(hex_df, x, y){
 #'
 #' @examples
 #' r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
-#' num_bins_x <- 3
+#' num_bins_x <- 4
 #' hb_obj <- hex_binning(data = s_curve_noise_umap_scaled, bin1 = num_bins_x,
 #' r2 = r2)
 #' all_centroids_df <- hb_obj$centroids
@@ -557,7 +557,7 @@ gen_edges <- function(tri_object) {
 #'
 #' @examples
 #' r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
-#' num_bins_x <- 3
+#' num_bins_x <- 4
 #' hb_obj <- hex_binning(data = s_curve_noise_umap_scaled, bin1 = num_bins_x,
 #' r2 = r2)
 #' all_centroids_df <- hb_obj$centroids
@@ -609,7 +609,7 @@ cal_2d_dist <- function(tr_coord_df, start_x, start_y, end_x, end_y,
 #'
 #' @examples
 #' r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
-#' num_bins_x <- 3
+#' num_bins_x <- 4
 #' hb_obj <- hex_binning(data = s_curve_noise_umap_scaled, bin1 = num_bins_x,
 #' r2 = r2)
 #' all_centroids_df <- hb_obj$centroids
@@ -672,7 +672,7 @@ vis_lg_mesh <- function(distance_edges, benchmark_value,
 #'
 #' @examples
 #' r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
-#' num_bins_x <- 3
+#' num_bins_x <- 4
 #' hb_obj <- hex_binning(data = s_curve_noise_umap_scaled, bin1 = num_bins_x,
 #' r2 = r2)
 #' all_centroids_df <- hb_obj$centroids
@@ -740,14 +740,10 @@ find_non_empty_bins <- function(data, non_empty_bins, r2, q = 0.1) {
     stop("Required number of non-empty bins is not defined.")
   }
 
-  ## To initialise starting point coordinates
-  s1 <- -q
-  s2 <- -q * r2
-
   max_bins_along_axis <- ceiling(sqrt(NROW(data)))
 
   ## Since having 1 bin along x or y-axis is not obvious therefore started from 2
-  num_bins_x_vec <- 2:max_bins_along_axis
+  num_bins_x_vec <- 4:max_bins_along_axis
 
   ## To initialise the number of bins along the x-axis
   bin1 <- num_bins_x_vec[1]

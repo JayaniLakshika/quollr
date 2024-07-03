@@ -20,7 +20,7 @@ the differences in a distance column.
 }
 \examples{
 r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
-num_bins_x <- 3
+num_bins_x <- 4
 hb_obj <- hex_binning(data = s_curve_noise_umap_scaled, bin1 = num_bins_x,
 r2 = r2)
 all_centroids_df <- hb_obj$centroids

@@ -56,10 +56,11 @@ ggplot(data = hex_grid, aes(x = x, y = y)) +
 ```
 
 ```{r}
+
 ggplot(data = hex_grid, aes(x = x, y = y)) + 
   geom_polygon(fill = "white", color = "black", aes(group = hex_poly_id)) +
   geom_point(data = all_centroids_df, aes(x = c_x, y = c_y), color = "red") +
-  geom_point(data = df_bin_centroids, aes(x = c_x, y = c_y), color = "purple") +
+  geom_point(data = df_bin_centroids, aes(x = c_x, y = c_y), color = "purple") + 
   coord_fixed()
 ```
 

@@ -25,11 +25,11 @@
 #' @examples
 #' r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
 #' fit_highd_model(training_data = s_curve_noise_training,
-#' emb_df = s_curve_noise_umap_scaled, bin1 = 3, r2 = r2,
+#' emb_df = s_curve_noise_umap_scaled, bin1 = 4, r2 = r2,
 #' col_start_highd = "x")
 #'
 #' @export
-fit_highd_model <- function(training_data, emb_df, bin1 = 2, r2, q = 0.1,
+fit_highd_model <- function(training_data, emb_df, bin1 = 4, r2, q = 0.1,
                             is_bin_centroid = TRUE, is_rm_lwd_hex = FALSE,
                             benchmark_to_rm_lwd_hex = NULL,
                             col_start_highd = "x") {

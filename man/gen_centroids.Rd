@@ -22,6 +22,6 @@ This function generates all possible centroids in the hexagonal grid.
 }
 \examples{
 r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
-gen_centroids(bin1 = 3, r2 = r2, q = 0.1)
+gen_centroids(bin1 = 4, r2 = r2, q = 0.1)
 
 }
