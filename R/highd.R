@@ -106,8 +106,9 @@ show_langevitour <- function(df, df_b, df_b_with_center_data, benchmark_value,
       tr_from_to_df <- gen_edges(tri_object = tr1)
 
       langevitour(df_exe[1:(length(df_exe)-1)], lineFrom = tr_from_to_df$from,
-                               lineTo = tr_from_to_df$to, group = df_exe$type, pointSize = 3,
-                               levelColors = c("#6a3d9a", "#33a02c"))
+                  lineTo = tr_from_to_df$to, group = df_exe$type,
+                  pointSize = append(rep(2, NROW(df_b)), rep(1, NROW(df))),
+                  levelColors = c("#000000", "#33a02c"))
 
     } else {
 
@@ -122,8 +123,9 @@ show_langevitour <- function(df, df_b, df_b_with_center_data, benchmark_value,
       langevitour::langevitour(df_exe[1:(length(df_exe)-1)],
                                lineFrom = distance_df_small_edges$from,
                                lineTo = distance_df_small_edges$to,
-                               group = df_exe$type, pointSize = 3,
-                               levelColors = c("#6a3d9a", "#33a02c"))
+                               group = df_exe$type,
+                               pointSize = append(rep(2, NROW(df_b)), rep(1, NROW(df))),
+                               levelColors = c("#000000", "#33a02c"))
 
     }
 
@@ -152,8 +154,9 @@ show_langevitour <- function(df, df_b, df_b_with_center_data, benchmark_value,
     langevitour::langevitour(df_exe[1:(length(df_exe)-1)],
                              lineFrom = distance_df_small_edges$from,
                              lineTo = distance_df_small_edges$to,
-                             group = df_exe$type, pointSize = 3,
-                             levelColors = c("#6a3d9a", "#33a02c"))
+                             group = df_exe$type,
+                             pointSize = append(rep(2, NROW(df_b)), rep(1, NROW(df))),
+                             levelColors = c("#000000", "#33a02c"))
 
   }
 
