@@ -14,7 +14,7 @@ between the vertices."><meta property="og:image" content="https://jayanilakshika
     
     <a class="navbar-brand me-2" href="../index.html">quollr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.5</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -97,16 +97,20 @@ relationships and the corresponding x and y coordinates.</p>
 <span class="r-in"><span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">drop_empty</span> <span class="op">==</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">tr1_object</span> <span class="op">&lt;-</span> <span class="fu"><a href="tri_bin_centroids.html">tri_bin_centroids</a></span><span class="op">(</span>hex_df <span class="op">=</span> <span class="va">df_bin_centroids</span>, x <span class="op">=</span> <span class="st">"c_x"</span>, y <span class="op">=</span> <span class="st">"c_y"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">gen_edges</span><span class="op">(</span>tri_object <span class="op">=</span> <span class="va">tr1_object</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 7 × 6</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    from    to x_from y_from  x_to  y_to</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span>     1     2 -<span style="color: #BB0000;">0.1</span>   -<span style="color: #BB0000;">0.202</span> 0.328 0.539</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span>     3     4  0.755  1.28  0.328 2.02 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span>     4     5  0.328  2.02  1.18  2.02 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span>     1     4 -<span style="color: #BB0000;">0.1</span>   -<span style="color: #BB0000;">0.202</span> 0.328 2.02 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span>     2     3  0.328  0.539 0.755 1.28 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span>     3     5  0.755  1.28  1.18  2.02 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">7</span>     2     4  0.328  0.539 0.328 2.02 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 23 × 6</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     from    to  x_from y_from  x_to  y_to</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span>     1     4  0.091<span style="text-decoration: underline;">5</span>  0.130 0.283 0.461</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span>     2     4  0.474   0.130 0.283 0.461</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span>     3     5 -<span style="color: #BB0000;">0.1</span>     0.461 0.474 0.793</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span>     4     6  0.283   0.461 0.857 0.793</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span>     3     9 -<span style="color: #BB0000;">0.1</span>     0.461 0.666 1.79 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span>     5     7  0.474   0.793 0.666 1.12 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span>     7     8  0.666   1.12  0.857 1.46 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span>     5     9  0.474   0.793 0.666 1.79 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span>     9    10  0.666   1.79  1.05  1.79 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span>     8    10  0.857   1.46  1.05  1.79 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 13 more rows</span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

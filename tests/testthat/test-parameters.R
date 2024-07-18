@@ -17,7 +17,7 @@ test_that("find_lg_benchmark() works", {
                              select_vars = c("from", "to", "distance"))
 
   testthat::expect_equal(find_lg_benchmark(distance_edges = distance_df,
-                                              distance_col = "distance"), 1.168)
+                                              distance_col = "distance"), 0.663)
 
   distance_df_n <- distance_df |> dplyr::add_row(from = 5, to = 6,
                                                 distance = NA_integer_)

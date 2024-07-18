@@ -29,23 +29,23 @@ calc_bins_y <- function(bin1 = 4, r2, q = 0.1) {
   }
 
   ## To check whether q is between a specific range
-  if (!between(q, 0.05, 0.1)) {
+  if (!between(q, 0.05, 0.2)) {
     stop("The buffer should be within 0.05 and 0.1.")
   }
 
   ## To compute the number of bins along the x-axis
-  bin2 <- ceiling(2 + (2 / sqrt(3)) * r2 * (bin1 - 3))
+  bin2 <- ceiling(1 + ((2 * (r2 + q * (1 + r2)) * (bin1 - 1))/(sqrt(3) * (1 + 2 * q))))
 
   ## Validating and compute horizontal spacing
-  check_factor <-  ((bin2 - 2) * sqrt(3))/(2 * (bin1 - 3))
+  check_factor <- (1 /(1 + q)) * (((sqrt(3) * (1 + 2 *q) * (bin2 - 1))/(2 * (bin1 - 1))) - q)
 
   if (r2 > check_factor) {
 
-    a1 <- (1 + q)/(bin1 - 3)
+    a1 <- (1 + 2 * q)/(bin1 - 1)
 
   } else {
 
-    a1 <- (2 * r2 * (1 + q))/((bin2 - 2) * sqrt(3))
+    a1 <- (2 * (r2 + q * (1 + r2)))/(sqrt(3) * (bin2 - 1))
 
   }
 
