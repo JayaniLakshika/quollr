@@ -48,7 +48,7 @@ predict_emb <- function(test_data, df_bin_centroids, df_bin, type_NLDR) {
   pred_emb2 = df_bin_centroids$c_y[match_indices]
 
   pred_obj <- tibble(pred_emb1 = pred_emb1, pred_emb2 = pred_emb2,
-                   ID = test_data$ID, pred_hb_id = pred_hb_id)
+                     ID = test_data$ID, pred_hb_id = pred_hb_id)
 
   ## Rename column names
   names(pred_obj) <- c(paste0("pred_", type_NLDR, "_", 1:2), "ID", "pred_hb_id")

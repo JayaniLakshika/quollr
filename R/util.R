@@ -19,8 +19,8 @@
 calc_bins_y <- function(bin1 = 4, r2, q = 0.1) {
 
   ## To check whether bin2 greater than 2
-  if (bin1 < 4) {
-    stop("Number of bins along the x-axis at least should be 4.")
+  if (bin1 < 2) {
+    stop("Number of bins along the x-axis at least should be 2.")
   }
 
   ## To check original data range of embedding component 2 is initialized or not
@@ -30,7 +30,7 @@ calc_bins_y <- function(bin1 = 4, r2, q = 0.1) {
 
   ## To check whether q is between a specific range
   if (!between(q, 0.05, 0.2)) {
-    stop("The buffer should be within 0.05 and 0.1.")
+    stop("The buffer should be within 0.05 and 0.2.")
   }
 
   ## To compute the number of bins along the x-axis
