@@ -292,8 +292,9 @@ find_pts <- function(data_hb) {
 #' @param r2 The ratio of the ranges of the original embedding components.
 #' @param q The buffer amount as proportion of data range.
 #'
-#' @return A object that contains numeric vector that contains bins along
-#' the x and y axes respectively (bins), numeric vector that contains hexagonal
+#' @return A object that contains numeric vector that contains binwidths (a1),
+#' vertical distance (a2), bins along the x and y axes respectively (bins),
+#' numeric vector that contains hexagonal
 #' starting point coordinates all hexagonal bin centroids (centroids),
 #' hexagonal coordinates of the full grid(hex_poly),
 #' embedding components with their corresponding hexagon IDs (data_hb_id),
@@ -318,6 +319,9 @@ hex_binning <- function(data, bin1 = 4, r2, q = 0.1) {
   ## To obtain the width of the hexagon
   a1 <- bin_obj$a1
 
+  # To compute vertical spacing
+  a2 <- sqrt(3) * a1/2
+
   ## To initialise starting point coordinates
   s1 <- -q
   s2 <- -q * r2
@@ -338,7 +342,9 @@ hex_binning <- function(data, bin1 = 4, r2, q = 0.1) {
   pts_df <- find_pts(data_hb = nldr_hex_id)
 
   ## To generate the object of hexagon info
-  hex_bin_obj <- list(bins = c(bin1, bin2),
+  hex_bin_obj <- list(a1 = a1,
+                      a2 = a2,
+                      bins = c(bin1, bin2),
                       start_point = c(s1, s2),
                       centroids = all_centroids_df,
                       hex_poly = all_hex_coord,
@@ -388,7 +394,7 @@ extract_hexbin_centroids <- function(centroids_df, counts_df) {
   ## Map the standardize counts
   centroids_df <- centroids_df |>
     mutate(drop_empty = if_else(!(is.na(std_counts)), FALSE, TRUE)) |>
-    select(-n)
+    rename(bin_counts = n)
 
   return(centroids_df)
 }
@@ -439,8 +445,8 @@ extract_hexbin_mean <- function(data_hb, counts_df, centroids_df) {
 
   centroids_df <- full_join(centroids_df, hex_mean_df, by = c("hexID" = "hexID")) |>
     mutate(drop_empty = if_else(!(is.na(std_counts)), FALSE, TRUE)) |>
-    select(-n) |>
-    select(hexID, c_x, c_y, std_counts, drop_empty)
+    rename(bin_counts = n) |>
+    select(hexID, c_x, c_y, bin_counts, std_counts, drop_empty)
 
   return(centroids_df)
 }

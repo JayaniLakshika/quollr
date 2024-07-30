@@ -16,8 +16,9 @@ hex_binning(data, bin1 = 4, r2, q = 0.1)
 \item{q}{The buffer amount as proportion of data range.}
 }
 \value{
-A object that contains numeric vector that contains bins along
-the x and y axes respectively (bins), numeric vector that contains hexagonal
+A object that contains numeric vector that contains binwidths (a1),
+vertical distance (a2), bins along the x and y axes respectively (bins),
+numeric vector that contains hexagonal
 starting point coordinates all hexagonal bin centroids (centroids),
 hexagonal coordinates of the full grid(hex_poly),
 embedding components with their corresponding hexagon IDs (data_hb_id),

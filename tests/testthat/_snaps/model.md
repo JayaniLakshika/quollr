@@ -22,20 +22,20 @@
       11    31  0.901  1.55    1.38     0.000970  0.00252    0.00784 -0.00202  
       
       $df_bin_centroids
-      # A tibble: 11 x 5
-         hexID     c_x   c_y std_counts drop_empty
-         <int>   <dbl> <dbl>      <dbl> <lgl>     
-       1     5  0.0915 0.130      1     FALSE     
-       2     6  0.474  0.130      0.214 FALSE     
-       3     9 -0.1    0.461      0.214 FALSE     
-       4    10  0.283  0.461      0.429 FALSE     
-       5    14  0.474  0.793      0.643 FALSE     
-       6    15  0.857  0.793      0.143 FALSE     
-       7    19  0.666  1.12       0.786 FALSE     
-       8    23  0.857  1.46       0.286 FALSE     
-       9    27  0.666  1.79       0.643 FALSE     
-      10    28  1.05   1.79       0.643 FALSE     
-      11    31  0.857  2.12       0.357 FALSE     
+      # A tibble: 11 x 6
+         hexID     c_x   c_y bin_counts std_counts drop_empty
+         <int>   <dbl> <dbl>      <int>      <dbl> <lgl>     
+       1     5  0.0915 0.130         14      1     FALSE     
+       2     6  0.474  0.130          3      0.214 FALSE     
+       3     9 -0.1    0.461          3      0.214 FALSE     
+       4    10  0.283  0.461          6      0.429 FALSE     
+       5    14  0.474  0.793          9      0.643 FALSE     
+       6    15  0.857  0.793          2      0.143 FALSE     
+       7    19  0.666  1.12          11      0.786 FALSE     
+       8    23  0.857  1.46           4      0.286 FALSE     
+       9    27  0.666  1.79           9      0.643 FALSE     
+      10    28  1.05   1.79           9      0.643 FALSE     
+      11    31  0.857  2.12           5      0.357 FALSE     
       
 
 ---
@@ -62,20 +62,20 @@
       11    31  0.901  1.55    1.38     0.000970  0.00252    0.00784 -0.00202  
       
       $df_bin_centroids
-      # A tibble: 11 x 5
-         hexID     c_x   c_y std_counts drop_empty
-         <int>   <dbl> <dbl>      <dbl> <lgl>     
-       1     5  0.0915 0.130      1     FALSE     
-       2     6  0.474  0.130      0.214 FALSE     
-       3     9 -0.1    0.461      0.214 FALSE     
-       4    10  0.283  0.461      0.429 FALSE     
-       5    14  0.474  0.793      0.643 FALSE     
-       6    15  0.857  0.793      0.143 FALSE     
-       7    19  0.666  1.12       0.786 FALSE     
-       8    23  0.857  1.46       0.286 FALSE     
-       9    27  0.666  1.79       0.643 FALSE     
-      10    28  1.05   1.79       0.643 FALSE     
-      11    31  0.857  2.12       0.357 FALSE     
+      # A tibble: 11 x 6
+         hexID     c_x   c_y bin_counts std_counts drop_empty
+         <int>   <dbl> <dbl>      <int>      <dbl> <lgl>     
+       1     5  0.0915 0.130         14      1     FALSE     
+       2     6  0.474  0.130          3      0.214 FALSE     
+       3     9 -0.1    0.461          3      0.214 FALSE     
+       4    10  0.283  0.461          6      0.429 FALSE     
+       5    14  0.474  0.793          9      0.643 FALSE     
+       6    15  0.857  0.793          2      0.143 FALSE     
+       7    19  0.666  1.12          11      0.786 FALSE     
+       8    23  0.857  1.46           4      0.286 FALSE     
+       9    27  0.666  1.79           9      0.643 FALSE     
+      10    28  1.05   1.79           9      0.643 FALSE     
+      11    31  0.857  2.12           5      0.357 FALSE     
       
 
 ---
@@ -102,20 +102,20 @@
       11    31  0.901  1.55    1.38     0.000970  0.00252    0.00784 -0.00202  
       
       $df_bin_centroids
-      # A tibble: 11 x 5
-         hexID    c_x   c_y std_counts drop_empty
-         <int>  <dbl> <dbl>      <dbl> <lgl>     
-       1     5 0.133  0.138      1     FALSE     
-       2     6 0.291  0.178      0.214 FALSE     
-       3     9 0.0278 0.348      0.214 FALSE     
-       4    10 0.330  0.419      0.429 FALSE     
-       5    14 0.597  0.744      0.643 FALSE     
-       6    15 0.700  0.919      0.143 FALSE     
-       7    19 0.781  1.08       0.786 FALSE     
-       8    23 0.823  1.53       0.286 FALSE     
-       9    27 0.736  1.82       0.643 FALSE     
-      10    28 0.952  1.80       0.643 FALSE     
-      11    31 0.840  2.00       0.357 FALSE     
+      # A tibble: 11 x 6
+         hexID    c_x   c_y bin_counts std_counts drop_empty
+         <int>  <dbl> <dbl>      <int>      <dbl> <lgl>     
+       1     5 0.133  0.138         14      1     FALSE     
+       2     6 0.291  0.178          3      0.214 FALSE     
+       3     9 0.0278 0.348          3      0.214 FALSE     
+       4    10 0.330  0.419          6      0.429 FALSE     
+       5    14 0.597  0.744          9      0.643 FALSE     
+       6    15 0.700  0.919          2      0.143 FALSE     
+       7    19 0.781  1.08          11      0.786 FALSE     
+       8    23 0.823  1.53           4      0.286 FALSE     
+       9    27 0.736  1.82           9      0.643 FALSE     
+      10    28 0.952  1.80           9      0.643 FALSE     
+      11    31 0.840  2.00           5      0.357 FALSE     
       
 
 ---
@@ -142,19 +142,19 @@
       11    31  0.901  1.55    1.38     0.000970  0.00252    0.00784 -0.00202  
       
       $df_bin_centroids
-      # A tibble: 11 x 5
-         hexID    c_x   c_y std_counts drop_empty
-         <int>  <dbl> <dbl>      <dbl> <lgl>     
-       1     5 0.133  0.138      1     FALSE     
-       2     6 0.291  0.178      0.214 FALSE     
-       3     9 0.0278 0.348      0.214 FALSE     
-       4    10 0.330  0.419      0.429 FALSE     
-       5    14 0.597  0.744      0.643 FALSE     
-       6    15 0.700  0.919      0.143 FALSE     
-       7    19 0.781  1.08       0.786 FALSE     
-       8    23 0.823  1.53       0.286 FALSE     
-       9    27 0.736  1.82       0.643 FALSE     
-      10    28 0.952  1.80       0.643 FALSE     
-      11    31 0.840  2.00       0.357 FALSE     
+      # A tibble: 11 x 6
+         hexID    c_x   c_y bin_counts std_counts drop_empty
+         <int>  <dbl> <dbl>      <int>      <dbl> <lgl>     
+       1     5 0.133  0.138         14      1     FALSE     
+       2     6 0.291  0.178          3      0.214 FALSE     
+       3     9 0.0278 0.348          3      0.214 FALSE     
+       4    10 0.330  0.419          6      0.429 FALSE     
+       5    14 0.597  0.744          9      0.643 FALSE     
+       6    15 0.700  0.919          2      0.143 FALSE     
+       7    19 0.781  1.08          11      0.786 FALSE     
+       8    23 0.823  1.53           4      0.286 FALSE     
+       9    27 0.736  1.82           9      0.643 FALSE     
+      10    28 0.952  1.80           9      0.643 FALSE     
+      11    31 0.840  2.00           5      0.357 FALSE     
       
 
