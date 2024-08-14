@@ -36,25 +36,25 @@
 </defs>
 <g clip-path='url(#cpMjI0LjEwfDUyNS42NnwyMi43OHw1NDUuMTE=)'>
 <rect x='224.10' y='22.78' width='301.57' height='522.33' style='stroke-width: 1.07; stroke: none; fill: #FFFFFF;' />
-<line x1='283.50' y1='521.37' x2='329.19' y2='442.23' style='stroke-width: 1.07; stroke-linecap: butt;' />
-<line x1='374.88' y1='521.37' x2='329.19' y2='442.23' style='stroke-width: 1.07; stroke-linecap: butt;' />
-<line x1='237.80' y1='442.23' x2='374.88' y2='363.09' style='stroke-width: 1.07; stroke-linecap: butt;' />
-<line x1='329.19' y1='442.23' x2='466.26' y2='363.09' style='stroke-width: 1.07; stroke-linecap: butt;' />
-<line x1='374.88' y1='363.09' x2='420.57' y2='283.95' style='stroke-width: 1.07; stroke-linecap: butt;' />
-<line x1='420.57' y1='283.95' x2='466.26' y2='204.81' style='stroke-width: 1.07; stroke-linecap: butt;' />
-<line x1='420.57' y1='125.67' x2='511.96' y2='125.67' style='stroke-width: 1.07; stroke-linecap: butt;' />
-<line x1='466.26' y1='204.81' x2='511.96' y2='125.67' style='stroke-width: 1.07; stroke-linecap: butt;' />
-<line x1='420.57' y1='125.67' x2='466.26' y2='46.53' style='stroke-width: 1.07; stroke-linecap: butt;' />
-<line x1='283.50' y1='521.37' x2='237.80' y2='442.23' style='stroke-width: 1.07; stroke-linecap: butt;' />
-<line x1='283.50' y1='521.37' x2='374.88' y2='521.37' style='stroke-width: 1.07; stroke-linecap: butt;' />
-<line x1='329.19' y1='442.23' x2='374.88' y2='363.09' style='stroke-width: 1.07; stroke-linecap: butt;' />
-<line x1='466.26' y1='363.09' x2='420.57' y2='283.95' style='stroke-width: 1.07; stroke-linecap: butt;' />
-<line x1='420.57' y1='283.95' x2='420.57' y2='125.67' style='stroke-width: 1.07; stroke-linecap: butt;' />
-<line x1='466.26' y1='363.09' x2='466.26' y2='204.81' style='stroke-width: 1.07; stroke-linecap: butt;' />
-<line x1='511.96' y1='125.67' x2='466.26' y2='46.53' style='stroke-width: 1.07; stroke-linecap: butt;' />
-<line x1='237.80' y1='442.23' x2='329.19' y2='442.23' style='stroke-width: 1.07; stroke-linecap: butt;' />
-<line x1='374.88' y1='363.09' x2='466.26' y2='363.09' style='stroke-width: 1.07; stroke-linecap: butt;' />
-<line x1='466.26' y1='204.81' x2='420.57' y2='125.67' style='stroke-width: 1.07; stroke-linecap: butt;' />
+<line x1='283.50' y1='521.37' x2='329.19' y2='442.23' style='stroke-width: 1.07; stroke: #33A02C; stroke-linecap: butt;' />
+<line x1='374.88' y1='521.37' x2='329.19' y2='442.23' style='stroke-width: 1.07; stroke: #33A02C; stroke-linecap: butt;' />
+<line x1='237.80' y1='442.23' x2='374.88' y2='363.09' style='stroke-width: 1.07; stroke: #33A02C; stroke-linecap: butt;' />
+<line x1='329.19' y1='442.23' x2='466.26' y2='363.09' style='stroke-width: 1.07; stroke: #33A02C; stroke-linecap: butt;' />
+<line x1='374.88' y1='363.09' x2='420.57' y2='283.95' style='stroke-width: 1.07; stroke: #33A02C; stroke-linecap: butt;' />
+<line x1='420.57' y1='283.95' x2='466.26' y2='204.81' style='stroke-width: 1.07; stroke: #33A02C; stroke-linecap: butt;' />
+<line x1='420.57' y1='125.67' x2='511.96' y2='125.67' style='stroke-width: 1.07; stroke: #33A02C; stroke-linecap: butt;' />
+<line x1='466.26' y1='204.81' x2='511.96' y2='125.67' style='stroke-width: 1.07; stroke: #33A02C; stroke-linecap: butt;' />
+<line x1='420.57' y1='125.67' x2='466.26' y2='46.53' style='stroke-width: 1.07; stroke: #33A02C; stroke-linecap: butt;' />
+<line x1='283.50' y1='521.37' x2='237.80' y2='442.23' style='stroke-width: 1.07; stroke: #33A02C; stroke-linecap: butt;' />
+<line x1='283.50' y1='521.37' x2='374.88' y2='521.37' style='stroke-width: 1.07; stroke: #33A02C; stroke-linecap: butt;' />
+<line x1='329.19' y1='442.23' x2='374.88' y2='363.09' style='stroke-width: 1.07; stroke: #33A02C; stroke-linecap: butt;' />
+<line x1='466.26' y1='363.09' x2='420.57' y2='283.95' style='stroke-width: 1.07; stroke: #33A02C; stroke-linecap: butt;' />
+<line x1='420.57' y1='283.95' x2='420.57' y2='125.67' style='stroke-width: 1.07; stroke: #33A02C; stroke-linecap: butt;' />
+<line x1='466.26' y1='363.09' x2='466.26' y2='204.81' style='stroke-width: 1.07; stroke: #33A02C; stroke-linecap: butt;' />
+<line x1='511.96' y1='125.67' x2='466.26' y2='46.53' style='stroke-width: 1.07; stroke: #33A02C; stroke-linecap: butt;' />
+<line x1='237.80' y1='442.23' x2='329.19' y2='442.23' style='stroke-width: 1.07; stroke: #33A02C; stroke-linecap: butt;' />
+<line x1='374.88' y1='363.09' x2='466.26' y2='363.09' style='stroke-width: 1.07; stroke: #33A02C; stroke-linecap: butt;' />
+<line x1='466.26' y1='204.81' x2='420.57' y2='125.67' style='stroke-width: 1.07; stroke: #33A02C; stroke-linecap: butt;' />
 <circle cx='283.50' cy='521.37' r='1.42' style='stroke-width: 0.71; stroke: #33A02C; fill: #33A02C;' />
 <circle cx='374.88' cy='521.37' r='1.42' style='stroke-width: 0.71; stroke: #33A02C; fill: #33A02C;' />
 <circle cx='237.80' cy='442.23' r='1.42' style='stroke-width: 0.71; stroke: #33A02C; fill: #33A02C;' />

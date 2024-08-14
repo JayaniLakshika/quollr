@@ -713,7 +713,8 @@ vis_rmlg_mesh <- function(distance_edges, benchmark_value, tr_coord_df,
   ## Create the triangular mesh plot after removing the long edges
   tri_mesh_plot <- ggplot(tr_df, aes(x = x, y = y)) +
     geom_segment(aes(x = x_from, y = y_from, xend = x_to, yend = y_to),
-                          data = tr_coord_df) +
+                          data = tr_coord_df,
+                 colour = "#33a02c") +
     geom_point(size = 1, colour = "#33a02c") +
     coord_equal() +
     labs(color=NULL)
