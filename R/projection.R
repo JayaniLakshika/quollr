@@ -83,8 +83,8 @@ gen_proj_langevitour <- function(points_df, projection, edge_df) {
 
   proj_plot <- ggplot(data = projected_df, aes(x = proj1, y = proj2, color = type)) +
     geom_point(size = 2, alpha = 0.6) +
-    geom_segment(data = model_df, aes(x = proj1_from, y = proj2_from, xend = proj1_to, yend = proj2_to), color = "#000000", alpha = 0.5) +
-    scale_color_manual(values = c("#6a3d9a", "#33a02c"))
+    geom_segment(data = model_df, aes(x = proj1_from, y = proj2_from, xend = proj1_to, yend = proj2_to), color = "#33a02c", alpha = 0.5) +
+    scale_color_manual(values = c("#000000", "#33a02c"))
 
   return(proj_plot)
 
