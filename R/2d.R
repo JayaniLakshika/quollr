@@ -655,7 +655,7 @@ vis_lg_mesh <- function(distance_edges, benchmark_value,
       data = tr_coord_df
     ) +
     geom_point(size = 1, colour = "#33a02c") +
-    scale_colour_manual(values = c("#de2d26", "#636363")) +
+    scale_colour_manual(values = c("#de2d26", "#33a02c")) +
     coord_equal()
 
   return(tri_mesh_plot)
