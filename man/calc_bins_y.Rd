@@ -15,7 +15,7 @@ calc_bins_y(bin1 = 4, r2, q = 0.1)
 }
 \value{
 A list of numeric values that represents the effective number of
-bins along the y axis and width of the hexagon.
+bins along the y axis, height and, width of the hexagon.
 }
 \description{
 This function calculates the effective number of bins along the x and y axes

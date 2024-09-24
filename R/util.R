@@ -8,7 +8,7 @@
 #' @param q The buffer amount as proportion of data range.
 #'
 #' @return A list of numeric values that represents the effective number of
-#' bins along the y axis and width of the hexagon.
+#' bins along the y axis, height and, width of the hexagon.
 #' @importFrom dplyr between
 #'
 #' @examples
@@ -49,5 +49,8 @@ calc_bins_y <- function(bin1 = 4, r2, q = 0.1) {
 
   }
 
-  return(list(bin2 = bin2, a1 = a1))
+  # To compute height of the hexagon
+  a2 <- sqrt(3) * a1/2
+
+  return(list(bin2 = bin2, a1 = a1, a2 = a2))
 }
