@@ -66,6 +66,8 @@ reference:
   - vis_lg_mesh
   - vis_rmlg_mesh
   - show_langevitour
+  - gen_proj_langevitour
+  - show_link_plots
 - title: "Additional"
   desc: These are additional functionalities.
   contents:

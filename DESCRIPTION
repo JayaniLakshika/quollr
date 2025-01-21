@@ -36,7 +36,9 @@ Imports:
     rsample,
     stats,
     tibble,
-    tidyselect
+    tidyselect,
+    crosstalk,
+    plotly
 Suggests: 
     knitr,
     rmarkdown,
