@@ -92,7 +92,7 @@ show_link_plots <- function(df_all, df_b, df_b_with_center_data, benchmark_value
       axis.text.y = element_blank(), axis.ticks.y = element_blank()
     )
 
-  nldr_plt <- ggplotly(nldr_plt, width = as.character(round(600/r2, 0)),
+  nldr_plt <- ggplotly(nldr_plt, width = "600",
                               height = "600", tooltip = "none") |>
     style(unselected=list(marker=list(opacity=1))) |>
     highlight(on="plotly_selected", off="plotly_deselect") |>
