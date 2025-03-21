@@ -13,6 +13,7 @@ reference:
   - s_curve_noise_umap
   - s_curve_noise_umap_scaled
   - s_curve_noise_umap_predict
+  - s_curve_obj
 - title: "Data preprocessing"
   desc: These are for data preprocessing.
   contents:

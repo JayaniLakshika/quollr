@@ -47,7 +47,10 @@ to customize the modeling process, including the choice of bin centroids or bin 
 removal of low-density hexagons, and averaging of high-dimensional data.
 }
 \examples{
-r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
+scurve_umap_scaled_obj <- s_curve_obj$nldr_scaled_obj
+lim1 <- scurve_umap_scaled_obj$lim1
+lim2 <- scurve_umap_scaled_obj$lim2
+r2 <- diff(lim2)/diff(lim1)
 fit_highd_model(training_data = s_curve_noise_training,
 emb_df = s_curve_noise_umap_scaled, bin1 = 4, r2 = r2,
 col_start_highd = "x")

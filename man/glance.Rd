@@ -34,11 +34,8 @@ A tibble contains Error, and MSE values.
 This function generates an evaluation data frame based on the provided data and predictions.
 }
 \examples{
-r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
-model <- fit_highd_model(training_data = s_curve_noise_training,
-emb_df = s_curve_noise_umap_scaled, bin1 = 4, r2 = r2, col_start_highd = "x")
-df_bin_centroids <- model$df_bin_centroids
-df_bin <- model$df_bin
+df_bin_centroids <- s_curve_obj$s_curve_umap_model_distance_df$df_bin_centroids
+df_bin <- s_curve_obj$s_curve_umap_model_distance_df$df_bin
 glance(df_bin_centroids = df_bin_centroids, df_bin = df_bin,
 training_data = s_curve_noise_training, newdata = NULL, type_NLDR = "UMAP",
 col_start = "x")

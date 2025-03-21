@@ -11,7 +11,10 @@
 #' @importFrom tibble tibble
 #'
 #' @examples
-#' r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
+#' scurve_umap_scaled_obj <- s_curve_obj$nldr_scaled_obj
+#' lim1 <- scurve_umap_scaled_obj$lim1
+#' lim2 <- scurve_umap_scaled_obj$lim2
+#' r2 <- diff(lim2)/diff(lim1)
 #' gen_centroids(bin1 = 4, r2 = r2, q = 0.1)
 #'
 #' @export
@@ -80,10 +83,8 @@ gen_centroids <- function(bin1 = 2, r2, q = 0.1){
 #' @importFrom tibble tibble
 #'
 #' @examples
-#' r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
-#' num_bins_list <- calc_bins_y(bin1 = 4, r2 = r2, q = 0.1)
-#' width <- num_bins_list$a1
-#' all_centroids_df <- gen_centroids(bin1 = 4, r2 = r2, q = 0.1)
+#' width <- s_curve_obj$s_curve_umap_hb_obj$a1
+#' all_centroids_df <- s_curve_obj$s_curve_umap_hb_obj$centroids
 #' gen_hex_coord(centroids_df = all_centroids_df, a1 = width)
 #'
 #' @export
@@ -169,8 +170,7 @@ get_min_indices <- function(x) {
 #' @importFrom dplyr mutate select
 #'
 #' @examples
-#' r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
-#' all_centroids_df <- gen_centroids(bin1 = 4, r2 = r2, q = 0.1)
+#' all_centroids_df <- s_curve_obj$s_curve_umap_hb_obj$centroids
 #' assign_data(data = s_curve_noise_umap_scaled, centroid_df = all_centroids_df)
 #'
 #' @export
@@ -215,10 +215,7 @@ assign_data <- function(data, centroid_df) {
 #' @importFrom dplyr count mutate
 #'
 #' @examples
-#' r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
-#' all_centroids_df <- gen_centroids(bin1 = 4, r2 = r2, q = 0.1)
-#' umap_with_hb_id <- assign_data(data = s_curve_noise_umap_scaled,
-#' centroid_df = all_centroids_df)
+#' umap_with_hb_id <- s_curve_obj$s_curve_umap_hb_obj$data_hb_id
 #' compute_std_counts(data_hb = umap_with_hb_id)
 #'
 #' @export
@@ -244,10 +241,7 @@ compute_std_counts <- function(data_hb) {
 #' @importFrom tibble tibble
 #'
 #' @examples
-#' r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
-#' all_centroids_df <- gen_centroids(bin1 = 4, r2 = r2, q = 0.1)
-#' umap_with_hb_id <- assign_data(data = s_curve_noise_umap_scaled,
-#' centroid_df = all_centroids_df)
+#' umap_with_hb_id <- s_curve_obj$s_curve_umap_hb_obj$data_hb_id
 #' find_pts(data_hb = umap_with_hb_id)
 #'
 #' @export
@@ -304,7 +298,10 @@ find_pts <- function(data_hb) {
 #'
 #'
 #' @examples
-#' r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
+#' scurve_umap_scaled_obj <- s_curve_obj$nldr_scaled_obj
+#' lim1 <- scurve_umap_scaled_obj$lim1
+#' lim2 <- scurve_umap_scaled_obj$lim2
+#' r2 <- diff(lim2)/diff(lim1)
 #' num_bins_x <- 4
 #' hex_binning(data = s_curve_noise_umap_scaled, bin1 = num_bins_x,
 #' r2 = r2, q = 0.1)
@@ -372,12 +369,8 @@ hex_binning <- function(data, bin1 = 4, r2, q = 0.1) {
 #' @importFrom dplyr arrange mutate if_else full_join
 #'
 #' @examples
-#' r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
-#' num_bins_x <- 4
-#' hb_obj <- hex_binning(data = s_curve_noise_umap_scaled, bin1 = num_bins_x,
-#' r2 = r2, q = 0.1)
-#' all_centroids_df <- hb_obj$centroids
-#' counts_df <- hb_obj$std_cts
+#' all_centroids_df <- s_curve_obj$s_curve_umap_hb_obj$centroids
+#' counts_df <- s_curve_obj$s_curve_umap_hb_obj$std_cts
 #' extract_hexbin_centroids(centroids_df = all_centroids_df,
 #' counts_df = counts_df)
 #'
@@ -412,13 +405,9 @@ extract_hexbin_centroids <- function(centroids_df, counts_df) {
 #' @importFrom tidyselect everything
 #'
 #' @examples
-#' r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
-#' num_bins_x <- 4
-#' hb_obj <- hex_binning(data = s_curve_noise_umap_scaled, bin1 = num_bins_x,
-#' r2 = r2, q = 0.1)
-#' all_centroids_df <- hb_obj$centroids
-#' umap_with_hb_id <- hb_obj$data_hb_id
-#' counts_df <- hb_obj$std_cts
+#' all_centroids_df <- s_curve_obj$s_curve_umap_hb_obj$centroids
+#' counts_df <- s_curve_obj$s_curve_umap_hb_obj$std_cts
+#' umap_with_hb_id <- s_curve_obj$s_curve_umap_hb_obj$data_hb_id
 #' extract_hexbin_mean(data_hb = umap_with_hb_id, counts_df = counts_df,
 #' centroids_df = all_centroids_df)
 #'
@@ -465,14 +454,7 @@ extract_hexbin_mean <- function(data_hb, counts_df, centroids_df) {
 #' @importFrom rlang sym as_string
 #'
 #' @examples
-#' r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
-#' num_bins_x <- 4
-#' hb_obj <- hex_binning(data = s_curve_noise_umap_scaled, bin1 = num_bins_x,
-#' r2 = r2)
-#' all_centroids_df <- hb_obj$centroids
-#' counts_df <- hb_obj$std_cts
-#' df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df,
-#' counts_df = counts_df)
+#' df_bin_centroids <- s_curve_obj$s_curve_umap_model_obj$df_bin_centroids
 #' tri_bin_centroids(hex_df = df_bin_centroids, x = "c_x", y = "c_y")
 #'
 #' @export
@@ -498,16 +480,7 @@ tri_bin_centroids <- function(hex_df, x, y){
 #' @importFrom interp triangles
 #'
 #' @examples
-#' r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
-#' num_bins_x <- 4
-#' hb_obj <- hex_binning(data = s_curve_noise_umap_scaled, bin1 = num_bins_x,
-#' r2 = r2)
-#' all_centroids_df <- hb_obj$centroids
-#' counts_df <- hb_obj$std_cts
-#' df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df,
-#' counts_df = counts_df) |>
-#' dplyr::filter(drop_empty == FALSE)
-#' tr1_object <- tri_bin_centroids(hex_df = df_bin_centroids, x = "c_x", y = "c_y")
+#' tr1_object <- s_curve_obj$s_curve_umap_model_tr1_object
 #' gen_edges(tri_object = tr1_object)
 #'
 #' @export
@@ -562,17 +535,7 @@ gen_edges <- function(tri_object) {
 #' @importFrom tidyselect all_of
 #'
 #' @examples
-#' r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
-#' num_bins_x <- 4
-#' hb_obj <- hex_binning(data = s_curve_noise_umap_scaled, bin1 = num_bins_x,
-#' r2 = r2)
-#' all_centroids_df <- hb_obj$centroids
-#' counts_df <- hb_obj$std_cts
-#' df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df,
-#' counts_df = counts_df) |>
-#' dplyr::filter(drop_empty == FALSE)
-#' tr1_object <- tri_bin_centroids(hex_df = df_bin_centroids, x = "c_x", y = "c_y")
-#' tr_from_to_df <- gen_edges(tri_object = tr1_object)
+#' tr_from_to_df <- s_curve_obj$s_curve_umap_model_tr_from_to_df
 #' cal_2d_dist(tr_coord_df = tr_from_to_df, start_x = "x_from", start_y = "y_from",
 #' end_x = "x_to", end_y = "y_to", select_vars = c("from", "to", "distance"))
 #'
@@ -614,20 +577,8 @@ cal_2d_dist <- function(tr_coord_df, start_x, start_y, end_x, end_y,
 #' @importFrom tibble tibble
 #'
 #' @examples
-#' r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
-#' num_bins_x <- 4
-#' hb_obj <- hex_binning(data = s_curve_noise_umap_scaled, bin1 = num_bins_x,
-#' r2 = r2)
-#' all_centroids_df <- hb_obj$centroids
-#' counts_df <- hb_obj$std_cts
-#' df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df,
-#' counts_df = counts_df) |>
-#' dplyr::filter(drop_empty == FALSE)
-#' tr1_object <- tri_bin_centroids(hex_df = df_bin_centroids, x = "c_x", y = "c_y")
-#' tr_from_to_df <- gen_edges(tri_object = tr1_object)
-#' distance_df <- cal_2d_dist(tr_coord_df = tr_from_to_df, start_x = "x_from",
-#' start_y = "y_from", end_x = "x_to", end_y = "y_to",
-#' select_vars = c("from", "to", "distance"))
+#' tr_from_to_df <- s_curve_obj$s_curve_umap_model_tr_from_to_df
+#' distance_df <- s_curve_obj$distance_df
 #' vis_lg_mesh(distance_edges = distance_df, benchmark_value = 0.75,
 #' tr_coord_df = tr_from_to_df, distance_col = "distance")
 #'
@@ -677,20 +628,8 @@ vis_lg_mesh <- function(distance_edges, benchmark_value,
 #' @importFrom tibble tibble
 #'
 #' @examples
-#' r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
-#' num_bins_x <- 4
-#' hb_obj <- hex_binning(data = s_curve_noise_umap_scaled, bin1 = num_bins_x,
-#' r2 = r2)
-#' all_centroids_df <- hb_obj$centroids
-#' counts_df <- hb_obj$std_cts
-#' df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df,
-#' counts_df = counts_df) |>
-#' dplyr::filter(drop_empty == FALSE)
-#' tr1_object <- tri_bin_centroids(hex_df = df_bin_centroids, x = "c_x", y = "c_y")
-#' tr_from_to_df <- gen_edges(tri_object = tr1_object)
-#' distance_df <- cal_2d_dist(tr_coord_df = tr_from_to_df, start_x = "x_from",
-#' start_y = "y_from", end_x = "x_to", end_y = "y_to",
-#' select_vars = c("from", "to", "distance"))
+#' tr_from_to_df <- s_curve_obj$s_curve_umap_model_tr_from_to_df
+#' distance_df <- s_curve_obj$distance_df
 #' vis_rmlg_mesh(distance_edges = distance_df, benchmark_value = 0.75,
 #' tr_coord_df = tr_from_to_df, distance_col = "distance")
 #'
@@ -736,7 +675,10 @@ vis_rmlg_mesh <- function(distance_edges, benchmark_value, tr_coord_df,
 #' needed to achieve a specific number of non-empty bins.
 #'
 #' @examples
-#' r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
+#' scurve_umap_scaled_obj <- s_curve_obj$nldr_scaled_obj
+#' lim1 <- scurve_umap_scaled_obj$lim1
+#' lim2 <- scurve_umap_scaled_obj$lim2
+#' r2 <- diff(lim2)/diff(lim1)
 #' find_non_empty_bins(data = s_curve_noise_umap_scaled, non_empty_bins = 5,
 #' r2 = r2)
 #'

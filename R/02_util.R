@@ -12,7 +12,10 @@
 #' @importFrom dplyr between
 #'
 #' @examples
-#' r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
+#' scurve_umap_scaled_obj <- s_curve_obj$nldr_scaled_obj
+#' lim1 <- scurve_umap_scaled_obj$lim1
+#' lim2 <- scurve_umap_scaled_obj$lim2
+#' r2 <- diff(lim2)/diff(lim1)
 #' calc_bins_y(bin1 = 4, r2 = r2, q = 0.1)
 #'
 #' @export

@@ -167,3 +167,28 @@
 #'
 #' @source This dataset is generated for illustrative purposes.
 "s_curve_noise_umap_scaled"
+
+
+#' Object for S-curve dataset
+#'
+#' The `s_curve_obj` contains object of scaled umap embedding, x and y limits,
+#' range of y; object of hexagonal binning information,
+#' object of high-d model fitted to umap embedding for the training data,
+#' the triangular object representing the triangulated bin centroids,
+#' a tibble that contains the edge information, a tibble with
+#' edge distance information.
+#'
+#' @format ## `s_curve_obj`
+#' An object of 6 elements
+#' @examples
+#' # Load the s_curve_obj
+#' data(s_curve_obj)
+#'
+#' @keywords object
+#'
+#' @rdname s_curve_obj
+#' @docType data
+#' @usage data(s_curve_obj)
+#'
+#' @source This object is generated for illustrative purposes.
+"s_curve_obj"

@@ -9,7 +9,7 @@ provided in the input data frame and returns the triangular object."><meta prope
 
     <a class="navbar-brand me-2" href="../index.html">quollr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -38,7 +38,7 @@ provided in the input data frame and returns the triangular object."><meta prope
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Triangulate bin centroids</h1>
-      <small class="dont-index">Source: <a href="https://github.com/JayaniLakshika/quollr/blob/HEAD/R/2d.R" class="external-link"><code>R/2d.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/JayaniLakshika/quollr/blob/HEAD/R/03_2d.R" class="external-link"><code>R/03_2d.R</code></a></small>
       <div class="d-none name"><code>tri_bin_centroids.Rd</code></div>
     </div>
 
@@ -75,66 +75,32 @@ provided in the input data frame and returns the triangular object.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">r2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/diff.html" class="external-link">diff</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/range.html" class="external-link">range</a></span><span class="op">(</span><span class="va">s_curve_noise_umap</span><span class="op">$</span><span class="va">UMAP2</span><span class="op">)</span><span class="op">)</span><span class="op">/</span><span class="fu"><a href="https://rdrr.io/r/base/diff.html" class="external-link">diff</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/range.html" class="external-link">range</a></span><span class="op">(</span><span class="va">s_curve_noise_umap</span><span class="op">$</span><span class="va">UMAP1</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">num_bins_x</span> <span class="op">&lt;-</span> <span class="fl">4</span></span></span>
-<span class="r-in"><span><span class="va">hb_obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="hex_binning.html">hex_binning</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">s_curve_noise_umap_scaled</span>, bin1 <span class="op">=</span> <span class="va">num_bins_x</span>,</span></span>
-<span class="r-in"><span>r2 <span class="op">=</span> <span class="va">r2</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">all_centroids_df</span> <span class="op">&lt;-</span> <span class="va">hb_obj</span><span class="op">$</span><span class="va">centroids</span></span></span>
-<span class="r-in"><span><span class="va">counts_df</span> <span class="op">&lt;-</span> <span class="va">hb_obj</span><span class="op">$</span><span class="va">std_cts</span></span></span>
-<span class="r-in"><span><span class="va">df_bin_centroids</span> <span class="op">&lt;-</span> <span class="fu"><a href="extract_hexbin_centroids.html">extract_hexbin_centroids</a></span><span class="op">(</span>centroids_df <span class="op">=</span> <span class="va">all_centroids_df</span>,</span></span>
-<span class="r-in"><span>counts_df <span class="op">=</span> <span class="va">counts_df</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">df_bin_centroids</span> <span class="op">&lt;-</span> <span class="va">s_curve_obj</span><span class="op">$</span><span class="va">s_curve_umap_model_obj</span><span class="op">$</span><span class="va">df_bin_centroids</span></span></span>
 <span class="r-in"><span><span class="fu">tri_bin_centroids</span><span class="op">(</span>hex_df <span class="op">=</span> <span class="va">df_bin_centroids</span>, x <span class="op">=</span> <span class="st">"c_x"</span>, y <span class="op">=</span> <span class="st">"c_y"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Delaunay triangulation, node and triangle indices:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> triangle: nodes (a,b,c), neighbour triangles [i,j,k] </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1: (1,2,5), [2,4,0]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2: (6,5,2), [1,3,6]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3: (3,6,2), [2,0,9]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4: (9,1,5), [1,5,0]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5: (5,10,9), [10,4,6]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6: (5,6,10), [7,5,2]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7: (11,10,6), [6,8,12]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8: (6,7,11), [18,7,9]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9: (6,3,7), [15,8,3]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10: (13,9,10), [5,11,19]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11: (10,14,13), [21,10,12]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12: (10,11,14), [13,11,7]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13: (15,14,11), [12,16,22]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14: (8,7,4), [15,0,17]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15: (4,7,3), [9,0,14]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16: (11,12,15), [25,13,18]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17: (8,12,7), [18,14,26]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 18: (11,7,12), [17,16,8]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 19: (17,9,13), [10,20,0]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20: (18,17,13), [19,21,27]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 21: (18,13,14), [11,23,20]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 22: (14,15,19), [30,23,13]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 23: (14,19,18), [28,21,22]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 24: (20,15,16), [25,39,30]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 25: (15,12,16), [26,24,16]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 26: (16,12,8), [17,0,25]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 27: (21,17,18), [20,31,33]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 28: (22,18,19), [23,32,31]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 29: (23,19,20), [30,38,32]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 30: (20,19,15), [22,24,29]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 31: (22,21,18), [27,28,35]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 32: (23,22,19), [28,29,40]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 33: (25,17,21), [27,34,0]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 34: (26,25,21), [33,35,42]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 35: (26,21,22), [31,36,34]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 36: (27,26,22), [35,40,44]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 37: (28,23,24), [38,48,41]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 38: (24,23,20), [29,39,37]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 39: (24,20,16), [24,0,38]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 40: (27,22,23), [32,41,36]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 41: (28,27,23), [40,37,45]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 42: (29,25,26), [34,43,0]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 43: (30,29,26), [42,44,0]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 44: (30,26,27), [36,46,43]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 45: (27,28,31), [47,46,41]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 46: (27,31,30), [0,44,45]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 47: (32,31,28), [45,48,0]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 48: (32,28,24), [37,0,47]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> boundary nodes:  1 2 3 4 8 16 24 32 31 30 29 25 17 9 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1: (1,2,4), [2,7,0]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2: (5,4,2), [1,3,8]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3: (3,5,2), [2,0,4]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4: (6,5,3), [3,14,6]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5: (11,5,8), [6,13,9]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6: (8,5,6), [4,11,5]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7: (10,1,4), [1,8,15]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8: (5,10,4), [7,2,9]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9: (11,10,5), [8,5,17]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10: (8,9,12), [20,13,11]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11: (9,8,6), [6,12,10]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12: (6,7,9), [21,11,14]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13: (8,12,11), [18,5,10]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14: (6,3,7), [0,12,4]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15: (13,1,10), [7,16,0]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16: (14,13,10), [15,17,0]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17: (14,10,11), [9,19,16]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18: (11,12,15), [20,19,13]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19: (11,15,14), [0,17,18]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20: (15,9,12), [10,18,21]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21: (15,7,9), [12,20,0]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> boundary nodes:  1 2 3 7 15 7 15 </span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

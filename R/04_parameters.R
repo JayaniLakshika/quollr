@@ -13,20 +13,7 @@
 #' @importFrom rlang sym
 #'
 #' @examples
-#' r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
-#' num_bins_x <- 4
-#' hb_obj <- hex_binning(data = s_curve_noise_umap_scaled, bin1 = num_bins_x,
-#' r2 = r2)
-#' all_centroids_df <- hb_obj$centroids
-#' counts_df <- hb_obj$std_cts
-#' df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df,
-#' counts_df = counts_df) |>
-#' dplyr::filter(drop_empty == FALSE)
-#' tr1_object <- tri_bin_centroids(hex_df = df_bin_centroids, x = "c_x", y = "c_y")
-#' tr_from_to_df <- gen_edges(tri_object = tr1_object)
-#' distance_df <- cal_2d_dist(tr_coord_df = tr_from_to_df, start_x = "x_from",
-#' start_y = "y_from", end_x = "x_to", end_y = "y_to",
-#' select_vars = c("from", "to", "distance"))
+#' distance_df <- s_curve_obj$distance_df
 #' find_lg_benchmark(distance_edges = distance_df, distance_col = "distance")
 #'
 #' @export
@@ -100,15 +87,8 @@ find_lg_benchmark <- function(distance_edges, distance_col) {
 #' @importFrom tibble tibble
 #'
 #' @examples
-#' r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
 #' num_bins_x <- 4
-#' hb_obj <- hex_binning(data = s_curve_noise_umap_scaled, bin1 = num_bins_x,
-#' r2 = r2)
-#' all_centroids_df <- hb_obj$centroids
-#' counts_df <- hb_obj$std_cts
-#' df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df,
-#' counts_df = counts_df) |>
-#' dplyr::filter(drop_empty == FALSE)
+#' df_bin_centroids <- df_bin_centroids <- s_curve_obj$s_curve_umap_model_obj$df_bin_centroids
 #' compute_mean_density_hex(df_bin_centroids, bin1 = num_bins_x)
 #'
 #' @export
@@ -169,15 +149,8 @@ compute_mean_density_hex <- function(df_bin_centroids, bin1) {
 #' @importFrom stats quantile
 #'
 #' @examples
-#' r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
 #' num_bins_x <- 4
-#' hb_obj <- hex_binning(data = s_curve_noise_umap_scaled, bin1 = num_bins_x,
-#' r2 = r2)
-#' all_centroids_df <- hb_obj$centroids
-#' counts_df <- hb_obj$std_cts
-#' df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df,
-#' counts_df = counts_df) |>
-#' dplyr::filter(drop_empty == FALSE)
+#' df_bin_centroids <- df_bin_centroids <- s_curve_obj$s_curve_umap_model_obj$df_bin_centroids
 #' df_bin_centroids_low <- df_bin_centroids |>
 #' dplyr::filter(std_counts <= 0.43)
 #' find_low_dens_hex(df_bin_centroids_all = df_bin_centroids, bin1 = num_bins_x,
