@@ -241,7 +241,7 @@ show_error_link_plots <- function(df_all, df_b, df_b_with_center_data, benchmark
         error_plt,
         nldr_plt,
         langevitour_output),
-    datatableWidget),
+    datatableWidget, style = "padding-left: 50px;"),
     device = "sm"
   )
 
