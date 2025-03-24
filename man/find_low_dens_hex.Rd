@@ -22,7 +22,7 @@ of their neighboring hexagons.
 }
 \examples{
 num_bins_x <- 4
-df_bin_centroids <- df_bin_centroids <- s_curve_obj$s_curve_umap_model_obj$df_bin_centroids
+df_bin_centroids <- s_curve_obj$s_curve_umap_model_obj$df_bin_centroids
 df_bin_centroids_low <- df_bin_centroids |>
 dplyr::filter(std_counts <= 0.43)
 find_low_dens_hex(df_bin_centroids_all = df_bin_centroids, bin1 = num_bins_x,

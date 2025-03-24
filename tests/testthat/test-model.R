@@ -30,7 +30,7 @@ test_that("fit_highd_model() works", {
                                             bin1 = 4, r2 = r2,
                                             is_bin_centroid = TRUE,
                                             is_rm_lwd_hex = TRUE,
-                                            benchmark_to_rm_lwd_hex = 0.1,
+                                            benchmark_to_rm_lwd_hex = 1.2,
                                             col_start_highd = "x"))
 
   testthat::expect_snapshot(fit_highd_model(training_data = s_curve_noise_training,
@@ -84,7 +84,7 @@ test_that("fit_highd_model() works", {
                                             bin1 = 4, r2 = r2,
                                             is_bin_centroid = FALSE,
                                             is_rm_lwd_hex = TRUE,
-                                            benchmark_to_rm_lwd_hex = 0.1,
+                                            benchmark_to_rm_lwd_hex = 1.2,
                                             col_start_highd = "x"))
 
   testthat::expect_snapshot(fit_highd_model(training_data = s_curve_noise_training,

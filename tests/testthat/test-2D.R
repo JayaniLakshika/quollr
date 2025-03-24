@@ -72,7 +72,7 @@ test_that("find_non_empty_bins() works", {
                                                 r2 = r2))
 
   testthat::expect_error(find_non_empty_bins(data = s_curve_noise_umap_scaled,
-                                             non_empty_bins = 18,
+                                             non_empty_bins = 21,
                                              r2 = r2))
 
 })

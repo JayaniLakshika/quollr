@@ -19,7 +19,7 @@ This function finds the benchmark value to remove long edges based on
 the differences in a distance column.
 }
 \examples{
-distance_df <- s_curve_obj$distance_df
+distance_df <- s_curve_obj$s_curve_umap_model_distance_df
 find_lg_benchmark(distance_edges = distance_df, distance_col = "distance")
 
 }

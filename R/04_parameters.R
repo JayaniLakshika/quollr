@@ -13,7 +13,7 @@
 #' @importFrom rlang sym
 #'
 #' @examples
-#' distance_df <- s_curve_obj$distance_df
+#' distance_df <- s_curve_obj$s_curve_umap_model_distance_df
 #' find_lg_benchmark(distance_edges = distance_df, distance_col = "distance")
 #'
 #' @export
@@ -88,7 +88,7 @@ find_lg_benchmark <- function(distance_edges, distance_col) {
 #'
 #' @examples
 #' num_bins_x <- 4
-#' df_bin_centroids <- df_bin_centroids <- s_curve_obj$s_curve_umap_model_obj$df_bin_centroids
+#' df_bin_centroids <- s_curve_obj$s_curve_umap_model_obj$df_bin_centroids
 #' compute_mean_density_hex(df_bin_centroids, bin1 = num_bins_x)
 #'
 #' @export
@@ -150,7 +150,7 @@ compute_mean_density_hex <- function(df_bin_centroids, bin1) {
 #'
 #' @examples
 #' num_bins_x <- 4
-#' df_bin_centroids <- df_bin_centroids <- s_curve_obj$s_curve_umap_model_obj$df_bin_centroids
+#' df_bin_centroids <- s_curve_obj$s_curve_umap_model_obj$df_bin_centroids
 #' df_bin_centroids_low <- df_bin_centroids |>
 #' dplyr::filter(std_counts <= 0.43)
 #' find_low_dens_hex(df_bin_centroids_all = df_bin_centroids, bin1 = num_bins_x,

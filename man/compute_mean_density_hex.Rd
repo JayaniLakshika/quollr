@@ -21,7 +21,7 @@ This function calculates the mean density of hexagonal bins based on their neigh
 }
 \examples{
 num_bins_x <- 4
-df_bin_centroids <- df_bin_centroids <- s_curve_obj$s_curve_umap_model_obj$df_bin_centroids
+df_bin_centroids <- s_curve_obj$s_curve_umap_model_obj$df_bin_centroids
 compute_mean_density_hex(df_bin_centroids, bin1 = num_bins_x)
 
 }

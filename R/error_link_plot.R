@@ -1,4 +1,4 @@
-#' Visualize the model overlaid on high-dimensional data along with 2D wireframe model.
+#' Visualize the model overlaid on high-dimensional data along with 2D wireframe model and error.
 #'
 #' This function generates a LangeviTour visualization based on different
 #' conditions and input parameters with 2D wireframe.
@@ -20,32 +20,64 @@
 #'
 #' @importFrom dplyr mutate bind_rows filter select
 #' @importFrom langevitour langevitour
-#' @importFrom ggplot2 ggplot theme_linedraw aes_string theme element_rect element_text element_blank
+#' @importFrom ggplot2 ggplot theme_bw theme_linedraw aes aes_string theme element_rect element_text element_blank geom_point xlab ylab
 #' @importFrom plotly ggplotly config highlight style
-#'
 #' @examples
 #' umap_data_with_hb_id <- s_curve_obj$s_curve_umap_hb_obj$data_hb_id
 #' df_all <- dplyr::bind_cols(s_curve_noise_training |> dplyr::select(-ID),
 #' umap_data_with_hb_id)
-#' df_bin_centroids <- s_curve_obj$s_curve_umap_model_distance_df$df_bin_centroids
-#' df_bin <- s_curve_obj$s_curve_umap_model_distance_df$df_bin
+#' df_bin_centroids <- s_curve_obj$s_curve_umap_model_obj$df_bin_centroids
+#' df_bin <- s_curve_obj$s_curve_umap_model_obj$df_bin
 #' distance_df <- s_curve_obj$s_curve_umap_model_distance_df
-#' show_link_plots(df_all = df_all, df_b = df_bin, df_b_with_center_data = df_bin_centroids,
-#' benchmark_value = 1.16, distance = distance_df, distance_col = "distance",
+#' show_error_link_plots(df_all = df_all, df_b = df_bin, df_b_with_center_data = df_bin_centroids,
+#' benchmark_value = 0.8, distance = distance_df, distance_col = "distance",
 #' use_default_benchmark_val = FALSE, col_start = "x", type_nldr = "UMAP", r2 = r2)
 #'
 #' @export
-show_link_plots <- function(df_all, df_b, df_b_with_center_data, benchmark_value,
-                             distance_df, distance_col,
-                            use_default_benchmark_val = FALSE, col_start = "x",
-                            type_nldr, r2) {
+show_error_link_plots <- function(df_all, df_b, df_b_with_center_data, benchmark_value,
+                                  distance_df, distance_col,
+                                  use_default_benchmark_val = FALSE, col_start = "x",
+                                  type_nldr, r2) {
+
+
 
   num_highd_col <- df_all |>
     dplyr::select(starts_with(col_start)) |>
     NCOL()
 
+  ## Compute error
+  error_df <- augment(
+    df_bin_centroids = df_b_with_center_data,
+    df_bin = df_b,
+    training_data = df_all |>
+      dplyr::select(ID, starts_with(col_start)),
+    newdata = NULL,
+    type_NLDR = type_nldr,
+    col_start = col_start)
+
+  error_df <- error_df |>
+    dplyr::mutate(sqrt_row_wise_total_error = sqrt(row_wise_total_error))
+
+  # Compute density
+  density_data <- density(error_df$sqrt_row_wise_total_error)
+  density_df <- data.frame(x = density_data$x, y = density_data$y)
+
+  # Add density values to the original dataset
+  error_df <- error_df |>
+    dplyr::mutate(density = approx(density_df$x, density_df$y, xout = sqrt_row_wise_total_error)$y)
+
+  # error_plot <-
+  #   ggplot(error_df) +
+  #   geom_histogram(aes(x=sqrt_row_wise_total_error, y=..density..)) +
+  #   geom_density(aes(x=sqrt_row_wise_total_error, y=..density..), colour="red") +
+  #   xlab(expression(e[hj])) +
+  #   ylab("") +
+  #   theme_bw()
+
   df_all <- df_all |>
-    dplyr::mutate(type = "data")
+    dplyr::mutate(type = "data") |>
+    dplyr::mutate(sqrt_row_wise_total_error = error_df$sqrt_row_wise_total_error) |>
+    dplyr::mutate(density = error_df$density)
 
   df_b <- df_b |>
     dplyr::filter(hb_id %in% df_b_with_center_data$hexID)
@@ -58,6 +90,31 @@ show_link_plots <- function(df_all, df_b, df_b_with_center_data, benchmark_value
   df_exe <- dplyr::bind_rows(df_b, df_all)
 
   shared_df <- crosstalk::SharedData$new(df_exe)
+
+  error_plt <- shared_df |>
+    ggplot(aes(x=sqrt_row_wise_total_error, y = density)) +
+    geom_point() +
+    xlab(expression(e[hj])) +
+    ylab("") +
+    theme_bw() +
+    theme(
+      #aspect.ratio = 1,
+      plot.background = element_rect(fill = 'transparent', colour = NA),
+      plot.title = element_text(size = 7, hjust = 0.5, vjust = -0.5),
+      panel.background = element_rect(fill = 'transparent',
+                                      colour = NA),
+      panel.grid.major = element_blank(),
+      panel.grid.minor = element_blank(),
+      axis.title.x = element_blank(), axis.title.y = element_blank(),
+      axis.text.x = element_blank(), axis.ticks.x = element_blank(),
+      axis.text.y = element_blank(), axis.ticks.y = element_blank()
+    )
+
+  error_plt <- ggplotly(error_plt, width = "400",
+                        height = "400", tooltip = "none") |>
+    style(unselected=list(marker=list(opacity=1))) |>
+    highlight(on="plotly_selected", off="plotly_deselect") |>
+    config(displayModeBar = FALSE)
 
   emb1 <- paste0(type_nldr, "1")
   emb2 <- paste0(type_nldr, "2")
@@ -79,8 +136,8 @@ show_link_plots <- function(df_all, df_b, df_b_with_center_data, benchmark_value
       axis.text.y = element_blank(), axis.ticks.y = element_blank()
     )
 
-  nldr_plt <- ggplotly(nldr_plt, width = "600",
-                              height = "600", tooltip = "none") |>
+  nldr_plt <- ggplotly(nldr_plt, width = "400",
+                       height = "400", tooltip = "none") |>
     style(unselected=list(marker=list(opacity=1))) |>
     highlight(on="plotly_selected", off="plotly_deselect") |>
     config(displayModeBar = FALSE)
@@ -101,7 +158,9 @@ show_link_plots <- function(df_all, df_b, df_b_with_center_data, benchmark_value
                                                                         rep(1, NROW(df_all))),
                                                      levelColors = c("#000000", "#33a02c"),
                                                      link=shared_df,
-                                                     link_filter=FALSE)
+                                                     link_filter=FALSE,
+                                                     width = "450",
+                                                     height = "450")
 
     } else {
 
@@ -114,14 +173,16 @@ show_link_plots <- function(df_all, df_b, df_b_with_center_data, benchmark_value
       ## Since erase brushing is considered.
 
       langevitour_output <- langevitour::langevitour(df_exe[1:num_highd_col],
-                               lineFrom = distance_df_small_edges$from,
-                               lineTo = distance_df_small_edges$to,
-                               group = df_exe$type,
-                               pointSize = append(rep(2, NROW(df_b)),
-                                                  rep(1, NROW(df_all))),
-                               levelColors = c("#000000", "#33a02c"),
-                               link=shared_df,
-                               link_filter=FALSE)
+                                                     lineFrom = distance_df_small_edges$from,
+                                                     lineTo = distance_df_small_edges$to,
+                                                     group = df_exe$type,
+                                                     pointSize = append(rep(2, NROW(df_b)),
+                                                                        rep(1, NROW(df_all))),
+                                                     levelColors = c("#000000", "#33a02c"),
+                                                     link=shared_df,
+                                                     link_filter=FALSE,
+                                                     width = "450",
+                                                     height = "450")
 
     }
 
@@ -148,24 +209,28 @@ show_link_plots <- function(df_all, df_b, df_b_with_center_data, benchmark_value
     ## Since erase brushing is considerd.
 
     langevitour_output <- langevitour::langevitour(df_exe[1:num_highd_col],
-                             lineFrom = distance_df_small_edges$from,
-                             lineTo = distance_df_small_edges$to,
-                             group = df_exe$type,
-                             pointSize = append(rep(2, NROW(df_b)),
-                                                rep(1, NROW(df_all))),
-                             levelColors = c("#000000", "#33a02c"),
-                             link=shared_df,
-                             link_filter=FALSE)
+                                                   lineFrom = distance_df_small_edges$from,
+                                                   lineTo = distance_df_small_edges$to,
+                                                   group = df_exe$type,
+                                                   pointSize = append(rep(2, NROW(df_b)),
+                                                                      rep(1, NROW(df_all))),
+                                                   levelColors = c("#000000", "#33a02c"),
+                                                   link=shared_df,
+                                                   link_filter=FALSE,
+                                                   width = "450",
+                                                   height = "450")
 
   }
 
   linked_plt <- crosstalk::bscols(
+    error_plt,
     nldr_plt,
     langevitour_output,
-    widths = c(6, 6),
+    widths = c(4, 4, 4),
     device = "sm"
   )
 
   linked_plt
 
 }
+

@@ -15,7 +15,7 @@
 #' umap_data_with_hb_id)
 #' df_bin_centroids <- s_curve_obj$s_curve_umap_model_distance_df$df_bin_centroids
 #' df_bin <- s_curve_obj$s_curve_umap_model_distance_df$df_bin
-#' distance_df <- s_curve_obj$distance_df
+#' distance_df <- s_curve_obj$s_curve_umap_model_distance_df
 #' ### Define type column
 #' df <- df_all |>
 #'   dplyr::select(tidyselect::starts_with("x")) |>

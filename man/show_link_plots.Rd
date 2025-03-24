@@ -47,11 +47,12 @@ This function generates a LangeviTour visualization based on different
 conditions and input parameters with 2D wireframe.
 }
 \examples{
+umap_data_with_hb_id <- s_curve_obj$s_curve_umap_hb_obj$data_hb_id
 df_all <- dplyr::bind_cols(s_curve_noise_training |> dplyr::select(-ID),
 umap_data_with_hb_id)
 df_bin_centroids <- s_curve_obj$s_curve_umap_model_distance_df$df_bin_centroids
 df_bin <- s_curve_obj$s_curve_umap_model_distance_df$df_bin
-distance_df <- s_curve_obj$distance_df
+distance_df <- s_curve_obj$s_curve_umap_model_distance_df
 show_link_plots(df_all = df_all, df_b = df_bin, df_b_with_center_data = df_bin_centroids,
 benchmark_value = 1.16, distance = distance_df, distance_col = "distance",
 use_default_benchmark_val = FALSE, col_start = "x", type_nldr = "UMAP", r2 = r2)

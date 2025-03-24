@@ -184,7 +184,7 @@
 #' # Load the s_curve_obj
 #' data(s_curve_obj)
 #'
-#' @keywords object
+#' @keywords datasets
 #'
 #' @rdname s_curve_obj
 #' @docType data

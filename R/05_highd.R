@@ -56,7 +56,7 @@ avg_highd_data <- function(data, col_start = "x") {
 #' umap_data_with_hb_id)
 #' df_bin_centroids <- s_curve_obj$s_curve_umap_model_distance_df$df_bin_centroids
 #' df_bin <- s_curve_obj$s_curve_umap_model_distance_df$df_bin
-#' distance_df <- s_curve_obj$distance_df
+#' distance_df <- s_curve_obj$s_curve_umap_model_distance_df
 #' show_langevitour(df = df_all, df_b = df_bin, df_b_with_center_data = df_bin_centroids,
 #' benchmark_value = 1.16, distance = distance_df, distance_col = "distance",
 #' use_default_benchmark_val = FALSE, col_start = "x")

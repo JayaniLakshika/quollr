@@ -35,7 +35,7 @@ test_that("show_langevitour() works", {
                              select_vars = c("from", "to", "distance"))
   tour_widget <- show_langevitour(df = df_all, df_b = df_bin,
                                   df_b_with_center_data = df_bin_centroids,
-                                  benchmark_value = 1.168, distance = distance_df,
+                                  benchmark_value = 0.6, distance = distance_df,
                                   distance_col = "distance",
                                   use_default_benchmark_val = FALSE,
                                   col_start = "x")

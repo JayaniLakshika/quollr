@@ -24,7 +24,7 @@ This function visualize triangular mesh with coloured long edges.
 }
 \examples{
 tr_from_to_df <- s_curve_obj$s_curve_umap_model_tr_from_to_df
-distance_df <- s_curve_obj$distance_df
+distance_df <- s_curve_obj$s_curve_umap_model_distance_df
 vis_lg_mesh(distance_edges = distance_df, benchmark_value = 0.75,
 tr_coord_df = tr_from_to_df, distance_col = "distance")
 

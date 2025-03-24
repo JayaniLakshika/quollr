@@ -112,6 +112,8 @@ fit_highd_model <- function(training_data, emb_df, bin1 = 4, r2, q = 0.1,
   df_bin <- df_bin |>
     filter(hb_id %in% df_bin_centroids$hexID)
 
+  cli::cli_alert_success("Model generated successfully! 🎉")
+
   return(list(df_bin = df_bin, df_bin_centroids = df_bin_centroids))
 
 }

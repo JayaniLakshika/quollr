@@ -578,7 +578,7 @@ cal_2d_dist <- function(tr_coord_df, start_x, start_y, end_x, end_y,
 #'
 #' @examples
 #' tr_from_to_df <- s_curve_obj$s_curve_umap_model_tr_from_to_df
-#' distance_df <- s_curve_obj$distance_df
+#' distance_df <- s_curve_obj$s_curve_umap_model_distance_df
 #' vis_lg_mesh(distance_edges = distance_df, benchmark_value = 0.75,
 #' tr_coord_df = tr_from_to_df, distance_col = "distance")
 #'
@@ -629,7 +629,7 @@ vis_lg_mesh <- function(distance_edges, benchmark_value,
 #'
 #' @examples
 #' tr_from_to_df <- s_curve_obj$s_curve_umap_model_tr_from_to_df
-#' distance_df <- s_curve_obj$distance_df
+#' distance_df <- s_curve_obj$s_curve_umap_model_distance_df
 #' vis_rmlg_mesh(distance_edges = distance_df, benchmark_value = 0.75,
 #' tr_coord_df = tr_from_to_df, distance_col = "distance")
 #'
