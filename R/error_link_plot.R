@@ -222,11 +222,20 @@ show_error_link_plots <- function(df_all, df_b, df_b_with_center_data, benchmark
 
   }
 
+  # Create a table widget
+  datatableWidget <- DT::datatable(
+    shared_df,
+    rownames=FALSE, width="100%",
+    class='compact cell-border hover', extensions='Buttons',
+    options=list(dom='Bfrtip',buttons=c('copy','csv','excel', 'pdf')))
+
   linked_plt <- crosstalk::bscols(
-    error_plt,
-    nldr_plt,
-    langevitour_output,
-    widths = c(4, 4, 4),
+    htmltools::div(
+    htmltools::div(style="display: grid; grid-template-columns: 1fr 1fr 1fr;",
+        error_plt,
+        nldr_plt,
+        langevitour_output),
+    datatableWidget),
     device = "sm"
   )
 
