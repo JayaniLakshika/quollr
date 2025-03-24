@@ -159,10 +159,26 @@ show_link_plots <- function(df_all, df_b, df_b_with_center_data, benchmark_value
 
   }
 
+  # Create a table widget
+  datatableWidget <- DT::datatable(
+    shared_df,
+    rownames = FALSE, extensions = "Buttons",
+    options = list(paging = TRUE,
+                   scrollX = TRUE,
+                   searching = TRUE,
+                   ordering = TRUE,
+                   dom = 'Bfrtip',
+                   buttons = c('copy', 'csv', 'excel', 'pdf'),
+                   pageLength = 10,
+                   lengthMenu = c(3, 5, 10)))
+
+
   linked_plt <- crosstalk::bscols(
-    nldr_plt,
-    langevitour_output,
-    widths = c(6, 6),
+    htmltools::div(
+      htmltools::div(style="display: grid; grid-template-columns: 1fr 1fr;",
+                     nldr_plt,
+                     langevitour_output),
+      datatableWidget, style = "padding-left: 50px;"),
     device = "sm"
   )
 
