@@ -4,7 +4,6 @@
 #'
 #' @param data A tibble that contains the high-dimensional data and embedding
 #' with hexagonal bin IDs.
-#' @param col_start The text that begin the column name of the high-dimensional data
 #'
 #' @return A tibble with the average values of the high-dimensional data within each hexagonal bin.
 #'
@@ -15,13 +14,13 @@
 #' @examples
 #' umap_with_hb_id <- s_curve_obj$s_curve_umap_hb_obj$data_hb_id
 #' df_all <- dplyr::bind_cols(s_curve_noise_training, umap_data_with_hb_id)
-#' avg_highd_data(data = df_all, col_start = "x")
+#' avg_highd_data(data = df_all)
 #'
 #' @export
-avg_highd_data <- function(data, col_start = "x") {
+avg_highd_data <- function(data) {
 
   df_b <- data |>
-    select(starts_with(col_start), hb_id) |>
+    select(starts_with("x"), hb_id) |>
     group_by(hb_id) |>
     summarise(across(everything(), mean))
 

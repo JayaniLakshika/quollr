@@ -11,7 +11,7 @@
 #' @importFrom tibble tibble
 #'
 #' @examples
-#' scurve_umap_scaled_obj <- s_curve_obj$nldr_scaled_obj
+#' scurve_umap_scaled_obj <- s_curve_obj$s_curve_umap_scaled_obj
 #' lim1 <- scurve_umap_scaled_obj$lim1
 #' lim2 <- scurve_umap_scaled_obj$lim2
 #' r2 <- diff(lim2)/diff(lim1)
@@ -298,7 +298,7 @@ find_pts <- function(data_hb) {
 #'
 #'
 #' @examples
-#' scurve_umap_scaled_obj <- s_curve_obj$nldr_scaled_obj
+#' scurve_umap_scaled_obj <- s_curve_obj$s_curve_umap_scaled_obj
 #' lim1 <- scurve_umap_scaled_obj$lim1
 #' lim2 <- scurve_umap_scaled_obj$lim2
 #' r2 <- diff(lim2)/diff(lim1)
@@ -675,7 +675,7 @@ vis_rmlg_mesh <- function(distance_edges, benchmark_value, tr_coord_df,
 #' needed to achieve a specific number of non-empty bins.
 #'
 #' @examples
-#' scurve_umap_scaled_obj <- s_curve_obj$nldr_scaled_obj
+#' scurve_umap_scaled_obj <- s_curve_obj$s_curve_umap_scaled_obj
 #' lim1 <- scurve_umap_scaled_obj$lim1
 #' lim2 <- scurve_umap_scaled_obj$lim2
 #' r2 <- diff(lim2)/diff(lim1)

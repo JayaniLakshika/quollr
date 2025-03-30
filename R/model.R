@@ -4,15 +4,11 @@
 #' to customize the modeling process, including the choice of bin centroids or bin means,
 #' removal of low-density hexagons, and averaging of high-dimensional data.
 #'
-#' @param training_data A tibble that contains the training high-dimensional data.
-#' @param emb_df A tibble that contains embedding with a unique identifier.
+#' @param highd_data A tibble that contains the training high-dimensional data.
+#' @param nldr_data A tibble that contains embedding with a unique identifier.
 #' @param bin1 Number of bins along the x axis.
 #' @param r2 The ratio of the ranges of the original embedding components.
 #' @param q The buffer amount as proportion of data range.
-#' @param is_bin_centroid Logical, indicating whether to use bin centroids (default is TRUE).
-#' @param is_rm_lwd_hex Logical, indicating whether to remove low-density hexagons
-#' (default is FALSE).
-#' @param benchmark_to_rm_lwd_hex The benchmark value to remove low-density hexagons.
 #'
 #' @return A list containing the data frame with high-dimensional coordinates
 #' for 2D bin centroids (\code{df_bin}) and the data frame containing
@@ -22,20 +18,19 @@
 #' @importFrom stats quantile
 #'
 #' @examples
-#' scurve_umap_scaled_obj <- s_curve_obj$nldr_scaled_obj
+#' scurve_umap_scaled_obj <- s_curve_obj$s_curve_umap_scaled_obj
 #' lim1 <- scurve_umap_scaled_obj$lim1
 #' lim2 <- scurve_umap_scaled_obj$lim2
 #' r2 <- diff(lim2)/diff(lim1)
-#' fit_highd_model(training_data = s_curve_noise_training,
-#' emb_df = s_curve_noise_umap_scaled, bin1 = 4, r2 = r2)
+#' fit_highd_model(highd_data = s_curve_noise_training,
+#' nldr_data = s_curve_noise_umap_scaled, bin1 = 4, r2 = r2)
 #'
 #' @export
-fit_highd_model <- function(training_data, emb_df, bin1 = 4, r2, q = 0.1,
-                            is_bin_centroid = TRUE, is_rm_lwd_hex = FALSE,
-                            benchmark_to_rm_lwd_hex = NULL) {
+fit_highd_model <- function(highd_data, nldr_data, bin1 = 4, r2, q = 0.1,
+                            is_bin_centroid = TRUE) {
 
   ## Obtain the hexbin object
-  hb_obj <- hex_binning(data = emb_df, bin1 = bin1, r2 = r2, q = q)
+  hb_obj <- hex_binning(data = nldr_data, bin1 = bin1, r2 = r2, q = q)
 
   all_centroids_df <- hb_obj$centroids
   counts_df <- hb_obj$std_cts
@@ -57,53 +52,11 @@ fit_highd_model <- function(training_data, emb_df, bin1 = 4, r2, q = 0.1,
 
   }
 
-  if (isFALSE(is_rm_lwd_hex)) {
-    if (!missing(benchmark_to_rm_lwd_hex)) {
-      stop("Need to initialise `is_rm_lwd_hex = TRUE`.")
-    }
-
-  }
-
-
-  ## Do you need to remove low density hexagons?
-  if (isTRUE(is_rm_lwd_hex)) {
-
-    ## if the benchmark value to remove low density hexagons is not provided
-    if (is.null(benchmark_to_rm_lwd_hex)) {
-      ## first quartile used as the default
-      benchmark_to_rm_lwd_hex <- quantile(df_bin_centroids$std_counts,
-                                                 probs = c(0,0.25,0.5,0.75,1))[2]
-    }
-
-    ## Check the benchmark value pass by the function is an acceptable one
-    if (benchmark_to_rm_lwd_hex < min(df_bin_centroids$std_counts)) {
-      stop("Benchmark value to remove low density hexagons is too small.")
-    }
-
-    if (benchmark_to_rm_lwd_hex > max(df_bin_centroids$std_counts)) {
-      stop("Benchmark value to remove low density hexagons is too large.")
-    }
-
-    ## To identify low density hexagons
-    df_bin_centroids_low <- df_bin_centroids |>
-      filter(std_counts <= benchmark_to_rm_lwd_hex)
-
-    ## To identify low-density hexagons needed to remove by investigating neighbouring mean density
-    identify_rm_bins <- find_low_dens_hex(df_bin_centroids_all = df_bin_centroids,
-                                          bin1 = bin1,
-                                          df_bin_centroids_low = df_bin_centroids_low)
-
-    ## To remove low-density hexagons
-    df_bin_centroids <- df_bin_centroids |>
-      filter(!(hexID %in% identify_rm_bins))
-
-  }
-
   ## To generate a data set with high-D and 2D training data
-  df_all <- bind_cols(training_data |> select(-ID), nldr_df_with_hex_id)
+  df_all <- bind_cols(highd_data |> select(-ID), nldr_df_with_hex_id)
 
   ## averaged high-D data
-  df_bin <- avg_highd_data(data = df_all, col_start = "x")
+  df_bin <- avg_highd_data(data = df_all)
 
   ## high-D model only contains the bins in 2D
   df_bin <- df_bin |>

@@ -21,7 +21,7 @@ of all hexagon bin centroids.
 This function generates all possible centroids in the hexagonal grid.
 }
 \examples{
-scurve_umap_scaled_obj <- s_curve_obj$nldr_scaled_obj
+scurve_umap_scaled_obj <- s_curve_obj$s_curve_umap_scaled_obj
 lim1 <- scurve_umap_scaled_obj$lim1
 lim2 <- scurve_umap_scaled_obj$lim2
 r2 <- diff(lim2)/diff(lim1)

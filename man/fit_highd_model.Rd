@@ -5,33 +5,24 @@
 \title{Construct the 2D model and lift into high-D}
 \usage{
 fit_highd_model(
-  training_data,
-  emb_df,
+  highd_data,
+  nldr_data,
   bin1 = 4,
   r2,
   q = 0.1,
-  is_bin_centroid = TRUE,
-  is_rm_lwd_hex = FALSE,
-  benchmark_to_rm_lwd_hex = NULL
+  is_bin_centroid = TRUE
 )
 }
 \arguments{
-\item{training_data}{A tibble that contains the training high-dimensional data.}
+\item{highd_data}{A tibble that contains the training high-dimensional data.}
 
-\item{emb_df}{A tibble that contains embedding with a unique identifier.}
+\item{nldr_data}{A tibble that contains embedding with a unique identifier.}
 
 \item{bin1}{Number of bins along the x axis.}
 
 \item{r2}{The ratio of the ranges of the original embedding components.}
 
 \item{q}{The buffer amount as proportion of data range.}
-
-\item{is_bin_centroid}{Logical, indicating whether to use bin centroids (default is TRUE).}
-
-\item{is_rm_lwd_hex}{Logical, indicating whether to remove low-density hexagons
-(default is FALSE).}
-
-\item{benchmark_to_rm_lwd_hex}{The benchmark value to remove low-density hexagons.}
 }
 \value{
 A list containing the data frame with high-dimensional coordinates
@@ -44,12 +35,11 @@ to customize the modeling process, including the choice of bin centroids or bin 
 removal of low-density hexagons, and averaging of high-dimensional data.
 }
 \examples{
-scurve_umap_scaled_obj <- s_curve_obj$nldr_scaled_obj
+scurve_umap_scaled_obj <- s_curve_obj$s_curve_umap_scaled_obj
 lim1 <- scurve_umap_scaled_obj$lim1
 lim2 <- scurve_umap_scaled_obj$lim2
 r2 <- diff(lim2)/diff(lim1)
-fit_highd_model(training_data = s_curve_noise_training,
-emb_df = s_curve_noise_umap_scaled, bin1 = 4, r2 = r2,
-col_start_highd = "x")
+fit_highd_model(highd_data = s_curve_noise_training,
+nldr_data = s_curve_noise_umap_scaled, bin1 = 4, r2 = r2)
 
 }
