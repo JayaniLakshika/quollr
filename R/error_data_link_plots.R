@@ -20,9 +20,8 @@
 #' @examples
 #' df_bin_centroids <- s_curve_obj$s_curve_umap_model_obj$df_bin_centroids
 #' df_bin <- s_curve_obj$s_curve_umap_model_obj$df_bin
-#' model_error <- augment(df_bin_centroids = df_bin_centroids, df_bin = df_bin,
-#' training_data = s_curve_noise_training, newdata = NULL, type_NLDR = "emb",
-#' col_start = "x")
+#' model_error <- augment(model_2d = df_bin_centroids, model_highd = df_bin,
+#' highd_data = s_curve_noise_training)
 #' comb_all_data_model_error(highd_data = s_curve_noise_training, nldr_data = s_curve_obj$s_curve_umap_scaled_obj$scaled_nldr,
 #' model_highd = df_bin, model_2d = df_bin_centroids, error_df = model_error)
 #'
@@ -85,9 +84,8 @@ comb_all_data_model_error <- function(highd_data, nldr_data, model_highd,
 #' @examples
 #' df_bin_centroids <- s_curve_obj$s_curve_umap_model_obj$df_bin_centroids
 #' df_bin <- s_curve_obj$s_curve_umap_model_obj$df_bin
-#' model_error <- augment(df_bin_centroids = df_bin_centroids, df_bin = df_bin,
-#' training_data = s_curve_noise_training, newdata = NULL, type_NLDR = "emb",
-#' col_start = "x")
+#' model_error <- augment(model_2d = df_bin_centroids, model_highd = df_bin,
+#' highd_data = s_curve_noise_training)
 #' df_exe <- comb_all_data_model_error(highd_data = s_curve_noise_training,
 #' nldr_data = s_curve_obj$s_curve_umap_scaled_obj$scaled_nldr,
 #' model_highd = df_bin, model_2d = df_bin_centroids, error_df = model_error)
