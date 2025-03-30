@@ -1,19 +1,58 @@
+#' Create a dataframe with averaged high-dimensional data and
+#' high-dimensional data, non-linear dimension reduction data
+#'
+#' This function combine the average values of high-dimensional data within each
+#' hexagonal bin and high-dimensional data, non-linear dimension reduction data.
+#'
+#' @param highd_data A tibble that contains the high-dimensional data.
+#' @param nldr_data A tibble that contains the non-linear dimension reduction data.
+#' @param model_highd A tibble that contains the high-dimensional coordinates of bin centroids.
+#' @param model_2d The dataset with hexagonal bin centroids.
+#'
+#' @return A tibble with the average values of the high-dimensional data within
+#' each hexagonal bin and high-dimensional data, non-linear dimension reduction data.
+#'
+#' @importFrom dplyr select mutate inner_join
+#' @importFrom rsample starts_with
+#'
+#' @examples
+#' df_bin_centroids <- s_curve_obj$s_curve_umap_model_obj$df_bin_centroids
+#' df_bin <- s_curve_obj$s_curve_umap_model_obj$df_bin
+#' comb_all_data_model(highd_data = s_curve_noise_training, nldr_data = s_curve_obj$s_curve_umap_scaled_obj$scaled_nldr,
+#' model_highd = df_bin, model_2d = df_bin_centroids)
+#'
+#' @export
+comb_all_data_model <- function(highd_data, nldr_data, model_highd, model_2d) {
+
+  df <- inner_join(highd_data, nldr_data, by = "ID")
+
+  ### Define type column
+  df <- df |>
+    select(starts_with("x"), starts_with("emb")) |>
+    mutate(type = "data") ## original dataset
+
+  df_b <- model_highd |>
+    filter(hb_id %in% model_2d$hexID) |>
+    mutate(type = "model") ## Data with summarized mean
+
+  ## Reorder the rows of df_b according to the hexID order in model_2d
+  df_b <- df_b[match(model_2d$hexID, df_b$hb_id),] |>
+    select(-hb_id)
+
+  df_exe <- bind_rows(df_b, df)
+
+  df_exe
+
+}
+
 #' Visualize the model overlaid on high-dimensional data along with 2D wireframe model.
 #'
 #' This function generates a LangeviTour visualization based on different
 #' conditions and input parameters with 2D wireframe.
 #'
-#' @param df_all A tibble that contains the high-dimensional data and embedding data.
-#' @param df_b A tibble that contains the high-dimensional coordinates of bin centroids.
-#' @param df_b_with_center_data The dataset with hexagonal bin centroids.
-#' @param benchmark_value The benchmark value used to remove long edges (optional).
-#' @param distance_df The tibble with distance.
-#' @param distance_col The name of the distance column.
-#' @param use_default_benchmark_val Logical, indicating whether to use default
-#' benchmark value  to remove long edges (default is FALSE).
-#' @param col_start The text that begin the column name of the high-dimensional data.
-#' @param type_nldr The type of non-linear dimensionality reduction (NLDR) used.
-#' @param r2 The ratio of the ranges of the original embedding components.
+#' @param point_df A tibble that contains the high-dimensional data, no-linear dimension reductions
+#' and model in high-dimensions.
+#' @param edge_df A tibble that contains the wireframe data (from and to).
 #'
 #'
 #' @return A browsable HTML element.
@@ -24,46 +63,32 @@
 #' @importFrom plotly ggplotly config highlight style
 #'
 #' @examples
-#' umap_data_with_hb_id <- s_curve_obj$s_curve_umap_hb_obj$data_hb_id
-#' df_all <- dplyr::bind_cols(s_curve_noise_training |> dplyr::select(-ID),
-#' umap_data_with_hb_id)
-#' df_bin_centroids <- s_curve_obj$s_curve_umap_model_distance_df$df_bin_centroids
-#' df_bin <- s_curve_obj$s_curve_umap_model_distance_df$df_bin
+#' df_exe <- comb_all_data_model(highd_data = s_curve_noise_training,
+#' nldr_data = s_curve_obj$s_curve_umap_scaled_obj$scaled_nldr,
+#' model_highd = df_bin, model_2d = df_bin_centroids)
 #' distance_df <- s_curve_obj$s_curve_umap_model_distance_df
-#' show_link_plots(df_all = df_all, df_b = df_bin, df_b_with_center_data = df_bin_centroids,
-#' benchmark_value = 1.16, distance = distance_df, distance_col = "distance",
-#' use_default_benchmark_val = FALSE, col_start = "x", type_nldr = "UMAP", r2 = r2)
+#' benchmark <- find_lg_benchmark(distance_edges = distance_df,
+#' distance_col = "distance")
+#' distance_small_df <- distance_df |> dplyr::filter(distance < benchmark)
+#' show_link_plots(point_df = df_exe, edge_df = distance_small_df)
 #'
 #' @export
-show_link_plots <- function(df_all, df_b, df_b_with_center_data, benchmark_value,
-                             distance_df, distance_col,
-                            use_default_benchmark_val = FALSE, col_start = "x",
-                            type_nldr, r2) {
+show_link_plots <- function(point_df, edge_df) {
 
-  num_highd_col <- df_all |>
-    dplyr::select(starts_with(col_start)) |>
+  num_highd_col <- point_df |>
+    dplyr::select(starts_with("x")) |>
     NCOL()
 
-  df_all <- df_all |>
-    dplyr::mutate(type = "data")
+  df_all <- point_df |>
+    dplyr::filter(type == "data") ## original dataset
 
-  df_b <- df_b |>
-    dplyr::filter(hb_id %in% df_b_with_center_data$hexID)
+  df_b <- point_df |>
+    dplyr::filter(type == "model") ## High-d model
 
-  ## Reorder the rows of df_b according to the hexID order in df_b_with_center_data
-  df_b <- df_b[match(df_b_with_center_data$hexID, df_b$hb_id),] |>
-    dplyr::select(-hb_id) |>
-    dplyr::mutate(type = "model")
-
-  df_exe <- dplyr::bind_rows(df_b, df_all)
-
-  shared_df <- crosstalk::SharedData$new(df_exe)
-
-  emb1 <- paste0(type_nldr, "1")
-  emb2 <- paste0(type_nldr, "2")
+  shared_df <- crosstalk::SharedData$new(point_df)
 
   nldr_plt <- shared_df |>
-    ggplot(aes_string(x = emb1, y = emb2)) +
+    ggplot(aes(x = emb1, y = emb2)) +
     geom_point(alpha=0.5, colour="#000000", size = 0.5) +
     theme_linedraw() +
     theme(
@@ -86,78 +111,15 @@ show_link_plots <- function(df_all, df_b, df_b_with_center_data, benchmark_value
     config(displayModeBar = FALSE)
 
 
-  if(missing(benchmark_value)){
-
-    if (isFALSE(use_default_benchmark_val)) {
-
-      tr1 <- tri_bin_centroids(hex_df = df_b_with_center_data, x = "c_x", y = "c_y")
-      tr_from_to_df <- gen_edges(tri_object = tr1)
-
-      langevitour_output <- langevitour::langevitour(df_exe[1:num_highd_col],
-                                                     lineFrom = tr_from_to_df$from,
-                                                     lineTo = tr_from_to_df$to,
-                                                     group = df_exe$type,
-                                                     pointSize = append(rep(2, NROW(df_b)),
-                                                                        rep(1, NROW(df_all))),
-                                                     levelColors = c("#000000", "#33a02c"),
-                                                     link=shared_df,
-                                                     link_filter=FALSE)
-
-    } else {
-
-      benchmark_value <- find_lg_benchmark(distance_edges = distance_df,
-                                           distance_col = distance_col)
-
-      ## Set the maximum difference as the criteria
-      distance_df_small_edges <- distance_df |>
-        filter(!!as.name(distance_col) < benchmark_value)
-      ## Since erase brushing is considered.
-
-      langevitour_output <- langevitour::langevitour(df_exe[1:num_highd_col],
-                               lineFrom = distance_df_small_edges$from,
-                               lineTo = distance_df_small_edges$to,
-                               group = df_exe$type,
-                               pointSize = append(rep(2, NROW(df_b)),
-                                                  rep(1, NROW(df_all))),
-                               levelColors = c("#000000", "#33a02c"),
-                               link=shared_df,
-                               link_filter=FALSE)
-
-    }
-
-  } else {
-
-    ## Check benchmark value is an accepted one
-    if (benchmark_value < min(distance_df[[rlang::as_string(rlang::sym(distance_col))]])) {
-      stop("Benchmark value to remove long edges is too small.")
-
-    }
-
-    if (benchmark_value > max(distance_df[[rlang::as_string(rlang::sym(distance_col))]])) {
-      stop("Benchmark value to remove long edges is too large.")
-
-    }
-
-    if (isTRUE(use_default_benchmark_val)) {
-      stop("Need to set `benchmark_value = NA`.")
-    }
-
-    ## Set the maximum difference as the criteria
-    distance_df_small_edges <- distance_df |>
-      dplyr::filter((!!as.name(distance_col)) < benchmark_value)
-    ## Since erase brushing is considerd.
-
-    langevitour_output <- langevitour::langevitour(df_exe[1:num_highd_col],
-                             lineFrom = distance_df_small_edges$from,
-                             lineTo = distance_df_small_edges$to,
-                             group = df_exe$type,
-                             pointSize = append(rep(2, NROW(df_b)),
-                                                rep(1, NROW(df_all))),
-                             levelColors = c("#000000", "#33a02c"),
-                             link=shared_df,
-                             link_filter=FALSE)
-
-  }
+  langevitour_output <- langevitour::langevitour(point_df[1:num_highd_col],
+                                                 lineFrom = edge_df$from,
+                                                 lineTo = edge_df$to,
+                                                 group = point_df$type,
+                                                 pointSize = append(rep(2, NROW(df_b)),
+                                                                    rep(1, NROW(df_all))),
+                                                 levelColors = c("#000000", "#33a02c"),
+                                                 link=shared_df,
+                                                 link_filter=FALSE)
 
   # Create a table widget
   datatableWidget <- DT::datatable(

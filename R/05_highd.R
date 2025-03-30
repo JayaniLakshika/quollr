@@ -50,7 +50,7 @@ avg_highd_data <- function(data, col_start = "x") {
 #' model_2d = df_bin_centroids)
 #'
 #' @export
-comb_data_mode <- function(highd_data, model_highd, model_2d) {
+comb_data_model <- function(highd_data, model_highd, model_2d) {
 
   ### Define type column
   df <- highd_data |>
@@ -84,7 +84,7 @@ comb_data_mode <- function(highd_data, model_highd, model_2d) {
 #'
 #'
 #' @examples
-#' df_exe <- comb_data_mode(highd_data = s_curve_noise_training, model_highd = df_bin,
+#' df_exe <- comb_data_model(highd_data = s_curve_noise_training, model_highd = df_bin,
 #' model_2d = df_bin_centroids)
 #' distance_df <- s_curve_obj$s_curve_umap_model_distance_df
 #' benchmark <- find_lg_benchmark(distance_edges = distance_df,

@@ -4,40 +4,13 @@
 \alias{show_link_plots}
 \title{Visualize the model overlaid on high-dimensional data along with 2D wireframe model.}
 \usage{
-show_link_plots(
-  df_all,
-  df_b,
-  df_b_with_center_data,
-  benchmark_value,
-  distance_df,
-  distance_col,
-  use_default_benchmark_val = FALSE,
-  col_start = "x",
-  type_nldr,
-  r2
-)
+show_link_plots(point_df, edge_df)
 }
 \arguments{
-\item{df_all}{A tibble that contains the high-dimensional data and embedding data.}
+\item{point_df}{A tibble that contains the high-dimensional data, no-linear dimension reductions
+and model in high-dimensions.}
 
-\item{df_b}{A tibble that contains the high-dimensional coordinates of bin centroids.}
-
-\item{df_b_with_center_data}{The dataset with hexagonal bin centroids.}
-
-\item{benchmark_value}{The benchmark value used to remove long edges (optional).}
-
-\item{distance_df}{The tibble with distance.}
-
-\item{distance_col}{The name of the distance column.}
-
-\item{use_default_benchmark_val}{Logical, indicating whether to use default
-benchmark value  to remove long edges (default is FALSE).}
-
-\item{col_start}{The text that begin the column name of the high-dimensional data.}
-
-\item{type_nldr}{The type of non-linear dimensionality reduction (NLDR) used.}
-
-\item{r2}{The ratio of the ranges of the original embedding components.}
+\item{edge_df}{A tibble that contains the wireframe data (from and to).}
 }
 \value{
 A browsable HTML element.
@@ -47,14 +20,13 @@ This function generates a LangeviTour visualization based on different
 conditions and input parameters with 2D wireframe.
 }
 \examples{
-umap_data_with_hb_id <- s_curve_obj$s_curve_umap_hb_obj$data_hb_id
-df_all <- dplyr::bind_cols(s_curve_noise_training |> dplyr::select(-ID),
-umap_data_with_hb_id)
-df_bin_centroids <- s_curve_obj$s_curve_umap_model_distance_df$df_bin_centroids
-df_bin <- s_curve_obj$s_curve_umap_model_distance_df$df_bin
+df_exe <- comb_all_data_model(highd_data = s_curve_noise_training,
+nldr_data = s_curve_obj$s_curve_umap_scaled_obj$scaled_nldr,
+model_highd = df_bin, model_2d = df_bin_centroids)
 distance_df <- s_curve_obj$s_curve_umap_model_distance_df
-show_link_plots(df_all = df_all, df_b = df_bin, df_b_with_center_data = df_bin_centroids,
-benchmark_value = 1.16, distance = distance_df, distance_col = "distance",
-use_default_benchmark_val = FALSE, col_start = "x", type_nldr = "UMAP", r2 = r2)
+benchmark <- find_lg_benchmark(distance_edges = distance_df,
+distance_col = "distance")
+distance_small_df <- distance_df |> dplyr::filter(distance < benchmark)
+show_link_plots(point_df = df_exe, edge_df = distance_small_df)
 
 }

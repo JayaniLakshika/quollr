@@ -13,7 +13,6 @@
 #' @param is_rm_lwd_hex Logical, indicating whether to remove low-density hexagons
 #' (default is FALSE).
 #' @param benchmark_to_rm_lwd_hex The benchmark value to remove low-density hexagons.
-#' @param col_start_highd The text prefix for columns in the high-dimensional data.
 #'
 #' @return A list containing the data frame with high-dimensional coordinates
 #' for 2D bin centroids (\code{df_bin}) and the data frame containing
@@ -34,8 +33,7 @@
 #' @export
 fit_highd_model <- function(training_data, emb_df, bin1 = 4, r2, q = 0.1,
                             is_bin_centroid = TRUE, is_rm_lwd_hex = FALSE,
-                            benchmark_to_rm_lwd_hex = NULL,
-                            col_start_highd = "x") {
+                            benchmark_to_rm_lwd_hex = NULL) {
 
   ## Obtain the hexbin object
   hb_obj <- hex_binning(data = emb_df, bin1 = bin1, r2 = r2, q = q)
@@ -106,7 +104,7 @@ fit_highd_model <- function(training_data, emb_df, bin1 = 4, r2, q = 0.1,
   df_all <- bind_cols(training_data |> select(-ID), nldr_df_with_hex_id)
 
   ## averaged high-D data
-  df_bin <- avg_highd_data(data = df_all, col_start = col_start_highd)
+  df_bin <- avg_highd_data(data = df_all, col_start = "x")
 
   ## high-D model only contains the bins in 2D
   df_bin <- df_bin |>

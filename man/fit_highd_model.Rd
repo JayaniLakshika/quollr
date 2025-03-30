@@ -12,8 +12,7 @@ fit_highd_model(
   q = 0.1,
   is_bin_centroid = TRUE,
   is_rm_lwd_hex = FALSE,
-  benchmark_to_rm_lwd_hex = NULL,
-  col_start_highd = "x"
+  benchmark_to_rm_lwd_hex = NULL
 )
 }
 \arguments{
@@ -33,8 +32,6 @@ fit_highd_model(
 (default is FALSE).}
 
 \item{benchmark_to_rm_lwd_hex}{The benchmark value to remove low-density hexagons.}
-
-\item{col_start_highd}{The text prefix for columns in the high-dimensional data.}
 }
 \value{
 A list containing the data frame with high-dimensional coordinates

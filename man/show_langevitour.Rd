@@ -19,7 +19,7 @@ This function generates a LangeviTour visualization based on different
 conditions and input parameters.
 }
 \examples{
-df_exe <- comb_data_mode(highd_data = s_curve_noise_training, model_highd = df_bin,
+df_exe <- comb_data_model(highd_data = s_curve_noise_training, model_highd = df_bin,
 model_2d = df_bin_centroids)
 distance_df <- s_curve_obj$s_curve_umap_model_distance_df
 benchmark <- find_lg_benchmark(distance_edges = distance_df,

@@ -58,7 +58,7 @@ s_curve_noise_umap <- UMAP_fit$layout |>
   as.data.frame() |>
   tibble::as_tibble()
 
-names(s_curve_noise_umap)[1:(ncol(s_curve_noise_umap))] <- paste0(rep("UMAP",(ncol(s_curve_noise_umap))), 1:(ncol(s_curve_noise_umap)))
+names(s_curve_noise_umap)[1:(ncol(s_curve_noise_umap))] <- paste0(rep("emb",(ncol(s_curve_noise_umap))), 1:(ncol(s_curve_noise_umap)))
 
 s_curve_noise_umap <- s_curve_noise_umap |>
   dplyr::mutate(ID = s_curve_noise_training$ID)
@@ -70,7 +70,7 @@ s_curve_noise_umap_predict <- predict(UMAP_fit, s_curve_noise_test |> dplyr::sel
   as.data.frame() |>
   tibble::as_tibble()
 
-names(s_curve_noise_umap_predict)[1:(ncol(s_curve_noise_umap_predict))] <- paste0(rep("UMAP",(ncol(s_curve_noise_umap_predict))), 1:(ncol(s_curve_noise_umap_predict)))
+names(s_curve_noise_umap_predict)[1:(ncol(s_curve_noise_umap_predict))] <- paste0(rep("emb",(ncol(s_curve_noise_umap_predict))), 1:(ncol(s_curve_noise_umap_predict)))
 
 s_curve_noise_umap_predict <- s_curve_noise_umap_predict |>
   dplyr::mutate(ID = s_curve_noise_test$ID)
