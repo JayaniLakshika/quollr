@@ -63,6 +63,8 @@ comb_all_data_model <- function(highd_data, nldr_data, model_highd, model_2d) {
 #' @importFrom plotly ggplotly config highlight style
 #'
 #' @examples
+#' df_bin_centroids <- s_curve_obj$s_curve_umap_model_obj$df_bin_centroids
+#' df_bin <- s_curve_obj$s_curve_umap_model_obj$df_bin
 #' df_exe <- comb_all_data_model(highd_data = s_curve_noise_training,
 #' nldr_data = s_curve_obj$s_curve_umap_scaled_obj$scaled_nldr,
 #' model_highd = df_bin, model_2d = df_bin_centroids)
