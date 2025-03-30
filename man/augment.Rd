@@ -4,14 +4,7 @@
 \alias{augment}
 \title{Augment Data with Predictions and Error Metrics}
 \usage{
-augment(
-  df_bin_centroids,
-  df_bin,
-  training_data,
-  newdata = NULL,
-  type_NLDR,
-  col_start = "x"
-)
+augment(highd_data, model_2d, model_highd)
 }
 \arguments{
 \item{df_bin_centroids}{Centroid coordinates of hexagonal bins in 2D space.}
@@ -36,10 +29,9 @@ This function augments a dataset with predictions and error metrics obtained
 from a nonlinear dimension reduction (NLDR) model.
 }
 \examples{
-df_bin_centroids <- s_curve_obj$s_curve_umap_model_distance_df$df_bin_centroids
-df_bin <- s_curve_obj$s_curve_umap_model_distance_df$df_bin
-augment(df_bin_centroids = df_bin_centroids, df_bin = df_bin,
-training_data = s_curve_noise_training, newdata = NULL, type_NLDR = "UMAP",
-col_start = "x")
+df_bin_centroids <- s_curve_obj$s_curve_umap_model_obj$df_bin_centroids
+df_bin <- s_curve_obj$s_curve_umap_model_obj$df_bin
+augment(highd_data = s_curve_noise_training, model_2d = df_bin_centroids,
+model_highd = df_bin)
 
 }

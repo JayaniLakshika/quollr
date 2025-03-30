@@ -4,28 +4,14 @@
 \alias{glance}
 \title{Generate evaluation metrics}
 \usage{
-glance(
-  df_bin_centroids,
-  df_bin,
-  training_data,
-  newdata = NULL,
-  type_NLDR,
-  col_start = "x"
-)
+glance(highd_data, model_2d, model_highd)
 }
 \arguments{
-\item{df_bin_centroids}{Centroid coordinates of hexagonal bins in 2D space.}
+\item{highd_data}{The dataset containing high-dimensional coordinates and an unique identifier.}
 
-\item{df_bin}{Centroid coordinates of hexagonal bins in high dimensions.}
+\item{model_2d}{Centroid coordinates of hexagonal bins in 2D space.}
 
-\item{training_data}{Training data used to fit the model.}
-
-\item{newdata}{Data to be augmented with predictions and error metrics.
-If NULL, the training data is used (default is NULL).}
-
-\item{type_NLDR}{The type of non-linear dimensionality reduction (NLDR) used.}
-
-\item{col_start}{The text that begin the column name of the high-dimensional data.}
+\item{model_highd}{Centroid coordinates of hexagonal bins in high dimensions.}
 }
 \value{
 A tibble contains Error, and MSE values.
@@ -34,10 +20,9 @@ A tibble contains Error, and MSE values.
 This function generates an evaluation data frame based on the provided data and predictions.
 }
 \examples{
-df_bin_centroids <- s_curve_obj$s_curve_umap_model_distance_df$df_bin_centroids
-df_bin <- s_curve_obj$s_curve_umap_model_distance_df$df_bin
-glance(df_bin_centroids = df_bin_centroids, df_bin = df_bin,
-training_data = s_curve_noise_training, newdata = NULL, type_NLDR = "UMAP",
-col_start = "x")
+df_bin_centroids <- s_curve_obj$s_curve_umap_model_obj$df_bin_centroids
+df_bin <- s_curve_obj$s_curve_umap_model_obj$df_bin
+glance(highd_data = s_curve_noise_training, model_2d = df_bin_centroids,
+model_highd = df_bin)
 
 }
