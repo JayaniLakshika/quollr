@@ -1,3 +1,209 @@
+# Center the data by subtracting the mean of each column
+center_data <- function(data) {
+  apply(data, 2, function(col) col - mean(col))
+}
+
+# Function to scale data manually
+scale_data_manual <- function(data, type_col) {
+  # Step 1: Center the data (mean 0)
+  data_centered <- center_data(data |> select(-all_of(type_col)))
+
+  # Step 2: Calculate the standard deviation of each dimension
+  sds <- apply(data_centered, 2, sd)
+
+  # Step 3: Scale each dimension to have the range [0, 1]
+  data_scaled <- apply(data_centered, 2, function(col) col / max(abs(col)))
+
+  # Step 4: Scale dimensions according to their variation
+  # The dimension with the highest standard deviation is scaled to [-1, 1]
+  # Other dimensions are scaled to smaller ranges based on their standard deviations
+  max_sd <- max(sds)
+
+  # Normalize the standard deviations to get scaling factors
+  scaling_factors <- sds / max_sd
+
+  for (i in seq_along(scaling_factors)) {
+    data_scaled[, i] <- data_scaled[, i] * scaling_factors[i]
+  }
+
+  # Combine the scaled data with the 'type' column and return as a tibble
+  data_scaled <- as_tibble(data_scaled) %>%
+    mutate(!!type_col := data[[type_col]])
+
+  return(data_scaled)
+}
+
+get_projection <- function(projection, proj_scale, scaled_data,
+                           scaled_data_model, distance_df_small_edges,
+                           axis_param) {
+
+  projection_scaled <- projection * proj_scale
+  projected <- as.matrix(scaled_data) %*% projection_scaled
+
+  projected_df <- projected |>
+    tibble::as_tibble(.name_repair = "unique") |>
+    dplyr::rename(c("proj1" = "...1",
+                    "proj2" = "...2")) |>
+    dplyr::mutate(ID = dplyr::row_number())
+
+  projected_model <- as.matrix(scaled_data_model) %*% projection_scaled
+
+  projected_model_df <- projected_model |>
+    tibble::as_tibble(.name_repair = "unique") |>
+    dplyr::rename(c("proj1" = "...1",
+                    "proj2" = "...2")) |>
+    dplyr::mutate(ID = dplyr::row_number())
+
+  model_df <- dplyr::left_join(
+    distance_df_small_edges |> select(-distance),
+    projected_model_df,
+    by = c("from" = "ID"))
+
+  names(model_df)[3:NCOL(model_df)] <- paste0(names(projected_model_df)[-NCOL(projected_model_df)], "_from")
+
+  model_df <- dplyr::left_join(model_df, projected_model_df, by = c("to" = "ID"))
+  names(model_df)[(2 + NCOL(projected_model_df)):NCOL(model_df)] <- paste0(names(projected_model_df)[-NCOL(projected_model_df)], "_to")
+
+  limits <- axis_param$limits
+  axis_scaled <- axis_param$axis_scaled
+  axis_pos_x <- axis_param$axis_pos_x
+  axis_pos_y <- axis_param$axis_pos_y
+  threshold <- axis_param$threshold
+
+  axes_obj <- gen_axes(
+    proj = projection * axis_scaled,
+    limits = limits,
+    axis_pos_x = axis_pos_x,
+    axis_pos_y = axis_pos_y,
+    axis_labels = names(scaled_data),
+    threshold = threshold)
+
+  axes <- axes_obj$axes
+  circle <- axes_obj$circle
+
+  return(list(projected_df = projected_df,
+              model_df = model_df,
+              axes = axes,
+              circle = circle))
+
+}
+
+gen_axes <- function(proj, limits = 1, axis_pos_x = NULL, axis_pos_y = NULL,
+                     axis_labels, threshold = 0) {
+
+  axis_scale <- limits/6
+
+  if (is.null(axis_pos_x)) {
+
+    axis_pos_x <- -2/3 * limits
+
+  }
+
+  if (is.null(axis_pos_y)) {
+
+    axis_pos_y <- -2/3 * limits
+
+  }
+
+  adj <- function(x, axis_pos) axis_pos + x * axis_scale
+  axes <- data.frame(x1 = adj(0, axis_pos_x),
+                     y1 = adj(0, axis_pos_y),
+                     x2 = adj(proj[, 1], axis_pos_x),
+                     y2 = adj(proj[, 2], axis_pos_y))
+
+  rownames(axes) <- axis_labels
+
+  ## To remove axes
+  axes <- axes |>
+    mutate(distance = sqrt((x2 - x1)^2 + (y2 - y1)^2)) |>
+    filter(distance >= threshold)
+
+  theta <- seq(0, 2 * pi, length = 50)
+  circle <- data.frame(c1 = adj(cos(theta), axis_pos_x),
+                       c2 = adj(sin(theta), axis_pos_y))
+
+  return(list(axes = axes, circle = circle))
+
+}
+
+
+plot_proj <- function(projected_df, model_df, axes, circle,
+                      point_param = c(1.5, 0.5, "#000000"), # size, alpha, color
+                      line_param = c(0.5, 0.5, "#000000"), #linewidth, alpha
+                      plot_limits, title, cex = 2,
+                      position = c(0.92, 0.92),
+                      axis_text_size = 3,
+                      is_category = FALSE) {
+
+  if(is_category == FALSE) {
+
+    initial_plot <- projected_df |>
+      ggplot(
+        aes(
+          x = proj1,
+          y = proj2)) +
+      geom_segment(
+        data = model_df,
+        aes(
+          x = proj1_from,
+          y = proj2_from,
+          xend = proj1_to,
+          yend = proj2_to),
+        color = line_param[3],
+        linewidth = as.numeric(line_param[1]),
+        alpha = as.numeric(line_param[2])) +
+      geom_point(
+        size = as.numeric(point_param[1]),
+        alpha = as.numeric(point_param[2]),
+        color = point_param[3])
+
+  } else {
+
+    initial_plot <- projected_df |>
+      ggplot(
+        aes(
+          x = proj1,
+          y = proj2,
+          colour = cluster)) +
+      geom_segment(
+        data = model_df,
+        aes(
+          x = proj1_from,
+          y = proj2_from,
+          xend = proj1_to,
+          yend = proj2_to),
+        color = line_param[3],
+        linewidth = as.numeric(line_param[1]),
+        alpha = as.numeric(line_param[2])) +
+      geom_point(
+        size = as.numeric(point_param[1]),
+        alpha = as.numeric(point_param[2]))
+
+  }
+
+  initial_plot <- initial_plot +
+    geom_segment(
+      data=axes,
+      aes(x=x1, y=y1, xend=x2, yend=y2),
+      colour="grey70") +
+    geom_text(
+      data=axes,
+      aes(x=x2, y=y2),
+      label=rownames(axes),
+      colour="grey50",
+      size = axis_text_size) +
+    geom_path(
+      data=circle,
+      aes(x=c1, y=c2), colour="grey70") +
+    xlim(plot_limits) +
+    ylim(plot_limits) +
+    interior_annotation(title, position, cex = cex)
+
+  initial_plot
+
+}
+
+
 #' Visualize a specific projection of langevitour
 #'
 #' This function visualize a specific projection of langevitour.
