@@ -27,8 +27,7 @@
 #' lim2 <- scurve_umap_scaled_obj$lim2
 #' r2 <- diff(lim2)/diff(lim1)
 #' fit_highd_model(training_data = s_curve_noise_training,
-#' emb_df = s_curve_noise_umap_scaled, bin1 = 4, r2 = r2,
-#' col_start_highd = "x")
+#' emb_df = s_curve_noise_umap_scaled, bin1 = 4, r2 = r2)
 #'
 #' @export
 fit_highd_model <- function(training_data, emb_df, bin1 = 4, r2, q = 0.1,
