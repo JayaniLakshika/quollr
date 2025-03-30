@@ -4,34 +4,12 @@
 \alias{show_langevitour}
 \title{Visualize the model overlaid on high-dimensional data}
 \usage{
-show_langevitour(
-  df,
-  df_b,
-  df_b_with_center_data,
-  benchmark_value,
-  distance_df,
-  distance_col,
-  use_default_benchmark_val = FALSE,
-  col_start
-)
+show_langevitour(point_df, edge_df)
 }
 \arguments{
-\item{df}{A tibble that contains the high-dimensional data.}
+\item{point_df}{A tibble that contains the high-dimensional data and model in high-dimensions.}
 
-\item{df_b}{A tibble that contains the high-dimensional coordinates of bin centroids.}
-
-\item{df_b_with_center_data}{The dataset with hexagonal bin centroids.}
-
-\item{benchmark_value}{The benchmark value used to remove long edges (optional).}
-
-\item{distance_df}{The tibble with distance.}
-
-\item{distance_col}{The name of the distance column.}
-
-\item{use_default_benchmark_val}{Logical, indicating whether to use default
-benchmark value  to remove long edges (default is FALSE).}
-
-\item{col_start}{The text that begin the column name of the high-dimensional data.}
+\item{edge_df}{A tibble that contains the wireframe data (from and to).}
 }
 \value{
 A langevitour object with the model and the high-dimensional data.
@@ -41,14 +19,12 @@ This function generates a LangeviTour visualization based on different
 conditions and input parameters.
 }
 \examples{
-umap_data_with_hb_id <- s_curve_obj$s_curve_umap_hb_obj$data_hb_id
-df_all <- dplyr::bind_cols(s_curve_noise_training |> dplyr::select(-ID),
-umap_data_with_hb_id)
-df_bin_centroids <- s_curve_obj$s_curve_umap_model_distance_df$df_bin_centroids
-df_bin <- s_curve_obj$s_curve_umap_model_distance_df$df_bin
+df_exe <- comb_data_mode(highd_data = s_curve_noise_training, model_highd = df_bin,
+model_2d = df_bin_centroids)
 distance_df <- s_curve_obj$s_curve_umap_model_distance_df
-show_langevitour(df = df_all, df_b = df_bin, df_b_with_center_data = df_bin_centroids,
-benchmark_value = 1.16, distance = distance_df, distance_col = "distance",
-use_default_benchmark_val = FALSE, col_start = "x")
+benchmark <- find_lg_benchmark(distance_edges = distance_df,
+distance_col = "distance")
+distance_small_df <- distance_df |> dplyr::filter(distance < benchmark)
+show_langevitour(point_df = df_exe, edge_df = distance_small_df)
 
 }
