@@ -7,7 +7,7 @@
 show_link_plots(point_df, edge_df)
 }
 \arguments{
-\item{point_df}{A tibble that contains the high-dimensional data, no-linear dimension reductions
+\item{point_df}{A tibble that contains the high-dimensional data, non-linear dimension reductions
 and model in high-dimensions.}
 
 \item{edge_df}{A tibble that contains the wireframe data (from and to).}

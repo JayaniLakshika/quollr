@@ -247,30 +247,9 @@ compute_std_counts <- function(data_hb) {
 #' @export
 find_pts <- function(data_hb) {
 
-  ## A vector to store points info
-  pts_list <- list()
-  hexID <- integer(0)
-
-  hexID_vec <- unique(data_hb$hb_id)
-
-  for (hb_id in hexID_vec) {
-
-    ## Filter a hexagon and find the point within that hexagon
-    pts_vec <- data_hb |>
-      filter(hb_id == hb_id) |>
-      pull(ID) |>
-      list()
-
-    ## Rename the list
-    names(pts_vec) <- paste0("Points in hexID: ", hb_id)
-
-    ## Store the hexagon ID with the respective points
-    pts_list <- append(pts_list, pts_vec)
-    hexID <- append(hexID, hb_id)
-
-  }
-
-  pts_df <- tibble(hexID = hexID, pts_list = pts_list)
+  pts_df <- data_hb |>
+    group_by(hb_id) |>
+    summarize(pts_list = list(ID), .groups = "drop")
 
   return(pts_df)
 

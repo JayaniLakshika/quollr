@@ -50,7 +50,7 @@ comb_all_data_model <- function(highd_data, nldr_data, model_highd, model_2d) {
 #' This function generates a LangeviTour visualization based on different
 #' conditions and input parameters with 2D wireframe.
 #'
-#' @param point_df A tibble that contains the high-dimensional data, no-linear dimension reductions
+#' @param point_df A tibble that contains the high-dimensional data, non-linear dimension reductions
 #' and model in high-dimensions.
 #' @param edge_df A tibble that contains the wireframe data (from and to).
 #'

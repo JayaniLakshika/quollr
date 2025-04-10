@@ -1,93 +1,21 @@
-# Center the data by subtracting the mean of each column
-center_data <- function(data) {
-  apply(data, 2, function(col) col - mean(col))
-}
-
-# Function to scale data manually
-scale_data_manual <- function(data, type_col) {
-  # Step 1: Center the data (mean 0)
-  data_centered <- center_data(data |> select(-all_of(type_col)))
-
-  # Step 2: Calculate the standard deviation of each dimension
-  sds <- apply(data_centered, 2, sd)
-
-  # Step 3: Scale each dimension to have the range [0, 1]
-  data_scaled <- apply(data_centered, 2, function(col) col / max(abs(col)))
-
-  # Step 4: Scale dimensions according to their variation
-  # The dimension with the highest standard deviation is scaled to [-1, 1]
-  # Other dimensions are scaled to smaller ranges based on their standard deviations
-  max_sd <- max(sds)
-
-  # Normalize the standard deviations to get scaling factors
-  scaling_factors <- sds / max_sd
-
-  for (i in seq_along(scaling_factors)) {
-    data_scaled[, i] <- data_scaled[, i] * scaling_factors[i]
-  }
-
-  # Combine the scaled data with the 'type' column and return as a tibble
-  data_scaled <- as_tibble(data_scaled) %>%
-    mutate(!!type_col := data[[type_col]])
-
-  return(data_scaled)
-}
-
-get_projection <- function(projection, proj_scale, scaled_data,
-                           scaled_data_model, distance_df_small_edges,
-                           axis_param) {
-
-  projection_scaled <- projection * proj_scale
-  projected <- as.matrix(scaled_data) %*% projection_scaled
-
-  projected_df <- projected |>
-    tibble::as_tibble(.name_repair = "unique") |>
-    dplyr::rename(c("proj1" = "...1",
-                    "proj2" = "...2")) |>
-    dplyr::mutate(ID = dplyr::row_number())
-
-  projected_model <- as.matrix(scaled_data_model) %*% projection_scaled
-
-  projected_model_df <- projected_model |>
-    tibble::as_tibble(.name_repair = "unique") |>
-    dplyr::rename(c("proj1" = "...1",
-                    "proj2" = "...2")) |>
-    dplyr::mutate(ID = dplyr::row_number())
-
-  model_df <- dplyr::left_join(
-    distance_df_small_edges |> select(-distance),
-    projected_model_df,
-    by = c("from" = "ID"))
-
-  names(model_df)[3:NCOL(model_df)] <- paste0(names(projected_model_df)[-NCOL(projected_model_df)], "_from")
-
-  model_df <- dplyr::left_join(model_df, projected_model_df, by = c("to" = "ID"))
-  names(model_df)[(2 + NCOL(projected_model_df)):NCOL(model_df)] <- paste0(names(projected_model_df)[-NCOL(projected_model_df)], "_to")
-
-  limits <- axis_param$limits
-  axis_scaled <- axis_param$axis_scaled
-  axis_pos_x <- axis_param$axis_pos_x
-  axis_pos_y <- axis_param$axis_pos_y
-  threshold <- axis_param$threshold
-
-  axes_obj <- gen_axes(
-    proj = projection * axis_scaled,
-    limits = limits,
-    axis_pos_x = axis_pos_x,
-    axis_pos_y = axis_pos_y,
-    axis_labels = names(scaled_data),
-    threshold = threshold)
-
-  axes <- axes_obj$axes
-  circle <- axes_obj$circle
-
-  return(list(projected_df = projected_df,
-              model_df = model_df,
-              axes = axes,
-              circle = circle))
-
-}
-
+#' Generate Axes for Projection
+#'
+#' @param proj A projection matrix or data frame.
+#' @param limits Numeric value specifying axis limits (default: 1).
+#' @param axis_pos_x Optional numeric value for x-axis position.
+#' @param axis_pos_y Optional numeric value for y-axis position.
+#' @param axis_labels A vector of axis labels.
+#' @param threshold A numeric threshold value (default: 0).
+#'
+#' @return A modified projection with added axis elements.
+#' @export
+#'
+#' @examples
+#' projection_df <- cbind(
+#' c(-0.17353,-0.02906,0.19857,0.00037,0.00131,-0.05019,0.03371),
+#' c(-0.10551,0.14829,-0.02063,0.02658,-0.03150,0.19698,0.00044))
+#'
+#' gen_axes(proj = projection_df, axis_labels = paste0("x", 1:7))
 gen_axes <- function(proj, limits = 1, axis_pos_x = NULL, axis_pos_y = NULL,
                      axis_labels, threshold = 0) {
 
@@ -126,11 +54,154 @@ gen_axes <- function(proj, limits = 1, axis_pos_x = NULL, axis_pos_y = NULL,
 
 }
 
+#' Compute Projection for High-Dimensional Data
+#'
+#' @param projection A matrix or data frame representing the projection.
+#' @param proj_scale Scaling factor for the projection.
+#' @param highd_data A data frame or matrix of high-dimensional data.
+#' @param model_highd A model object or function used for high-dimensional transformation.
+#' @param tr_from_to_df A data frame defining transformation from one space to another.
+#' @param axis_param A list of parameters for axis configuration.
+#'
+#' @return A data frame or matrix with the transformed projection.
+#' @export
+#'
+#' @examples
+#' projection_df <- cbind(
+#' c(-0.17353,-0.02906,0.19857,0.00037,0.00131,-0.05019,0.03371),
+#' c(-0.10551,0.14829,-0.02063,0.02658,-0.03150,0.19698,0.00044))
+#'
+#' distance_df <- s_curve_obj$s_curve_umap_model_distance_df
+#' benchmark <- find_lg_benchmark(distance_edges = distance_df,
+#' distance_col = "distance")
+#'
+#' df_bin <- s_curve_obj$s_curve_umap_model_obj$df_bin
+#'
+#' ## Set the maximum difference as the criteria
+#' distance_df_small_edges <- distance_df |>
+#'   dplyr::filter(distance < benchmark) |>
+#'   dplyr::select(-distance)
+#'
+#' get_projection(projection = projection_df, proj_scale = 1,
+#' highd_data = s_curve_noise_training, model_highd = df_bin,
+#' tr_from_to_df = distance_df_small_edges,
+#' axis_param = list(limits = 1, axis_scaled = 1, axis_pos_x = -0.72,
+#' axis_pos_y = -0.72,threshold = 0))
+#'
+get_projection <- function(projection, proj_scale, highd_data, model_highd,
+                           tr_from_to_df, axis_param) {
 
+  highd_data <- highd_data |>
+    dplyr::select(tidyselect::starts_with("x"))
+
+  projection_scaled <- projection * proj_scale
+  projected <- as.matrix(highd_data) %*% projection_scaled
+
+  projected_df <- projected |>
+    tibble::as_tibble(.name_repair = "unique") |>
+    dplyr::rename(c("proj1" = "...1",
+                    "proj2" = "...2")) |>
+    dplyr::mutate(ID = dplyr::row_number())
+
+  model_highd <- model_highd |>
+    dplyr::select(tidyselect::starts_with("x"))
+
+  projected_model <- as.matrix(model_highd) %*% projection_scaled
+
+  projected_model_df <- projected_model |>
+    tibble::as_tibble(.name_repair = "unique") |>
+    dplyr::rename(c("proj1" = "...1",
+                    "proj2" = "...2")) |>
+    dplyr::mutate(ID = dplyr::row_number())
+
+  model_df <- dplyr::left_join(
+    tr_from_to_df,
+    projected_model_df,
+    by = c("from" = "ID"))
+
+  names(model_df)[3:NCOL(model_df)] <- paste0(names(projected_model_df)[-NCOL(projected_model_df)], "_from")
+
+  model_df <- dplyr::left_join(model_df, projected_model_df, by = c("to" = "ID"))
+  names(model_df)[(2 + NCOL(projected_model_df)):NCOL(model_df)] <- paste0(names(projected_model_df)[-NCOL(projected_model_df)], "_to")
+
+  limits <- axis_param$limits
+  axis_scaled <- axis_param$axis_scaled
+  axis_pos_x <- axis_param$axis_pos_x
+  axis_pos_y <- axis_param$axis_pos_y
+  threshold <- axis_param$threshold
+
+  axes_obj <- gen_axes(
+    proj = projection * axis_scaled,
+    limits = limits,
+    axis_pos_x = axis_pos_x,
+    axis_pos_y = axis_pos_y,
+    axis_labels = names(highd_data),
+    threshold = threshold)
+
+  axes <- axes_obj$axes
+  circle <- axes_obj$circle
+
+  return(list(projected_df = projected_df,
+              model_df = model_df,
+              axes = axes,
+              circle = circle))
+
+}
+
+
+#' Plot Projected Data with Axes and Circles
+#'
+#' @param projected_df A data frame containing the projected data.
+#' @param model_df A data frame containing the model reference data.
+#' @param axes A data frame or list specifying the axes details.
+#' @param circle A list defining circle parameters.
+#' @param point_param A vector specifying point size, alpha, and color (default: c(1.5, 0.5, "#000000")).
+#' @param line_param A vector specifying line width, alpha, and color (default: c(0.5, 0.5, "#000000")).
+#' @param plot_limits Limits for the plot axes.
+#' @param cex Scaling factor for point size (default: 2).
+#' @param position Position of elements within the plot (default: c(0.92, 0.92)).
+#' @param axis_text_size Size of axis text (default: 3).
+#' @param is_category Logical indicating if the data is categorical (default: FALSE).
+#'
+#' @return A ggplot object.
+#'
+#' @importFrom ggplot2 ggplot geom_point geom_segment geom_text geom_path aes xlim ylim
+#'
+#' @export
+#'
+#' @examples
+#' projection_df <- cbind(
+#' c(-0.17353,-0.02906,0.19857,0.00037,0.00131,-0.05019,0.03371),
+#' c(-0.10551,0.14829,-0.02063,0.02658,-0.03150,0.19698,0.00044))
+#'
+#' distance_df <- s_curve_obj$s_curve_umap_model_distance_df
+#' benchmark <- find_lg_benchmark(distance_edges = distance_df,
+#' distance_col = "distance")
+#'
+#' df_bin <- s_curve_obj$s_curve_umap_model_obj$df_bin
+#'
+#' ## Set the maximum difference as the criteria
+#' distance_df_small_edges <- distance_df |>
+#'   dplyr::filter(distance < benchmark) |>
+#'   dplyr::select(-distance)
+#'
+#' proj_obj1 <- get_projection(projection = projection_df, proj_scale = 1,
+#' highd_data = s_curve_noise_training, model_highd = df_bin,
+#' tr_from_to_df = distance_df_small_edges,
+#' axis_param = list(limits = 1, axis_scaled = 1, axis_pos_x = -0.72,
+#' axis_pos_y = -0.72,threshold = 0))
+#'
+#' projected_df_n <- proj_obj1$projected_df
+#' model_df <- proj_obj1$model_df
+#' axes <- proj_obj1$axes
+#' circle <- proj_obj1$circle
+#'
+#' plot_proj(projected_df = projected_df_n, model_df = model_df,
+#' axes = axes, circle = circle, plot_limits = c(-1, 1))
 plot_proj <- function(projected_df, model_df, axes, circle,
                       point_param = c(1.5, 0.5, "#000000"), # size, alpha, color
                       line_param = c(0.5, 0.5, "#000000"), #linewidth, alpha
-                      plot_limits, title, cex = 2,
+                      plot_limits, cex = 2,
                       position = c(0.92, 0.92),
                       axis_text_size = 3,
                       is_category = FALSE) {
@@ -196,90 +267,8 @@ plot_proj <- function(projected_df, model_df, axes, circle,
       data=circle,
       aes(x=c1, y=c2), colour="grey70") +
     xlim(plot_limits) +
-    ylim(plot_limits) +
-    interior_annotation(title, position, cex = cex)
+    ylim(plot_limits)
 
   initial_plot
-
-}
-
-
-#' Visualize a specific projection of langevitour
-#'
-#' This function visualize a specific projection of langevitour.
-#'
-#' @param points_df The tibble that contains the model and data.
-#' @param projection The tibble of the projection.
-#' @param edge_df The tibble that contains the edge information (from, to).
-#' @return A ggplot object with the specific projection of langevitour.
-#'
-#' @importFrom ggplot2 ggplot geom_segment geom_point scale_color_manual aes labs
-#'
-#' @examples
-#' umap_data_with_hb_id <- s_curve_obj$s_curve_umap_hb_obj$data_hb_id
-#' df_all <- dplyr::bind_cols(s_curve_noise_training |> dplyr::select(-ID),
-#' umap_data_with_hb_id)
-#' df_bin_centroids <- s_curve_obj$s_curve_umap_model_distance_df$df_bin_centroids
-#' df_bin <- s_curve_obj$s_curve_umap_model_distance_df$df_bin
-#' distance_df <- s_curve_obj$s_curve_umap_model_distance_df
-#' ### Define type column
-#' df <- df_all |>
-#'   dplyr::select(tidyselect::starts_with("x")) |>
-#'   dplyr::mutate(type = "data") ## original dataset
-#'
-#' df_b <- df_bin |>
-#'   dplyr::filter(hb_id %in% df_bin_centroids$hexID) |>
-#'   dplyr::mutate(type = "model") ## Data with summarized mean
-#'
-#' ## Reorder the rows of df_b according to the hexID order in df_b_with_center_data
-#' df_b <- df_b[match(df_bin_centroids$hexID, df_b$hb_id),] |>
-#'   dplyr::select(-hb_id)
-#'
-#' df_exe <- dplyr::bind_rows(df_b, df)
-#' benchmark <- 0.663
-#'
-#' ## Set the maximum difference as the criteria
-#' distance_df_small_edges <- distance_df |>
-#'   dplyr::filter(distance < benchmark) |>
-#'   dplyr::select(-distance)
-#'
-#' projection_df <- cbind(
-#' c(-0.17353,-0.02906,0.19857,0.00037,0.00131,-0.05019,0.03371),
-#' c(-0.10551,0.14829,-0.02063,0.02658,-0.03150,0.19698,0.00044))
-#'
-#'
-#' gen_proj_langevitour(points_df = df_exe, projection = projection_df,
-#' edge_df = distance_df_small_edges)
-#'
-#' @export
-gen_proj_langevitour <- function(points_df, projection, edge_df) {
-
-  ## To extract only points
-  points_only_df <- points_df |>
-    dplyr::select(-type)
-
-  projected <- as.matrix(points_only_df) %*% projection
-  projected_df <- projected |>
-    tibble::as_tibble(.name_repair = "unique") |>
-    dplyr::rename(c("proj1" = "...1",
-                    "proj2" = "...2")) |>
-    dplyr::mutate(type = points_df$type) |>
-    dplyr::mutate(ID = dplyr::row_number())
-
-  proj_model <- projected_df |>
-    dplyr::filter(type == "model")
-
-  model_df <- dplyr::left_join(edge_df, proj_model, by = c("from" = "ID"))
-  names(model_df)[3:NCOL(model_df)] <- paste0(names(proj_model)[-NCOL(proj_model)], "_from")
-
-  model_df <- dplyr::left_join(model_df, proj_model, by = c("to" = "ID"))
-  names(model_df)[(NCOL(edge_df) + NCOL(proj_model)):NCOL(model_df)] <- paste0(names(proj_model)[-NCOL(proj_model)], "_to")
-
-  proj_plot <- ggplot(data = projected_df, aes(x = proj1, y = proj2, color = type)) +
-    geom_point(size = 2, alpha = 0.6) +
-    geom_segment(data = model_df, aes(x = proj1_from, y = proj2_from, xend = proj1_to, yend = proj2_to), color = "#33a02c", alpha = 0.5) +
-    scale_color_manual(values = c("#000000", "#33a02c"))
-
-  return(proj_plot)
 
 }
