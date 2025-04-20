@@ -3,7 +3,7 @@ Package: quollr
 Title: Visualising How Nonlinear Dimension Reduction Warps Your Data
 Version: 0.2.5
 Authors@R: c(
-    person("Jayani", "P.G. Lakshika", , "jayanilakshika76@gmail.com", role = c("aut", "cre"),
+    person("Jayani P.", "Gamage", , "jayanilakshika76@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-6265-6481")),
     person("Dianne", "Cook", , "dicook@monash.edu", role = "aut",
            comment = c(ORCID = "0000-0002-3813-7155")),
@@ -11,7 +11,7 @@ Authors@R: c(
            comment = c(ORCID = "0000-0002-3980-268X")),
     person("Michael", "Lydeamore", , "michael.lydeamore@monash.edu", role = "aut",
            comment = c(ORCID = "0000-0001-6515-827X")),
-    person("Thiyanga", "S. Talagala", , "ttalagala@sjp.ac.lk", role = "aut",
+    person("Thiyanga S.", "Talagala", , "ttalagala@sjp.ac.lk", role = "aut",
            comment = c(ORCID = "0000-0002-0656-9789"))
   )
 Description: To construct a model in 2D
