@@ -1,8 +1,8 @@
 ---
-title: "2. Algorithm for visualising the model overlaid on high-dimensional data"
+title: "3. Algorithm for visualising the model overlaid on high-dimensional data"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{2. Algorithm for visualising the model overlaid on high-dimensional data}
+  %\VignetteIndexEntry{3. Algorithm for visualising the model overlaid on high-dimensional data}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -36,8 +36,13 @@ The algorithm consists of two steps. First, construct the model in 2D space. Sec
 To construct the model in the 2D space, first you need to hexagonally bins the 2D layout. Discussed in details in [3. Algorithm for binning data](https://quollr.netlify.app/articles/visfullgrid).  
 
 ```{r}
-r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
-hb_obj <- hex_binning(data = s_curve_noise_umap_scaled, bin1 = 6, r2 = r2)
+lim1 <- s_curve_obj$s_curve_umap_scaled_obj$lim1
+lim2 <- s_curve_obj$s_curve_umap_scaled_obj$lim2
+r2 <- diff(lim2)/diff(lim1)
+
+umap_scaled <- s_curve_obj$s_curve_umap_scaled_obj$scaled_nldr
+
+hb_obj <- hex_binning(data = umap_scaled, bin1 = 6, r2 = r2)
 
 all_centroids_df <- hb_obj$centroids
 counts_df <- hb_obj$std_cts
@@ -139,6 +144,10 @@ benchmark <- find_lg_benchmark(distance_edges = distance_df,
 benchmark
 ```
 
+```{r}
+distance_small_df <- distance_df |> dplyr::filter(distance < benchmark)
+```
+
 To visualize the results, you can use `vis_lg_mesh()` and `vis_rmlg_mesh()`. These functions enable you to observe the wireframe in 2D obtained from the algorithm's computations.
 
 ```{r}
@@ -184,7 +193,7 @@ glimpse(df_all)
 Then, use `avg_highd_data()` to obtain the high-dimensional coordinates of the model.
 
 ```{r} 
-df_bin <- avg_highd_data(data = df_all, col_start = "x")
+df_bin <- avg_highd_data(data = df_all)
 glimpse(df_bin)
 ```
 
@@ -193,11 +202,11 @@ glimpse(df_bin)
 Finally, to visualise the model overlaid with the high-dimensional data, you initially need to pass the data set with the high-dimensional data and the 2D embedding with hexagonal bin IDs (`df_all`),  high-dimensional mapping of hexagonal bin centroids (`df_bin`), 2D hexagonal bin coordinates (`df_bin_centroids`), and wireframe data (`distance_df`).
 
 ```{r}
-tour1 <- show_langevitour(df = df_all, df_b = df_bin, 
-                          df_b_with_center_data = df_bin_centroids, 
-                          benchmark_value = 0.75, 
-                          distance_df = distance_df, distance_col = "distance", 
-                          use_default_benchmark_val = FALSE, col_start = "x")
+df_exe <- comb_data_model(highd_data = s_curve_noise_training, model_highd = df_bin, model_2d = df_bin_centroids)
+```
+
+```{r}
+tour1 <- show_langevitour(point_df = df_exe, edge_df = distance_small_df)
 
 tour1
 ```

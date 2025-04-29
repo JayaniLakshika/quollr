@@ -1,8 +1,8 @@
 ---
-title: "3. Algorithm for binning data"
+title: "2. Algorithm for binning data"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{3. Algorithm for binning data}
+  %\VignetteIndexEntry{2. Algorithm for binning data}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -28,21 +28,26 @@ library(dplyr)
 By passing the preprocessed 2D embedding data and hexagonal grid configurations, you can obtain the hexagonal binning information like centroid coordinates, hexagonal polygon coordinates, the standardise counts within each hexagon etc.  
 
 ```{r}
-r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
-hb_obj <- hex_binning(data = s_curve_noise_umap_scaled, bin1 = 7, q = 0.2, r2 = r2)
+lim1 <- s_curve_obj$s_curve_umap_scaled_obj$lim1
+lim2 <- s_curve_obj$s_curve_umap_scaled_obj$lim2
+r2 <- diff(lim2)/diff(lim1)
+
+umap_scaled <- s_curve_obj$s_curve_umap_scaled_obj$scaled_nldr
+
+hb_obj <- hex_binning(data = umap_scaled, bin1 = 7, q = 0.1, r2 = r2)
 ```
 
 ```{r}
 ## Data set with all possible centroids in the hexagonal grid
-all_centroids_df <- hb_obj$centroids
+all_centroids_df <- s_curve_obj$s_curve_umap_hb_obj$centroids
 glimpse(all_centroids_df)
 
 ## Generate all coordinates of hexagons
-hex_grid <- hb_obj$hex_poly
+hex_grid <- s_curve_obj$s_curve_umap_hb_obj$hex_poly
 glimpse(hex_grid)
 
 ## To obtain the standardise counts within hexbins
-counts_df <- hb_obj$std_cts
+counts_df <- s_curve_obj$s_curve_umap_hb_obj$std_cts
 df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df, 
                                              counts_df = counts_df) |>
       filter(drop_empty == FALSE)
@@ -67,7 +72,7 @@ ggplot(data = hex_grid, aes(x = x, y = y)) +
 ```{r}
 ggplot(data = hex_grid, aes(x = x, y = y)) + 
   geom_polygon(fill = "white", color = "black", aes(group = hex_poly_id)) +
-  geom_point(data = s_curve_noise_umap_scaled, aes(x = UMAP1, y = UMAP2), color = "blue") +
+  geom_point(data = umap_scaled, aes(x = emb1, y = emb2), color = "blue") +
   coord_fixed()
 ```
 
