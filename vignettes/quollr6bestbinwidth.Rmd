@@ -87,7 +87,7 @@ error_df_all |>
 ```
 
 ```{r, fig.alt="MSE Vs binw idths."}
-#| fig-height: 6
+#| fig-height: 4
 #| fig-width: 6
 #| out-width: 100%
 

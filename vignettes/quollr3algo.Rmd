@@ -80,6 +80,7 @@ trimesh <- ggplot(df_bin_centroids, aes(x = c_x, y = c_y)) +
 
 trimesh
 ```
+
 ### Create the wireframe in 2D
 
 To build the wireframe in 2D, you'll need to identify which vertices are connected. You can obtain this by passing the triangular object to the `gen_edges` function, which will provide information on the existing edges and the connected vertices.

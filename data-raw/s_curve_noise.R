@@ -97,9 +97,9 @@ s_curve_obj[[2]] <- hb_obj
 names(s_curve_obj)[2] <- "s_curve_umap_hb_obj"
 
 model_s_curve_obj <- fit_highd_model(
-  training_data = s_curve_noise_training,
-  emb_df = s_curve_noise_umap_scaled,
-  bin1 = 4, r2 = r2, col_start_highd = "x")
+  highd_data = s_curve_noise_training,
+  nldr_data = s_curve_noise_umap_scaled,
+  bin1 = 15, r2 = r2)
 
 s_curve_obj[[3]] <- model_s_curve_obj
 names(s_curve_obj)[3] <- "s_curve_umap_model_obj"
