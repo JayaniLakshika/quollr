@@ -93,7 +93,7 @@
 <span><span class="co">## To initialize number of bins along the x-axis</span></span>
 <span><span class="va">bin1_vec</span> <span class="op">&lt;-</span> <span class="fl">5</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">NROW</a></span><span class="op">(</span><span class="va">s_curve_noise_training</span><span class="op">)</span><span class="op">/</span><span class="va">r2</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">error_df_all</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span>nrow <span class="op">=</span> <span class="fl">0</span>, ncol <span class="op">=</span> <span class="fl">0</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">error_df_umap1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span>nrow <span class="op">=</span> <span class="fl">0</span>, ncol <span class="op">=</span> <span class="fl">0</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="kw">for</span> <span class="op">(</span><span class="va">xbins</span> <span class="kw">in</span> <span class="va">bin1_vec</span><span class="op">)</span> <span class="op">{</span></span>
 <span></span>
@@ -128,14 +128,276 @@
 <span>           a1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">a1</span>, <span class="fl">2</span><span class="op">)</span>,</span>
 <span>           a2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">a2</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span>  <span class="va">error_df_all</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_rows.html" class="external-link">bind_rows</a></span><span class="op">(</span><span class="va">error_df_all</span>, <span class="va">error_df</span><span class="op">)</span></span>
+<span>  <span class="va">error_df_umap1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_rows.html" class="external-link">bind_rows</a></span><span class="op">(</span><span class="va">error_df_umap1</span>, <span class="va">error_df</span><span class="op">)</span></span>
 <span></span>
-<span><span class="op">}</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">nldr_scaled_obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gen_scaled_data.html">gen_scaled_data</a></span><span class="op">(</span></span>
+<span>  data <span class="op">=</span> <span class="va">s_curve_noise_umap2</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">s_curve_noise_umap_scaled</span> <span class="op">&lt;-</span> <span class="va">nldr_scaled_obj</span><span class="op">$</span><span class="va">scaled_nldr</span></span>
+<span></span>
+<span><span class="va">lim1</span> <span class="op">&lt;-</span> <span class="va">nldr_scaled_obj</span><span class="op">$</span><span class="va">lim1</span></span>
+<span><span class="va">lim2</span> <span class="op">&lt;-</span> <span class="va">nldr_scaled_obj</span><span class="op">$</span><span class="va">lim2</span></span>
+<span><span class="va">r2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/diff.html" class="external-link">diff</a></span><span class="op">(</span><span class="va">lim2</span><span class="op">)</span><span class="op">/</span><span class="fu"><a href="https://rdrr.io/r/base/diff.html" class="external-link">diff</a></span><span class="op">(</span><span class="va">lim1</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## To initialize number of bins along the x-axis</span></span>
+<span><span class="va">bin1_vec</span> <span class="op">&lt;-</span> <span class="fl">5</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">NROW</a></span><span class="op">(</span><span class="va">s_curve_noise_training</span><span class="op">)</span><span class="op">/</span><span class="va">r2</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">error_df_umap2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span>nrow <span class="op">=</span> <span class="fl">0</span>, ncol <span class="op">=</span> <span class="fl">0</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="kw">for</span> <span class="op">(</span><span class="va">xbins</span> <span class="kw">in</span> <span class="va">bin1_vec</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  </span>
+<span>  <span class="va">hb_obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/calc_bins_y.html">calc_bins_y</a></span><span class="op">(</span>bin1 <span class="op">=</span> <span class="va">xbins</span>, r2 <span class="op">=</span> <span class="va">r2</span>, q <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="va">bin2</span> <span class="op">&lt;-</span> <span class="va">hb_obj</span><span class="op">$</span><span class="va">bin2</span></span>
+<span>  <span class="va">a1</span> <span class="op">&lt;-</span> <span class="va">hb_obj</span><span class="op">$</span><span class="va">a1</span></span>
+<span>  <span class="va">a2</span> <span class="op">&lt;-</span> <span class="va">hb_obj</span><span class="op">$</span><span class="va">a2</span></span>
+<span>  </span>
+<span>  <span class="va">scurve_model</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_highd_model.html">fit_highd_model</a></span><span class="op">(</span></span>
+<span>    highd_data <span class="op">=</span> <span class="va">s_curve_noise_training</span>,</span>
+<span>    nldr_data <span class="op">=</span> <span class="va">umap_scaled</span>,</span>
+<span>    bin1 <span class="op">=</span> <span class="va">xbins</span>,</span>
+<span>    r2 <span class="op">=</span> <span class="va">r2</span>,</span>
+<span>    q <span class="op">=</span> <span class="fl">0.1</span>,</span>
+<span>    is_bin_centroid <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>  <span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="va">df_bin_centroids_scurve</span> <span class="op">&lt;-</span> <span class="va">scurve_model</span><span class="op">$</span><span class="va">df_bin_centroids</span></span>
+<span>  <span class="va">df_bin_scurve</span> <span class="op">&lt;-</span> <span class="va">scurve_model</span><span class="op">$</span><span class="va">df_bin</span></span>
+<span>  </span>
+<span>  <span class="co">## Compute error</span></span>
+<span>  <span class="va">error_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/glance.html">glance</a></span><span class="op">(</span></span>
+<span>    model_2d <span class="op">=</span> <span class="va">df_bin_centroids_scurve</span>,</span>
+<span>    model_highd <span class="op">=</span> <span class="va">df_bin_scurve</span>,</span>
+<span>    highd_data <span class="op">=</span> <span class="va">s_curve_noise_training</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>bin1 <span class="op">=</span> <span class="va">xbins</span>,</span>
+<span>           bin2 <span class="op">=</span> <span class="va">bin2</span>,</span>
+<span>           b <span class="op">=</span> <span class="va">bin1</span> <span class="op">*</span> <span class="va">bin2</span>,</span>
+<span>           b_non_empty <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">NROW</a></span><span class="op">(</span><span class="va">df_bin_centroids_scurve</span><span class="op">)</span>,</span>
+<span>           method <span class="op">=</span> <span class="st">"UMAP2"</span>,</span>
+<span>           a1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">a1</span>, <span class="fl">2</span><span class="op">)</span>,</span>
+<span>           a2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">a2</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="va">error_df_umap2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_rows.html" class="external-link">bind_rows</a></span><span class="op">(</span><span class="va">error_df_umap2</span>, <span class="va">error_df</span><span class="op">)</span></span>
+<span>  </span>
+<span><span class="op">}</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">nldr_scaled_obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gen_scaled_data.html">gen_scaled_data</a></span><span class="op">(</span></span>
+<span>  data <span class="op">=</span> <span class="va">s_curve_noise_umap3</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">s_curve_noise_umap_scaled</span> <span class="op">&lt;-</span> <span class="va">nldr_scaled_obj</span><span class="op">$</span><span class="va">scaled_nldr</span></span>
+<span></span>
+<span><span class="va">lim1</span> <span class="op">&lt;-</span> <span class="va">nldr_scaled_obj</span><span class="op">$</span><span class="va">lim1</span></span>
+<span><span class="va">lim2</span> <span class="op">&lt;-</span> <span class="va">nldr_scaled_obj</span><span class="op">$</span><span class="va">lim2</span></span>
+<span><span class="va">r2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/diff.html" class="external-link">diff</a></span><span class="op">(</span><span class="va">lim2</span><span class="op">)</span><span class="op">/</span><span class="fu"><a href="https://rdrr.io/r/base/diff.html" class="external-link">diff</a></span><span class="op">(</span><span class="va">lim1</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## To initialize number of bins along the x-axis</span></span>
+<span><span class="va">bin1_vec</span> <span class="op">&lt;-</span> <span class="fl">5</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">NROW</a></span><span class="op">(</span><span class="va">s_curve_noise_training</span><span class="op">)</span><span class="op">/</span><span class="va">r2</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">error_df_umap3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span>nrow <span class="op">=</span> <span class="fl">0</span>, ncol <span class="op">=</span> <span class="fl">0</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="kw">for</span> <span class="op">(</span><span class="va">xbins</span> <span class="kw">in</span> <span class="va">bin1_vec</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  </span>
+<span>  <span class="va">hb_obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/calc_bins_y.html">calc_bins_y</a></span><span class="op">(</span>bin1 <span class="op">=</span> <span class="va">xbins</span>, r2 <span class="op">=</span> <span class="va">r2</span>, q <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="va">bin2</span> <span class="op">&lt;-</span> <span class="va">hb_obj</span><span class="op">$</span><span class="va">bin2</span></span>
+<span>  <span class="va">a1</span> <span class="op">&lt;-</span> <span class="va">hb_obj</span><span class="op">$</span><span class="va">a1</span></span>
+<span>  <span class="va">a2</span> <span class="op">&lt;-</span> <span class="va">hb_obj</span><span class="op">$</span><span class="va">a2</span></span>
+<span>  </span>
+<span>  <span class="va">scurve_model</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_highd_model.html">fit_highd_model</a></span><span class="op">(</span></span>
+<span>    highd_data <span class="op">=</span> <span class="va">s_curve_noise_training</span>,</span>
+<span>    nldr_data <span class="op">=</span> <span class="va">umap_scaled</span>,</span>
+<span>    bin1 <span class="op">=</span> <span class="va">xbins</span>,</span>
+<span>    r2 <span class="op">=</span> <span class="va">r2</span>,</span>
+<span>    q <span class="op">=</span> <span class="fl">0.1</span>,</span>
+<span>    is_bin_centroid <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>  <span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="va">df_bin_centroids_scurve</span> <span class="op">&lt;-</span> <span class="va">scurve_model</span><span class="op">$</span><span class="va">df_bin_centroids</span></span>
+<span>  <span class="va">df_bin_scurve</span> <span class="op">&lt;-</span> <span class="va">scurve_model</span><span class="op">$</span><span class="va">df_bin</span></span>
+<span>  </span>
+<span>  <span class="co">## Compute error</span></span>
+<span>  <span class="va">error_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/glance.html">glance</a></span><span class="op">(</span></span>
+<span>    model_2d <span class="op">=</span> <span class="va">df_bin_centroids_scurve</span>,</span>
+<span>    model_highd <span class="op">=</span> <span class="va">df_bin_scurve</span>,</span>
+<span>    highd_data <span class="op">=</span> <span class="va">s_curve_noise_training</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>bin1 <span class="op">=</span> <span class="va">xbins</span>,</span>
+<span>           bin2 <span class="op">=</span> <span class="va">bin2</span>,</span>
+<span>           b <span class="op">=</span> <span class="va">bin1</span> <span class="op">*</span> <span class="va">bin2</span>,</span>
+<span>           b_non_empty <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">NROW</a></span><span class="op">(</span><span class="va">df_bin_centroids_scurve</span><span class="op">)</span>,</span>
+<span>           method <span class="op">=</span> <span class="st">"UMAP3"</span>,</span>
+<span>           a1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">a1</span>, <span class="fl">2</span><span class="op">)</span>,</span>
+<span>           a2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">a2</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="va">error_df_umap3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_rows.html" class="external-link">bind_rows</a></span><span class="op">(</span><span class="va">error_df_umap3</span>, <span class="va">error_df</span><span class="op">)</span></span>
+<span>  </span>
+<span><span class="op">}</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">nldr_scaled_obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gen_scaled_data.html">gen_scaled_data</a></span><span class="op">(</span></span>
+<span>  data <span class="op">=</span> <span class="va">s_curve_noise_umap4</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">s_curve_noise_umap_scaled</span> <span class="op">&lt;-</span> <span class="va">nldr_scaled_obj</span><span class="op">$</span><span class="va">scaled_nldr</span></span>
+<span></span>
+<span><span class="va">lim1</span> <span class="op">&lt;-</span> <span class="va">nldr_scaled_obj</span><span class="op">$</span><span class="va">lim1</span></span>
+<span><span class="va">lim2</span> <span class="op">&lt;-</span> <span class="va">nldr_scaled_obj</span><span class="op">$</span><span class="va">lim2</span></span>
+<span><span class="va">r2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/diff.html" class="external-link">diff</a></span><span class="op">(</span><span class="va">lim2</span><span class="op">)</span><span class="op">/</span><span class="fu"><a href="https://rdrr.io/r/base/diff.html" class="external-link">diff</a></span><span class="op">(</span><span class="va">lim1</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## To initialize number of bins along the x-axis</span></span>
+<span><span class="va">bin1_vec</span> <span class="op">&lt;-</span> <span class="fl">5</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">NROW</a></span><span class="op">(</span><span class="va">s_curve_noise_training</span><span class="op">)</span><span class="op">/</span><span class="va">r2</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">error_df_umap4</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span>nrow <span class="op">=</span> <span class="fl">0</span>, ncol <span class="op">=</span> <span class="fl">0</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="kw">for</span> <span class="op">(</span><span class="va">xbins</span> <span class="kw">in</span> <span class="va">bin1_vec</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  </span>
+<span>  <span class="va">hb_obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/calc_bins_y.html">calc_bins_y</a></span><span class="op">(</span>bin1 <span class="op">=</span> <span class="va">xbins</span>, r2 <span class="op">=</span> <span class="va">r2</span>, q <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="va">bin2</span> <span class="op">&lt;-</span> <span class="va">hb_obj</span><span class="op">$</span><span class="va">bin2</span></span>
+<span>  <span class="va">a1</span> <span class="op">&lt;-</span> <span class="va">hb_obj</span><span class="op">$</span><span class="va">a1</span></span>
+<span>  <span class="va">a2</span> <span class="op">&lt;-</span> <span class="va">hb_obj</span><span class="op">$</span><span class="va">a2</span></span>
+<span>  </span>
+<span>  <span class="va">scurve_model</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_highd_model.html">fit_highd_model</a></span><span class="op">(</span></span>
+<span>    highd_data <span class="op">=</span> <span class="va">s_curve_noise_training</span>,</span>
+<span>    nldr_data <span class="op">=</span> <span class="va">umap_scaled</span>,</span>
+<span>    bin1 <span class="op">=</span> <span class="va">xbins</span>,</span>
+<span>    r2 <span class="op">=</span> <span class="va">r2</span>,</span>
+<span>    q <span class="op">=</span> <span class="fl">0.1</span>,</span>
+<span>    is_bin_centroid <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>  <span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="va">df_bin_centroids_scurve</span> <span class="op">&lt;-</span> <span class="va">scurve_model</span><span class="op">$</span><span class="va">df_bin_centroids</span></span>
+<span>  <span class="va">df_bin_scurve</span> <span class="op">&lt;-</span> <span class="va">scurve_model</span><span class="op">$</span><span class="va">df_bin</span></span>
+<span>  </span>
+<span>  <span class="co">## Compute error</span></span>
+<span>  <span class="va">error_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/glance.html">glance</a></span><span class="op">(</span></span>
+<span>    model_2d <span class="op">=</span> <span class="va">df_bin_centroids_scurve</span>,</span>
+<span>    model_highd <span class="op">=</span> <span class="va">df_bin_scurve</span>,</span>
+<span>    highd_data <span class="op">=</span> <span class="va">s_curve_noise_training</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>bin1 <span class="op">=</span> <span class="va">xbins</span>,</span>
+<span>           bin2 <span class="op">=</span> <span class="va">bin2</span>,</span>
+<span>           b <span class="op">=</span> <span class="va">bin1</span> <span class="op">*</span> <span class="va">bin2</span>,</span>
+<span>           b_non_empty <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">NROW</a></span><span class="op">(</span><span class="va">df_bin_centroids_scurve</span><span class="op">)</span>,</span>
+<span>           method <span class="op">=</span> <span class="st">"UMAP4"</span>,</span>
+<span>           a1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">a1</span>, <span class="fl">2</span><span class="op">)</span>,</span>
+<span>           a2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">a2</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="va">error_df_umap4</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_rows.html" class="external-link">bind_rows</a></span><span class="op">(</span><span class="va">error_df_umap4</span>, <span class="va">error_df</span><span class="op">)</span></span>
+<span>  </span>
+<span><span class="op">}</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">nldr_scaled_obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gen_scaled_data.html">gen_scaled_data</a></span><span class="op">(</span></span>
+<span>  data <span class="op">=</span> <span class="va">s_curve_noise_umap5</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">s_curve_noise_umap_scaled</span> <span class="op">&lt;-</span> <span class="va">nldr_scaled_obj</span><span class="op">$</span><span class="va">scaled_nldr</span></span>
+<span></span>
+<span><span class="va">lim1</span> <span class="op">&lt;-</span> <span class="va">nldr_scaled_obj</span><span class="op">$</span><span class="va">lim1</span></span>
+<span><span class="va">lim2</span> <span class="op">&lt;-</span> <span class="va">nldr_scaled_obj</span><span class="op">$</span><span class="va">lim2</span></span>
+<span><span class="va">r2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/diff.html" class="external-link">diff</a></span><span class="op">(</span><span class="va">lim2</span><span class="op">)</span><span class="op">/</span><span class="fu"><a href="https://rdrr.io/r/base/diff.html" class="external-link">diff</a></span><span class="op">(</span><span class="va">lim1</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## To initialize number of bins along the x-axis</span></span>
+<span><span class="va">bin1_vec</span> <span class="op">&lt;-</span> <span class="fl">5</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">NROW</a></span><span class="op">(</span><span class="va">s_curve_noise_training</span><span class="op">)</span><span class="op">/</span><span class="va">r2</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">error_df_umap5</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span>nrow <span class="op">=</span> <span class="fl">0</span>, ncol <span class="op">=</span> <span class="fl">0</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="kw">for</span> <span class="op">(</span><span class="va">xbins</span> <span class="kw">in</span> <span class="va">bin1_vec</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  </span>
+<span>  <span class="va">hb_obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/calc_bins_y.html">calc_bins_y</a></span><span class="op">(</span>bin1 <span class="op">=</span> <span class="va">xbins</span>, r2 <span class="op">=</span> <span class="va">r2</span>, q <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="va">bin2</span> <span class="op">&lt;-</span> <span class="va">hb_obj</span><span class="op">$</span><span class="va">bin2</span></span>
+<span>  <span class="va">a1</span> <span class="op">&lt;-</span> <span class="va">hb_obj</span><span class="op">$</span><span class="va">a1</span></span>
+<span>  <span class="va">a2</span> <span class="op">&lt;-</span> <span class="va">hb_obj</span><span class="op">$</span><span class="va">a2</span></span>
+<span>  </span>
+<span>  <span class="va">scurve_model</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_highd_model.html">fit_highd_model</a></span><span class="op">(</span></span>
+<span>    highd_data <span class="op">=</span> <span class="va">s_curve_noise_training</span>,</span>
+<span>    nldr_data <span class="op">=</span> <span class="va">umap_scaled</span>,</span>
+<span>    bin1 <span class="op">=</span> <span class="va">xbins</span>,</span>
+<span>    r2 <span class="op">=</span> <span class="va">r2</span>,</span>
+<span>    q <span class="op">=</span> <span class="fl">0.1</span>,</span>
+<span>    is_bin_centroid <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>  <span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="va">df_bin_centroids_scurve</span> <span class="op">&lt;-</span> <span class="va">scurve_model</span><span class="op">$</span><span class="va">df_bin_centroids</span></span>
+<span>  <span class="va">df_bin_scurve</span> <span class="op">&lt;-</span> <span class="va">scurve_model</span><span class="op">$</span><span class="va">df_bin</span></span>
+<span>  </span>
+<span>  <span class="co">## Compute error</span></span>
+<span>  <span class="va">error_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/glance.html">glance</a></span><span class="op">(</span></span>
+<span>    model_2d <span class="op">=</span> <span class="va">df_bin_centroids_scurve</span>,</span>
+<span>    model_highd <span class="op">=</span> <span class="va">df_bin_scurve</span>,</span>
+<span>    highd_data <span class="op">=</span> <span class="va">s_curve_noise_training</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>bin1 <span class="op">=</span> <span class="va">xbins</span>,</span>
+<span>           bin2 <span class="op">=</span> <span class="va">bin2</span>,</span>
+<span>           b <span class="op">=</span> <span class="va">bin1</span> <span class="op">*</span> <span class="va">bin2</span>,</span>
+<span>           b_non_empty <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">NROW</a></span><span class="op">(</span><span class="va">df_bin_centroids_scurve</span><span class="op">)</span>,</span>
+<span>           method <span class="op">=</span> <span class="st">"UMAP5"</span>,</span>
+<span>           a1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">a1</span>, <span class="fl">2</span><span class="op">)</span>,</span>
+<span>           a2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">a2</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="va">error_df_umap5</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_rows.html" class="external-link">bind_rows</a></span><span class="op">(</span><span class="va">error_df_umap5</span>, <span class="va">error_df</span><span class="op">)</span></span>
+<span>  </span>
+<span><span class="op">}</span></span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">nldr_scaled_obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gen_scaled_data.html">gen_scaled_data</a></span><span class="op">(</span></span>
+<span>  data <span class="op">=</span> <span class="va">s_curve_noise_umap6</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">s_curve_noise_umap_scaled</span> <span class="op">&lt;-</span> <span class="va">nldr_scaled_obj</span><span class="op">$</span><span class="va">scaled_nldr</span></span>
+<span></span>
+<span><span class="va">lim1</span> <span class="op">&lt;-</span> <span class="va">nldr_scaled_obj</span><span class="op">$</span><span class="va">lim1</span></span>
+<span><span class="va">lim2</span> <span class="op">&lt;-</span> <span class="va">nldr_scaled_obj</span><span class="op">$</span><span class="va">lim2</span></span>
+<span><span class="va">r2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/diff.html" class="external-link">diff</a></span><span class="op">(</span><span class="va">lim2</span><span class="op">)</span><span class="op">/</span><span class="fu"><a href="https://rdrr.io/r/base/diff.html" class="external-link">diff</a></span><span class="op">(</span><span class="va">lim1</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## To initialize number of bins along the x-axis</span></span>
+<span><span class="va">bin1_vec</span> <span class="op">&lt;-</span> <span class="fl">5</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">NROW</a></span><span class="op">(</span><span class="va">s_curve_noise_training</span><span class="op">)</span><span class="op">/</span><span class="va">r2</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">error_df_umap6</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span>nrow <span class="op">=</span> <span class="fl">0</span>, ncol <span class="op">=</span> <span class="fl">0</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="kw">for</span> <span class="op">(</span><span class="va">xbins</span> <span class="kw">in</span> <span class="va">bin1_vec</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  </span>
+<span>  <span class="va">hb_obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/calc_bins_y.html">calc_bins_y</a></span><span class="op">(</span>bin1 <span class="op">=</span> <span class="va">xbins</span>, r2 <span class="op">=</span> <span class="va">r2</span>, q <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="va">bin2</span> <span class="op">&lt;-</span> <span class="va">hb_obj</span><span class="op">$</span><span class="va">bin2</span></span>
+<span>  <span class="va">a1</span> <span class="op">&lt;-</span> <span class="va">hb_obj</span><span class="op">$</span><span class="va">a1</span></span>
+<span>  <span class="va">a2</span> <span class="op">&lt;-</span> <span class="va">hb_obj</span><span class="op">$</span><span class="va">a2</span></span>
+<span>  </span>
+<span>  <span class="va">scurve_model</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_highd_model.html">fit_highd_model</a></span><span class="op">(</span></span>
+<span>    highd_data <span class="op">=</span> <span class="va">s_curve_noise_training</span>,</span>
+<span>    nldr_data <span class="op">=</span> <span class="va">umap_scaled</span>,</span>
+<span>    bin1 <span class="op">=</span> <span class="va">xbins</span>,</span>
+<span>    r2 <span class="op">=</span> <span class="va">r2</span>,</span>
+<span>    q <span class="op">=</span> <span class="fl">0.1</span>,</span>
+<span>    is_bin_centroid <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>  <span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="va">df_bin_centroids_scurve</span> <span class="op">&lt;-</span> <span class="va">scurve_model</span><span class="op">$</span><span class="va">df_bin_centroids</span></span>
+<span>  <span class="va">df_bin_scurve</span> <span class="op">&lt;-</span> <span class="va">scurve_model</span><span class="op">$</span><span class="va">df_bin</span></span>
+<span>  </span>
+<span>  <span class="co">## Compute error</span></span>
+<span>  <span class="va">error_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/glance.html">glance</a></span><span class="op">(</span></span>
+<span>    model_2d <span class="op">=</span> <span class="va">df_bin_centroids_scurve</span>,</span>
+<span>    model_highd <span class="op">=</span> <span class="va">df_bin_scurve</span>,</span>
+<span>    highd_data <span class="op">=</span> <span class="va">s_curve_noise_training</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>bin1 <span class="op">=</span> <span class="va">xbins</span>,</span>
+<span>           bin2 <span class="op">=</span> <span class="va">bin2</span>,</span>
+<span>           b <span class="op">=</span> <span class="va">bin1</span> <span class="op">*</span> <span class="va">bin2</span>,</span>
+<span>           b_non_empty <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">NROW</a></span><span class="op">(</span><span class="va">df_bin_centroids_scurve</span><span class="op">)</span>,</span>
+<span>           method <span class="op">=</span> <span class="st">"UMAP6"</span>,</span>
+<span>           a1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">a1</span>, <span class="fl">2</span><span class="op">)</span>,</span>
+<span>           a2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">a2</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="va">error_df_umap6</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_rows.html" class="external-link">bind_rows</a></span><span class="op">(</span><span class="va">error_df_umap6</span>, <span class="va">error_df</span><span class="op">)</span></span>
+<span>  </span>
+<span><span class="op">}</span></span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">error_df_all</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_rows.html" class="external-link">bind_rows</a></span><span class="op">(</span><span class="va">error_df_umap1</span>,</span>
+<span>                                 <span class="va">error_df_umap2</span>,</span>
+<span>                                 <span class="va">error_df_umap3</span>,</span>
+<span>                                 <span class="va">error_df_umap4</span>,</span>
+<span>                                 <span class="va">error_df_umap5</span>,</span>
+<span>                                 <span class="va">error_df_umap6</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">error_df_all</span> <span class="op">&lt;-</span> <span class="va">error_df_all</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>a1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">a1</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">bin1</span> <span class="op">&gt;=</span> <span class="fl">5</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">a1</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">method</span>, <span class="va">a1</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">MSE</span> <span class="op">==</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">MSE</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">ungroup</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
@@ -143,32 +405,42 @@
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="op">-</span><span class="va">a1</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fl">5</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 5 × 9</span></span></span>
-<span><span class="co">#&gt;   Error    MSE  bin1  bin2     b b_non_empty method    a1    a2</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> <span style="text-decoration: underline;">2</span>454. 0.189      5     6    30          20 UMAP    0.26  0.23</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> <span style="text-decoration: underline;">2</span>226. 0.153      6     7    42          24 UMAP    0.22  0.19</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> <span style="text-decoration: underline;">2</span>080. 0.128      7     8    56          29 UMAP    0.19  0.16</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> <span style="text-decoration: underline;">1</span>838. 0.098<span style="text-decoration: underline;">9</span>     8     9    72          36 UMAP    0.16  0.14</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> <span style="text-decoration: underline;">1</span>702. 0.082<span style="text-decoration: underline;">3</span>     9    10    90          42 UMAP    0.15  0.13</span></span></code></pre></div>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<span><span class="co">#&gt;   Error   MSE  bin1  bin2     b b_non_empty method    a1    a2</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> <span style="text-decoration: underline;">2</span>629. 0.218     5     7    35          17 UMAP3   0.3   0.26</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> <span style="text-decoration: underline;">2</span>605. 0.212     5     5    25          17 UMAP5   0.28  0.25</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> <span style="text-decoration: underline;">2</span>454. 0.189     5     6    30          20 UMAP    0.26  0.23</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> <span style="text-decoration: underline;">2</span>409. 0.182     5     6    30          21 UMAP4   0.26  0.22</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> <span style="text-decoration: underline;">2</span>584. 0.212     5     5    25          18 UMAP2   0.25  0.22</span></span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">error_df_all</span>,</span>
 <span>         <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">a1</span>,</span>
-<span>             y <span class="op">=</span> <span class="va">MSE</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>             y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="va">MSE</span><span class="op">)</span>,</span>
+<span>             color <span class="op">=</span> <span class="va">method</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span>linewidth <span class="op">=</span> <span class="fl">0.3</span><span class="op">)</span> <span class="op">+</span></span>
-<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ylab</a></span><span class="op">(</span><span class="st">"MSE"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_x_continuous</a></span><span class="op">(</span>breaks <span class="op">=</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/sort.html" class="external-link">sort</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">error_df_all</span><span class="op">$</span><span class="va">a1</span><span class="op">)</span><span class="op">)</span><span class="op">[</span></span>
+<span>      <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span></span>
+<span>        <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">error_df_all</span><span class="op">$</span><span class="va">a1</span><span class="op">)</span><span class="op">)</span>, </span>
+<span>        by <span class="op">=</span> <span class="fl">5</span><span class="op">)</span><span class="op">]</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_color_manual</a></span><span class="op">(</span></span>
+<span>    values<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'#e41a1c'</span>,<span class="st">'#ff7f00'</span>,<span class="st">'#4daf4a'</span>, </span>
+<span>             <span class="st">"#a65628"</span>,<span class="st">'#636363'</span>, <span class="st">'#984ea3'</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ylab</a></span><span class="op">(</span><span class="st">"RMSE"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">xlab</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/expression.html" class="external-link">expression</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"binwidth ("</span>, <span class="va">a</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, <span class="st">")"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_minimal</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>panel.border <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_rect</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">'transparent'</span><span class="op">)</span>,</span>
 <span>          plot.title <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">12</span>, hjust <span class="op">=</span> <span class="fl">0.5</span>, vjust <span class="op">=</span> <span class="op">-</span><span class="fl">0.5</span><span class="op">)</span>,</span>
 <span>          axis.ticks.x <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_line</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>          axis.ticks.y <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_line</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>          legend.position <span class="op">=</span> <span class="st">"none"</span>,</span>
+<span>          legend.position <span class="op">=</span> <span class="st">"right"</span>,</span>
 <span>          axis.text.x <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">7</span><span class="op">)</span>,</span>
 <span>          axis.text.y <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">7</span><span class="op">)</span>,</span>
 <span>          axis.title.x <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">7</span><span class="op">)</span>,</span>
-<span>          axis.title.y <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">7</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="quollr7bestfit_files/figure-html/unnamed-chunk-3-1.png" alt="MSE Vs binw idths." width="100%"></p>
+<span>          axis.title.y <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">7</span><span class="op">)</span>,</span>
+<span>          aspect.ratio <span class="op">=</span> <span class="fl">1.5</span><span class="op">)</span></span></code></pre></div>
+<p><img src="quollr7bestfit_files/figure-html/unnamed-chunk-9-1.png" alt="MSE Vs binw idths." width="100%"></p>
   </main>
 </div>
 

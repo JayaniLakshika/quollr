@@ -108,7 +108,6 @@
 #' @source This dataset is generated for illustrative purposes.
 "s_curve_noise_umap"
 
-
 #' Predicted UMAP embedding for S-curve dataset which with noise dimensions
 #'
 #' The `s_curve_noise_umap_predict` dataset contains the predicted UMAP (Uniform Manifold
@@ -138,7 +137,6 @@
 #'
 #' @source This dataset is generated for illustrative purposes.
 "s_curve_noise_umap_predict"
-
 
 #' Scaled UMAP embedding for S-curve dataset which with noise dimensions
 #'
@@ -192,3 +190,153 @@
 #'
 #' @source This object is generated for illustrative purposes.
 "s_curve_obj"
+
+#' UMAP embedding for S-curve dataset which with noise dimensions
+#'
+#' The `s_curve_noise_umap2` dataset contains the UMAP (Uniform Manifold
+#' Approximation and Projection) embeddings of a three-dimensional S-curve with
+#' added noise. Each data point is represented by two UMAP coordinates (UMAP1
+#' and UMAP2) and an ID.
+#'
+#' @format ## `s_curve_noise_umap2`
+#' A data frame with 75 rows and 3 columns:
+#' \describe{
+#'   \item{UMAP1}{Numeric, first UMAP 2D embeddings.}
+#'   \item{UMAP2}{Numeric, second UMAP 2D embeddings.}
+#'   \item{ID}{Numeric, identifier for each data point.}
+#' }
+#' @examples
+#' # Load the s_curve_noise_umap2 dataset
+#' data(s_curve_noise_umap2)
+#'
+#' # Display the first few rows of the dataset
+#' head(s_curve_noise_umap2)
+#'
+#' @keywords datasets
+#'
+#' @rdname s_curve_noise_umap2
+#' @docType data
+#' @usage data(s_curve_noise_umap2)
+#'
+#' @source This dataset is generated for illustrative purposes.
+"s_curve_noise_umap2"
+
+#' UMAP embedding for S-curve dataset which with noise dimensions
+#'
+#' The `s_curve_noise_umap3` dataset contains the UMAP (Uniform Manifold
+#' Approximation and Projection) embeddings of a three-dimensional S-curve with
+#' added noise. Each data point is represented by two UMAP coordinates (UMAP1
+#' and UMAP2) and an ID.
+#'
+#' @format ## `s_curve_noise_umap3`
+#' A data frame with 75 rows and 3 columns:
+#' \describe{
+#'   \item{UMAP1}{Numeric, first UMAP 2D embeddings.}
+#'   \item{UMAP2}{Numeric, second UMAP 2D embeddings.}
+#'   \item{ID}{Numeric, identifier for each data point.}
+#' }
+#' @examples
+#' # Load the s_curve_noise_umap3 dataset
+#' data(s_curve_noise_umap3)
+#'
+#' # Display the first few rows of the dataset
+#' head(s_curve_noise_umap3)
+#'
+#' @keywords datasets
+#'
+#' @rdname s_curve_noise_umap3
+#' @docType data
+#' @usage data(s_curve_noise_umap3)
+#'
+#' @source This dataset is generated for illustrative purposes.
+"s_curve_noise_umap3"
+
+#' UMAP embedding for S-curve dataset which with noise dimensions
+#'
+#' The `s_curve_noise_umap4` dataset contains the UMAP (Uniform Manifold
+#' Approximation and Projection) embeddings of a three-dimensional S-curve with
+#' added noise. Each data point is represented by two UMAP coordinates (UMAP1
+#' and UMAP2) and an ID.
+#'
+#' @format ## `s_curve_noise_umap4`
+#' A data frame with 75 rows and 3 columns:
+#' \describe{
+#'   \item{UMAP1}{Numeric, first UMAP 2D embeddings.}
+#'   \item{UMAP2}{Numeric, second UMAP 2D embeddings.}
+#'   \item{ID}{Numeric, identifier for each data point.}
+#' }
+#' @examples
+#' # Load the s_curve_noise_umap4 dataset
+#' data(s_curve_noise_umap4)
+#'
+#' # Display the first few rows of the dataset
+#' head(s_curve_noise_umap4)
+#'
+#' @keywords datasets
+#'
+#' @rdname s_curve_noise_umap4
+#' @docType data
+#' @usage data(s_curve_noise_umap4)
+#'
+#' @source This dataset is generated for illustrative purposes.
+"s_curve_noise_umap4"
+
+#' UMAP embedding for S-curve dataset which with noise dimensions
+#'
+#' The `s_curve_noise_umap5` dataset contains the UMAP (Uniform Manifold
+#' Approximation and Projection) embeddings of a three-dimensional S-curve with
+#' added noise. Each data point is represented by two UMAP coordinates (UMAP1
+#' and UMAP2) and an ID.
+#'
+#' @format ## `s_curve_noise_umap5`
+#' A data frame with 75 rows and 3 columns:
+#' \describe{
+#'   \item{UMAP1}{Numeric, first UMAP 2D embeddings.}
+#'   \item{UMAP2}{Numeric, second UMAP 2D embeddings.}
+#'   \item{ID}{Numeric, identifier for each data point.}
+#' }
+#' @examples
+#' # Load the s_curve_noise_umap5 dataset
+#' data(s_curve_noise_umap5)
+#'
+#' # Display the first few rows of the dataset
+#' head(s_curve_noise_umap5)
+#'
+#' @keywords datasets
+#'
+#' @rdname s_curve_noise_umap5
+#' @docType data
+#' @usage data(s_curve_noise_umap5)
+#'
+#' @source This dataset is generated for illustrative purposes.
+"s_curve_noise_umap5"
+
+#' UMAP embedding for S-curve dataset which with noise dimensions
+#'
+#' The `s_curve_noise_umap6` dataset contains the UMAP (Uniform Manifold
+#' Approximation and Projection) embeddings of a three-dimensional S-curve with
+#' added noise. Each data point is represented by two UMAP coordinates (UMAP1
+#' and UMAP2) and an ID.
+#'
+#' @format ## `s_curve_noise_umap6`
+#' A data frame with 75 rows and 3 columns:
+#' \describe{
+#'   \item{UMAP1}{Numeric, first UMAP 2D embeddings.}
+#'   \item{UMAP2}{Numeric, second UMAP 2D embeddings.}
+#'   \item{ID}{Numeric, identifier for each data point.}
+#' }
+#' @examples
+#' # Load the s_curve_noise_umap6 dataset
+#' data(s_curve_noise_umap6)
+#'
+#' # Display the first few rows of the dataset
+#' head(s_curve_noise_umap6)
+#'
+#' @keywords datasets
+#'
+#' @rdname s_curve_noise_umap6
+#' @docType data
+#' @usage data(s_curve_noise_umap6)
+#'
+#' @source This dataset is generated for illustrative purposes.
+"s_curve_noise_umap6"

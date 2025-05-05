@@ -20,8 +20,17 @@ knitr::opts_chunk$set(
 library(quollr)
 library(dplyr)
 library(ggplot2)
+library(patchwork)
 
 set.seed(20240110)
+```
+
+```{r}
+interior_annotation <- function(label, position = c(0.92, 0.92), cex = 1, col="grey70") {
+  annotation_custom(grid::textGrob(label = label,
+                                   x = unit(position[1], "npc"), y = unit(position[2], "npc"),
+                                   gp = grid::gpar(cex = cex, col=col)))
+}
 ```
 
 ```{r}
@@ -32,10 +41,17 @@ r2 <- diff(lim2)/diff(lim1)
 
 umap_scaled <- s_curve_obj$s_curve_umap_scaled_obj$scaled_nldr
 
+nldr1 <- umap_scaled |>
+  ggplot(aes(x = emb1,
+             y = emb2))+
+  geom_point(alpha=0.1, size=1, colour='#a65628') +
+  interior_annotation("a", c(0.08, 0.93)) +
+  theme(aspect.ratio = 1)
+
 ## To initialize number of bins along the x-axis
 bin1_vec <- 5:sqrt(NROW(s_curve_noise_training)/r2)
 
-error_df_all <- data.frame(matrix(nrow = 0, ncol = 0))
+error_df_umap1 <- data.frame(matrix(nrow = 0, ncol = 0))
 
 for (xbins in bin1_vec) {
 
@@ -70,14 +86,323 @@ for (xbins in bin1_vec) {
            a1 = round(a1, 2),
            a2 = round(a2, 2))
 
-  error_df_all <- bind_rows(error_df_all, error_df)
+  error_df_umap1 <- bind_rows(error_df_umap1, error_df)
 
 }
+```
+
+```{r}
+nldr_scaled_obj <- gen_scaled_data(
+  data = s_curve_noise_umap2)
+
+umap_scaled <- nldr_scaled_obj$scaled_nldr
+
+nldr2 <- umap_scaled |>
+  ggplot(aes(x = emb1,
+             y = emb2))+
+  geom_point(alpha=0.1, size=1, colour='#a65628') +
+  interior_annotation("a", c(0.08, 0.93)) +
+  theme(aspect.ratio = 1)
+
+lim1 <- nldr_scaled_obj$lim1
+lim2 <- nldr_scaled_obj$lim2
+r2 <- diff(lim2)/diff(lim1)
+
+## To initialize number of bins along the x-axis
+bin1_vec <- 5:sqrt(NROW(s_curve_noise_training)/r2)
+
+error_df_umap2 <- data.frame(matrix(nrow = 0, ncol = 0))
+
+for (xbins in bin1_vec) {
+  
+  hb_obj <- calc_bins_y(bin1 = xbins, r2 = r2, q = 0.1)
+  
+  bin2 <- hb_obj$bin2
+  a1 <- hb_obj$a1
+  a2 <- hb_obj$a2
+  
+  scurve_model <- fit_highd_model(
+    highd_data = s_curve_noise_training,
+    nldr_data = umap_scaled,
+    bin1 = xbins,
+    r2 = r2,
+    q = 0.1,
+    is_bin_centroid = TRUE
+  )
+  
+  df_bin_centroids_scurve <- scurve_model$df_bin_centroids
+  df_bin_scurve <- scurve_model$df_bin
+  
+  ## Compute error
+  error_df <- glance(
+    model_2d = df_bin_centroids_scurve,
+    model_highd = df_bin_scurve,
+    highd_data = s_curve_noise_training) |>
+    mutate(bin1 = xbins,
+           bin2 = bin2,
+           b = bin1 * bin2,
+           b_non_empty = NROW(df_bin_centroids_scurve),
+           method = "UMAP2",
+           a1 = round(a1, 2),
+           a2 = round(a2, 2))
+  
+  error_df_umap2 <- bind_rows(error_df_umap2, error_df)
+  
+}
+```
+
+```{r}
+nldr_scaled_obj <- gen_scaled_data(
+  data = s_curve_noise_umap3)
+
+umap_scaled <- nldr_scaled_obj$scaled_nldr
+
+nldr3 <- umap_scaled |>
+  ggplot(aes(x = emb1,
+             y = emb2))+
+  geom_point(alpha=0.1, size=1, colour='#a65628') +
+  interior_annotation("a", c(0.08, 0.93)) +
+  theme(aspect.ratio = 1)
+
+lim1 <- nldr_scaled_obj$lim1
+lim2 <- nldr_scaled_obj$lim2
+r2 <- diff(lim2)/diff(lim1)
+
+## To initialize number of bins along the x-axis
+bin1_vec <- 5:sqrt(NROW(s_curve_noise_training)/r2)
+
+error_df_umap3 <- data.frame(matrix(nrow = 0, ncol = 0))
+
+for (xbins in bin1_vec) {
+  
+  hb_obj <- calc_bins_y(bin1 = xbins, r2 = r2, q = 0.1)
+  
+  bin2 <- hb_obj$bin2
+  a1 <- hb_obj$a1
+  a2 <- hb_obj$a2
+  
+  scurve_model <- fit_highd_model(
+    highd_data = s_curve_noise_training,
+    nldr_data = umap_scaled,
+    bin1 = xbins,
+    r2 = r2,
+    q = 0.1,
+    is_bin_centroid = TRUE
+  )
+  
+  df_bin_centroids_scurve <- scurve_model$df_bin_centroids
+  df_bin_scurve <- scurve_model$df_bin
+  
+  ## Compute error
+  error_df <- glance(
+    model_2d = df_bin_centroids_scurve,
+    model_highd = df_bin_scurve,
+    highd_data = s_curve_noise_training) |>
+    mutate(bin1 = xbins,
+           bin2 = bin2,
+           b = bin1 * bin2,
+           b_non_empty = NROW(df_bin_centroids_scurve),
+           method = "UMAP3",
+           a1 = round(a1, 2),
+           a2 = round(a2, 2))
+  
+  error_df_umap3 <- bind_rows(error_df_umap3, error_df)
+  
+}
+```
+
+```{r}
+nldr_scaled_obj <- gen_scaled_data(
+  data = s_curve_noise_umap4)
+
+umap_scaled <- nldr_scaled_obj$scaled_nldr
+
+nldr4 <- umap_scaled |>
+  ggplot(aes(x = emb1,
+             y = emb2))+
+  geom_point(alpha=0.1, size=1, colour='#a65628') +
+  interior_annotation("a", c(0.08, 0.93)) +
+  theme(aspect.ratio = 1)
+
+lim1 <- nldr_scaled_obj$lim1
+lim2 <- nldr_scaled_obj$lim2
+r2 <- diff(lim2)/diff(lim1)
+
+## To initialize number of bins along the x-axis
+bin1_vec <- 5:sqrt(NROW(s_curve_noise_training)/r2)
+
+error_df_umap4 <- data.frame(matrix(nrow = 0, ncol = 0))
+
+for (xbins in bin1_vec) {
+  
+  hb_obj <- calc_bins_y(bin1 = xbins, r2 = r2, q = 0.1)
+  
+  bin2 <- hb_obj$bin2
+  a1 <- hb_obj$a1
+  a2 <- hb_obj$a2
+  
+  scurve_model <- fit_highd_model(
+    highd_data = s_curve_noise_training,
+    nldr_data = umap_scaled,
+    bin1 = xbins,
+    r2 = r2,
+    q = 0.1,
+    is_bin_centroid = TRUE
+  )
+  
+  df_bin_centroids_scurve <- scurve_model$df_bin_centroids
+  df_bin_scurve <- scurve_model$df_bin
+  
+  ## Compute error
+  error_df <- glance(
+    model_2d = df_bin_centroids_scurve,
+    model_highd = df_bin_scurve,
+    highd_data = s_curve_noise_training) |>
+    mutate(bin1 = xbins,
+           bin2 = bin2,
+           b = bin1 * bin2,
+           b_non_empty = NROW(df_bin_centroids_scurve),
+           method = "UMAP4",
+           a1 = round(a1, 2),
+           a2 = round(a2, 2))
+  
+  error_df_umap4 <- bind_rows(error_df_umap4, error_df)
+  
+}
+```
+
+```{r}
+nldr_scaled_obj <- gen_scaled_data(
+  data = s_curve_noise_umap5)
+
+umap_scaled <- nldr_scaled_obj$scaled_nldr
+
+nldr5 <- umap_scaled |>
+  ggplot(aes(x = emb1,
+             y = emb2))+
+  geom_point(alpha=0.1, size=1, colour='#a65628') +
+  interior_annotation("a", c(0.08, 0.93)) +
+  theme(aspect.ratio = 1)
+
+lim1 <- nldr_scaled_obj$lim1
+lim2 <- nldr_scaled_obj$lim2
+r2 <- diff(lim2)/diff(lim1)
+
+## To initialize number of bins along the x-axis
+bin1_vec <- 5:sqrt(NROW(s_curve_noise_training)/r2)
+
+error_df_umap5 <- data.frame(matrix(nrow = 0, ncol = 0))
+
+for (xbins in bin1_vec) {
+  
+  hb_obj <- calc_bins_y(bin1 = xbins, r2 = r2, q = 0.1)
+  
+  bin2 <- hb_obj$bin2
+  a1 <- hb_obj$a1
+  a2 <- hb_obj$a2
+  
+  scurve_model <- fit_highd_model(
+    highd_data = s_curve_noise_training,
+    nldr_data = umap_scaled,
+    bin1 = xbins,
+    r2 = r2,
+    q = 0.1,
+    is_bin_centroid = TRUE
+  )
+  
+  df_bin_centroids_scurve <- scurve_model$df_bin_centroids
+  df_bin_scurve <- scurve_model$df_bin
+  
+  ## Compute error
+  error_df <- glance(
+    model_2d = df_bin_centroids_scurve,
+    model_highd = df_bin_scurve,
+    highd_data = s_curve_noise_training) |>
+    mutate(bin1 = xbins,
+           bin2 = bin2,
+           b = bin1 * bin2,
+           b_non_empty = NROW(df_bin_centroids_scurve),
+           method = "UMAP5",
+           a1 = round(a1, 2),
+           a2 = round(a2, 2))
+  
+  error_df_umap5 <- bind_rows(error_df_umap5, error_df)
+  
+}
+```
+
+```{r}
+nldr_scaled_obj <- gen_scaled_data(
+  data = s_curve_noise_umap6)
+
+umap_scaled <- nldr_scaled_obj$scaled_nldr
+
+nldr6 <- umap_scaled |>
+  ggplot(aes(x = emb1,
+             y = emb2))+
+  geom_point(alpha=0.1, size=1, colour='#a65628') +
+  interior_annotation("a", c(0.08, 0.93)) +
+  theme(aspect.ratio = 1)
+
+lim1 <- nldr_scaled_obj$lim1
+lim2 <- nldr_scaled_obj$lim2
+r2 <- diff(lim2)/diff(lim1)
+
+## To initialize number of bins along the x-axis
+bin1_vec <- 5:sqrt(NROW(s_curve_noise_training)/r2)
+
+error_df_umap6 <- data.frame(matrix(nrow = 0, ncol = 0))
+
+for (xbins in bin1_vec) {
+  
+  hb_obj <- calc_bins_y(bin1 = xbins, r2 = r2, q = 0.1)
+  
+  bin2 <- hb_obj$bin2
+  a1 <- hb_obj$a1
+  a2 <- hb_obj$a2
+  
+  scurve_model <- fit_highd_model(
+    highd_data = s_curve_noise_training,
+    nldr_data = umap_scaled,
+    bin1 = xbins,
+    r2 = r2,
+    q = 0.1,
+    is_bin_centroid = TRUE
+  )
+  
+  df_bin_centroids_scurve <- scurve_model$df_bin_centroids
+  df_bin_scurve <- scurve_model$df_bin
+  
+  ## Compute error
+  error_df <- glance(
+    model_2d = df_bin_centroids_scurve,
+    model_highd = df_bin_scurve,
+    highd_data = s_curve_noise_training) |>
+    mutate(bin1 = xbins,
+           bin2 = bin2,
+           b = bin1 * bin2,
+           b_non_empty = NROW(df_bin_centroids_scurve),
+           method = "UMAP6",
+           a1 = round(a1, 2),
+           a2 = round(a2, 2))
+  
+  error_df_umap6 <- bind_rows(error_df_umap6, error_df)
+  
+}
+```
+
+```{r}
+error_df_all <- dplyr::bind_rows(error_df_umap1,
+                                 error_df_umap2,
+                                 error_df_umap3,
+                                 error_df_umap4,
+                                 error_df_umap5,
+                                 error_df_umap6)
 
 error_df_all <- error_df_all |>
   mutate(a1 = round(a1, 2)) |>
   filter(bin1 >= 5) |>
-  group_by(a1) |>
+  group_by(method, a1) |>
   filter(MSE == min(MSE)) |>
   ungroup()
 
@@ -86,28 +411,45 @@ error_df_all |>
   head(5)
 ```
 
-```{r, fig.alt="MSE Vs binw idths."}
-#| fig-height: 6
-#| fig-width: 6
-#| out-width: 100%
-
-ggplot(error_df_all,
+```{r}
+error_plot <- ggplot(error_df_all,
          aes(x = a1,
-             y = MSE)) +
+             y = sqrt(MSE),
+             color = method)) +
     geom_point(size = 0.8) +
     geom_line(linewidth = 0.3) +
-    ylab("MSE") +
+  scale_x_continuous(breaks =
+    sort(unique(error_df_all$a1))[
+      seq(1, length(
+        unique(error_df_all$a1)), 
+        by = 5)]) +
+  scale_color_manual(
+    values=c('#e41a1c','#ff7f00','#4daf4a', 
+             "#a65628",'#636363', '#984ea3'))+
+    ylab("RMSE") +
     xlab(expression(paste("binwidth (", a[1], ")"))) +
     theme_minimal() +
     theme(panel.border = element_rect(fill = 'transparent'),
           plot.title = element_text(size = 12, hjust = 0.5, vjust = -0.5),
           axis.ticks.x = element_line(),
           axis.ticks.y = element_line(),
-          legend.position = "none",
+          legend.position = "right",
           axis.text.x = element_text(size = 7),
           axis.text.y = element_text(size = 7),
           axis.title.x = element_text(size = 7),
-          axis.title.y = element_text(size = 7))
+          axis.title.y = element_text(size = 7),
+          aspect.ratio = 1.5)
+```
+
+```{r, fig.alt="MSE Vs binw idths."}
+#| fig-height: 6
+#| fig-width: 6
+#| out-width: 100%
+
+error_plot + wrap_plots(nldr1, nldr2, 
+                        nldr3, nldr4, 
+                        nldr5,nldr6, 
+                        ncol = 2, widths = c(50, 50))
 
 ```
 
