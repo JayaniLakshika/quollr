@@ -83,6 +83,8 @@ comb_data_model <- function(highd_data, model_highd, model_2d) {
 #'
 #'
 #' @examples
+#' df_bin_centroids <- s_curve_obj$s_curve_umap_model_obj$df_bin_centroids
+#' df_bin <- s_curve_obj$s_curve_umap_model_obj$df_bin
 #' df_exe <- comb_data_model(highd_data = s_curve_noise_training, model_highd = df_bin,
 #' model_2d = df_bin_centroids)
 #' edge_data <- s_curve_obj$s_curve_umap_model_tr_from_to_df
