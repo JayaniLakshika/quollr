@@ -463,7 +463,7 @@ tri_bin_centroids <- function(hex_df, x, y){
 #' @return A tibble that contains the edge information, including the from-to
 #' relationships and the corresponding x and y coordinates.
 #' @importFrom tibble tibble as_tibble
-#' @importFrom dplyr mutate filter rename distinct left_join
+#' @importFrom dplyr mutate filter rename distinct left_join select
 #' @importFrom interp triangles
 #'
 #' @examples
@@ -500,7 +500,7 @@ gen_edges <- function(tri_object, threshold = 0) {
     rename(from_count = n_obs) |>
     left_join(tr_df |> select(ID, n_obs), by = c("to" = "ID")) |>
     rename(to_count = n_obs) |>
-    filter(from_count >= threshold & to_count >= threshold) |>
+    filter(from_count > threshold & to_count > threshold) |>
     select(from, to) |>
     mutate(x = pmin(from, to), y = pmax(from, to)) |>
     distinct(x, y) |>
@@ -512,6 +512,22 @@ gen_edges <- function(tri_object, threshold = 0) {
     left_join(tr_df, by = c("to" = "ID")) |>
     rename(x_to = x, y_to = y) |>
     select(from, to, x_from, y_from, x_to, y_to) # Keep only necessary columns
+
+  ## Updated the from and to
+  # Find the unique values in `from` and `to`, and sort them.
+  unique_values <- sort(unique(c(tr_from_to_df_coord$from, tr_from_to_df_coord$to)))
+
+  # Create a mapping between the old values and the new, renumbered values (starting from 1).
+  value_map <- data.frame(old_value = unique_values, new_value = 1:length(unique_values))
+
+  # Join this mapping to your data frame to replace the old values with the new ones.
+  tr_from_to_df_coord <- tr_from_to_df_coord |>
+    left_join(value_map, by = c("from" = "old_value")) |>
+    mutate(from = new_value) |>
+    select(-new_value) |> # Remove the temporary column
+    left_join(value_map, by = c("to" = "old_value")) |>
+    mutate(to = new_value) |>
+    select(-new_value)    # Remove the temporary column
 
   return(tr_from_to_df_coord)
 }

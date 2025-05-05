@@ -107,7 +107,7 @@ trimesh_removed
 To lift the constructed model into high-dimensions, you need to map the 2D hexagonal bin centroids to high-dimensions. To do that, first, you need to obtain the data set which have the 2D embedding with their corresponding hexagonal bin IDs.
 
 ```{r}
-umap_data_with_hb_id <- hb_obj$data_hb_id
+umap_data_with_hb_id <- s_curve_obj$s_curve_umap_hb_obj$data_hb_id
 glimpse(umap_data_with_hb_id)
 ```
 
@@ -133,7 +133,10 @@ Finally, to visualise the model overlaid with the high-dimensional data, you ini
 df_bin_centroids <- df_bin_centroids |>
   dplyr::filter(std_counts > 0)
 
-df_exe <- comb_data_model(highd_data = s_curve_noise_training, model_highd = df_bin, model_2d = df_bin_centroids)
+df_exe <- comb_data_model(
+  highd_data = s_curve_noise_training, 
+  model_highd = df_bin, 
+  model_2d = df_bin_centroids)
 ```
 
 ```{r}
