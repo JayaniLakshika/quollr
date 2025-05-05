@@ -70,7 +70,7 @@ str(tr1_object)
 
 To visualize the results, simply use `geom_trimesh()` and provide the hexagonal bin centroid coordinates. This will display the triangular mesh for you to examine.
 
-```{r}
+```{r, fig.alt="Triangular mesh."}
 trimesh <- ggplot(df_bin_centroids, aes(x = c_x, y = c_y)) +
   geom_trimesh() +
   coord_equal() +
@@ -92,7 +92,7 @@ glimpse(tr_from_to_df)
 
 To visualize the results, you can use `vis_rmlg_mesh()`. This function enable you to observe the wireframe in 2D obtained from the algorithm's computations.
 
-```{r}
+```{r, fig.alt="Triangular mesh after removing low-density hexagons."}
 trimesh_removed <- vis_rmlg_mesh(tr_coord_df = tr_from_to_df) +
   xlab(expression(C[x]^{(2)})) + ylab(expression(C[y]^{(2)})) +
   theme(axis.text = element_text(size = 5),

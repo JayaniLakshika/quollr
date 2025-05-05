@@ -21,8 +21,8 @@ Description: To construct a model in 2D
     technique. Furthermore, it facilitates the generation of summaries of
     high-dimensional distributions.
 License: MIT + file LICENSE
-URL: https://github.com/JayaniLakshika/quollr
-BugReports: https://github.com/JayaniLakshika/quollr/issues
+URL: https://jayanilakshika.github.io/quollr
+BugReports: https://github.com/jayanilakshika/quollr/issues
 Depends: 
     R (>= 3.5.0)
 Imports: 

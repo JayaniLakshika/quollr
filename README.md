@@ -47,7 +47,7 @@ comprises two main phases:(1) generate the model in the 2D space, and
 (2) generate the model in the high-dimensional space. This methodology
 is available in this package.
 
-<img src="man/figures/quollr-methodology.png" width="80%" style="display: block; margin: auto;" />
+<img src="man/figures/quollr-methodology.png" width="80%" style="display: block; margin: auto;" alt="Descriptive alt text for the quollr methodology image" />
 
 ## About the name
 
@@ -71,4 +71,4 @@ is available in this package.
 ## Copyright
 
 This package is licensed under the [MIT
-license](https://github.com/JayaniLakshika/quollr/tree/main?tab=MIT-2-ov-file).
+license](https://github.com/jayanilakshika/quollr/tree/main?tab=MIT-2-ov-file).

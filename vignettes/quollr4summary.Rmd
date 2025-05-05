@@ -26,11 +26,16 @@ library(ggplot2)
 To obtain the model summaries, first you need to obtain the 2D hexagonal bin centroids which is the 2D model (`df_bin_centroids`) and the high-dimensional coordinates of bin centroids which represents the lifted model in high-dimensions (`df_bin`).
 
 ```{r}
-r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
-model <- fit_highd_model(training_data = s_curve_noise_training, 
-                         emb_df = s_curve_noise_umap_scaled,
-                         bin1 = 15, r2 = r2,
-                         col_start_highd = "x")
+lim1 <- s_curve_obj$s_curve_umap_scaled_obj$lim1
+lim2 <- s_curve_obj$s_curve_umap_scaled_obj$lim2
+r2 <- diff(lim2)/diff(lim1)
+
+umap_scaled <- s_curve_obj$s_curve_umap_scaled_obj$scaled_nldr
+
+model <- fit_highd_model(highd_data = s_curve_noise_training, 
+                         nldr_data = umap_scaled,
+                         bin1 = 15, r2 = r2)
+
 df_bin_centroids <- model$df_bin_centroids
 df_bin <- model$df_bin
 ```
@@ -38,19 +43,19 @@ df_bin <- model$df_bin
 Let's first compute the model summaries for training data. To do that, you need to predict 2D embedding for the training data.
 
 ```{r}
-pred_df_training <- predict_emb(test_data = s_curve_noise_training, 
-                             df_bin_centroids = df_bin_centroids, 
-                             df_bin = df_bin, type_NLDR = "UMAP")
+pred_df_training <- predict_emb(highd_data = s_curve_noise_training, 
+                                model_2d = df_bin_centroids, 
+                                model_highd = df_bin)
 glimpse(pred_df_training)
 ```
 
-```{r}
+```{r, fig.alt="UMAP embedding of the S-curve training data with predictions in red."}
 s_curve_noise_umap_scaled |>
-    ggplot(aes(x = UMAP1,
-               y = UMAP2,
+    ggplot(aes(x = emb1,
+               y = emb2,
                label = ID))+
     geom_point(alpha=0.5) +
-    geom_point(data = pred_df_training, aes(x = pred_UMAP_1, y = pred_UMAP_2), 
+    geom_point(data = pred_df_training, aes(x = pred_emb_1, y = pred_emb_2), 
                color = "red", alpha=0.5) +
     coord_equal() +
     theme(plot.title = element_text(hjust = 0.5, size = 18, face = "bold"),
@@ -61,35 +66,34 @@ s_curve_noise_umap_scaled |>
 Next, you can use the generated 2D embedding to compute model summaries.
 
 ```{r}
-glance(df_bin_centroids = df_bin_centroids, df_bin = df_bin, 
-        training_data = s_curve_noise_training, newdata = NULL, 
-        type_NLDR = "UMAP", col_start = "x")
+glance(highd_data = s_curve_noise_training, 
+       model_2d = df_bin_centroids, 
+       model_highd = df_bin)
 ```
 
 To obtain a dataframe with the high-dimensional data, the fitted model data, the predicted NLDR data, and summary information, you can use the following function.
 
 ```{r}
-augment(df_bin_centroids = df_bin_centroids, df_bin = df_bin, 
-        training_data = s_curve_noise_training, newdata = NULL, 
-        type_NLDR = "UMAP", col_start = "x") |>
+augment(highd_data = s_curve_noise_training, 
+        model_2d = df_bin_centroids, model_highd = df_bin) |>
   head(5)
 ```
 
 The same workflow is followed for the test data as well.
 
 ```{r}
-pred_df_test <- predict_emb(test_data = s_curve_noise_test, 
-                             df_bin_centroids = df_bin_centroids, 
-                             df_bin = df_bin, type_NLDR = "UMAP")
+pred_df_test <- predict_emb(highd_data = s_curve_noise_test, 
+                            model_2d = df_bin_centroids, 
+                            model_highd = df_bin)
 ```
 
-```{r}
+```{r, fig.alt="UMAP embedding of the S-curve test data with predictions in red."}
 s_curve_noise_umap_scaled |>
-    ggplot(aes(x = UMAP1,
-               y = UMAP2,
+    ggplot(aes(x = emb1,
+               y = emb2,
                label = ID))+
     geom_point(alpha=0.5) +
-    geom_point(data = pred_df_test, aes(x = pred_UMAP_1, y = pred_UMAP_2), 
+    geom_point(data = pred_df_test, aes(x = pred_emb_1, y = pred_emb_2), 
                color = "red", alpha=0.5) +
     coord_equal() +
     theme(plot.title = element_text(hjust = 0.5, size = 18, face = "bold"),
@@ -98,14 +102,13 @@ s_curve_noise_umap_scaled |>
 ```
 
 ```{r}
-glance(df_bin_centroids = df_bin_centroids, df_bin = df_bin, 
-        training_data = s_curve_noise_training, newdata = s_curve_noise_test, 
-        type_NLDR = "UMAP", col_start = "x")
+glance(highd_data = s_curve_noise_test, 
+       model_2d = df_bin_centroids, 
+       model_highd = df_bin) 
 ```
 
 ```{r}
-augment(df_bin_centroids = df_bin_centroids, df_bin = df_bin, 
-        training_data = s_curve_noise_training, newdata = s_curve_noise_test, 
-        type_NLDR = "UMAP", col_start = "x") |>
+augment(highd_data = s_curve_noise_test, 
+        model_2d = df_bin_centroids, model_highd = df_bin) |>
   head(5)
 ```

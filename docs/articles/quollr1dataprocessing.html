@@ -26,7 +26,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">quollr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.6</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -40,8 +40,8 @@
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
 <li><a class="dropdown-item" href="../articles/quollr1dataprocessing.html">1. Data preprocessing</a></li>
-    <li><a class="dropdown-item" href="../articles/quollr2algo.html">2. Algorithm for visualising the model overlaid on high-dimensional data</a></li>
-    <li><a class="dropdown-item" href="../articles/quollr3hexbin.html">3. Algorithm for binning data</a></li>
+    <li><a class="dropdown-item" href="../articles/quollr2hexbin.html">2. Algorithm for binning data</a></li>
+    <li><a class="dropdown-item" href="../articles/quollr3algo.html">3. Algorithm for visualising the model overlaid on high-dimensional data</a></li>
     <li><a class="dropdown-item" href="../articles/quollr4summary.html">4. Generating model summaries</a></li>
     <li><a class="dropdown-item" href="../articles/quollr5quickstart.html">5. Quick start</a></li>
   </ul>
@@ -52,7 +52,7 @@
 <li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json">
 </form></li>
-<li class="nav-item"><a class="external-link nav-link" href="https://github.com/JayaniLakshika/quollr/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/jayanilakshika/quollr/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul>
 </div>
 
@@ -68,7 +68,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>1. Data preprocessing</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/JayaniLakshika/quollr/blob/HEAD/vignettes/quollr1dataprocessing.Rmd" class="external-link"><code>vignettes/quollr1dataprocessing.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/jayanilakshika/quollr/blob/HEAD/vignettes/quollr1dataprocessing.Rmd" class="external-link"><code>vignettes/quollr1dataprocessing.Rmd</code></a></small>
       <div class="d-none name"><code>quollr1dataprocessing.Rmd</code></div>
     </div>
 
@@ -77,7 +77,7 @@
 <p>Here, we’ll walk through the process of preprocessing 2D embedding
 data to obtain regular hexagons.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/JayaniLakshika/quollr" class="external-link">quollr</a></span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://jayanilakshika.github.io/quollr">quollr</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span></code></pre></div>
 <p>First, you’ll need 2D embedding data generated for your training
 data. For our example, we’ll use a
@@ -91,9 +91,9 @@ for the S-curve data.</p>
 <span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="va">scaled_umap</span><span class="op">)</span></span>
 <span><span class="co">#&gt; List of 3</span></span>
 <span><span class="co">#&gt;  $ scaled_nldr: tibble [3,750 × 3] (S3: tbl_df/tbl/data.frame)</span></span>
-<span><span class="co">#&gt;   ..$ UMAP1: num [1:3750] 0.276 0.927 0.81 0.137 0.476 ...</span></span>
-<span><span class="co">#&gt;   ..$ UMAP2: num [1:3750] 0.915 0.347 0.242 0.657 0.799 ...</span></span>
-<span><span class="co">#&gt;   ..$ ID   : int [1:3750] 1 2 3 5 6 7 9 10 11 12 ...</span></span>
+<span><span class="co">#&gt;   ..$ emb1: num [1:3750] 0.276 0.927 0.81 0.137 0.476 ...</span></span>
+<span><span class="co">#&gt;   ..$ emb2: num [1:3750] 0.915 0.347 0.242 0.657 0.799 ...</span></span>
+<span><span class="co">#&gt;   ..$ ID  : int [1:3750] 1 2 3 5 6 7 9 10 11 12 ...</span></span>
 <span><span class="co">#&gt;  $ lim1       : num [1:2] -8.7 10.9</span></span>
 <span><span class="co">#&gt;  $ lim2       : num [1:2] -9.46 8.89</span></span></code></pre></div>
 <p><code>gen_scaled_data</code> function preprocesses the 2D embedding
@@ -104,7 +104,7 @@ data to obtain regular hexagons.</p>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Jayani P.G. Lakshika, Dianne Cook, Paul Harrison, Michael Lydeamore, Thiyanga S. Talagala.</p>
+  <p>Developed by Jayani P. Gamage, Dianne Cook, Paul Harrison, Michael Lydeamore, Thiyanga S. Talagala.</p>
 </div>
 
 <div class="pkgdown-footer-right">

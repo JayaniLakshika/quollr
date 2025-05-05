@@ -122,7 +122,6 @@ glance <- function(highd_data, model_2d, model_highd) {
 #' @param df_bin_centroids Centroid coordinates of hexagonal bins in 2D space.
 #' @param df_bin Centroid coordinates of hexagonal bins in high dimensions.
 #' @param training_data Training data used to fit the model.
-#' @param newdata Data to be augmented with predictions and error metrics.
 #' If NULL, the training data is used (default is NULL).
 #' @param type_NLDR The type of non-linear dimensionality reduction (NLDR) used.
 #' @param col_start The text that begin the column name of the high-dimensional data.

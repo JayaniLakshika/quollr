@@ -91,7 +91,7 @@ r2 <- diff(lim2)/diff(lim1)
 s_curve_obj[[1]] <- nldr_scaled_obj
 names(s_curve_obj)[1] <- "s_curve_umap_scaled_obj"
 
-hb_obj <- hex_binning(s_curve_noise_umap_scaled, bin1 = 4, r2 = r2, q = 0.1)
+hb_obj <- hex_binning(s_curve_noise_umap_scaled, bin1 = 15, r2 = r2, q = 0.1)
 
 s_curve_obj[[2]] <- hb_obj
 names(s_curve_obj)[2] <- "s_curve_umap_hb_obj"

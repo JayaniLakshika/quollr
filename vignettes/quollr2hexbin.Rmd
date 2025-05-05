@@ -53,14 +53,14 @@ df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df,
       filter(drop_empty == FALSE)
 ```
 
-```{r}
+```{r, fig.alt="Grid with hexagon centroids."}
 ggplot(data = hex_grid, aes(x = x, y = y)) + 
   geom_polygon(fill = "white", color = "black", aes(group = hex_poly_id)) +
   geom_point(data = all_centroids_df, aes(x = c_x, y = c_y), color = "red") +
   coord_fixed()
 ```
 
-```{r}
+```{r, fig.alt="Grid with hexagons colored empty bin centroid in red."}
 
 ggplot(data = hex_grid, aes(x = x, y = y)) + 
   geom_polygon(fill = "white", color = "black", aes(group = hex_poly_id)) +
@@ -69,14 +69,14 @@ ggplot(data = hex_grid, aes(x = x, y = y)) +
   coord_fixed()
 ```
 
-```{r}
+```{r, fig.alt="Grid with hexagons overlayed data."}
 ggplot(data = hex_grid, aes(x = x, y = y)) + 
   geom_polygon(fill = "white", color = "black", aes(group = hex_poly_id)) +
   geom_point(data = umap_scaled, aes(x = emb1, y = emb2), color = "blue") +
   coord_fixed()
 ```
 
-```{r}
+```{r, fig.alt="Grid with hexagons colored with density of points."}
 hex_grid_with_counts <- left_join(hex_grid, counts_df, by = c("hex_poly_id" = "hb_id"))
 
 ggplot(data = hex_grid_with_counts, aes(x = x, y = y)) +
@@ -88,7 +88,7 @@ ggplot(data = hex_grid_with_counts, aes(x = x, y = y)) +
 
 You can also use `geom_hexgrid` to visualise the hexagonal grid rather than `geom_polygon`.
 
-```{r}
+```{r, fig.alt="Grid with hexagons."}
 ggplot(data = all_centroids_df, aes(x = c_x, y = c_y)) +
   geom_hexgrid() +
   coord_equal() +

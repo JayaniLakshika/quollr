@@ -9,7 +9,7 @@ from a nonlinear dimension reduction (NLDR) model."><meta property="og:image" co
 
     <a class="navbar-brand me-2" href="../index.html">quollr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.6</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -21,15 +21,15 @@ from a nonlinear dimension reduction (NLDR) model."><meta property="og:image" co
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/quollr1dataprocessing.html">1. Data preprocessing</a></li>
-    <li><a class="dropdown-item" href="../articles/quollr2algo.html">2. Algorithm for visualising the model overlaid on high-dimensional data</a></li>
-    <li><a class="dropdown-item" href="../articles/quollr3hexbin.html">3. Algorithm for binning data</a></li>
+    <li><a class="dropdown-item" href="../articles/quollr2hexbin.html">2. Algorithm for binning data</a></li>
+    <li><a class="dropdown-item" href="../articles/quollr3algo.html">3. Algorithm for visualising the model overlaid on high-dimensional data</a></li>
     <li><a class="dropdown-item" href="../articles/quollr4summary.html">4. Generating model summaries</a></li>
     <li><a class="dropdown-item" href="../articles/quollr5quickstart.html">5. Quick start</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
-<li class="nav-item"><a class="external-link nav-link" href="https://github.com/JayaniLakshika/quollr/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/jayanilakshika/quollr/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul></div>
 
 
@@ -38,7 +38,7 @@ from a nonlinear dimension reduction (NLDR) model."><meta property="og:image" co
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Augment Data with Predictions and Error Metrics</h1>
-      <small class="dont-index">Source: <a href="https://github.com/JayaniLakshika/quollr/blob/HEAD/R/prediction.R" class="external-link"><code>R/prediction.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/jayanilakshika/quollr/blob/HEAD/R/prediction.R" class="external-link"><code>R/prediction.R</code></a></small>
       <div class="d-none name"><code>augment.Rd</code></div>
     </div>
 
@@ -49,14 +49,7 @@ from a nonlinear dimension reduction (NLDR) model.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">augment</span><span class="op">(</span></span>
-<span>  <span class="va">df_bin_centroids</span>,</span>
-<span>  <span class="va">df_bin</span>,</span>
-<span>  <span class="va">training_data</span>,</span>
-<span>  newdata <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  <span class="va">type_NLDR</span>,</span>
-<span>  col_start <span class="op">=</span> <span class="st">"x"</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">augment</span><span class="op">(</span><span class="va">highd_data</span>, <span class="va">model_2d</span>, <span class="va">model_highd</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -72,11 +65,7 @@ from a nonlinear dimension reduction (NLDR) model.</p>
 
 
 <dt id="arg-training-data">training_data<a class="anchor" aria-label="anchor" href="#arg-training-data"></a></dt>
-<dd><p>Training data used to fit the model.</p></dd>
-
-
-<dt id="arg-newdata">newdata<a class="anchor" aria-label="anchor" href="#arg-newdata"></a></dt>
-<dd><p>Data to be augmented with predictions and error metrics.
+<dd><p>Training data used to fit the model.
 If NULL, the training data is used (default is NULL).</p></dd>
 
 
@@ -96,14 +85,30 @@ error metrics, and absolute error metrics.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">df_bin_centroids</span> <span class="op">&lt;-</span> <span class="va">s_curve_obj</span><span class="op">$</span><span class="va">s_curve_umap_model_distance_df</span><span class="op">$</span><span class="va">df_bin_centroids</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Unknown or uninitialised column: `df_bin_centroids`.</span>
-<span class="r-in"><span><span class="va">df_bin</span> <span class="op">&lt;-</span> <span class="va">s_curve_obj</span><span class="op">$</span><span class="va">s_curve_umap_model_distance_df</span><span class="op">$</span><span class="va">df_bin</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Unknown or uninitialised column: `df_bin`.</span>
-<span class="r-in"><span><span class="fu">augment</span><span class="op">(</span>df_bin_centroids <span class="op">=</span> <span class="va">df_bin_centroids</span>, df_bin <span class="op">=</span> <span class="va">df_bin</span>,</span></span>
-<span class="r-in"><span>training_data <span class="op">=</span> <span class="va">s_curve_noise_training</span>, newdata <span class="op">=</span> <span class="cn">NULL</span>, type_NLDR <span class="op">=</span> <span class="st">"UMAP"</span>,</span></span>
-<span class="r-in"><span>col_start <span class="op">=</span> <span class="st">"x"</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in names(df_bin) &lt;- `*vtmp*`:</span> attempt to set an attribute on NULL</span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">df_bin_centroids</span> <span class="op">&lt;-</span> <span class="va">s_curve_obj</span><span class="op">$</span><span class="va">s_curve_umap_model_obj</span><span class="op">$</span><span class="va">df_bin_centroids</span></span></span>
+<span class="r-in"><span><span class="va">df_bin</span> <span class="op">&lt;-</span> <span class="va">s_curve_obj</span><span class="op">$</span><span class="va">s_curve_umap_model_obj</span><span class="op">$</span><span class="va">df_bin</span></span></span>
+<span class="r-in"><span><span class="fu">augment</span><span class="op">(</span>highd_data <span class="op">=</span> <span class="va">s_curve_noise_training</span>, model_2d <span class="op">=</span> <span class="va">df_bin_centroids</span>,</span></span>
+<span class="r-in"><span>model_highd <span class="op">=</span> <span class="va">df_bin</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 3,750 × 32</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       ID      x1     x2        x3       x4       x5       x6       x7 pred_hb_id</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span>     1 -<span style="color: #BB0000;">0.120</span>  1.64   -<span style="color: #BB0000;">1.99</span>      0.010<span style="text-decoration: underline;">4</span>   0.012<span style="text-decoration: underline;">5</span>   0.092<span style="text-decoration: underline;">3</span>  -<span style="color: #BB0000;">1.28</span><span style="color: #949494;">e</span><span style="color: #BB0000;">-3</span>         18</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span>     2 -<span style="color: #BB0000;">0.049</span><span style="color: #BB0000; text-decoration: underline;">2</span> 1.51    0.001<span style="text-decoration: underline;">21</span>  -<span style="color: #BB0000;">0.017</span><span style="color: #BB0000; text-decoration: underline;">7</span>   0.007<span style="text-decoration: underline;">26</span> -<span style="color: #BB0000;">0.036</span><span style="color: #BB0000; text-decoration: underline;">2</span>  -<span style="color: #BB0000;">5.35</span><span style="color: #949494;">e</span><span style="color: #BB0000;">-3</span>          8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span>     3 -<span style="color: #BB0000;">0.774</span>  1.30    0.367    -<span style="color: #BB0000;">0.001</span><span style="color: #BB0000; text-decoration: underline;">73</span>  0.015<span style="text-decoration: underline;">6</span>  -<span style="color: #BB0000;">0.096</span><span style="color: #BB0000; text-decoration: underline;">2</span>   3.35<span style="color: #949494;">e</span><span style="color: #BB0000;">-3</span>          7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span>     5 -<span style="color: #BB0000;">0.478</span>  0.017<span style="text-decoration: underline;">7</span> -<span style="color: #BB0000;">1.88</span>      0.008<span style="text-decoration: underline;">48</span>  0.005<span style="text-decoration: underline;">33</span>  0.099<span style="text-decoration: underline;">8</span>   6.77<span style="color: #949494;">e</span><span style="color: #BB0000;">-4</span>         13</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span>     6  0.818  0.927  -<span style="color: #BB0000;">1.58</span>     -<span style="color: #BB0000;">0.003</span><span style="color: #BB0000; text-decoration: underline;">18</span> -<span style="color: #BB0000;">0.009</span><span style="color: #BB0000; text-decoration: underline;">80</span>  0.098<span style="text-decoration: underline;">9</span>   6.96<span style="color: #949494;">e</span><span style="color: #BB0000;">-3</span>         14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span>     7  0.910  1.40    1.42      0.006<span style="text-decoration: underline;">99</span> -<span style="color: #BB0000;">0.018</span><span style="color: #BB0000; text-decoration: underline;">2</span>  -<span style="color: #BB0000;">0.071</span><span style="color: #BB0000; text-decoration: underline;">0</span>   9.66<span style="color: #949494;">e</span><span style="color: #BB0000;">-3</span>          1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span>     9  0.859  1.59   -<span style="color: #BB0000;">0.488</span>    -<span style="color: #BB0000;">0.011</span><span style="color: #BB0000; text-decoration: underline;">9</span>   0.004<span style="text-decoration: underline;">21</span> -<span style="color: #BB0000;">0.004</span><span style="color: #BB0000; text-decoration: underline;">40</span> -<span style="color: #BB0000;">5.95</span><span style="color: #949494;">e</span><span style="color: #BB0000;">-3</span>         15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span>    10 -<span style="color: #BB0000;">0.727</span>  1.62    0.314     0.002<span style="text-decoration: underline;">51</span>  0.017<span style="text-decoration: underline;">7</span>  -<span style="color: #BB0000;">0.075</span><span style="color: #BB0000; text-decoration: underline;">5</span>  -<span style="color: #BB0000;">3.69</span><span style="color: #949494;">e</span><span style="color: #BB0000;">-3</span>          8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span>    11 -<span style="color: #BB0000;">0.040</span><span style="color: #BB0000; text-decoration: underline;">0</span> 1.23    0.000<span style="text-decoration: underline;">801</span> -<span style="color: #BB0000;">0.004</span><span style="color: #BB0000; text-decoration: underline;">89</span>  0.005<span style="text-decoration: underline;">70</span>  0.072<span style="text-decoration: underline;">2</span>  -<span style="color: #BB0000;">7.89</span><span style="color: #949494;">e</span><span style="color: #BB0000;">-3</span>         12</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span>    12  0.765  0.510   1.64     -<span style="color: #BB0000;">0.006</span><span style="color: #BB0000; text-decoration: underline;">41</span> -<span style="color: #BB0000;">0.009</span><span style="color: #BB0000; text-decoration: underline;">41</span> -<span style="color: #BB0000;">0.070</span><span style="color: #BB0000; text-decoration: underline;">8</span>   9.89<span style="color: #949494;">e</span><span style="color: #BB0000;">-3</span>          5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 3,740 more rows</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 23 more variables: model_high_d_x1 &lt;dbl&gt;, model_high_d_x2 &lt;dbl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   model_high_d_x3 &lt;dbl&gt;, model_high_d_x4 &lt;dbl&gt;, model_high_d_x5 &lt;dbl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   model_high_d_x6 &lt;dbl&gt;, model_high_d_x7 &lt;dbl&gt;, error_square_x1 &lt;dbl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   error_square_x2 &lt;dbl&gt;, error_square_x3 &lt;dbl&gt;, error_square_x4 &lt;dbl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   error_square_x5 &lt;dbl&gt;, error_square_x6 &lt;dbl&gt;, error_square_x7 &lt;dbl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   row_wise_total_error &lt;dbl&gt;, abs_error_x1 &lt;dbl&gt;, abs_error_x2 &lt;dbl&gt;, …</span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
@@ -112,7 +117,7 @@ error metrics, and absolute error metrics.</p>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Jayani P.G. Lakshika, Dianne Cook, Paul Harrison, Michael Lydeamore, Thiyanga S. Talagala.</p>
+  <p>Developed by Jayani P. Gamage, Dianne Cook, Paul Harrison, Michael Lydeamore, Thiyanga S. Talagala.</p>
 </div>
 
 <div class="pkgdown-footer-right">

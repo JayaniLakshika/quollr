@@ -11,7 +11,7 @@ removal of low-density hexagons, and averaging of high-dimensional data."><meta 
 
     <a class="navbar-brand me-2" href="../index.html">quollr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.6</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -23,15 +23,15 @@ removal of low-density hexagons, and averaging of high-dimensional data."><meta 
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/quollr1dataprocessing.html">1. Data preprocessing</a></li>
-    <li><a class="dropdown-item" href="../articles/quollr2algo.html">2. Algorithm for visualising the model overlaid on high-dimensional data</a></li>
-    <li><a class="dropdown-item" href="../articles/quollr3hexbin.html">3. Algorithm for binning data</a></li>
+    <li><a class="dropdown-item" href="../articles/quollr2hexbin.html">2. Algorithm for binning data</a></li>
+    <li><a class="dropdown-item" href="../articles/quollr3algo.html">3. Algorithm for visualising the model overlaid on high-dimensional data</a></li>
     <li><a class="dropdown-item" href="../articles/quollr4summary.html">4. Generating model summaries</a></li>
     <li><a class="dropdown-item" href="../articles/quollr5quickstart.html">5. Quick start</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
-<li class="nav-item"><a class="external-link nav-link" href="https://github.com/JayaniLakshika/quollr/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/jayanilakshika/quollr/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul></div>
 
 
@@ -40,7 +40,7 @@ removal of low-density hexagons, and averaging of high-dimensional data."><meta 
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Construct the 2D model and lift into high-D</h1>
-      <small class="dont-index">Source: <a href="https://github.com/JayaniLakshika/quollr/blob/HEAD/R/model.R" class="external-link"><code>R/model.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/jayanilakshika/quollr/blob/HEAD/R/model.R" class="external-link"><code>R/model.R</code></a></small>
       <div class="d-none name"><code>fit_highd_model.Rd</code></div>
     </div>
 
@@ -53,15 +53,12 @@ removal of low-density hexagons, and averaging of high-dimensional data.</p>
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">fit_highd_model</span><span class="op">(</span></span>
-<span>  <span class="va">training_data</span>,</span>
-<span>  <span class="va">emb_df</span>,</span>
+<span>  <span class="va">highd_data</span>,</span>
+<span>  <span class="va">nldr_data</span>,</span>
 <span>  bin1 <span class="op">=</span> <span class="fl">4</span>,</span>
 <span>  <span class="va">r2</span>,</span>
 <span>  q <span class="op">=</span> <span class="fl">0.1</span>,</span>
-<span>  is_bin_centroid <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  is_rm_lwd_hex <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  benchmark_to_rm_lwd_hex <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  col_start_highd <span class="op">=</span> <span class="st">"x"</span></span>
+<span>  is_bin_centroid <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -69,11 +66,11 @@ removal of low-density hexagons, and averaging of high-dimensional data.</p>
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
 
 
-<dl><dt id="arg-training-data">training_data<a class="anchor" aria-label="anchor" href="#arg-training-data"></a></dt>
+<dl><dt id="arg-highd-data">highd_data<a class="anchor" aria-label="anchor" href="#arg-highd-data"></a></dt>
 <dd><p>A tibble that contains the training high-dimensional data.</p></dd>
 
 
-<dt id="arg-emb-df">emb_df<a class="anchor" aria-label="anchor" href="#arg-emb-df"></a></dt>
+<dt id="arg-nldr-data">nldr_data<a class="anchor" aria-label="anchor" href="#arg-nldr-data"></a></dt>
 <dd><p>A tibble that contains embedding with a unique identifier.</p></dd>
 
 
@@ -88,23 +85,6 @@ removal of low-density hexagons, and averaging of high-dimensional data.</p>
 <dt id="arg-q">q<a class="anchor" aria-label="anchor" href="#arg-q"></a></dt>
 <dd><p>The buffer amount as proportion of data range.</p></dd>
 
-
-<dt id="arg-is-bin-centroid">is_bin_centroid<a class="anchor" aria-label="anchor" href="#arg-is-bin-centroid"></a></dt>
-<dd><p>Logical, indicating whether to use bin centroids (default is TRUE).</p></dd>
-
-
-<dt id="arg-is-rm-lwd-hex">is_rm_lwd_hex<a class="anchor" aria-label="anchor" href="#arg-is-rm-lwd-hex"></a></dt>
-<dd><p>Logical, indicating whether to remove low-density hexagons
-(default is FALSE).</p></dd>
-
-
-<dt id="arg-benchmark-to-rm-lwd-hex">benchmark_to_rm_lwd_hex<a class="anchor" aria-label="anchor" href="#arg-benchmark-to-rm-lwd-hex"></a></dt>
-<dd><p>The benchmark value to remove low-density hexagons.</p></dd>
-
-
-<dt id="arg-col-start-highd">col_start_highd<a class="anchor" aria-label="anchor" href="#arg-col-start-highd"></a></dt>
-<dd><p>The text prefix for columns in the high-dimensional data.</p></dd>
-
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -115,14 +95,53 @@ information about hexagonal bin centroids (<code>df_bin_centroids</code>) in 2D.
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">scurve_umap_scaled_obj</span> <span class="op">&lt;-</span> <span class="va">s_curve_obj</span><span class="op">$</span><span class="va">nldr_scaled_obj</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">scurve_umap_scaled_obj</span> <span class="op">&lt;-</span> <span class="va">s_curve_obj</span><span class="op">$</span><span class="va">s_curve_umap_scaled_obj</span></span></span>
 <span class="r-in"><span><span class="va">lim1</span> <span class="op">&lt;-</span> <span class="va">scurve_umap_scaled_obj</span><span class="op">$</span><span class="va">lim1</span></span></span>
 <span class="r-in"><span><span class="va">lim2</span> <span class="op">&lt;-</span> <span class="va">scurve_umap_scaled_obj</span><span class="op">$</span><span class="va">lim2</span></span></span>
 <span class="r-in"><span><span class="va">r2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/diff.html" class="external-link">diff</a></span><span class="op">(</span><span class="va">lim2</span><span class="op">)</span><span class="op">/</span><span class="fu"><a href="https://rdrr.io/r/base/diff.html" class="external-link">diff</a></span><span class="op">(</span><span class="va">lim1</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">fit_highd_model</span><span class="op">(</span>training_data <span class="op">=</span> <span class="va">s_curve_noise_training</span>,</span></span>
-<span class="r-in"><span>emb_df <span class="op">=</span> <span class="va">s_curve_noise_umap_scaled</span>, bin1 <span class="op">=</span> <span class="fl">4</span>, r2 <span class="op">=</span> <span class="va">r2</span>,</span></span>
-<span class="r-in"><span>col_start_highd <span class="op">=</span> <span class="st">"x"</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in if (r2 &gt; check_factor) {    a1 &lt;- (1 + 2 * q)/(bin1 - 1)} else {    a1 &lt;- (2 * (r2 + q * (1 + r2)))/(sqrt(3) * (bin2 - 1))}:</span> argument is of length zero</span>
+<span class="r-in"><span><span class="fu">fit_highd_model</span><span class="op">(</span>highd_data <span class="op">=</span> <span class="va">s_curve_noise_training</span>,</span></span>
+<span class="r-in"><span>nldr_data <span class="op">=</span> <span class="va">s_curve_noise_umap_scaled</span>, bin1 <span class="op">=</span> <span class="fl">4</span>, r2 <span class="op">=</span> <span class="va">r2</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Model generated successfully! 🎉</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $df_bin</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 15 × 8</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    hb_id      x1    x2       x3         x4         x5        x6          x7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span>     1  0.979  1.90   1.17    -<span style="color: #BB0000;">0.000</span><span style="color: #BB0000; text-decoration: underline;">726</span>   0.000<span style="text-decoration: underline;">051</span>9 -<span style="color: #BB0000;">0.029</span><span style="color: #BB0000; text-decoration: underline;">2</span>   -<span style="color: #BB0000;">0.000</span><span style="color: #BB0000; text-decoration: underline;">946</span>  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span>     2  0.164  1.70   1.92    -<span style="color: #BB0000;">0.001</span><span style="color: #BB0000; text-decoration: underline;">34</span>    0.001<span style="text-decoration: underline;">23</span>    0.007<span style="text-decoration: underline;">17</span>  -<span style="color: #BB0000;">0.000</span><span style="color: #BB0000; text-decoration: underline;">111</span>  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span>     3 -<span style="color: #BB0000;">0.736</span>  1.88   1.65     0.000<span style="text-decoration: underline;">779</span>   0.000<span style="text-decoration: underline;">445</span>   0.000<span style="text-decoration: underline;">375</span>  0.001<span style="text-decoration: underline;">20</span>   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span>     5  0.760  0.878  1.55    -<span style="color: #BB0000;">0.000</span><span style="color: #BB0000; text-decoration: underline;">029</span><span style="color: #BB0000;">6</span> -<span style="color: #BB0000;">0.000</span><span style="color: #BB0000; text-decoration: underline;">455</span>  -<span style="color: #BB0000;">0.002</span><span style="color: #BB0000; text-decoration: underline;">83</span>  -<span style="color: #BB0000;">0.000</span><span style="color: #BB0000; text-decoration: underline;">161</span>  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span>     6 -<span style="color: #BB0000;">0.442</span>  0.732  1.77    -<span style="color: #BB0000;">0.000</span><span style="color: #BB0000; text-decoration: underline;">256</span>  -<span style="color: #BB0000;">0.000</span><span style="color: #BB0000; text-decoration: underline;">205</span>  -<span style="color: #BB0000;">0.002</span><span style="color: #BB0000; text-decoration: underline;">90</span>   0.000<span style="text-decoration: underline;">141</span>  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span>     7 -<span style="color: #BB0000;">0.885</span>  1.25   0.736    0.000<span style="text-decoration: underline;">338</span>   0.000<span style="text-decoration: underline;">525</span>  -<span style="color: #BB0000;">0.001</span><span style="color: #BB0000; text-decoration: underline;">74</span>   0.000<span style="text-decoration: underline;">172</span>  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span>     8 -<span style="color: #BB0000;">0.299</span>  1.81   0.067<span style="text-decoration: underline;">3</span>  -<span style="color: #BB0000;">0.002</span><span style="color: #BB0000; text-decoration: underline;">01</span>   -<span style="color: #BB0000;">0.000</span><span style="color: #BB0000; text-decoration: underline;">363</span>  -<span style="color: #BB0000;">0.005</span><span style="color: #BB0000; text-decoration: underline;">81</span>   0.000<span style="text-decoration: underline;">076</span>4 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span>    11 -<span style="color: #BB0000;">0.894</span>  0.188  0.678   -<span style="color: #BB0000;">0.000</span><span style="color: #BB0000; text-decoration: underline;">078</span><span style="color: #BB0000;">6</span> -<span style="color: #BB0000;">0.000</span><span style="color: #BB0000; text-decoration: underline;">632</span>  -<span style="color: #BB0000;">0.005</span><span style="color: #BB0000; text-decoration: underline;">85</span>   0.000<span style="text-decoration: underline;">328</span>  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span>    12 -<span style="color: #BB0000;">0.012</span><span style="color: #BB0000; text-decoration: underline;">1</span> 0.886  0.004<span style="text-decoration: underline;">28</span> -<span style="color: #BB0000;">0.000</span><span style="color: #BB0000; text-decoration: underline;">607</span>   0.001<span style="text-decoration: underline;">05</span>    0.003<span style="text-decoration: underline;">24</span>   0.000<span style="text-decoration: underline;">302</span>  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span>    13 -<span style="color: #BB0000;">0.749</span>  0.876 -<span style="color: #BB0000;">1.55</span>    -<span style="color: #BB0000;">0.000</span><span style="color: #BB0000; text-decoration: underline;">230</span>  -<span style="color: #BB0000;">0.000</span><span style="color: #BB0000; text-decoration: underline;">361</span>   0.000<span style="text-decoration: underline;">102</span> -<span style="color: #BB0000;">0.000</span><span style="color: #BB0000; text-decoration: underline;">049</span><span style="color: #BB0000;">7</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">11</span>    14  0.440  0.761 -<span style="color: #BB0000;">1.81</span>    -<span style="color: #BB0000;">0.000</span><span style="color: #BB0000; text-decoration: underline;">471</span>   0.000<span style="text-decoration: underline;">461</span>  -<span style="color: #BB0000;">0.003</span><span style="color: #BB0000; text-decoration: underline;">61</span>  -<span style="color: #BB0000;">0.000</span><span style="color: #BB0000; text-decoration: underline;">009</span><span style="color: #BB0000;">19</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">12</span>    15  0.867  0.957 -<span style="color: #BB0000;">0.676</span>    0.000<span style="text-decoration: underline;">797</span>   0.000<span style="text-decoration: underline;">363</span>  -<span style="color: #BB0000;">0.001</span><span style="color: #BB0000; text-decoration: underline;">09</span>   0.000<span style="text-decoration: underline;">304</span>  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">13</span>    17 -<span style="color: #BB0000;">0.991</span>  1.82  -<span style="color: #BB0000;">1.11</span>    -<span style="color: #BB0000;">0.001</span><span style="color: #BB0000; text-decoration: underline;">17</span>   -<span style="color: #BB0000;">0.001</span><span style="color: #BB0000; text-decoration: underline;">09</span>   -<span style="color: #BB0000;">0.005</span><span style="color: #BB0000; text-decoration: underline;">51</span>   0.000<span style="text-decoration: underline;">819</span>  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">14</span>    18 -<span style="color: #BB0000;">0.284</span>  1.74  -<span style="color: #BB0000;">1.90</span>     0.000<span style="text-decoration: underline;">209</span>   0.001<span style="text-decoration: underline;">06</span>    0.000<span style="text-decoration: underline;">850</span> -<span style="color: #BB0000;">0.000</span><span style="color: #BB0000; text-decoration: underline;">549</span>  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">15</span>    19  0.876  1.70  -<span style="color: #BB0000;">1.43</span>    -<span style="color: #BB0000;">0.001</span><span style="color: #BB0000; text-decoration: underline;">08</span>   -<span style="color: #BB0000;">0.001</span><span style="color: #BB0000; text-decoration: underline;">30</span>    0.002<span style="text-decoration: underline;">20</span>  -<span style="color: #BB0000;">0.000</span><span style="color: #BB0000; text-decoration: underline;">737</span>  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $df_bin_centroids</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 15 × 6</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    hexID     c_x     c_y bin_counts std_counts drop_empty</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span>     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span>     1 -<span style="color: #BB0000;">0.1</span>    -<span style="color: #BB0000;">0.093</span><span style="color: #BB0000; text-decoration: underline;">8</span>         17     0.030<span style="text-decoration: underline;">2</span> FALSE     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span>     2  0.227  -<span style="color: #BB0000;">0.093</span><span style="color: #BB0000; text-decoration: underline;">8</span>        169     0.300  FALSE     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span>     3  0.554  -<span style="color: #BB0000;">0.093</span><span style="color: #BB0000; text-decoration: underline;">8</span>         34     0.060<span style="text-decoration: underline;">4</span> FALSE     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span>     5  0.063<span style="text-decoration: underline;">4</span>  0.189         431     0.766  FALSE     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span>     6  0.390   0.189         430     0.764  FALSE     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span>     7  0.717   0.189         407     0.723  FALSE     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span>     8  1.04    0.189          57     0.101  FALSE     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span>    11  0.554   0.472          82     0.146  FALSE     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span>    12  0.880   0.472         367     0.652  FALSE     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span>    13  0.063<span style="text-decoration: underline;">4</span>  0.755         442     0.785  FALSE     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">11</span>    14  0.390   0.755         478     0.849  FALSE     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">12</span>    15  0.717   0.755         563     1      FALSE     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">13</span>    17 -<span style="color: #BB0000;">0.1</span>     1.04           26     0.046<span style="text-decoration: underline;">2</span> FALSE     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">14</span>    18  0.227   1.04          149     0.265  FALSE     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">15</span>    19  0.554   1.04           98     0.174  FALSE     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
@@ -131,7 +150,7 @@ information about hexagonal bin centroids (<code>df_bin_centroids</code>) in 2D.
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Jayani P.G. Lakshika, Dianne Cook, Paul Harrison, Michael Lydeamore, Thiyanga S. Talagala.</p>
+  <p>Developed by Jayani P. Gamage, Dianne Cook, Paul Harrison, Michael Lydeamore, Thiyanga S. Talagala.</p>
 </div>
 
 <div class="pkgdown-footer-right">

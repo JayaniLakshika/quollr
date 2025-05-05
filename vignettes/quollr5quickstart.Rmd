@@ -22,12 +22,15 @@ library(tibble)
 In here, we use `fit_highd_model()` function to construct the model in 2D and high-dimensional space using the provided training data (`s_curve_noise_training`) and the precomputed scaled UMAP embeddings (`s_curve_noise_umap_scaled`). The function takes various parameters to configure the model construction process, such as hexagonal binning parameters (`bin1`, `s1`, `s2`, `r2``), and options for binning and hexagon visualization. 
 
 ```{r, message=FALSE}
-r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
+lim1 <- s_curve_obj$s_curve_umap_scaled_obj$lim1
+lim2 <- s_curve_obj$s_curve_umap_scaled_obj$lim2
+r2 <- diff(lim2)/diff(lim1)
 
-model <- fit_highd_model(training_data = s_curve_noise_training, 
-                         emb_df = s_curve_noise_umap_scaled, bin1 = 15,
-                         r2 = r2, is_bin_centroid = TRUE, 
-                         is_rm_lwd_hex = FALSE)
+umap_scaled <- s_curve_obj$s_curve_umap_scaled_obj$scaled_nldr
+
+model <- fit_highd_model(highd_data = s_curve_noise_training, 
+                         nldr_data = umap_scaled, bin1 = 15,
+                         r2 = r2, is_bin_centroid = TRUE)
 ## 2D model
 glimpse(model$df_bin)
 

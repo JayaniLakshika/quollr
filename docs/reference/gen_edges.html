@@ -11,7 +11,7 @@ between the vertices."><meta property="og:image" content="https://jayanilakshika
 
     <a class="navbar-brand me-2" href="../index.html">quollr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.6</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -23,15 +23,15 @@ between the vertices."><meta property="og:image" content="https://jayanilakshika
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/quollr1dataprocessing.html">1. Data preprocessing</a></li>
-    <li><a class="dropdown-item" href="../articles/quollr2algo.html">2. Algorithm for visualising the model overlaid on high-dimensional data</a></li>
-    <li><a class="dropdown-item" href="../articles/quollr3hexbin.html">3. Algorithm for binning data</a></li>
+    <li><a class="dropdown-item" href="../articles/quollr2hexbin.html">2. Algorithm for binning data</a></li>
+    <li><a class="dropdown-item" href="../articles/quollr3algo.html">3. Algorithm for visualising the model overlaid on high-dimensional data</a></li>
     <li><a class="dropdown-item" href="../articles/quollr4summary.html">4. Generating model summaries</a></li>
     <li><a class="dropdown-item" href="../articles/quollr5quickstart.html">5. Quick start</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
-<li class="nav-item"><a class="external-link nav-link" href="https://github.com/JayaniLakshika/quollr/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/jayanilakshika/quollr/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul></div>
 
 
@@ -40,7 +40,7 @@ between the vertices."><meta property="og:image" content="https://jayanilakshika
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Generate edge information</h1>
-      <small class="dont-index">Source: <a href="https://github.com/JayaniLakshika/quollr/blob/HEAD/R/03_2d.R" class="external-link"><code>R/03_2d.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/jayanilakshika/quollr/blob/HEAD/R/2d.R" class="external-link"><code>R/2d.R</code></a></small>
       <div class="d-none name"><code>gen_edges.Rd</code></div>
     </div>
 
@@ -52,7 +52,7 @@ between the vertices.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">gen_edges</span><span class="op">(</span><span class="va">tri_object</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">gen_edges</span><span class="op">(</span><span class="va">tri_object</span>, threshold <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -61,6 +61,10 @@ between the vertices.</p>
 
 <dl><dt id="arg-tri-object">tri_object<a class="anchor" aria-label="anchor" href="#arg-tri-object"></a></dt>
 <dd><p>The triangular object from which to generate edge information.</p></dd>
+
+
+<dt id="arg-threshold">threshold<a class="anchor" aria-label="anchor" href="#arg-threshold"></a></dt>
+<dd><p>A numeric value to filter high-density hexagons.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -73,20 +77,7 @@ relationships and the corresponding x and y coordinates.</p>
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">tr1_object</span> <span class="op">&lt;-</span> <span class="va">s_curve_obj</span><span class="op">$</span><span class="va">s_curve_umap_model_tr1_object</span></span></span>
 <span class="r-in"><span><span class="fu">gen_edges</span><span class="op">(</span>tri_object <span class="op">=</span> <span class="va">tr1_object</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 35 × 6</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     from    to  x_from  y_from   x_to    y_to</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span>     1     2 -<span style="color: #BB0000;">0.1</span>    -<span style="color: #BB0000;">0.093</span><span style="color: #BB0000; text-decoration: underline;">8</span> 0.227  -<span style="color: #BB0000;">0.093</span><span style="color: #BB0000; text-decoration: underline;">8</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span>     4     5  0.063<span style="text-decoration: underline;">4</span>  0.189  0.390   0.189 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span>     3     5  0.554  -<span style="color: #BB0000;">0.093</span><span style="color: #BB0000; text-decoration: underline;">8</span> 0.390   0.189 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span>     5     6  0.390   0.189  0.717   0.189 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span>     5    11  0.390   0.189  0.390   0.755 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span>     5     8  0.390   0.189  0.554   0.472 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span>     1    10 -<span style="color: #BB0000;">0.1</span>    -<span style="color: #BB0000;">0.093</span><span style="color: #BB0000; text-decoration: underline;">8</span> 0.063<span style="text-decoration: underline;">4</span>  0.755 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span>     5    10  0.390   0.189  0.063<span style="text-decoration: underline;">4</span>  0.755 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span>    10    11  0.063<span style="text-decoration: underline;">4</span>  0.755  0.390   0.755 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span>     8     9  0.554   0.472  0.880   0.472 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 25 more rows</span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in triangles(tri):</span> tri.obj must be of class "triSht"</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
@@ -95,7 +86,7 @@ relationships and the corresponding x and y coordinates.</p>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Jayani P.G. Lakshika, Dianne Cook, Paul Harrison, Michael Lydeamore, Thiyanga S. Talagala.</p>
+  <p>Developed by Jayani P. Gamage, Dianne Cook, Paul Harrison, Michael Lydeamore, Thiyanga S. Talagala.</p>
 </div>
 
 <div class="pkgdown-footer-right">

@@ -52,20 +52,12 @@ projection_df <- cbind(
 c(-0.17353,-0.02906,0.19857,0.00037,0.00131,-0.05019,0.03371),
 c(-0.10551,0.14829,-0.02063,0.02658,-0.03150,0.19698,0.00044))
 
-distance_df <- s_curve_obj$s_curve_umap_model_distance_df
-benchmark <- find_lg_benchmark(distance_edges = distance_df,
-distance_col = "distance")
-
 df_bin <- s_curve_obj$s_curve_umap_model_obj$df_bin
-
-## Set the maximum difference as the criteria
-distance_df_small_edges <- distance_df |>
-  dplyr::filter(distance < benchmark) |>
-  dplyr::select(-distance)
+edge_data <- s_curve_obj$s_curve_umap_model_tr_from_to_df
 
 proj_obj1 <- get_projection(projection = projection_df, proj_scale = 1,
 highd_data = s_curve_noise_training, model_highd = df_bin,
-tr_from_to_df = distance_df_small_edges,
+tr_from_to_df = edge_data,
 axis_param = list(limits = 1, axis_scaled = 1, axis_pos_x = -0.72,
 axis_pos_y = -0.72,threshold = 0))
 

@@ -11,9 +11,7 @@ augment(highd_data, model_2d, model_highd)
 
 \item{df_bin}{Centroid coordinates of hexagonal bins in high dimensions.}
 
-\item{training_data}{Training data used to fit the model.}
-
-\item{newdata}{Data to be augmented with predictions and error metrics.
+\item{training_data}{Training data used to fit the model.
 If NULL, the training data is used (default is NULL).}
 
 \item{type_NLDR}{The type of non-linear dimensionality reduction (NLDR) used.}
