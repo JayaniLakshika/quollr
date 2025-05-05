@@ -168,26 +168,11 @@ show_error_link_plots <- function(point_df, edge_df) {
                                                  width = "450",
                                                  height = "450")
 
-  # Create a table widget
-  datatableWidget <- DT::datatable(
-    shared_df,
-    rownames = FALSE, extensions = "Buttons",
-    options = list(paging = TRUE,
-                   scrollX = TRUE,
-                   searching = TRUE,
-                   ordering = TRUE,
-                   dom = 'Bfrtip',
-                   buttons = c('copy', 'csv', 'excel', 'pdf'),
-                   pageLength = 10,
-                   lengthMenu = c(3, 5, 10)))
-
   linked_plt <- crosstalk::bscols(
-    htmltools::div(
     htmltools::div(style="display: grid; grid-template-columns: 1fr 1fr 1fr;",
         error_plt,
         nldr_plt,
         langevitour_output),
-    datatableWidget, style = "padding-left: 50px;"),
     device = "sm"
   )
 

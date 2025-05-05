@@ -199,12 +199,18 @@ model_s_curve_obj <- fit_highd_model(
 s_curve_obj[[3]] <- model_s_curve_obj
 names(s_curve_obj)[3] <- "s_curve_umap_model_obj"
 
-tr1_object <- tri_bin_centroids(hex_df = model_s_curve_obj$df_bin_centroids, x = "c_x", y = "c_y")
+all_centroids_df <- hb_obj$centroids
+counts_df <- hb_obj$std_cts
+
+df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df,
+                                             counts_df = counts_df)
+
+tr1_object <- tri_bin_centroids(hex_df = df_bin_centroids, x = "c_x", y = "c_y")
 
 s_curve_obj[[4]] <- tr1_object
 names(s_curve_obj)[4] <- "s_curve_umap_model_tr1_object"
 
-tr_from_to_df <- gen_edges(tri_object = tr1_object)
+tr_from_to_df <- gen_edges(tri_object = tr1_object, threshold = 0)
 
 s_curve_obj[[5]] <- tr_from_to_df
 names(s_curve_obj)[5] <- "s_curve_umap_model_tr_from_to_df"
