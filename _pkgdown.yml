@@ -30,7 +30,6 @@ reference:
 - title: "2D model construction"
   desc: These are to construct the 2D model.
   contents:
-  - cal_2d_dist
   - extract_hexbin_centroids
   - extract_hexbin_mean
   - tri_bin_centroids
@@ -40,7 +39,6 @@ reference:
   contents:
   - compute_mean_density_hex
   - find_low_dens_hex
-  - find_lg_benchmark
 - title: "Lift to high dimensions"
   desc: The function is to lift the constructed 2D model into high-dimensions.
   contents:
@@ -55,8 +53,8 @@ reference:
   - glance
   - predict_emb
   - augment
-- title: "Visualisation"
-  desc: These are to visualise the model in 2D and high-dimensions.
+- title: "2D visualisation"
+  desc: These are to visualise the model in 2D.
   contents:
   - GeomHexgrid
   - stat_hexgrid
@@ -64,11 +62,25 @@ reference:
   - GeomTrimesh
   - stat_trimesh
   - geom_trimesh
-  - vis_lg_mesh
   - vis_rmlg_mesh
+- title: "High-dimensional visualisation"
+  desc: These are to visualise the model in high-dimensional space.
+  contents:
+  - comb_data_model
   - show_langevitour
-  - gen_proj_langevitour
+- title: "Projection"
+  desc: These are to generate 2D projections from tour.
+  contents:
+  - gen_axes
+  - get_projection
+  - plot_proj
+- title: "Link plots"
+  desc: These are to diagnoise with interactivity.
+  contents:
+  - comb_all_data_model
   - show_link_plots
+  - comb_all_data_model_error
+  - show_error_link_plots
 - title: "Additional"
   desc: These are additional functionalities.
   contents:
