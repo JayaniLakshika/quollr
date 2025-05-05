@@ -29,7 +29,7 @@ To obtain the model summaries, first you need to obtain the 2D hexagonal bin cen
 r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
 model <- fit_highd_model(training_data = s_curve_noise_training, 
                          emb_df = s_curve_noise_umap_scaled,
-                         bin1 = 6, r2 = r2,
+                         bin1 = 15, r2 = r2,
                          col_start_highd = "x")
 df_bin_centroids <- model$df_bin_centroids
 df_bin <- model$df_bin

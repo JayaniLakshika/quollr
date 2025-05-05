@@ -189,7 +189,7 @@ assign_data <- function(data, centroid_df) {
   centroid_matrix <- as.matrix(select_centroid)
 
   ## Compute distances between embedding points and hex bin centroids
-  dist_df <- dist(matrix_nldr, centroid_matrix, method = "Euclidean")
+  dist_df <- proxy::dist(matrix_nldr, centroid_matrix, method = "Euclidean")
 
   # Get the column indices of minimum distances (if there are multiple minimum,
   # get the minimum indicies)

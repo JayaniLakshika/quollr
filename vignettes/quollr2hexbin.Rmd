@@ -34,7 +34,7 @@ r2 <- diff(lim2)/diff(lim1)
 
 umap_scaled <- s_curve_obj$s_curve_umap_scaled_obj$scaled_nldr
 
-hb_obj <- hex_binning(data = umap_scaled, bin1 = 7, q = 0.1, r2 = r2)
+hb_obj <- hex_binning(data = umap_scaled, bin1 = 15, q = 0.1, r2 = r2)
 ```
 
 ```{r}

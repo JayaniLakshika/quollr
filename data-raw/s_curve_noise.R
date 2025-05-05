@@ -114,11 +114,4 @@ tr_from_to_df <- gen_edges(tri_object = tr1_object)
 s_curve_obj[[5]] <- tr_from_to_df
 names(s_curve_obj)[5] <- "s_curve_umap_model_tr_from_to_df"
 
-distance_df <- cal_2d_dist(tr_coord_df = tr_from_to_df, start_x = "x_from",
-                           start_y = "y_from", end_x = "x_to", end_y = "y_to",
-                           select_vars = c("from", "to", "distance"))
-
-s_curve_obj[[6]] <- distance_df
-names(s_curve_obj)[6] <- "s_curve_umap_model_distance_df"
-
 usethis::use_data(s_curve_obj, overwrite = TRUE)
