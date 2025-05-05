@@ -58,8 +58,8 @@ knitr::include_graphics("man/figures/quollr-methodology.png")
   * To learn more about the main steps of the algorithm: [3. Algorithm for visualising the model overlaid on high-dimensional data](https://jayanilakshika.github.io/quollr/articles/quollr3algo.html)
   * To generate model summaries: [4. Generating model summaries](https://jayanilakshika.github.io/quollr/articles/quollr4summary.html)
   * Quick start guide: [5. Quick start](https://jayanilakshika.github.io/quollr/articles/quollr5quickstart.html)
-  * To select optimal bin width: [6. Selecting the best bin width](https://jayanilakshika.github.io/quollr/articles/quollr6bestbinwidth.html)
-  * To select the most reasonable fit: [7. Selecting the best fit](https://jayanilakshika.github.io/quollr/articles/quollr7bestfit.html)
+  * To select the optimal bin width: [6. Selecting the best bin width](https://jayanilakshika.github.io/quollr/articles/quollr6bestbinwidth.html)
+  * To select the most reasonable NLDR layout: [7. Selecting the best fit](https://jayanilakshika.github.io/quollr/articles/quollr7bestfit.html)
 
 ## Copyright
 

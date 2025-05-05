@@ -47,7 +47,7 @@ comprises two main phases:(1) generate the model in the 2D space, and
 (2) generate the model in the high-dimensional space. This methodology
 is available in this package.
 
-<img src="man/figures/quollr-methodology.png" width="80%" style="display: block; margin: auto;" alt="Descriptive alt text for the quollr methodology image" />
+<img src="man/figures/quollr-methodology.png" width="80%" style="display: block; margin: auto;" />
 
 ## About the name
 
@@ -58,17 +58,21 @@ is available in this package.
 
 - To learn more about the data preprocessing: [1. Data
   preprocessing](https://jayanilakshika.github.io/quollr/articles/quollr1dataprocessing.html)
-- To learn more about the main steps of the algorithm: [2. Algorithm for
+- To create the full hexagonal grid: [2. Algorithm for binning
+  data](https://jayanilakshika.github.io/quollr/articles/quollr2hexbin.html)
+- To learn more about the main steps of the algorithm: [3. Algorithm for
   visualising the model overlaid on high-dimensional
-  data](https://jayanilakshika.github.io/quollr/articles/quollr2algo.html)
-- To create the full hexagonal grid: [3. Algorithm for binning
-  data](https://jayanilakshika.github.io/quollr/articles/quollr3hexbin.html)
+  data](https://jayanilakshika.github.io/quollr/articles/quollr3algo.html)
 - To generate model summaries: [4. Generating model
   summaries](https://jayanilakshika.github.io/quollr/articles/quollr4summary.html)
 - Quick start guide: [5. Quick
   start](https://jayanilakshika.github.io/quollr/articles/quollr5quickstart.html)
+- To select the optimal bin width: [6. Selecting the best bin
+  width](https://jayanilakshika.github.io/quollr/articles/quollr6bestbinwidth.html)
+- To select the most reasonable NLDR layout: [7. Selecting the best
+  fit](https://jayanilakshika.github.io/quollr/articles/quollr7bestfit.html)
 
 ## Copyright
 
 This package is licensed under the [MIT
-license](https://github.com/jayanilakshika/quollr/tree/main?tab=MIT-2-ov-file).
+license](https://github.com/JayaniLakshika/quollr/tree/main?tab=MIT-2-ov-file).
