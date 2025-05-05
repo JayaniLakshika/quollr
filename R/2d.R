@@ -440,7 +440,14 @@ extract_hexbin_mean <- function(data_hb, counts_df, centroids_df) {
 tri_bin_centroids <- function(hex_df, x, y){
   tr1 <- tri.mesh(hex_df[[rlang::as_string(rlang::sym(x))]],
                   hex_df[[rlang::as_string(rlang::sym(y))]])
-  return(tr1)
+
+  # Create a list to store the triangulation object and the counts
+  result <- list(
+    trimesh_object = tr1,
+    bin_counts = hex_df[["std_counts"]]
+  )
+
+  return(result)
 }
 
 
@@ -451,6 +458,7 @@ tri_bin_centroids <- function(hex_df, x, y){
 #' between the vertices.
 #'
 #' @param tri_object The triangular object from which to generate edge information.
+#' @param threshold A numeric value to filter high-density hexagons.
 #'
 #' @return A tibble that contains the edge information, including the from-to
 #' relationships and the corresponding x and y coordinates.
@@ -463,142 +471,56 @@ tri_bin_centroids <- function(hex_df, x, y){
 #' gen_edges(tri_object = tr1_object)
 #'
 #' @export
-gen_edges <- function(tri_object) {
+gen_edges <- function(tri_object, threshold = 0) {
+  # Access the trimesh object and bin counts
+  tri <- tri_object$trimesh_object
+  counts <- tri_object$bin_counts
 
-  # Create a data frame with x and y coordinate values from the triangular object
-  tr_df <- tibble(x = tri_object$x, y = tri_object$y,
-                  ID = 1:length(tri_object$x))
-  # Add ID numbers for joining with from and to points in tr_arcs
+  # Create a data frame with x, y coordinates, and bin counts
+  tr_df <- tibble(
+    x = tri$x,
+    y = tri$y,
+    ID = 1:length(tri$x),
+    n_obs = counts # Assuming 'n_obs' is how you named the counts
+  )
 
-  # Extract the triangles from the triangular object
-  trang <- triangles(tri_object)
+  # Extract the triangles
+  trang <- triangles(tri)
   trang <- as_tibble(trang)
 
-  # Create data frames with from-to edges
-  tr_arcs_df <- tibble(from = c(trang$node1, trang$node1, trang$node2),
-                       to = c(trang$node2, trang$node3, trang$node3))
+  # Create initial from-to edges
+  tr_arcs_df <- tibble(
+    from = c(trang$node1, trang$node1, trang$node2),
+    to = c(trang$node2, trang$node3, trang$node3)
+  )
 
-  ## To extract unique combinations
-  tr_arcs_df <- tr_arcs_df |>
+  # Filter edges based on the bin counts of the connected nodes
+  filtered_edges <- tr_arcs_df |>
+    left_join(tr_df |> select(ID, n_obs), by = c("from" = "ID")) |>
+    rename(from_count = n_obs) |>
+    left_join(tr_df |> select(ID, n_obs), by = c("to" = "ID")) |>
+    rename(to_count = n_obs) |>
+    filter(from_count >= threshold & to_count >= threshold) |>
+    select(from, to) |>
     mutate(x = pmin(from, to), y = pmax(from, to)) |>
     distinct(x, y) |>
-    rename(c("from" = "x", "to" = "y"))
+    rename(from = x, to = y)
 
-  ## Map from and to coordinates
-  tr_from_to_df_coord <- left_join(tr_arcs_df, tr_df, by = c("from" = "ID")) |>
-    rename(c("x_from" = "x", "y_from" = "y"))
-  tr_from_to_df_coord <- left_join(tr_from_to_df_coord, tr_df, by = c("to" = "ID"))|>
-    rename(c("x_to" = "x", "y_to" = "y"))
+  # Map from and to coordinates for the filtered edges
+  tr_from_to_df_coord <- left_join(filtered_edges, tr_df, by = c("from" = "ID")) |>
+    rename(x_from = x, y_from = y) |>
+    left_join(tr_df, by = c("to" = "ID")) |>
+    rename(x_to = x, y_to = y) |>
+    select(from, to, x_from, y_from, x_to, y_to) # Keep only necessary columns
 
   return(tr_from_to_df_coord)
-
-
-}
-
-#' Calculate 2D Euclidean distances between vertices
-#'
-#' This function calculates the 2D distances between pairs of points in a data frame.
-#'
-#' @param tr_coord_df A tibble that contains the x and y coordinates of start
-#' and end points.
-#' @param start_x Column name for the x-coordinate of the starting point.
-#' @param start_y Column name for the y-coordinate of the starting point.
-#' @param end_x Column name for the x-coordinate of the ending point.
-#' @param end_y Column name for the y-coordinate of the ending point.
-#' @param select_vars A character vector specifying the columns to be
-#' selected in the resulting data frame.
-#'
-#' @return A tibble with columns for the starting point, ending point,
-#' and calculated distances.
-#' @importFrom dplyr select
-#' @importFrom tidyselect all_of
-#'
-#' @examples
-#' tr_from_to_df <- s_curve_obj$s_curve_umap_model_tr_from_to_df
-#' cal_2d_dist(tr_coord_df = tr_from_to_df, start_x = "x_from", start_y = "y_from",
-#' end_x = "x_to", end_y = "y_to", select_vars = c("from", "to", "distance"))
-#'
-#' @export
-cal_2d_dist <- function(tr_coord_df, start_x, start_y, end_x, end_y,
-                        select_vars) {
-
-  # Calculate the 2D distances
-  tr_coord_df$distance <- lapply(seq(nrow(tr_coord_df)), function(x) {
-    start <- unlist(tr_coord_df[x, c(start_x, start_y)], use.names = FALSE)
-    end <- unlist(tr_coord_df[x, c(end_x, end_y)], use.names = FALSE)
-    sqrt(sum((start - end)^2))
-  })
-
-  # Create a data frame with the from-to relationships and distances
-  tr_coord_df <- tr_coord_df |>
-    select(all_of(select_vars))
-
-  # Convert the distances to a vector and return the data frame
-  tr_coord_df$distance <- unlist(tr_coord_df$distance, use.names = FALSE)
-  return(tr_coord_df)
-}
-
-
-#' Visualize triangular mesh with coloured long edges
-#'
-#' This function visualize triangular mesh with coloured long edges.
-#'
-#' @param distance_edges The tibble that contains the edge information.
-#' @param benchmark_value The threshold value to determine long edges.
-#' @param tr_coord_df A tibble that contains the x and y coordinates of start and end points.
-#' @param distance_col The column name in `distance_edges` representing the distances.
-#'
-#' @return A ggplot object with the triangular mesh plot where long edges are
-#' coloured differently.
-#'
-#' @importFrom dplyr distinct if_else mutate inner_join
-#' @importFrom ggplot2 ggplot geom_segment geom_point coord_equal scale_colour_manual aes
-#' @importFrom tibble tibble
-#'
-#' @examples
-#' tr_from_to_df <- s_curve_obj$s_curve_umap_model_tr_from_to_df
-#' distance_df <- s_curve_obj$s_curve_umap_model_distance_df
-#' vis_lg_mesh(distance_edges = distance_df, benchmark_value = 0.75,
-#' tr_coord_df = tr_from_to_df, distance_col = "distance")
-#'
-#' @export
-vis_lg_mesh <- function(distance_edges, benchmark_value,
-                         tr_coord_df, distance_col) {
-
-  # Create the tibble with x and y coordinates
-  tr_df <- tibble(x = c(tr_coord_df[["x_from"]], tr_coord_df[["x_to"]]),
-                  y = c(tr_coord_df[["y_from"]], tr_coord_df[["y_to"]])) |>
-    distinct()
-
-  # label small and long edges
-  distance_edges <- distance_edges |>
-    mutate(type = if_else(!!as.name(distance_col) < benchmark_value,
-                                        "small_edges", "long_edges"))
-
-  # Merge edge information with distance data
-  tr_coord_df <- inner_join(tr_coord_df, distance_edges, by = c("from", "to"))
-
-  # Create the triangular mesh plot with colored long edges
-  tri_mesh_plot <- ggplot(tr_df, aes(x = x, y = y)) +
-    geom_segment(
-      aes(x = x_from, y = y_from, xend = x_to, yend = y_to, color = type),
-      data = tr_coord_df
-    ) +
-    geom_point(size = 1, colour = "#33a02c") +
-    scale_colour_manual(values = c("#de2d26", "#33a02c")) +
-    coord_equal()
-
-  return(tri_mesh_plot)
 }
 
 #' Visualize triangular mesh after removing the long edges
 #'
 #' This function visualize the triangular mesh after removing the long edges.
 #'
-#' @param distance_edges The tibble that contains the edge information.
-#' @param benchmark_value The threshold value to determine long edges.
 #' @param tr_coord_df A tibble that contains the x and y coordinates of start and end points.
-#' @param distance_col The column name in `distance_edges` representing the distances.
 #'
 #' @return A ggplot object with the triangular mesh plot where long edges are removed.
 #'
@@ -608,25 +530,14 @@ vis_lg_mesh <- function(distance_edges, benchmark_value,
 #'
 #' @examples
 #' tr_from_to_df <- s_curve_obj$s_curve_umap_model_tr_from_to_df
-#' distance_df <- s_curve_obj$s_curve_umap_model_distance_df
-#' vis_rmlg_mesh(distance_edges = distance_df, benchmark_value = 0.75,
-#' tr_coord_df = tr_from_to_df, distance_col = "distance")
+#' vis_rmlg_mesh(tr_coord_df = tr_from_to_df)
 #'
 #' @export
-vis_rmlg_mesh <- function(distance_edges, benchmark_value, tr_coord_df,
-                              distance_col) {
+vis_rmlg_mesh <- function(tr_coord_df) {
   # Create the tibble with x and y coordinates
   tr_df <- tibble::tibble(x = c(tr_coord_df[["x_from"]], tr_coord_df[["x_to"]]),
                           y = c(tr_coord_df[["y_from"]], tr_coord_df[["y_to"]])) |>
     distinct()
-
-  # Filter small edges
-  distance_df_small_edges <- distance_edges |>
-    filter(!!as.name(distance_col) < benchmark_value)
-
-  # Merge edge information with distance data
-  tr_coord_df <- inner_join(tr_coord_df, distance_df_small_edges,
-                                           by = c("from", "to"))
 
   ## Create the triangular mesh plot after removing the long edges
   tri_mesh_plot <- ggplot(tr_df, aes(x = x, y = y)) +

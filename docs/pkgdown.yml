@@ -3,11 +3,11 @@ pkgdown: 2.1.1
 pkgdown_sha: ~
 articles:
   quollr1dataprocessing: quollr1dataprocessing.html
-  quollr2algo: quollr2algo.html
-  quollr3hexbin: quollr3hexbin.html
+  quollr2hexbin: quollr2hexbin.html
+  quollr3algo: quollr3algo.html
   quollr4summary: quollr4summary.html
   quollr5quickstart: quollr5quickstart.html
-last_built: 2025-03-21T08:50Z
+last_built: 2025-04-29T11:23Z
 urls:
   reference: https://jayanilakshika.github.io/quollr/reference
   article: https://jayanilakshika.github.io/quollr/articles

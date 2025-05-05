@@ -54,11 +54,42 @@ Nest step is to obtain the hexagonal bin centroid coordinates (`all_centroids_df
 
 ```{r}
 df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df,
-                                             counts_df = counts_df) |>
-      filter(drop_empty == FALSE)
+                                             counts_df = counts_df) #|>
+      #filter(drop_empty == FALSE)
 
 glimpse(df_bin_centroids) 
 ```
+
+### Triangulate bin centroids
+
+Then, you need to triangulate the bin centroids.
+
+```{r}
+tr1_object <- tri_bin_centroids(hex_df = df_bin_centroids, x = "c_x", y = "c_y")
+str(tr1_object)
+```
+
+To visualize the results, simply use `geom_trimesh()` and provide the hexagonal bin centroid coordinates. This will display the triangular mesh for you to examine.
+
+```{r}
+trimesh <- ggplot(df_bin_centroids, aes(x = c_x, y = c_y)) +
+  geom_trimesh() +
+  coord_equal() +
+  xlab(expression(C[x]^{(2)})) + ylab(expression(C[y]^{(2)})) +
+  theme(axis.text = element_text(size = 5),
+        axis.title = element_text(size = 7))
+
+trimesh
+```
+### Create the wireframe in 2D
+
+To build the wireframe in 2D, you'll need to identify which vertices are connected. You can obtain this by passing the triangular object to the `gen_edges` function, which will provide information on the existing edges and the connected vertices.
+
+```{r}
+tr_from_to_df <- gen_edges(tri_object = tr1_object)
+glimpse(tr_from_to_df)
+```
+
 
 ### Remove low density hexagons
 
@@ -93,36 +124,7 @@ identify_rm_bins
 
 As you have seen, even though there are low density hexagons, it's not a good decision to remove them. Therefore, let's use the same `df_bin_centroids` as before.
 
-### Triangulate bin centroids
 
-Then, you need to triangulate the bin centroids.
-
-```{r}
-tr1_object <- tri_bin_centroids(hex_df = df_bin_centroids, x = "c_x", y = "c_y")
-str(tr1_object)
-```
-
-To visualize the results, simply use `geom_trimesh()` and provide the hexagonal bin centroid coordinates. This will display the triangular mesh for you to examine.
-
-```{r}
-trimesh <- ggplot(df_bin_centroids, aes(x = c_x, y = c_y)) +
-  geom_trimesh() +
-  coord_equal() +
-  xlab(expression(C[x]^{(2)})) + ylab(expression(C[y]^{(2)})) +
-  theme(axis.text = element_text(size = 5),
-        axis.title = element_text(size = 7))
-
-trimesh
-```
-
-### Create the wireframe in 2D
-
-To build the wireframe in 2D, you'll need to identify which vertices are connected. You can obtain this by passing the triangular object to the `gen_edges` function, which will provide information on the existing edges and the connected vertices.
-
-```{r}
-tr_from_to_df <- gen_edges(tri_object = tr1_object)
-glimpse(tr_from_to_df)
-```
 
 ### Remove long edges
 
