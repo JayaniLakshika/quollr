@@ -118,7 +118,7 @@ show_link_plots <- function(point_df, edge_df) {
                                                                     rep(1, NROW(df_all))),
                                                  levelColors = c("#000000", "#33a02c"),
                                                  link=shared_df,
-                                                 link_filter=FALSE)
+                                                 linkFilter=FALSE)
 
   # Create a table widget
   datatableWidget <- DT::datatable(

@@ -54,16 +54,16 @@ usethis::use_data(s_curve_noise_test, overwrite = TRUE)
 UMAP_fit <- umap(s_curve_noise_training |> dplyr::select(-ID),
                  n_neighbors = 15, n_components =  2)
 
-s_curve_noise_umap <- UMAP_fit$layout |>
+s_curve_noise_umap6 <- UMAP_fit$layout |>
   as.data.frame() |>
   tibble::as_tibble()
 
-names(s_curve_noise_umap)[1:(ncol(s_curve_noise_umap))] <- paste0(rep("emb",(ncol(s_curve_noise_umap))), 1:(ncol(s_curve_noise_umap)))
+names(s_curve_noise_umap6)[1:(ncol(s_curve_noise_umap6))] <- paste0(rep("emb",(ncol(s_curve_noise_umap6))), 1:(ncol(s_curve_noise_umap6)))
 
-s_curve_noise_umap <- s_curve_noise_umap |>
+s_curve_noise_umap6 <- s_curve_noise_umap6 |>
   dplyr::mutate(ID = s_curve_noise_training$ID)
 
-usethis::use_data(s_curve_noise_umap, overwrite = TRUE)
+usethis::use_data(s_curve_noise_umap6, overwrite = TRUE)
 
 ## predict umap embeddings
 s_curve_noise_umap_predict <- predict(UMAP_fit, s_curve_noise_test |> dplyr::select(-ID)) |>
@@ -161,16 +161,16 @@ umap_config$min_dist <- 0.9
 
 UMAP_fit <- umap(s_curve_noise_training |> dplyr::select(-ID), config = umap_config)
 
-s_curve_noise_umap6 <- UMAP_fit$layout |>
+s_curve_noise_umap <- UMAP_fit$layout |>
   as.data.frame() |>
   tibble::as_tibble()
 
-names(s_curve_noise_umap6)[1:(ncol(s_curve_noise_umap6))] <- paste0(rep("emb",(ncol(s_curve_noise_umap6))), 1:(ncol(s_curve_noise_umap6)))
+names(s_curve_noise_umap)[1:(ncol(s_curve_noise_umap))] <- paste0(rep("emb",(ncol(s_curve_noise_umap))), 1:(ncol(s_curve_noise_umap)))
 
-s_curve_noise_umap6 <- s_curve_noise_umap6 |>
+s_curve_noise_umap <- s_curve_noise_umap |>
   dplyr::mutate(ID = s_curve_noise_training$ID)
 
-usethis::use_data(s_curve_noise_umap6, overwrite = TRUE)
+usethis::use_data(s_curve_noise_umap, overwrite = TRUE)
 
 nldr_scaled_obj <- gen_scaled_data(
   data = s_curve_noise_umap)

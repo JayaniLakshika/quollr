@@ -25,12 +25,31 @@ library(patchwork)
 set.seed(20240110)
 ```
 
-```{r}
-interior_annotation <- function(label, position = c(0.92, 0.92), cex = 1, col="grey70") {
-  annotation_custom(grid::textGrob(label = label,
-                                   x = unit(position[1], "npc"), y = unit(position[2], "npc"),
-                                   gp = grid::gpar(cex = cex, col=col)))
-}
+```{r, echo=FALSE}
+#| label: plot-theme
+theme_set(theme_linedraw() +
+   theme(
+     #aspect.ratio = 1,
+     plot.background = element_rect(fill = 'transparent', colour = NA),
+     plot.title = element_text(size = 7, hjust = 0.5, vjust = -0.5),
+     panel.background = element_rect(fill = 'transparent', 
+                                     colour = NA),
+     panel.grid.major = element_blank(), 
+     panel.grid.minor = element_blank(), 
+     axis.title.x = element_blank(), axis.title.y = element_blank(),
+     axis.text.x = element_blank(), axis.ticks.x = element_blank(),
+     axis.text.y = element_blank(), axis.ticks.y = element_blank(),
+     legend.background = element_rect(fill = 'transparent', 
+                                      colour = NA),
+     legend.key = element_rect(fill = 'transparent', 
+                               colour = NA),
+     legend.position = "bottom", 
+     legend.title = element_blank(), 
+     legend.text = element_text(size=4),
+     legend.key.height = unit(0.25, 'cm'),
+     legend.key.width = unit(0.25, 'cm')
+   )
+)
 ```
 
 ```{r}
@@ -44,8 +63,7 @@ umap_scaled <- s_curve_obj$s_curve_umap_scaled_obj$scaled_nldr
 nldr1 <- umap_scaled |>
   ggplot(aes(x = emb1,
              y = emb2))+
-  geom_point(alpha=0.1, size=1, colour='#a65628') +
-  interior_annotation("a", c(0.08, 0.93)) +
+  geom_point(alpha=0.1, size=1, colour='#e41a1c') +
   theme(aspect.ratio = 1)
 
 ## To initialize number of bins along the x-axis
@@ -100,8 +118,7 @@ umap_scaled <- nldr_scaled_obj$scaled_nldr
 nldr2 <- umap_scaled |>
   ggplot(aes(x = emb1,
              y = emb2))+
-  geom_point(alpha=0.1, size=1, colour='#a65628') +
-  interior_annotation("a", c(0.08, 0.93)) +
+  geom_point(alpha=0.1, size=1, colour='#ff7f00') +
   theme(aspect.ratio = 1)
 
 lim1 <- nldr_scaled_obj$lim1
@@ -160,8 +177,7 @@ umap_scaled <- nldr_scaled_obj$scaled_nldr
 nldr3 <- umap_scaled |>
   ggplot(aes(x = emb1,
              y = emb2))+
-  geom_point(alpha=0.1, size=1, colour='#a65628') +
-  interior_annotation("a", c(0.08, 0.93)) +
+  geom_point(alpha=0.1, size=1, colour='#4daf4a') +
   theme(aspect.ratio = 1)
 
 lim1 <- nldr_scaled_obj$lim1
@@ -221,7 +237,6 @@ nldr4 <- umap_scaled |>
   ggplot(aes(x = emb1,
              y = emb2))+
   geom_point(alpha=0.1, size=1, colour='#a65628') +
-  interior_annotation("a", c(0.08, 0.93)) +
   theme(aspect.ratio = 1)
 
 lim1 <- nldr_scaled_obj$lim1
@@ -280,8 +295,7 @@ umap_scaled <- nldr_scaled_obj$scaled_nldr
 nldr5 <- umap_scaled |>
   ggplot(aes(x = emb1,
              y = emb2))+
-  geom_point(alpha=0.1, size=1, colour='#a65628') +
-  interior_annotation("a", c(0.08, 0.93)) +
+  geom_point(alpha=0.1, size=1, colour='#636363') +
   theme(aspect.ratio = 1)
 
 lim1 <- nldr_scaled_obj$lim1
@@ -340,8 +354,7 @@ umap_scaled <- nldr_scaled_obj$scaled_nldr
 nldr6 <- umap_scaled |>
   ggplot(aes(x = emb1,
              y = emb2))+
-  geom_point(alpha=0.1, size=1, colour='#a65628') +
-  interior_annotation("a", c(0.08, 0.93)) +
+  geom_point(alpha=0.1, size=1, colour='#984ea3') +
   theme(aspect.ratio = 1)
 
 lim1 <- nldr_scaled_obj$lim1
@@ -433,7 +446,7 @@ error_plot <- ggplot(error_df_all,
           plot.title = element_text(size = 12, hjust = 0.5, vjust = -0.5),
           axis.ticks.x = element_line(),
           axis.ticks.y = element_line(),
-          legend.position = "right",
+          legend.position = "none",
           axis.text.x = element_text(size = 7),
           axis.text.y = element_text(size = 7),
           axis.title.x = element_text(size = 7),

@@ -79,224 +79,257 @@ provided in the input data frame and returns the triangular object.</p>
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">df_bin_centroids</span> <span class="op">&lt;-</span> <span class="va">s_curve_obj</span><span class="op">$</span><span class="va">s_curve_umap_model_obj</span><span class="op">$</span><span class="va">df_bin_centroids</span></span></span>
 <span class="r-in"><span><span class="fu">tri_bin_centroids</span><span class="op">(</span>hex_df <span class="op">=</span> <span class="va">df_bin_centroids</span>, x <span class="op">=</span> <span class="st">"c_x"</span>, y <span class="op">=</span> <span class="st">"c_y"</span><span class="op">)</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>triangle collapsed!</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>three points coincide or are collinear!</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $trimesh_object</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Delaunay triangulation, node and triangle indices:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> triangle: nodes (a,b,c), neighbour triangles [i,j,k] </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1: (1,2,6), [3,2,0]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2: (5,1,6), [1,4,0]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3: (7,6,2), [1,8,6]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4: (13,5,6), [2,5,22]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5: (6,14,13), [12,4,6]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6: (6,7,14), [9,5,3]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7: (8,7,3), [8,14,10]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8: (3,7,2), [3,0,7]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9: (7,15,14), [15,6,10]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10: (8,15,7), [9,7,17]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11: (13,23,34), [23,22,12]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12: (23,13,14), [5,13,11]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13: (14,24,23), [24,12,15]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14: (4,8,3), [7,0,21]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15: (14,15,24), [19,13,9]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16: (15,16,25), [28,19,17]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17: (16,15,8), [10,18,16]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 18: (8,9,16), [20,17,21]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 19: (15,25,24), [25,15,16]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20: (16,9,17), [36,27,18]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 21: (8,4,9), [38,18,14]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 22: (13,34,5), [89,4,11]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 23: (35,34,23), [11,24,70]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 24: (35,23,24), [13,26,23]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 25: (24,25,36), [29,26,19]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 26: (24,36,35), [55,24,25]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 27: (16,17,26), [32,28,20]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 28: (16,26,25), [30,16,27]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 29: (25,37,36), [58,25,30]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 30: (25,26,37), [33,29,28]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 31: (26,27,38), [39,33,32]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 32: (27,26,17), [27,35,31]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 33: (26,38,37), [77,30,31]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 34: (27,18,28), [40,41,35]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 35: (18,27,17), [32,36,34]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 36: (18,17,9), [20,37,35]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 37: (9,10,18), [43,36,38]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 38: (9,4,10), [45,37,21]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 39: (27,39,38), [59,31,41]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 40: (18,19,28), [42,34,43]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 41: (27,28,39), [46,39,34]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 42: (28,19,29), [49,47,40]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 43: (18,10,19), [44,40,37]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 44: (11,19,10), [43,45,48]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 45: (11,10,4), [38,52,44]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 46: (28,40,39), [60,41,47]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 47: (28,29,40), [53,46,42]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 48: (19,11,20), [51,49,44]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 49: (19,20,29), [54,42,48]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 50: (21,20,12), [51,76,65]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 51: (12,20,11), [48,52,50]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 52: (12,11,4), [45,0,51]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 53: (41,40,29), [47,63,61]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 54: (29,20,30), [65,63,49]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 55: (62,35,36), [26,71,56]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 56: (62,61,35), [70,55,85]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 57: (37,64,63), [94,58,77]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 58: (36,37,63), [57,71,29]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 59: (66,38,39), [39,96,72]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 60: (46,39,40), [46,61,96]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 61: (46,40,41), [53,62,60]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 62: (47,46,41), [61,66,81]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 63: (29,30,41), [67,53,54]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 64: (31,30,21), [65,75,68]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 65: (21,30,20), [54,50,64]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 66: (41,42,47), [79,62,67]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 67: (41,30,42), [68,66,63]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 68: (31,42,30), [67,64,80]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 69: (34,61,72), [90,89,70]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 70: (35,61,34), [69,23,56]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 71: (36,63,62), [86,55,58]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 72: (66,65,38), [73,59,104]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 73: (65,64,38), [77,72,97]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 74: (32,31,22), [75,114,93]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 75: (22,31,21), [64,76,74]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 76: (22,21,12), [50,0,75]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 77: (37,38,64), [73,57,33]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 78: (47,48,52), [83,81,79]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 79: (48,47,42), [66,84,78]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 80: (42,31,43), [93,84,68]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 81: (52,46,47), [62,78,102]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 82: (46,67,66), [101,96,102]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 83: (53,52,48), [78,99,127]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 84: (42,43,48), [100,79,80]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 85: (73,61,62), [56,87,90]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 86: (74,62,63), [71,88,87]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 87: (74,73,62), [85,86,106]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 88: (75,74,63), [86,94,107]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 89: (34,72,5), [0,22,69]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 90: (72,61,73), [85,105,69]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 91: (76,75,64), [94,97,111]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 92: (44,43,32), [93,113,103]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 93: (32,43,31), [80,74,92]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 94: (75,63,64), [57,91,88]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 95: (77,76,65), [97,104,121]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 96: (66,39,46), [60,82,59]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 97: (76,64,65), [73,95,91]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 98: (52,59,68), [143,119,124]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 99: (48,49,53), [122,83,100]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 100: (48,43,49), [103,99,84]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 101: (78,66,67), [82,139,117]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 102: (52,67,46), [82,81,119]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 103: (44,49,43), [100,92,123]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 104: (77,65,66), [72,117,95]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 105: (83,72,73), [90,108,135]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 106: (84,73,74), [87,109,108]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 107: (85,74,75), [88,115,109]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 108: (84,83,73), [105,106,129]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 109: (85,84,74), [106,107,130]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 110: (76,87,86), [145,111,121]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 111: (86,75,76), [91,110,115]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 112: (45,44,33), [113,0,134]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 113: (33,44,32), [92,114,112]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 114: (33,32,22), [74,0,113]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 115: (86,85,75), [107,111,141]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 116: (77,88,87), [142,121,137]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 117: (78,77,66), [104,101,137]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 118: (79,67,68), [119,149,139]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 119: (68,67,52), [102,98,118]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 120: (57,53,54), [122,152,127]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 121: (76,77,87), [116,110,95]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 122: (53,49,54), [126,120,99]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 123: (49,44,50), [134,126,103]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 124: (57,59,52), [98,127,151]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 125: (55,58,57), [151,152,178]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 126: (49,50,54), [153,122,123]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 127: (57,52,53), [83,120,124]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 128: (83,94,93), [158,135,129]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 129: (94,83,84), [108,131,128]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 130: (95,84,85), [109,132,131]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 131: (95,94,84), [129,130,159]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 132: (96,95,85), [130,141,160]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 133: (51,50,45), [134,180,155]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 134: (45,50,44), [123,112,133]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 135: (83,93,72), [0,105,128]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 136: (97,96,86), [141,145,170]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 137: (77,78,88), [147,116,117]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 138: (89,78,79), [139,168,147]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 139: (79,78,67), [101,118,138]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 140: (80,68,69), [143,172,149]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 141: (96,85,86), [115,136,132]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 142: (87,88,98), [146,154,116]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 143: (68,59,69), [164,140,98]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 144: (70,59,60), [150,177,164]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 145: (97,86,87), [110,154,136]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 146: (88,99,98), [171,142,166]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 147: (89,88,78), [137,138,166]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 148: (90,79,80), [149,181,168]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 149: (80,79,68), [118,140,148]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 150: (59,58,60), [157,144,151]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 151: (59,57,58), [125,150,124]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 152: (55,57,54), [120,153,125]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 153: (54,50,55), [155,152,126]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 154: (87,98,97), [163,145,142]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 155: (51,55,50), [153,133,179]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 156: (81,69,70), [164,183,172]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 157: (71,60,58), [150,176,177]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 158: (103,93,94), [128,161,0]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 159: (104,94,95), [131,162,161]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 160: (105,95,96), [132,165,162]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 161: (104,103,94), [158,159,0]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 162: (105,104,95), [159,160,0]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 163: (97,98,106), [171,170,154]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 164: (70,69,59), [143,144,156]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 165: (106,105,96), [160,170,0]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 166: (88,89,99), [174,146,147]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 167: (100,89,90), [168,187,174]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 168: (90,89,79), [138,148,167]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 169: (91,80,81), [172,189,181]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 170: (106,96,97), [136,163,165]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 171: (98,99,106), [173,163,146]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 172: (81,80,69), [140,156,169]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 173: (107,106,99), [171,190,0]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 174: (100,99,89), [166,167,190]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 175: (101,90,91), [181,192,187]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 176: (71,58,56), [178,185,157]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 177: (71,70,60), [144,157,182]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 178: (58,55,56), [179,176,125]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 179: (56,55,51), [155,180,178]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 180: (56,45,51), [133,179,0]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 181: (91,90,80), [148,169,175]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 182: (82,70,71), [177,185,183]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 183: (82,81,70), [156,182,184]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 184: (92,81,82), [183,0,189]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 185: (82,56,71), [176,182,0]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 186: (100,101,107), [191,190,187]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 187: (101,100,90), [167,175,186]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 188: (102,91,92), [189,0,192]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 189: (92,91,81), [169,184,188]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 190: (107,99,100), [174,186,173]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 191: (101,102,107), [0,186,192]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 192: (102,101,91), [175,188,191]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> boundary nodes:  1 2 3 4 12 22 33 45 56 45 56 45 56 45 56 45 56 45 56 45 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1: (1,2,4), [2,4,0]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2: (5,4,2), [1,3,6]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3: (3,5,2), [2,0,8]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4: (12,1,4), [1,5,34]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5: (4,13,12), [10,4,6]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6: (4,5,13), [9,5,2]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7: (14,5,6), [8,14,9]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8: (5,3,6), [17,7,3]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9: (14,13,5), [6,7,12]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10: (22,12,13), [5,11,18]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11: (13,23,22), [20,10,12]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12: (13,14,23), [16,11,9]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13: (14,15,24), [24,16,14]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14: (15,14,6), [7,15,13]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15: (6,7,15), [26,14,17]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16: (14,24,23), [21,12,13]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17: (6,3,7), [33,15,8]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18: (32,12,22), [10,19,35]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19: (33,32,22), [18,20,27]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20: (33,22,23), [11,22,19]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21: (23,24,34), [30,22,16]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22: (23,34,33), [37,20,21]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23: (35,24,25), [24,31,30]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 24: (24,15,25), [25,23,13]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 25: (15,16,25), [40,24,26]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 26: (15,7,16), [32,25,15]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 27: (44,32,33), [19,28,36]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28: (45,44,33), [27,37,55]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 29: (46,34,35), [30,42,38]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 30: (35,34,24), [21,23,29]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 31: (25,36,35), [45,23,39]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 32: (8,16,7), [26,33,44]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 33: (8,7,3), [17,47,32]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 34: (43,1,12), [4,35,143]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 35: (43,12,32), [18,36,34]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 36: (43,32,44), [27,54,35]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 37: (45,33,34), [22,38,28]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 38: (46,45,34), [37,29,56]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 39: (25,26,36), [49,31,40]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 40: (25,16,26), [41,39,25]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 41: (16,17,26), [43,40,44]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 42: (35,47,46), [58,29,45]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 43: (26,17,27), [50,48,41]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 44: (16,8,17), [46,41,32]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 45: (35,36,47), [51,42,31]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 46: (9,17,8), [44,47,52]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 47: (9,8,3), [33,63,46]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 48: (26,27,37), [66,49,43]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 49: (26,37,36), [53,39,48]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 50: (17,18,27), [60,43,52]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 51: (36,48,47), [86,45,53]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 52: (17,9,18), [62,50,46]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 53: (36,37,48), [64,51,49]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 54: (61,43,44), [36,55,70]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 55: (61,44,45), [28,57,54]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 56: (62,45,46), [38,59,57]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 57: (62,61,45), [55,56,72]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 58: (70,46,47), [42,67,59]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 59: (70,62,46), [56,58,78]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 60: (27,18,28), [74,69,50]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 61: (19,18,10), [62,76,74]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 62: (10,18,9), [52,63,61]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 63: (10,9,3), [47,77,62]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 64: (37,49,48), [73,53,65]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 65: (37,38,49), [80,64,66]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 66: (27,38,37), [65,48,69]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 67: (71,70,47), [58,86,93]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 68: (38,28,39), [81,79,69]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 69: (27,28,38), [68,66,60]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 70: (67,43,61), [54,71,91]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 71: (68,67,61), [70,72,87]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 72: (68,61,62), [57,75,71]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 73: (48,49,55), [85,83,64]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 74: (19,28,18), [60,61,82]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 75: (62,69,68), [88,72,78]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 76: (11,19,10), [61,77,84]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 77: (11,10,3), [63,0,76]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 78: (70,69,62), [75,59,95]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 79: (38,39,50), [98,80,68]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 80: (38,50,49), [85,65,79]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 81: (29,39,28), [68,82,100]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 82: (29,28,19), [74,94,81]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 83: (48,55,71), [102,86,73]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 84: (19,11,20), [121,94,76]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 85: (49,50,55), [97,73,80]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 86: (71,47,48), [51,83,67]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 87: (79,67,68), [71,89,92]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 88: (80,68,69), [75,90,89]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 89: (80,79,68), [87,88,110]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 90: (81,80,69), [88,95,116]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 91: (78,43,67), [70,92,114]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 92: (78,67,79), [87,109,91]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 93: (82,70,71), [67,118,101]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 94: (19,20,29), [103,82,84]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 95: (81,69,70), [78,101,90]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 96: (56,50,51), [98,105,97]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 97: (56,55,50), [85,96,104]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 98: (51,50,39), [79,99,96]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 99: (40,51,39), [98,100,125]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 100: (40,39,29), [81,107,99]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 101: (82,81,70), [95,93,122]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 102: (72,71,55), [83,104,119]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 103: (29,20,30), [108,107,94]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 104: (72,55,56), [97,130,102]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 105: (57,56,51), [96,120,123]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 106: (41,40,30), [107,142,133]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 107: (29,30,40), [106,100,103]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 108: (20,21,30), [124,103,121]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 109: (91,78,79), [92,111,115]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 110: (92,79,80), [89,112,111]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 111: (92,91,79), [109,110,135]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 112: (93,92,80), [110,116,136]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 113: (94,93,81), [116,122,146]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 114: (90,43,78), [91,115,144]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 115: (90,78,91), [109,139,114]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 116: (93,80,81), [90,113,112]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 117: (95,94,82), [122,129,153]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 118: (71,83,82), [129,93,119]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 119: (72,83,71), [118,102,127]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 120: (57,51,52), [125,132,105]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 121: (20,11,21), [0,108,84]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 122: (94,81,82), [101,117,113]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 123: (63,56,57), [105,154,128]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 124: (30,21,31), [0,142,108]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 125: (52,51,40), [99,133,120]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 126: (96,83,84), [127,161,148]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 127: (84,83,72), [119,150,126]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 128: (73,56,63), [123,151,130]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 129: (95,82,83), [118,148,117]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 130: (73,72,56), [104,128,141]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 131: (53,58,52), [132,155,185]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 132: (58,57,52), [120,131,152]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 133: (41,52,40), [125,106,155]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 134: (91,104,103), [167,139,135]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 135: (104,91,92), [111,137,134]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 136: (105,92,93), [112,138,137]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 137: (105,104,92), [135,136,168]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 138: (106,105,93), [136,146,169]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 139: (91,103,90), [145,115,134]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 140: (107,106,94), [146,153,173]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 141: (85,72,73), [130,175,150]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 142: (41,30,31), [124,157,106]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 143: (102,1,43), [34,144,0]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 144: (102,43,90), [114,145,143]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 145: (102,90,103), [139,166,144]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 146: (106,93,94), [113,140,138]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 147: (108,107,95), [153,165,182]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 148: (96,95,83), [129,126,165]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 149: (97,84,85), [150,162,161]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 150: (85,84,72), [127,141,149]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 151: (74,73,63), [128,156,158]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 152: (64,57,58), [132,176,154]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 153: (107,94,95), [117,147,140]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 154: (64,63,57), [123,152,156]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 155: (53,52,41), [133,164,131]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 156: (74,63,64), [154,159,151]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 157: (41,31,42), [0,164,142]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 158: (86,73,74), [151,187,175]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 159: (75,74,64), [156,181,184]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 160: (96,97,109), [195,179,161]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 161: (97,96,84), [126,149,160]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 162: (85,98,97), [180,149,174]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 163: (54,53,42), [164,0,188]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 164: (41,42,53), [163,155,157]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 165: (108,95,96), [148,179,147]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 166: (114,102,103), [145,167,0]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 167: (114,103,104), [134,170,166]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 168: (115,104,105), [137,171,170]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 169: (116,105,106), [138,177,171]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 170: (115,114,104), [167,168,190]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 171: (116,115,105), [168,169,191]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 172: (107,118,117), [202,173,182]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 173: (117,106,107), [140,172,177]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 174: (85,86,98), [199,162,175]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 175: (86,85,73), [141,158,174]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 176: (65,64,58), [152,186,181]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 177: (117,116,106), [169,173,192]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 178: (119,118,108), [182,183,198]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 179: (96,109,108), [183,165,160]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 180: (110,97,98), [162,209,195]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 181: (75,64,65), [176,206,159]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 182: (107,108,118), [178,172,147]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 183: (119,108,109), [179,204,178]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 184: (74,75,87), [200,187,159]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 185: (58,53,59), [188,186,131]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 186: (58,59,65), [207,176,185]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 187: (74,87,86), [189,158,184]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 188: (54,59,53), [185,163,212]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 189: (99,86,87), [187,213,199]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 190: (123,114,115), [170,191,0]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 191: (123,115,116), [171,193,190]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 192: (124,116,117), [177,197,193]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 193: (124,123,116), [191,192,0]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 194: (109,110,120), [218,204,195]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 195: (110,109,97), [160,180,194]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 196: (111,98,99), [199,220,209]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 197: (117,125,124), [0,192,202]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 198: (118,119,125), [203,202,178]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 199: (99,98,86), [174,189,196]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 200: (88,87,75), [184,210,211]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 201: (76,65,66), [207,215,206]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 202: (117,118,125), [198,197,172]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 203: (120,125,119), [198,204,217]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 204: (109,120,119), [203,183,194]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 205: (121,110,111), [209,226,218]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 206: (76,75,65), [181,201,210]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 207: (66,65,59), [186,208,201]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 208: (59,60,66), [223,207,212]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 209: (111,110,98), [180,196,205]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 210: (88,75,76), [206,222,200]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 211: (87,88,100), [221,213,200]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 212: (59,54,60), [0,208,188]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 213: (87,100,99), [216,189,211]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 214: (89,76,77), [215,0,222]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 215: (77,76,66), [201,223,214]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 216: (112,99,100), [213,228,220]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 217: (121,125,120), [203,218,225]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 218: (121,120,110), [194,205,217]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 219: (122,111,112), [220,229,226]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 220: (112,111,99), [196,216,219]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221: (88,101,100), [227,211,224]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 222: (89,88,76), [210,214,224]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 223: (66,60,77), [0,215,208]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 224: (88,89,101), [0,221,222]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 225: (122,125,121), [217,226,0]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 226: (122,121,111), [205,219,225]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 227: (113,100,101), [221,0,228]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 228: (113,112,100), [216,227,229]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 229: (113,122,112), [219,228,0]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> boundary nodes:  1 2 3 11 21 31 42 54 60 77 89 101 113 122 125 124 123 114 102 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $bin_counts</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   [1] 0.05747126 0.28735632 0.17241379 0.37931034 0.29885057 0.62068966</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   [7] 0.55172414 0.83908046 0.02298851 0.18390805 0.36781609 0.14942529</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [13] 0.59770115 0.50574713 0.43678161 0.45977011 0.19540230 0.29885057</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [19] 0.63218391 0.51724138 0.35632184 0.04597701 0.68965517 0.37931034</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [25] 0.45977011 0.42528736 0.34482759 0.67816092 0.24137931 0.67816092</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [31] 0.45977011 0.41379310 0.02298851 0.57471264 0.45977011 0.18390805</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [37] 0.27586207 0.03448276 0.37931034 0.44827586 0.29885057 0.13793103</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [43] 0.22988506 0.49425287 0.44827586 0.29885057 0.78160920 0.29885057</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [49] 0.21839080 0.44827586 0.56321839 0.25287356 0.52873563 0.47126437</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [55] 0.54022989 0.41379310 0.58620690 0.26436782 0.35632184 1.00000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [61] 0.47126437 0.74712644 0.14942529 0.94252874 0.58620690 0.29885057</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [67] 0.47126437 0.47126437 0.73563218 0.35632184 0.35632184 0.28735632</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [73] 0.47126437 0.39080460 0.45977011 0.16091954 0.08045977 0.58620690</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [79] 0.41379310 0.39080460 0.36781609 0.51724138 0.54022989 0.55172414</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [85] 0.36781609 0.21839080 0.63218391 0.31034483 0.17241379 0.35632184</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [91] 0.50574713 0.48275862 0.17241379 0.60919540 0.59770115 0.51724138</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [97] 0.59770115 0.40229885 0.63218391 0.51724138 0.60919540 0.39080460</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [103] 0.19540230 0.13793103 0.04597701 0.02298851 0.04597701</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [1] 0.078125 0.203125 0.171875 0.640625 0.593750 0.562500 0.609375 0.328125</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [9] 0.375000 0.296875 0.156250 0.203125 0.453125 0.531250 0.546875 0.500000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [17] 0.593750 0.500000 0.468750 0.468750 0.203125 0.546875 0.390625 0.515625</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [25] 0.500000 0.515625 0.562500 0.484375 0.468750 0.531250 0.468750 0.375000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [33] 0.484375 0.500000 0.578125 0.421875 0.593750 0.562500 0.640625 0.390625</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [41] 0.390625 0.140625 0.015625 0.546875 0.562500 0.562500 0.625000 0.609375</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [49] 0.562500 0.562500 0.750000 0.656250 0.515625 0.375000 0.343750 0.468750</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [57] 0.734375 0.531250 0.390625 0.234375 0.234375 0.171875 0.875000 0.671875</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [65] 0.421875 0.421875 0.640625 0.609375 0.562500 0.515625 0.109375 0.390625</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [73] 0.687500 0.640625 0.468750 0.437500 0.093750 0.484375 0.546875 0.437500</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [81] 0.437500 0.593750 0.296875 0.593750 0.562500 0.421875 0.562500 0.453125</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [89] 0.468750 0.328125 0.437500 0.484375 0.546875 0.468750 0.406250 0.734375</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [97] 0.609375 0.578125 0.593750 0.546875 0.203125 0.265625 0.609375 0.468750</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [105] 0.578125 0.437500 0.687500 1.000000 0.734375 0.750000 0.406250 0.500000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [113] 0.203125 0.296875 0.562500 0.578125 0.578125 0.593750 0.390625 0.593750</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [121] 0.578125 0.265625 0.015625 0.140625 0.015625</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 </code></pre></div>

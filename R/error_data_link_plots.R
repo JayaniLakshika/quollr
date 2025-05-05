@@ -164,7 +164,7 @@ show_error_link_plots <- function(point_df, edge_df) {
                                                                     rep(1, NROW(df_all))),
                                                  levelColors = c("#000000", "#33a02c"),
                                                  link=shared_df,
-                                                 link_filter=FALSE,
+                                                 linkFilter=FALSE,
                                                  width = "450",
                                                  height = "450")
 
