@@ -13,6 +13,11 @@ reference:
   - s_curve_noise_umap
   - s_curve_noise_umap_scaled
   - s_curve_noise_umap_predict
+  - s_curve_noise_umap2
+  - s_curve_noise_umap3
+  - s_curve_noise_umap4
+  - s_curve_noise_umap5
+  - s_curve_noise_umap6
   - s_curve_obj
 - title: "Data preprocessing"
   desc: These are for data preprocessing.

@@ -77,6 +77,101 @@ s_curve_noise_umap_predict <- s_curve_noise_umap_predict |>
 
 usethis::use_data(s_curve_noise_umap_predict, overwrite = TRUE)
 
+## Fit umap2
+umap_config <- umap.defaults
+umap_config$n_neighbors <- 10      # Set the number of neighbors
+umap_config$n_components <- 2    # Set the number of output dimensions (typically 2 or 3)
+umap_config$min_dist <- 0.4
+
+UMAP_fit <- umap(s_curve_noise_training |> dplyr::select(-ID), config = umap_config)
+
+s_curve_noise_umap2 <- UMAP_fit$layout |>
+  as.data.frame() |>
+  tibble::as_tibble()
+
+names(s_curve_noise_umap2)[1:(ncol(s_curve_noise_umap2))] <- paste0(rep("emb",(ncol(s_curve_noise_umap2))), 1:(ncol(s_curve_noise_umap2)))
+
+s_curve_noise_umap2 <- s_curve_noise_umap2 |>
+  dplyr::mutate(ID = s_curve_noise_training$ID)
+
+usethis::use_data(s_curve_noise_umap2, overwrite = TRUE)
+
+## Fit umap3
+umap_config <- umap.defaults
+umap_config$n_neighbors <- 62      # Set the number of neighbors
+umap_config$n_components <- 2    # Set the number of output dimensions (typically 2 or 3)
+umap_config$min_dist <- 0.1
+
+UMAP_fit <- umap(s_curve_noise_training |> dplyr::select(-ID), config = umap_config)
+
+s_curve_noise_umap3 <- UMAP_fit$layout |>
+  as.data.frame() |>
+  tibble::as_tibble()
+
+names(s_curve_noise_umap3)[1:(ncol(s_curve_noise_umap3))] <- paste0(rep("emb",(ncol(s_curve_noise_umap3))), 1:(ncol(s_curve_noise_umap3)))
+
+s_curve_noise_umap3 <- s_curve_noise_umap3 |>
+  dplyr::mutate(ID = s_curve_noise_training$ID)
+
+usethis::use_data(s_curve_noise_umap3, overwrite = TRUE)
+
+## Fit umap4
+umap_config <- umap.defaults
+umap_config$n_neighbors <- 30      # Set the number of neighbors
+umap_config$n_components <- 2    # Set the number of output dimensions (typically 2 or 3)
+umap_config$min_dist <- 0.5
+
+UMAP_fit <- umap(s_curve_noise_training |> dplyr::select(-ID), config = umap_config)
+
+s_curve_noise_umap4 <- UMAP_fit$layout |>
+  as.data.frame() |>
+  tibble::as_tibble()
+
+names(s_curve_noise_umap4)[1:(ncol(s_curve_noise_umap4))] <- paste0(rep("emb",(ncol(s_curve_noise_umap4))), 1:(ncol(s_curve_noise_umap4)))
+
+s_curve_noise_umap4 <- s_curve_noise_umap4 |>
+  dplyr::mutate(ID = s_curve_noise_training$ID)
+
+usethis::use_data(s_curve_noise_umap4, overwrite = TRUE)
+
+## Fit umap5
+umap_config <- umap.defaults
+umap_config$n_neighbors <- 15      # Set the number of neighbors
+umap_config$n_components <- 2    # Set the number of output dimensions (typically 2 or 3)
+umap_config$min_dist <- 0.5
+
+UMAP_fit <- umap(s_curve_noise_training |> dplyr::select(-ID), config = umap_config)
+
+s_curve_noise_umap5 <- UMAP_fit$layout |>
+  as.data.frame() |>
+  tibble::as_tibble()
+
+names(s_curve_noise_umap5)[1:(ncol(s_curve_noise_umap5))] <- paste0(rep("emb",(ncol(s_curve_noise_umap5))), 1:(ncol(s_curve_noise_umap5)))
+
+s_curve_noise_umap5 <- s_curve_noise_umap5 |>
+  dplyr::mutate(ID = s_curve_noise_training$ID)
+
+usethis::use_data(s_curve_noise_umap5, overwrite = TRUE)
+
+## Fit umap6
+umap_config <- umap.defaults
+umap_config$n_neighbors <- 46      # Set the number of neighbors
+umap_config$n_components <- 2    # Set the number of output dimensions (typically 2 or 3)
+umap_config$min_dist <- 0.9
+
+UMAP_fit <- umap(s_curve_noise_training |> dplyr::select(-ID), config = umap_config)
+
+s_curve_noise_umap6 <- UMAP_fit$layout |>
+  as.data.frame() |>
+  tibble::as_tibble()
+
+names(s_curve_noise_umap6)[1:(ncol(s_curve_noise_umap6))] <- paste0(rep("emb",(ncol(s_curve_noise_umap6))), 1:(ncol(s_curve_noise_umap6)))
+
+s_curve_noise_umap6 <- s_curve_noise_umap6 |>
+  dplyr::mutate(ID = s_curve_noise_training$ID)
+
+usethis::use_data(s_curve_noise_umap6, overwrite = TRUE)
+
 nldr_scaled_obj <- gen_scaled_data(
   data = s_curve_noise_umap)
 
