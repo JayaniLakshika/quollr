@@ -237,7 +237,7 @@ compute_std_counts <- function(data_hb) {
 #' @param data_hb A data frame with data, ID and hexagonal bin IDs.
 #'
 #' @return A tibble with hexagonal bin IDs and the corresponding points.
-#' @importFrom dplyr filter pull
+#' @importFrom dplyr filter pull summarize
 #' @importFrom tibble tibble
 #'
 #' @examples
