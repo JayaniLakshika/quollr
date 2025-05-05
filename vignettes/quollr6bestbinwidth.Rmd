@@ -1,8 +1,8 @@
 ---
-title: "6. Selecting the best fit"
+title: "6. Selecting the optimal bin width"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{6. Selecting the best fit}
+  %\VignetteIndexEntry{6. Selecting the optimal bin width}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
