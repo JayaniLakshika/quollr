@@ -365,6 +365,8 @@ extract_hexbin_centroids <- function(centroids_df, counts_df) {
 
   ## Map the standardize counts
   centroids_df <- centroids_df |>
+    mutate(std_counts = if_else(is.na(std_counts), 0, std_counts)) |>
+    mutate(n = if_else(is.na(n), 0, n)) |>
     mutate(drop_empty = if_else(!(is.na(std_counts)), FALSE, TRUE)) |>
     rename(bin_counts = n)
 
