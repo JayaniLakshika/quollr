@@ -3,38 +3,36 @@
 #' This function calculates the effective number of bins along the x and y axes
 #' of a hexagonal grid.
 #'
+#' @param nldr_data A tibble that contains embedding components in the first and second columns.
 #' @param bin1 Number of bins along the x axis.
-#' @param r2 The ratio of the ranges of the original embedding components.
 #' @param q The buffer amount as proportion of data range.
 #'
 #' @return A list of numeric values that represents the effective number of
 #' bins along the y axis, height and, width of the hexagon.
-#' @importFrom dplyr between
 #'
 #' @examples
-#' scurve_umap_scaled_obj <- s_curve_obj$s_curve_umap_scaled_obj
-#' lim1 <- scurve_umap_scaled_obj$lim1
-#' lim2 <- scurve_umap_scaled_obj$lim2
-#' r2 <- diff(lim2)/diff(lim1)
-#' calc_bins_y(bin1 = 4, r2 = r2, q = 0.1)
+#' calc_bins_y(nldr_data = scurve_umap, bin1 = 4, q = 0.1)
 #'
 #' @export
-calc_bins_y <- function(bin1 = 4, r2, q = 0.1) {
+calc_bins_y <- function(nldr_data, bin1 = 4, q = 0.1) {
 
   ## To check whether bin2 greater than 2
   if (bin1 < 2) {
     stop("Number of bins along the x-axis at least should be 2.")
   }
 
-  ## To check original data range of embedding component 2 is initialized or not
-  if (missing(r2)) {
-    stop("The range of the original second embedding component is not initialised.")
-  }
-
   ## To check whether q is between a specific range
-  if (!between(q, 0.05, 0.2)) {
+  if (!dplyr::between(q, 0.05, 0.2)) {
     stop("The buffer should be within 0.05 and 0.2.")
   }
+
+  ## To pre-process the data
+  nldr_obj <- gen_scaled_data(nldr_data = nldr_data)
+
+  ## To compute the range
+  lim1 <- nldr_obj$lim1
+  lim2 <- nldr_obj$lim2
+  r2 <- diff(lim2)/diff(lim1)
 
   ## To compute the number of bins along the x-axis
   bin2 <- ceiling(1 + ((2 * (r2 + q * (1 + r2)) * (bin1 - 1))/(sqrt(3) * (1 + 2 * q))))

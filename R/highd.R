@@ -2,8 +2,8 @@
 #'
 #' This function calculates the average values of high-dimensional data within each hexagonal bin.
 #'
-#' @param data A tibble that contains the high-dimensional data and embedding
-#' with hexagonal bin IDs.
+#' @param highd_data A tibble that contains the high-dimensional data.
+#' @param scaled_nldr_hexid A tibble that contains the scaled embedding with hexagonal bin IDs.
 #'
 #' @return A tibble with the average values of the high-dimensional data within each hexagonal bin.
 #'
@@ -17,9 +17,11 @@
 #' avg_highd_data(data = df_all)
 #'
 #' @export
-avg_highd_data <- function(data) {
+avg_highd_data <- function(highd_data, scaled_nldr_hexid) {
 
-  df_b <- data |>
+  df_all <- dplyr::inner_join(highd_data, scaled_nldr_hexid, by = "ID")
+
+  df_b <- df_all |>
     select(starts_with("x"), hb_id) |>
     group_by(hb_id) |>
     summarise(across(everything(), mean))

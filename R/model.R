@@ -4,10 +4,9 @@
 #' to customize the modeling process, including the choice of bin centroids or bin means,
 #' removal of low-density hexagons, and averaging of high-dimensional data.
 #'
-#' @param highd_data A tibble that contains the training high-dimensional data.
-#' @param nldr_data A tibble that contains embedding with a unique identifier.
+#' @param highd_data A tibble that contains the high-dimensional data with a unique identifier.
+#' @param nldr_data A tibble that contains the embedding with a unique identifier.
 #' @param bin1 Number of bins along the x axis.
-#' @param r2 The ratio of the ranges of the original embedding components.
 #' @param q The buffer amount as proportion of data range.
 #'
 #' @return A list containing the data frame with high-dimensional coordinates
@@ -26,45 +25,39 @@
 #' nldr_data = s_curve_noise_umap_scaled, bin1 = 4, r2 = r2)
 #'
 #' @export
-fit_highd_model <- function(highd_data, nldr_data, bin1 = 4, r2, q = 0.1,
-                            is_bin_centroid = TRUE) {
+fit_highd_model <- function(highd_data, nldr_data, bin1 = 4, q = 0.1, benchmark_highd = 5) {
+
+  ## To pre-process the data
+  nldr_obj <- gen_scaled_data(nldr_data = nldr_data)
 
   ## Obtain the hexbin object
-  hb_obj <- hex_binning(data = nldr_data, bin1 = bin1, r2 = r2, q = q)
+  hb_obj <- hex_binning(nldr_obj = nldr_obj, bin1 = bin1, q = q)
 
   all_centroids_df <- hb_obj$centroids
   counts_df <- hb_obj$std_cts
-  nldr_df_with_hex_id <- hb_obj$data_hb_id
 
-  ## Do you need to use bin centroids or bin means?
-  if (isTRUE(is_bin_centroid)) {
-    ## For bin centroids
-    df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df,
-                                                 counts_df = counts_df) |>
-      filter(drop_empty == FALSE)
+  ## To extract all bin centroids with bin counts
+  df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df,
+                                               counts_df = counts_df)
 
-  } else {
-    ## For bin means
-    df_bin_centroids <- extract_hexbin_mean(data_hb = nldr_df_with_hex_id,
-                                            counts_df = counts_df,
-                                            centroids_df = all_centroids_df) |>
-      filter(drop_empty == FALSE)
-
-  }
-
-  ## To generate a data set with high-D and 2D training data
-  df_all <- bind_cols(highd_data |> select(-ID), nldr_df_with_hex_id)
+  ## Wireframe
+  tr_object <- tri_bin_centroids(centroids_data = df_bin_centroids)
+  trimesh_data <- gen_edges(tri_object = tr_object, benchmark_highd = benchmark_highd)
 
   ## averaged high-D data
-  df_bin <- avg_highd_data(data = df_all)
+  nldr_df_with_hex_id <- hb_obj$data_hb_id
+  model_highd <- avg_highd_data(highd_data = highd_data, scaled_nldr_hexid = nldr_df_with_hex_id)
 
-  ## high-D model only contains the bins in 2D
-  df_bin <- df_bin |>
-    filter(hb_id %in% df_bin_centroids$hexID)
+  ## To extract high-densed bins
+  model_2d <- df_bin_centroids |>
+    dplyr::filter(bin_counts > benchmark_highd)
+
+  model_highd <- model_highd |>
+    dplyr::filter(hexID %in% model_2d$hexID)
 
   cli::cli_alert_success("Model generated successfully! 🎉")
 
-  return(list(df_bin = df_bin, df_bin_centroids = df_bin_centroids))
+  return(list(model_highd = model_highd, model_2d = model_2d, trimesh_data = trimesh_data))
 
 }
 
