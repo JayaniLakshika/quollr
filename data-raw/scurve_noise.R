@@ -163,6 +163,9 @@ scurve_umap <- scurve_umap |>
 usethis::use_data(scurve_umap, overwrite = TRUE)
 
 #####################################Fit the model #############################
+scurve_umap_obj <- gen_scaled_data(nldr_data = scurve_umap)
+
+usethis::use_data(scurve_umap_obj, overwrite = TRUE)
 
 scurve_model_obj <- fit_highd_model(
   highd_data = scurve,

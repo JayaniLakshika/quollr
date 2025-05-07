@@ -11,7 +11,7 @@
 #' bins along the y axis, height and, width of the hexagon.
 #'
 #' @examples
-#' calc_bins_y(nldr_data = scurve_umap, bin1 = 4, q = 0.1)
+#' calc_bins_y(nldr_obj = scurve_umap_obj, bin1 = 4, q = 0.1)
 #'
 #' @export
 calc_bins_y <- function(nldr_obj, bin1 = 4, q = 0.1) {

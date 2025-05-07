@@ -50,12 +50,12 @@ comb_all_data_model_error <- function(highd_data, nldr_data, model_highd,
     dplyr::mutate(density = error_df$density)
 
   df_b <- model_highd |>
-    filter(hb_id %in% model_2d$hexID) |>
+    filter(hexID %in% model_2d$hexID) |>
     mutate(type = "model") ## Data with summarized mean
 
   ## Reorder the rows of df_b according to the hexID order in model_2d
-  df_b <- df_b[match(model_2d$hexID, df_b$hb_id),] |>
-    select(-hb_id)
+  df_b <- df_b[match(model_2d$hexID, df_b$hexID),] |>
+    select(-hexID)
 
   df_exe <- bind_rows(df_b, df)
 
