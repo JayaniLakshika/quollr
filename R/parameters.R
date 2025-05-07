@@ -18,17 +18,13 @@
 #' compute_mean_density_hex(df_bin_centroids, bin1 = num_bins_x)
 #'
 #' @export
-compute_mean_density_hex <- function(df_bin_centroids, bin1) {
+compute_mean_density_hex <- function(centroids_data, bin1) {
 
   if (missing(bin1)) {
     stop("Number of bins along x axis is not defined.")
   }
 
-  if (any(is.na(df_bin_centroids$std_counts))) {
-    stop("NAs present")
-  }
-
-  hexID_vec <- df_bin_centroids$hexID
+  hexID_vec <- centroids_data$hexID
 
   # To store mean densities of hexagons
   mean_density_vec <- c()
@@ -36,7 +32,7 @@ compute_mean_density_hex <- function(df_bin_centroids, bin1) {
   for (hb_id in hexID_vec) {
 
     ## Identify neighbors of a specific hex bin
-    neighbor_df <- df_bin_centroids |>
+    neighbor_df <- centroids_data |>
       filter((hexID == (hb_id + 1)) | (hexID == (hb_id - 1)) |
                       (hexID == (hb_id + (bin1 + 1))) |
                       (hexID == (hb_id + bin1)) |
@@ -83,38 +79,19 @@ compute_mean_density_hex <- function(df_bin_centroids, bin1) {
 #' df_bin_centroids_low = df_bin_centroids_low)
 #'
 #' @export
-find_low_dens_hex <- function(df_bin_centroids_all, bin1, df_bin_centroids_low) {
+find_low_dens_hex <- function(centroids_data, bin1, benchmark_mean_dens = 0.05) {
 
   if (is.na(bin1)) {
     stop("Number of bins along x-axis is not defined.")
   }
 
-  if (any(is.na(df_bin_centroids_all$std_counts))) {
-    stop("NAs present")
-  }
-
   ## To compute mean density of hexagons
-  mean_density_df <- compute_mean_density_hex(df_bin_centroids = df_bin_centroids_all,
-                                                bin1 = bin1)
-
-  ## Take first quartile as the benchmark to remove hexagons using mean_density
-  benchmark_mean_dens_rm_hex <- quantile(mean_density_df$mean_density,
-                                                probs = c(0,0.25,0.5,0.75,1), na.rm = TRUE)[2]
-
-  ## If df_bin_centroids_low is not defined
-  if (NROW(df_bin_centroids_low) == 0) {
-
-    first_qtl_conts <- quantile(df_bin_centroids_all$std_counts,
-                    probs = c(0,0.25,0.5,0.75,1))[2]
-
-    df_bin_centroids_low <- df_bin_centroids_all |>
-      dplyr::filter(std_counts <= first_qtl_conts)
-  }
+  mean_density_df <- compute_mean_density_hex(centroids_data = centroids_data,
+                                              bin1 = bin1)
 
   ## Obtain the hexagonal bins need to remove
   remove_bins <- mean_density_df |>
-    filter(hb_id %in% df_bin_centroids_low$hexID) |>
-    filter(mean_density < benchmark_mean_dens_rm_hex) |>
+    filter(mean_density < benchmark_mean_dens) |>
     pull(hb_id)
 
   if (is.null(remove_bins)) {

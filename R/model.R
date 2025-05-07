@@ -57,7 +57,7 @@ fit_highd_model <- function(highd_data, nldr_data, bin1 = 4, q = 0.1, benchmark_
 
   cli::cli_alert_success("Model generated successfully! 🎉")
 
-  return(list(model_highd = model_highd, model_2d = model_2d, trimesh_data = trimesh_data))
+  return(list(hb_obj = hb_obj, model_highd = model_highd, model_2d = model_2d, trimesh_data = trimesh_data))
 
 }
 

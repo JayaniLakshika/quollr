@@ -64,9 +64,9 @@ gen_centroids <- function(nldr_obj, bin1 = 4, q = 0.1){
 
   }
 
-  centroid_df <- tibble::tibble(hexID = 1:length(c_x), c_x = c_x, c_y = c_y)
+  centroids_data <- tibble::tibble(hexID = 1:length(c_x), c_x = c_x, c_y = c_y)
 
-  return(centroid_df)
+  return(centroids_data)
 
 }
 
@@ -163,16 +163,16 @@ get_min_indices <- function(x) {
 #' This function assigns the data to hexagons.
 #'
 #' @param nldr_data A tibble that contains embedding components in the first and second columns.
-#' @param centroid_df The dataset with centroid coordinates.
+#' @param centroids_data The dataset with centroid coordinates.
 #'
 #' @return A tibble contains embedding components and corresponding hexagon ID.
 #'
 #' @examples
 #' all_centroids_df <- s_curve_obj$s_curve_umap_hb_obj$centroids
-#' assign_data(nldr_obj = scurve_umap_scaled_obj, centroid_df = all_centroids_df)
+#' assign_data(nldr_obj = scurve_umap_scaled_obj, centroids_data = all_centroids_df)
 #'
 #' @export
-assign_data <- function(nldr_obj, centroid_df) {
+assign_data <- function(nldr_obj, centroids_data) {
 
   scaled_nldr_df <- nldr_obj$scaled_nldr
 
@@ -181,7 +181,7 @@ assign_data <- function(nldr_obj, centroid_df) {
     select(c(1, 2))
 
   ## To select coordinates for the centroids
-  select_centroid <- centroid_df |>
+  select_centroid <- centroids_data |>
     dplyr::select(c(2, 3))
 
   ## Convert to a matrix
@@ -196,7 +196,7 @@ assign_data <- function(nldr_obj, centroid_df) {
   min_column <- apply(dist_df, 1, get_min_indices)
 
   # Extract hex bin IDs corresponding to minimum distances
-  hb_ids <- centroid_df$hexID[min_column]
+  hb_ids <- centroids_data$hexID[min_column]
 
   # Add hex bin IDs to the data
   scaled_nldr_df <- scaled_nldr_df |>
@@ -311,7 +311,7 @@ hex_binning <- function(nldr_obj, bin1 = 4, q = 0.1) {
   all_hex_coord <- gen_hex_coord(centroids_df = all_centroids_df, a1 = a1)
 
   ## To find which 2D embedding assigned to which hexagon
-  nldr_hex_id <- assign_data(nldr_obj = nldr_obj, centroid_df = all_centroids_df)
+  nldr_hex_id <- assign_data(nldr_obj = nldr_obj, centroids_data = all_centroids_df)
 
   ## To generate standardize counts of each hexagon
   std_df <- compute_std_counts(scaled_nldr_hexid = nldr_hex_id)
