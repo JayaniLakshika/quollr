@@ -9,7 +9,7 @@
 #' @param nldr_data A tibble that contains the non-linear dimension reduction data.
 #' @param model_highd A tibble that contains the high-dimensional coordinates of bin centroids.
 #' @param model_2d The dataset with hexagonal bin centroids.
-#' @param error_df A tibble that high-dimesional model error.
+#' @param error_data A tibble that high-dimesional model error.
 #'
 #' @return A tibble with the average values of the high-dimensional data within
 #' each hexagonal bin and high-dimensional data, non-linear dimension reduction data, model error.
@@ -18,36 +18,34 @@
 #' @importFrom rsample starts_with
 #'
 #' @examples
-#' df_bin_centroids <- s_curve_obj$s_curve_umap_model_obj$df_bin_centroids
-#' df_bin <- s_curve_obj$s_curve_umap_model_obj$df_bin
-#' model_error <- augment(model_2d = df_bin_centroids, model_highd = df_bin,
-#' highd_data = s_curve_noise_training)
-#' comb_all_data_model_error(highd_data = s_curve_noise_training, nldr_data = s_curve_obj$s_curve_umap_scaled_obj$scaled_nldr,
-#' model_highd = df_bin, model_2d = df_bin_centroids, error_df = model_error)
+#' model_error <- augment(highd_data = scurve, model_highd = scurve_model_obj$model_highd,
+#' model_2d = scurve_model_obj$model_2d)
+#' comb_all_data_model_error(highd_data = scurve, nldr_data = scurve_umap,
+#' model_highd = scurve_model_obj$model_highd, model_2d = scurve_model_obj$model_2d, error_data = model_error)
 #'
 #' @export
 comb_all_data_model_error <- function(highd_data, nldr_data, model_highd,
-                                      model_2d, error_df) {
+                                      model_2d, error_data) {
 
   df <- inner_join(highd_data, nldr_data, by = "ID")
 
-  error_df <- error_df |>
+  error_data <- error_data |>
     dplyr::mutate(sqrt_row_wise_total_error = sqrt(row_wise_total_error))
 
   # Compute density
-  density_data <- density(error_df$sqrt_row_wise_total_error)
+  density_data <- density(error_data$sqrt_row_wise_total_error)
   density_df <- data.frame(x = density_data$x, y = density_data$y)
 
   # Add density values to the original dataset
-  error_df <- error_df |>
+  error_data <- error_data |>
     dplyr::mutate(density = approx(density_df$x, density_df$y, xout = sqrt_row_wise_total_error)$y)
 
   ### Define type column
   df <- df |>
     select(starts_with("x"), starts_with("emb")) |>
     mutate(type = "data") |> ## original dataset
-    dplyr::mutate(sqrt_row_wise_total_error = error_df$sqrt_row_wise_total_error) |>
-    dplyr::mutate(density = error_df$density)
+    dplyr::mutate(sqrt_row_wise_total_error = error_data$sqrt_row_wise_total_error) |>
+    dplyr::mutate(density = error_data$density)
 
   df_b <- model_highd |>
     filter(hexID %in% model_2d$hexID) |>
@@ -72,7 +70,7 @@ comb_all_data_model_error <- function(highd_data, nldr_data, model_highd,
 #' @param point_df A tibble that contains the high-dimensional data, no-linear dimension reductions
 #' and model in high-dimensions.
 #' @param edge_df A tibble that contains the wireframe data (from and to).
-#' @param error_df A tibble that high-dimesional model error.
+#' @param error_data A tibble that high-dimesional model error.
 #'
 #'
 #' @return A browsable HTML element.
@@ -82,14 +80,10 @@ comb_all_data_model_error <- function(highd_data, nldr_data, model_highd,
 #' @importFrom ggplot2 ggplot theme_bw theme_linedraw aes aes_string theme element_rect element_text element_blank geom_point xlab ylab
 #' @importFrom plotly ggplotly config highlight style
 #' @examples
-#' df_bin_centroids <- s_curve_obj$s_curve_umap_model_obj$df_bin_centroids
-#' df_bin <- s_curve_obj$s_curve_umap_model_obj$df_bin
-#' model_error <- augment(model_2d = df_bin_centroids, model_highd = df_bin,
-#' highd_data = s_curve_noise_training)
-#' df_exe <- comb_all_data_model_error(highd_data = s_curve_noise_training,
-#' nldr_data = s_curve_obj$s_curve_umap_scaled_obj$scaled_nldr,
-#' model_highd = df_bin, model_2d = df_bin_centroids, error_df = model_error)
-#' edge_data <- s_curve_obj$s_curve_umap_model_tr_from_to_df
+#' df_exe <- comb_all_data_model_error(highd_data = scurve, nldr_data = scurve_umap,
+#' model_highd = scurve_model_obj$model_highd, model_2d = scurve_model_obj$model_2d,
+#' error_data = model_error)
+#' edge_data <- scurve_model_obj$trimesh_data
 #' show_error_link_plots(point_df = df_exe, edge_df = edge_data)
 #'
 #' @export

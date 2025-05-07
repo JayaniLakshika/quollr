@@ -13,10 +13,8 @@
 #' @importFrom tibble tibble
 #'
 #' @examples
-#' df_bin_centroids <- s_curve_obj$s_curve_umap_model_obj$df_bin_centroids
-#' df_bin <- s_curve_obj$s_curve_umap_model_obj$df_bin
-#' predict_emb(highd_data = s_curve_noise_training, model_2d = df_bin_centroids,
-#' model_highd = df_bin)
+#' predict_emb(highd_data = scurve, model_highd = scurve_model_obj$model_highd,
+#' model_2d = scurve_model_obj$model_2d)
 #'
 #' @export
 predict_emb <- function(highd_data, model_2d, model_highd) {
@@ -68,10 +66,8 @@ predict_emb <- function(highd_data, model_2d, model_highd) {
 #' @importFrom tibble tibble
 #'
 #' @examples
-#' df_bin_centroids <- s_curve_obj$s_curve_umap_model_obj$df_bin_centroids
-#' df_bin <- s_curve_obj$s_curve_umap_model_obj$df_bin
-#' glance(highd_data = s_curve_noise_training, model_2d = df_bin_centroids,
-#' model_highd = df_bin)
+#' glance(highd_data = scurve, model_highd = scurve_model_obj$model_highd,
+#' model_2d = scurve_model_obj$model_2d)
 #'
 #' @export
 glance <- function(highd_data, model_2d, model_highd) {
@@ -133,10 +129,8 @@ glance <- function(highd_data, model_2d, model_highd) {
 #' @importFrom tidyselect starts_with
 #'
 #' @examples
-#' df_bin_centroids <- s_curve_obj$s_curve_umap_model_obj$df_bin_centroids
-#' df_bin <- s_curve_obj$s_curve_umap_model_obj$df_bin
-#' augment(highd_data = s_curve_noise_training, model_2d = df_bin_centroids,
-#' model_highd = df_bin)
+#' augment(highd_data = scurve, model_highd = scurve_model_obj$model_highd,
+#' model_2d = scurve_model_obj$model_2d)
 #'
 #' @export
 augment <- function(highd_data, model_2d, model_highd) {

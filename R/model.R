@@ -17,12 +17,8 @@
 #' @importFrom stats quantile
 #'
 #' @examples
-#' scurve_umap_scaled_obj <- s_curve_obj$s_curve_umap_scaled_obj
-#' lim1 <- scurve_umap_scaled_obj$lim1
-#' lim2 <- scurve_umap_scaled_obj$lim2
-#' r2 <- diff(lim2)/diff(lim1)
-#' fit_highd_model(highd_data = s_curve_noise_training,
-#' nldr_data = s_curve_noise_umap_scaled, bin1 = 4, r2 = r2)
+#' fit_highd_model(highd_data = scurve, nldr_data = scurve_umap, bin1 = 4,
+#' q = 0.1, benchmark_highd = 5)
 #'
 #' @export
 fit_highd_model <- function(highd_data, nldr_data, bin1 = 4, q = 0.1, benchmark_highd = 5) {

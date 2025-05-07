@@ -10,8 +10,7 @@
 #' of all hexagon bin centroids.
 #'
 #' @examples
-#' scurve_umap_scaled_obj <- s_curve_obj$s_curve_umap_scaled_obj
-#' gen_centroids(nldr_obj = scurve_umap_scaled_obj, bin1 = 4, q = 0.1)
+#' gen_centroids(nldr_obj = scurve_umap_obj, bin1 = 4, q = 0.1)
 #'
 #' @export
 gen_centroids <- function(nldr_obj, bin1 = 4, q = 0.1){
@@ -75,7 +74,7 @@ gen_centroids <- function(nldr_obj, bin1 = 4, q = 0.1){
 #' This function generates the coordinates of hexagons after passing
 #' hexagonal centroids.
 #'
-#' @param centroids_df The dataset with all hexagonal bin IDs
+#' @param centroids_data The dataset with all hexagonal bin IDs
 #' and centroid coordinates.
 #' @param a1 The width of the hexagon.
 #'
@@ -83,12 +82,12 @@ gen_centroids <- function(nldr_obj, bin1 = 4, q = 0.1){
 #' and y respectively) of hexagons.
 #'
 #' @examples
-#' width <- s_curve_obj$s_curve_umap_hb_obj$a1
-#' all_centroids_df <- s_curve_obj$s_curve_umap_hb_obj$centroids
-#' gen_hex_coord(centroids_df = all_centroids_df, a1 = width)
+#' width <- scurve_model_obj$hb_obj$a1
+#' all_centroids_df <- scurve_model_obj$hb_obj$centroids
+#' gen_hex_coord(centroids_data = all_centroids_df, a1 = width)
 #'
 #' @export
-gen_hex_coord <- function(centroids_df, a1){
+gen_hex_coord <- function(centroids_data, a1){
 
   # If the hexagonal width is missing
   if (missing(a1)) {
@@ -96,9 +95,9 @@ gen_hex_coord <- function(centroids_df, a1){
   }
 
   ## Obtain centroid info
-  hex_ids <- centroids_df$hexID
-  c_x_vec <- centroids_df$c_x
-  c_y_vec <- centroids_df$c_y
+  hex_ids <- centroids_data$hexID
+  c_x_vec <- centroids_data$c_x
+  c_y_vec <- centroids_data$c_y
 
   ## To compute vertical spacing factor
   vs_factor <- a1/(2 * sqrt(3))
@@ -168,8 +167,8 @@ get_min_indices <- function(x) {
 #' @return A tibble contains embedding components and corresponding hexagon ID.
 #'
 #' @examples
-#' all_centroids_df <- s_curve_obj$s_curve_umap_hb_obj$centroids
-#' assign_data(nldr_obj = scurve_umap_scaled_obj, centroids_data = all_centroids_df)
+#' all_centroids_df <- scurve_model_obj$hb_obj$centroids
+#' assign_data(nldr_obj = scurve_umap_obj, centroids_data = all_centroids_df)
 #'
 #' @export
 assign_data <- function(nldr_obj, centroids_data) {
@@ -215,7 +214,7 @@ assign_data <- function(nldr_obj, centroids_data) {
 #' @importFrom dplyr count mutate rename
 #'
 #' @examples
-#' umap_with_hb_id <- s_curve_obj$s_curve_umap_hb_obj$data_hb_id
+#' umap_with_hb_id <- scurve_model_obj$hb_obj$data_hb_id
 #' compute_std_counts(scaled_nldr_hexid = umap_with_hb_id)
 #'
 #' @export
@@ -242,7 +241,7 @@ compute_std_counts <- function(scaled_nldr_hexid) {
 #' @importFrom tibble tibble
 #'
 #' @examples
-#' umap_with_hb_id <- s_curve_obj$s_curve_umap_hb_obj$data_hb_id
+#' umap_with_hb_id <- scurve_model_obj$hb_obj$data_hb_id
 #' find_pts(scaled_nldr_hexid = umap_with_hb_id)
 #'
 #' @export
@@ -277,8 +276,7 @@ find_pts <- function(scaled_nldr_hexid) {
 #'
 #'
 #' @examples
-#' scurve_umap_scaled_obj <- s_curve_obj$s_curve_umap_scaled_obj
-#' hex_binning(nldr_obj = scurve_umap_scaled_obj, bin1 = 4, q = 0.1)
+#' hex_binning(nldr_obj = scurve_umap_obj, bin1 = 4, q = 0.1)
 #'
 #' @export
 hex_binning <- function(nldr_obj, bin1 = 4, q = 0.1) {
@@ -308,7 +306,7 @@ hex_binning <- function(nldr_obj, bin1 = 4, q = 0.1) {
   all_centroids_df <- gen_centroids(nldr_obj = nldr_obj, bin1 = bin1, q = q)
 
   ## To generate the hexagon coordinates
-  all_hex_coord <- gen_hex_coord(centroids_df = all_centroids_df, a1 = a1)
+  all_hex_coord <- gen_hex_coord(centroids_data = all_centroids_df, a1 = a1)
 
   ## To find which 2D embedding assigned to which hexagon
   nldr_hex_id <- assign_data(nldr_obj = nldr_obj, centroids_data = all_centroids_df)
@@ -341,63 +339,63 @@ hex_binning <- function(nldr_obj, bin1 = 4, q = 0.1) {
 
 #' Extract hexagonal bin centroids coordinates and the corresponding standardise counts.
 #'
-#' @param centroids_df A tibble that contains all hexagonal bin centroid
+#' @param centroids_data A tibble that contains all hexagonal bin centroid
 #' coordinates with hexagon IDs.
-#' @param counts_df A tibble that contains hexagon IDs with the standardise
+#' @param counts_data A tibble that contains hexagon IDs with the standardise
 #' number of points within each hexagon.
 #'
 #' @return A tibble contains hexagon ID, centroid coordinates, and standardise counts.
 #'
 #' @examples
 #' all_centroids_df <- s_curve_obj$s_curve_umap_hb_obj$centroids
-#' counts_df <- s_curve_obj$s_curve_umap_hb_obj$std_cts
-#' extract_hexbin_centroids(centroids_df = all_centroids_df,
-#' counts_df = counts_df)
+#' counts_data <- s_curve_obj$s_curve_umap_hb_obj$std_cts
+#' extract_hexbin_centroids(centroids_data = all_centroids_df,
+#' counts_data = counts_data)
 #'
 #' @export
-extract_hexbin_centroids <- function(centroids_df, counts_df) {
+extract_hexbin_centroids <- function(centroids_data, counts_data) {
 
   ## To arrange the hexagon IDs
-  counts_df <- counts_df |>
+  counts_data <- counts_data |>
     dplyr::arrange(hexID)
 
   ## To join the datasets
-  centroids_df <- dplyr::full_join(centroids_df, counts_df, by = "hexID")
+  centroids_data <- dplyr::full_join(centroids_data, counts_data, by = "hexID")
 
   ## Map the standardize counts
-  centroids_df <- centroids_df |>
+  centroids_data <- centroids_data |>
     dplyr::mutate(std_counts = dplyr::if_else(is.na(std_counts), 0, std_counts)) |>
     dplyr::mutate(bin_counts = dplyr::if_else(is.na(bin_counts), 0, bin_counts))
 
-  return(centroids_df)
+  return(centroids_data)
 }
 
 #' Extract hexagonal bin mean coordinates and the corresponding standardize counts.
 #'
 #' @param data_hb A tibble with embedding components and hexagonal bin IDs.
-#' @param counts_df A tibble that contains hexagon IDs with the standardise
+#' @param counts_data A tibble that contains hexagon IDs with the standardise
 #' number of points within each hexagon.
-#' @param centroids_df A tibble that contains all hexagonal bin centroid
+#' @param centroids_data A tibble that contains all hexagonal bin centroid
 #' coordinates with hexagon IDs.
 #'
 #' @return A tibble contains hexagon ID, bin mean coordinates, and standardize counts.
 #'
 #' @examples
 #' all_centroids_df <- s_curve_obj$s_curve_umap_hb_obj$centroids
-#' counts_df <- s_curve_obj$s_curve_umap_hb_obj$std_cts
+#' counts_data <- s_curve_obj$s_curve_umap_hb_obj$std_cts
 #' umap_with_hb_id <- s_curve_obj$s_curve_umap_hb_obj$data_hb_id
-#' extract_hexbin_mean(data_hb = umap_with_hb_id, counts_df = counts_df,
-#' centroids_df = all_centroids_df)
+#' extract_hexbin_mean(data_hb = umap_with_hb_id, counts_data = counts_data,
+#' centroids_data = all_centroids_df)
 #'
 #' @export
-extract_hexbin_mean <- function(data_hb, counts_df, centroids_df) {
+extract_hexbin_mean <- function(data_hb, counts_data, centroids_data) {
 
   ## To arrange the hexagon IDs
-  counts_df <- counts_df |>
+  counts_data <- counts_data |>
     dplyr::arrange(hexID)
 
   ## To join the datasets
-  centroids_df <- dplyr::full_join(centroids_df, counts_df, by = "hexID") |>
+  centroids_data <- dplyr::full_join(centroids_data, counts_data, by = "hexID") |>
     dplyr::select(-c(c_x, c_y))
 
   ## To compute hexagonal bin means
@@ -410,11 +408,11 @@ extract_hexbin_mean <- function(data_hb, counts_df, centroids_df) {
   ## Rename columns
   names(hex_mean_df) <- c("hexID", "c_x", "c_y")
 
-  centroids_df <- dplyr::full_join(centroids_df, hex_mean_df, by = c("hexID" = "hexID")) |>
+  centroids_data <- dplyr::full_join(centroids_data, hex_mean_df, by = c("hexID" = "hexID")) |>
     dplyr::rename(bin_counts = n) |>
     dplyr::select(hexID, c_x, c_y, bin_counts, std_counts)
 
-  return(centroids_df)
+  return(centroids_data)
 }
 
 #' Triangulate bin centroids
@@ -429,7 +427,11 @@ extract_hexbin_mean <- function(data_hb, counts_df, centroids_df) {
 #' @importFrom rlang sym as_string
 #'
 #' @examples
-#' df_bin_centroids <- s_curve_obj$s_curve_umap_model_obj$df_bin_centroids
+#' all_centroids_df <- s_curve_obj$s_curve_umap_hb_obj$centroids
+#' counts_data <- s_curve_obj$s_curve_umap_hb_obj$std_cts
+#' umap_with_hb_id <- s_curve_obj$s_curve_umap_hb_obj$data_hb_id
+#' df_bin_centroids <- extract_hexbin_mean(data_hb = umap_with_hb_id, counts_data = counts_data,
+#' centroids_data = all_centroids_df)
 #' tri_bin_centroids(centroids_data = df_bin_centroids)
 #'
 #' @export
@@ -462,7 +464,12 @@ tri_bin_centroids <- function(centroids_data){
 #' @importFrom interp triangles
 #'
 #' @examples
-#' tr1_object <- s_curve_obj$s_curve_umap_model_tr1_object
+#' all_centroids_df <- s_curve_obj$s_curve_umap_hb_obj$centroids
+#' counts_data <- s_curve_obj$s_curve_umap_hb_obj$std_cts
+#' umap_with_hb_id <- s_curve_obj$s_curve_umap_hb_obj$data_hb_id
+#' df_bin_centroids <- extract_hexbin_mean(data_hb = umap_with_hb_id, counts_data = counts_data,
+#' centroids_data = all_centroids_df)
+#' tr1_object <- tri_bin_centroids(centroids_data = df_bin_centroids)
 #' gen_edges(tri_object = tr1_object)
 #'
 #' @export
@@ -540,7 +547,7 @@ gen_edges <- function(tri_object, benchmark_highd = 5) { #centroids_data
 #' @importFrom tibble tibble
 #'
 #' @examples
-#' tr_from_to_df <- s_curve_obj$s_curve_umap_model_tr_from_to_df
+#' tr_from_to_df <- scurve_model_obj$trimesh_data
 #' vis_mesh(trimesh_data = tr_from_to_df)
 #'
 #' @export
@@ -575,8 +582,7 @@ vis_mesh <- function(trimesh_data) {
 #' needed to achieve a specific number of non-empty bins.
 #'
 #' @examples
-#' scurve_umap_scaled_obj <- s_curve_obj$s_curve_umap_scaled_obj
-#' find_non_empty_bins(nldr_obj = scurve_umap_scaled_obj, non_empty_bins = 5)
+#' find_non_empty_bins(nldr_obj = scurve_umap_obj, non_empty_bins = 5)
 #'
 #' @export
 find_non_empty_bins <- function(nldr_obj, non_empty_bins, q = 0.1) {

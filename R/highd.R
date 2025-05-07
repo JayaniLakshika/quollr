@@ -12,9 +12,8 @@
 #' @importFrom tidyselect everything
 #'
 #' @examples
-#' umap_with_hb_id <- s_curve_obj$s_curve_umap_hb_obj$data_hb_id
-#' df_all <- dplyr::bind_cols(s_curve_noise_training, umap_data_with_hb_id)
-#' avg_highd_data(data = df_all)
+#' umap_with_hb_id <- scurve_model_obj$hb_obj$data_hb_id
+#' avg_highd_data(highd_data = scurve, scaled_nldr_hexid = umap_with_hb_id)
 #'
 #' @export
 avg_highd_data <- function(highd_data, scaled_nldr_hexid) {
@@ -45,10 +44,8 @@ avg_highd_data <- function(highd_data, scaled_nldr_hexid) {
 #' @importFrom rsample starts_with
 #'
 #' @examples
-#' df_bin_centroids <- s_curve_obj$s_curve_umap_model_obj$df_bin_centroids
-#' df_bin <- s_curve_obj$s_curve_umap_model_obj$df_bin
-#' comb_data_mode(highd_data = s_curve_noise_training, model_highd = df_bin,
-#' model_2d = df_bin_centroids)
+#' comb_data_mode(highd_data = scurve, model_highd = scurve_model_obj$model_highd,
+#' model_2d = scurve_model_obj$model_2d)
 #'
 #' @export
 comb_data_model <- function(highd_data, model_highd, model_2d) {
@@ -85,11 +82,9 @@ comb_data_model <- function(highd_data, model_highd, model_2d) {
 #'
 #'
 #' @examples
-#' df_bin_centroids <- s_curve_obj$s_curve_umap_model_obj$df_bin_centroids
-#' df_bin <- s_curve_obj$s_curve_umap_model_obj$df_bin
-#' df_exe <- comb_data_model(highd_data = s_curve_noise_training, model_highd = df_bin,
-#' model_2d = df_bin_centroids)
-#' edge_data <- s_curve_obj$s_curve_umap_model_tr_from_to_df
+#' df_exe <- comb_data_mode(highd_data = scurve, model_highd = scurve_model_obj$model_highd,
+#' model_2d = scurve_model_obj$model_2d)
+#' edge_data <- scurve_model_obj$trimesh_data
 #' show_langevitour(point_df = df_exe, edge_df = edge_data)
 #'
 #' @export
