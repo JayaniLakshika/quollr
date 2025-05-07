@@ -163,49 +163,12 @@ scurve_umap <- scurve_umap |>
 usethis::use_data(scurve_umap, overwrite = TRUE)
 
 #####################################Fit the model #############################
-scurve_model_obj <- list()
-
-nldr_scaled_obj <- gen_scaled_data(
-  data = scurve_umap)
-
-scurve_umap_scaled <- nldr_scaled_obj$scaled_nldr
-
 usethis::use_data(scurve_umap_scaled, overwrite = TRUE)
 
-lim1 <- nldr_scaled_obj$lim1
-lim2 <- nldr_scaled_obj$lim2
-r2 <- diff(lim2)/diff(lim1)
-
-scurve_model_obj[[1]] <- nldr_scaled_obj
-names(scurve_model_obj)[1] <- "scurve_umap_scaled_obj"
-
-hb_obj <- hex_binning(scurve_umap_scaled, bin1 = 15, r2 = r2, q = 0.1)
-
-scurve_model_obj[[2]] <- hb_obj
-names(scurve_model_obj)[2] <- "scurve_umap_hb_obj"
-
-model_s_curve_obj <- fit_highd_model(
+scurve_model_obj <- fit_highd_model(
   highd_data = scurve,
-  nldr_data = scurve_umap_scaled,
-  bin1 = 15, r2 = r2)
-
-scurve_model_obj[[3]] <- model_s_curve_obj
-names(scurve_model_obj)[3] <- "scurve_umap_model_obj"
-
-all_centroids_df <- hb_obj$centroids
-counts_df <- hb_obj$std_cts
-
-df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df,
-                                             counts_df = counts_df)
-
-tr1_object <- tri_bin_centroids(hex_df = df_bin_centroids, x = "c_x", y = "c_y")
-
-scurve_model_obj[[4]] <- tr1_object
-names(scurve_model_obj)[4] <- "scurve_umap_model_tr1_object"
-
-tr_from_to_df <- gen_edges(tri_object = tr1_object, threshold = 0)
-
-scurve_model_obj[[5]] <- tr_from_to_df
-names(scurve_model_obj)[5] <- "scurve_umap_model_tr_from_to_df"
+  nldr_data = scurve_umap,
+  bin1 = 15,
+  benchmark_highd = 5)
 
 usethis::use_data(scurve_model_obj, overwrite = TRUE)
