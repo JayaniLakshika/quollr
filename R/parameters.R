@@ -13,12 +13,10 @@
 #' @importFrom tibble tibble
 #'
 #' @examples
-#' num_bins_x <- 4
-#' df_bin_centroids <- s_curve_obj$s_curve_umap_model_obj$df_bin_centroids
-#' compute_mean_density_hex(df_bin_centroids, bin1 = num_bins_x)
+#' compute_mean_density_hex(centroids_data = scurve_model_obj$model_2d, bin1 = 4)
 #'
 #' @export
-compute_mean_density_hex <- function(centroids_data, bin1) {
+compute_mean_density_hex <- function(centroids_data, bin1 = 4) {
 
   if (missing(bin1)) {
     stop("Number of bins along x axis is not defined.")
@@ -71,15 +69,11 @@ compute_mean_density_hex <- function(centroids_data, bin1) {
 #' @importFrom stats quantile
 #'
 #' @examples
-#' num_bins_x <- 4
-#' df_bin_centroids <- s_curve_obj$s_curve_umap_model_obj$df_bin_centroids
-#' df_bin_centroids_low <- df_bin_centroids |>
-#' dplyr::filter(std_counts <= 0.43)
-#' find_low_dens_hex(df_bin_centroids_all = df_bin_centroids, bin1 = num_bins_x,
-#' df_bin_centroids_low = df_bin_centroids_low)
+#' find_low_dens_hex(centroids_data = scurve_model_obj$model_2d, bin1 = 4,
+#' benchmark_mean_dens = 0.05)
 #'
 #' @export
-find_low_dens_hex <- function(centroids_data, bin1, benchmark_mean_dens = 0.05) {
+find_low_dens_hex <- function(centroids_data, bin1 = 4, benchmark_mean_dens = 0.05) {
 
   if (is.na(bin1)) {
     stop("Number of bins along x-axis is not defined.")
