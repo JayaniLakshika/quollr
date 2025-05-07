@@ -14,7 +14,7 @@
 #' calc_bins_y(nldr_data = scurve_umap, bin1 = 4, q = 0.1)
 #'
 #' @export
-calc_bins_y <- function(nldr_data, bin1 = 4, q = 0.1) {
+calc_bins_y <- function(nldr_obj, bin1 = 4, q = 0.1) {
 
   ## To check whether bin2 greater than 2
   if (bin1 < 2) {
@@ -25,9 +25,6 @@ calc_bins_y <- function(nldr_data, bin1 = 4, q = 0.1) {
   if (!dplyr::between(q, 0.05, 0.2)) {
     stop("The buffer should be within 0.05 and 0.2.")
   }
-
-  ## To pre-process the data
-  nldr_obj <- gen_scaled_data(nldr_data = nldr_data)
 
   ## To compute the range
   lim1 <- nldr_obj$lim1

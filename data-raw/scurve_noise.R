@@ -10,9 +10,9 @@ set.seed(20230531)
 
 ## To generate S-curve data
 s_curve <- function(n = 100) {
-  tt <- 3 * pi * stats::runif(n = n_samples, min = -0.5, max = 0.5)
+  tt <- 3 * pi * stats::runif(n = n, min = -0.5, max = 0.5)
   x1 <- sin(tt)
-  x2 <- 2.0 * stats::runif(n = n_samples)
+  x2 <- 2.0 * stats::runif(n = n)
   x3 <- sign(tt) * (cos(tt) - 1)
 
   tibble::tibble(
@@ -163,7 +163,6 @@ scurve_umap <- scurve_umap |>
 usethis::use_data(scurve_umap, overwrite = TRUE)
 
 #####################################Fit the model #############################
-usethis::use_data(scurve_umap_scaled, overwrite = TRUE)
 
 scurve_model_obj <- fit_highd_model(
   highd_data = scurve,

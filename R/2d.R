@@ -439,7 +439,7 @@ tri_bin_centroids <- function(centroids_data){
   # Create a list to store the triangulation object and the counts
   result <- list(
     trimesh_object = tr,
-    bin_counts = hex_df[["bin_counts"]]
+    bin_counts = centroids_data[["bin_counts"]]
   )
 
   return(result)
