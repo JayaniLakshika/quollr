@@ -80,6 +80,8 @@ comb_all_data_model_error <- function(highd_data, nldr_data, model_highd,
 #' @importFrom ggplot2 ggplot theme_bw theme_linedraw aes aes_string theme element_rect element_text element_blank geom_point xlab ylab
 #' @importFrom plotly ggplotly config highlight style
 #' @examples
+#' model_error <- augment(highd_data = scurve, model_highd = scurve_model_obj$model_highd,
+#' model_2d = scurve_model_obj$model_2d)
 #' df_exe <- comb_all_data_model_error(highd_data = scurve, nldr_data = scurve_umap,
 #' model_highd = scurve_model_obj$model_highd, model_2d = scurve_model_obj$model_2d,
 #' error_data = model_error)

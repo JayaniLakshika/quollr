@@ -22,6 +22,8 @@ This function generates a LangeviTour visualization based on different
 conditions and input parameters with 2D wireframe.
 }
 \examples{
+model_error <- augment(highd_data = scurve, model_highd = scurve_model_obj$model_highd,
+model_2d = scurve_model_obj$model_2d)
 df_exe <- comb_all_data_model_error(highd_data = scurve, nldr_data = scurve_umap,
 model_highd = scurve_model_obj$model_highd, model_2d = scurve_model_obj$model_2d,
 error_data = model_error)
