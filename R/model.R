@@ -6,8 +6,9 @@
 #'
 #' @param highd_data A tibble that contains the high-dimensional data with a unique identifier.
 #' @param nldr_data A tibble that contains the embedding with a unique identifier.
-#' @param bin1 Number of bins along the x axis.
-#' @param q The buffer amount as proportion of data range.
+#' @param bin1 (default: 4) A numeric value representing the number of bins along the x axis.
+#' @param q (default: 0.1) A numeric value representing the buffer amount as proportion of data range.
+#' @param benchmark_highd (default: 5) A numeric value using to filter high-density hexagons.
 #'
 #' @return A list containing the data frame with high-dimensional coordinates
 #' for 2D bin centroids (\code{df_bin}) and the data frame containing
