@@ -34,8 +34,8 @@ fit_highd_model <- function(highd_data, nldr_data, bin1 = 4, q = 0.1, benchmark_
   counts_df <- hb_obj$std_cts
 
   ## To extract all bin centroids with bin counts
-  df_bin_centroids <- extract_hexbin_centroids(centroids_df = all_centroids_df,
-                                               counts_df = counts_df)
+  df_bin_centroids <- extract_hexbin_centroids(centroids_data = all_centroids_df,
+                                               counts_data = counts_df)
 
   ## Wireframe
   tr_object <- tri_bin_centroids(centroids_data = df_bin_centroids)
