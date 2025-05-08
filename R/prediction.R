@@ -24,7 +24,7 @@ predict_emb <- function(highd_data, model_2d, model_highd) {
     as.matrix()
 
   df_bin_matrix <- model_highd |>
-    select(-hb_id) |>
+    select(-hexID) |>
     as.matrix()
 
   ## Compute distances between nldr coordinates and hex bin centroids
@@ -33,7 +33,7 @@ predict_emb <- function(highd_data, model_2d, model_highd) {
   ## Columns that gives minimum distances
   min_column <- apply(dist_df, 1, which.min)
 
-  pred_hb_id <- model_highd$hb_id[min_column]
+  pred_hb_id <- model_highd$hexID[min_column]
 
   ## Obtain 2D coordinate of the nearest high-D centroid
   match_indices <- match(pred_hb_id, model_2d$hexID)
@@ -82,7 +82,7 @@ glance <- function(highd_data, model_2d, model_highd) {
 
   ## Map high-D averaged mean coordinates
   prediction_df <- prediction_df |>
-    left_join(model_highd, by = c("pred_hb_id" = "hb_id"))
+    left_join(model_highd, by = c("pred_hb_id" = "hexID"))
 
   prediction_df <- prediction_df |>
     left_join(highd_data, by = c("ID" = "ID")) ## Map high-D data
@@ -144,7 +144,7 @@ augment <- function(highd_data, model_2d, model_highd) {
                                model_highd = model_highd)
 
   prediction_df <- prediction_df |>
-    left_join(model_highd, by = c("pred_hb_id" = "hb_id"))
+    left_join(model_highd, by = c("pred_hb_id" = "hexID"))
 
   prediction_df <- prediction_df |>
     left_join(highd_data, by = c("ID" = "ID")) ## Map high-D data

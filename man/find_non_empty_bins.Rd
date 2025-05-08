@@ -4,7 +4,7 @@
 \alias{find_non_empty_bins}
 \title{Find the number of bins required to achieve required number of non-empty bins.}
 \usage{
-find_non_empty_bins(nldr_obj, non_empty_bins, q = 0.1)
+find_non_empty_bins(nldr_obj, non_empty_bins = 2, q = 0.1)
 }
 \arguments{
 \item{non_empty_bins}{The desired number of non-empty bins.}
