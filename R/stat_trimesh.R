@@ -68,29 +68,37 @@ StatTrimesh <- ggplot2::ggproto(
     tr_arcs_df <- tibble::tibble(from = c(trang$node1, trang$node1, trang$node2),
                                  to = c(trang$node2, trang$node3, trang$node3))
 
-    ## To extract unique combinations
-    tr_arcs_df <- tr_arcs_df |>
-      dplyr::mutate(x = pmin(from, to), y = pmax(from, to)) |>
-      dplyr::distinct(x, y) |>
-      dplyr::rename(c("from" = "x", "to" = "y"))
+    # Filter edges based on the bin counts of the connected nodes
+    edges_all <- tr_arcs_df |>
+      left_join(tr_df |> select(ID), by = c("from" = "ID")) |>
+      left_join(tr_df |> select(ID), by = c("to" = "ID")) |>
+      select(from, to) |>
+      mutate(x = pmin(from, to), y = pmax(from, to)) |>
+      distinct(x, y) |>
+      rename(from = x, to = y)
 
-    ## Map from and to coordinates
-    tr_from_to_df_coord <- dplyr::left_join(tr_arcs_df, tr_df, by = c("from" = "ID")) |>
-      dplyr::rename(c("x_from" = "x", "y_from" = "y"))
-    tr_from_to_df_coord <- dplyr::left_join(tr_from_to_df_coord, tr_df, by = c("to" = "ID"))|>
-      dplyr::rename(c("x_to" = "x", "y_to" = "y"))
+    # Map from and to coordinates for the filtered edges
+    tr_from_to_df_coord <- left_join(edges_all, tr_df, by = c("from" = "ID")) |>
+      rename(x_from = x, y_from = y) |>
+      left_join(tr_df, by = c("to" = "ID")) |>
+      rename(x_to = x, y_to = y) |>
+      select(from, to, x_from, y_from, x_to, y_to) # Keep only necessary columns
 
-    trimesh <- tibble::tibble(x = tr_from_to_df_coord$x_from,
-                              y = tr_from_to_df_coord$y_from,
-                              xend = tr_from_to_df_coord$x_to,
-                              yend = tr_from_to_df_coord$y_to,
-                              PANEL = as.factor(rep(1, nrow(tr_from_to_df_coord))),
-                              group = rep(-1, nrow(tr_from_to_df_coord)),
-                              size = rep(0.5, nrow(tr_from_to_df_coord)),
-                              linetype = rep(1, nrow(tr_from_to_df_coord)),
-                              linewidth = rep(0.5, nrow(tr_from_to_df_coord)),
-                              alpha = rep(NA, nrow(tr_from_to_df_coord)),
-                              colour = rep("#636363", nrow(tr_from_to_df_coord)))
+    trimesh_data <- calc_2d_dist(edge_data = tr_from_to_df_coord) |>
+      dplyr::filter(distance <= sqrt(a1^2 + a2^2)) |>
+      dplyr::select(-distance)
+
+    trimesh <- tibble::tibble(x = trimesh_data$x_from,
+                              y = trimesh_data$y_from,
+                              xend = trimesh_data$x_to,
+                              yend = trimesh_data$y_to,
+                              PANEL = as.factor(rep(1, nrow(trimesh_data))),
+                              group = rep(-1, nrow(trimesh_data)),
+                              size = rep(0.5, nrow(trimesh_data)),
+                              linetype = rep(1, nrow(trimesh_data)),
+                              linewidth = rep(0.5, nrow(trimesh_data)),
+                              alpha = rep(NA, nrow(trimesh_data)),
+                              colour = rep("#636363", nrow(trimesh_data)))
     trimesh
   },
   required_aes = c("x", "y")
