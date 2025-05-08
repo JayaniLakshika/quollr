@@ -48,9 +48,9 @@ comb_all_data_model <- function(highd_data, nldr_data, model_highd, model_2d) {
 #' This function generates a LangeviTour visualization based on different
 #' conditions and input parameters with 2D wireframe.
 #'
-#' @param point_df A tibble that contains the high-dimensional data, non-linear dimension reductions
+#' @param point_data A tibble that contains the high-dimensional data, non-linear dimension reductions
 #' and model in high-dimensions.
-#' @param edge_df A tibble that contains the wireframe data (from and to).
+#' @param edge_data A tibble that contains the wireframe data (from and to).
 #'
 #'
 #' @return A browsable HTML element.
@@ -64,22 +64,22 @@ comb_all_data_model <- function(highd_data, nldr_data, model_highd, model_2d) {
 #' df_exe <- comb_all_data_model(highd_data = scurve, nldr_data = scurve_umap,
 #' model_highd = scurve_model_obj$model_highd, model_2d = scurve_model_obj$model_2d)
 #' edge_data <- scurve_model_obj$trimesh_data
-#' show_link_plots(point_df = df_exe, edge_df = edge_data)
+#' show_link_plots(point_data = df_exe, edge_data = edge_data)
 #'
 #' @export
-show_link_plots <- function(point_df, edge_df) {
+show_link_plots <- function(point_data, edge_data) {
 
-  num_highd_col <- point_df |>
+  num_highd_col <- point_data |>
     dplyr::select(starts_with("x")) |>
     NCOL()
 
-  df_all <- point_df |>
+  df_all <- point_data |>
     dplyr::filter(type == "data") ## original dataset
 
-  df_b <- point_df |>
+  df_b <- point_data |>
     dplyr::filter(type == "model") ## High-d model
 
-  shared_df <- crosstalk::SharedData$new(point_df)
+  shared_df <- crosstalk::SharedData$new(point_data)
 
   nldr_plt <- shared_df |>
     ggplot(aes(x = emb1, y = emb2)) +
@@ -105,10 +105,10 @@ show_link_plots <- function(point_df, edge_df) {
     config(displayModeBar = FALSE)
 
 
-  langevitour_output <- langevitour::langevitour(point_df[1:num_highd_col],
-                                                 lineFrom = edge_df$from,
-                                                 lineTo = edge_df$to,
-                                                 group = point_df$type,
+  langevitour_output <- langevitour::langevitour(point_data[1:num_highd_col],
+                                                 lineFrom = edge_data$from,
+                                                 lineTo = edge_data$to,
+                                                 group = point_data$type,
                                                  pointSize = append(rep(2, NROW(df_b)),
                                                                     rep(1, NROW(df_all))),
                                                  levelColors = c("#000000", "#33a02c"),

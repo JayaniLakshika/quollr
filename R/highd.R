@@ -75,8 +75,8 @@ comb_data_model <- function(highd_data, model_highd, model_2d) {
 #' This function generates a LangeviTour visualization based on different
 #' conditions and input parameters.
 #'
-#' @param point_df A tibble that contains the high-dimensional data and model in high-dimensions.
-#' @param edge_df A tibble that contains the wireframe data (from and to).
+#' @param point_data A tibble that contains the high-dimensional data and model in high-dimensions.
+#' @param edge_data A tibble that contains the wireframe data (from and to).
 #'
 #' @return A langevitour object with the model and the high-dimensional data.
 #'
@@ -85,21 +85,21 @@ comb_data_model <- function(highd_data, model_highd, model_2d) {
 #' df_exe <- comb_data_mode(highd_data = scurve, model_highd = scurve_model_obj$model_highd,
 #' model_2d = scurve_model_obj$model_2d)
 #' edge_data <- scurve_model_obj$trimesh_data
-#' show_langevitour(point_df = df_exe, edge_df = edge_data)
+#' show_langevitour(point_data = df_exe, edge_data = edge_data)
 #'
 #' @export
-show_langevitour <- function(point_df, edge_df) {
+show_langevitour <- function(point_data, edge_data) {
 
-  df <- point_df |>
+  df <- point_data |>
     dplyr::filter(type == "data") ## original dataset
 
-  df_b <- point_df |>
+  df_b <- point_data |>
     dplyr::filter(type == "model") ## High-d model
 
-  langevitour::langevitour(point_df[1:(length(point_df)-1)],
-                           lineFrom = edge_df$from,
-                           lineTo = edge_df$to,
-                           group = point_df$type,
+  langevitour::langevitour(point_data[1:(length(point_data)-1)],
+                           lineFrom = edge_data$from,
+                           lineTo = edge_data$to,
+                           group = point_data$type,
                            pointSize = append(rep(2, NROW(df_b)), rep(1, NROW(df))),
                            levelColors = c("#000000", "#33a02c"))
 
