@@ -177,7 +177,7 @@ assign_data <- function(nldr_obj, centroids_data) {
 
   ## To select first and second embedding components
   select_emb <- scaled_nldr_df |>
-    select(c(1, 2))
+    dplyr::select(c(1, 2))
 
   ## To select coordinates for the centroids
   select_centroid <- centroids_data |>

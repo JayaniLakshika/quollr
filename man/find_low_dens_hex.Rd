@@ -4,12 +4,12 @@
 \alias{find_low_dens_hex}
 \title{Find low-density Hexagons}
 \usage{
-find_low_dens_hex(df_bin_centroids_all, bin1, df_bin_centroids_low)
+find_low_dens_hex(centroids_data, bin1 = 4, benchmark_mean_dens = 0.05)
 }
 \arguments{
-\item{df_bin_centroids_all}{The tibble that contains all hexagonal bin centroids.}
-
 \item{bin1}{Number of bins along the x-axis for hexagon binning.}
+
+\item{df_bin_centroids_all}{The tibble that contains all hexagonal bin centroids.}
 
 \item{df_bin_centroids_low}{The tibble that contains identified low-density hexagonal bin centroids.}
 }
@@ -21,11 +21,7 @@ This function identifies hexagons with low density based on the mean density
 of their neighboring hexagons.
 }
 \examples{
-num_bins_x <- 4
-df_bin_centroids <- s_curve_obj$s_curve_umap_model_obj$df_bin_centroids
-df_bin_centroids_low <- df_bin_centroids |>
-dplyr::filter(std_counts <= 0.43)
-find_low_dens_hex(df_bin_centroids_all = df_bin_centroids, bin1 = num_bins_x,
-df_bin_centroids_low = df_bin_centroids_low)
+find_low_dens_hex(centroids_data = scurve_model_obj$model_2d, bin1 = 4,
+benchmark_mean_dens = 0.05)
 
 }

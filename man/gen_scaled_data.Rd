@@ -4,10 +4,10 @@
 \alias{gen_scaled_data}
 \title{Scaling the NLDR data}
 \usage{
-gen_scaled_data(data)
+gen_scaled_data(nldr_data)
 }
 \arguments{
-\item{data}{A tibble that contains embedding components in the first and second columns.}
+\item{nldr_data}{A tibble that contains embedding components in the first and second columns.}
 }
 \value{
 A list of a tibble contains scaled first and second columns, and
@@ -17,6 +17,6 @@ numeric vectors representing the limits of the original data.
 This function scales first and second columns.
 }
 \examples{
-gen_scaled_data(data = s_curve_noise_umap)
+gen_scaled_data(nldr_data = scurve_umap)
 
 }

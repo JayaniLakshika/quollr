@@ -4,16 +4,14 @@
 \alias{find_non_empty_bins}
 \title{Find the number of bins required to achieve required number of non-empty bins.}
 \usage{
-find_non_empty_bins(data, non_empty_bins, r2, q = 0.1)
+find_non_empty_bins(nldr_obj, non_empty_bins, q = 0.1)
 }
 \arguments{
-\item{data}{A tibble that contains the embedding.}
-
 \item{non_empty_bins}{The desired number of non-empty bins.}
 
-\item{r2}{The range of the original second embedding component.}
-
 \item{q}{The buffer amount as proportion of data range.}
+
+\item{data}{A tibble that contains the embedding.}
 }
 \value{
 The number of bins along the x and y axes
@@ -24,11 +22,6 @@ This function determines the number of bins along the x and y axes
 to obtain a specific number of non-empty bins.
 }
 \examples{
-scurve_umap_scaled_obj <- s_curve_obj$s_curve_umap_scaled_obj
-lim1 <- scurve_umap_scaled_obj$lim1
-lim2 <- scurve_umap_scaled_obj$lim2
-r2 <- diff(lim2)/diff(lim1)
-find_non_empty_bins(data = s_curve_noise_umap_scaled, non_empty_bins = 5,
-r2 = r2)
+find_non_empty_bins(nldr_obj = scurve_umap_obj, non_empty_bins = 5)
 
 }

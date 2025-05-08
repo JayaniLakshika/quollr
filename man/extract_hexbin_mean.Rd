@@ -4,15 +4,15 @@
 \alias{extract_hexbin_mean}
 \title{Extract hexagonal bin mean coordinates and the corresponding standardize counts.}
 \usage{
-extract_hexbin_mean(data_hb, counts_df, centroids_df)
+extract_hexbin_mean(data_hb, counts_data, centroids_data)
 }
 \arguments{
 \item{data_hb}{A tibble with embedding components and hexagonal bin IDs.}
 
-\item{counts_df}{A tibble that contains hexagon IDs with the standardise
+\item{counts_data}{A tibble that contains hexagon IDs with the standardise
 number of points within each hexagon.}
 
-\item{centroids_df}{A tibble that contains all hexagonal bin centroid
+\item{centroids_data}{A tibble that contains all hexagonal bin centroid
 coordinates with hexagon IDs.}
 }
 \value{
@@ -23,9 +23,9 @@ Extract hexagonal bin mean coordinates and the corresponding standardize counts.
 }
 \examples{
 all_centroids_df <- s_curve_obj$s_curve_umap_hb_obj$centroids
-counts_df <- s_curve_obj$s_curve_umap_hb_obj$std_cts
+counts_data <- s_curve_obj$s_curve_umap_hb_obj$std_cts
 umap_with_hb_id <- s_curve_obj$s_curve_umap_hb_obj$data_hb_id
-extract_hexbin_mean(data_hb = umap_with_hb_id, counts_df = counts_df,
-centroids_df = all_centroids_df)
+extract_hexbin_mean(data_hb = umap_with_hb_id, counts_data = counts_data,
+centroids_data = all_centroids_df)
 
 }

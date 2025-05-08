@@ -4,10 +4,10 @@
 \alias{gen_hex_coord}
 \title{Generate hexagonal polygon coordinates}
 \usage{
-gen_hex_coord(centroids_df, a1)
+gen_hex_coord(centroids_data, a1)
 }
 \arguments{
-\item{centroids_df}{The dataset with all hexagonal bin IDs
+\item{centroids_data}{The dataset with all hexagonal bin IDs
 and centroid coordinates.}
 
 \item{a1}{The width of the hexagon.}
@@ -21,8 +21,8 @@ This function generates the coordinates of hexagons after passing
 hexagonal centroids.
 }
 \examples{
-width <- s_curve_obj$s_curve_umap_hb_obj$a1
-all_centroids_df <- s_curve_obj$s_curve_umap_hb_obj$centroids
-gen_hex_coord(centroids_df = all_centroids_df, a1 = width)
+width <- scurve_model_obj$hb_obj$a1
+all_centroids_df <- scurve_model_obj$hb_obj$centroids
+gen_hex_coord(centroids_data = all_centroids_df, a1 = width)
 
 }

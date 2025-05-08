@@ -20,9 +20,7 @@ A tibble contains Error, and MSE values.
 This function generates an evaluation data frame based on the provided data and predictions.
 }
 \examples{
-df_bin_centroids <- s_curve_obj$s_curve_umap_model_obj$df_bin_centroids
-df_bin <- s_curve_obj$s_curve_umap_model_obj$df_bin
-glance(highd_data = s_curve_noise_training, model_2d = df_bin_centroids,
-model_highd = df_bin)
+glance(highd_data = scurve, model_highd = scurve_model_obj$model_highd,
+model_2d = scurve_model_obj$model_2d)
 
 }

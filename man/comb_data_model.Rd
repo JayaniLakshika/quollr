@@ -22,9 +22,7 @@ This function combine the average values of high-dimensional data within each
 hexagonal bin and high-dimensional data.
 }
 \examples{
-df_bin_centroids <- s_curve_obj$s_curve_umap_model_obj$df_bin_centroids
-df_bin <- s_curve_obj$s_curve_umap_model_obj$df_bin
-comb_data_mode(highd_data = s_curve_noise_training, model_highd = df_bin,
-model_2d = df_bin_centroids)
+comb_data_mode(highd_data = scurve, model_highd = scurve_model_obj$model_highd,
+model_2d = scurve_model_obj$model_2d)
 
 }

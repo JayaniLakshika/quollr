@@ -4,11 +4,12 @@
 \alias{avg_highd_data}
 \title{Create a dataframe with averaged high-dimensional data}
 \usage{
-avg_highd_data(data)
+avg_highd_data(highd_data, scaled_nldr_hexid)
 }
 \arguments{
-\item{data}{A tibble that contains the high-dimensional data and embedding
-with hexagonal bin IDs.}
+\item{highd_data}{A tibble that contains the high-dimensional data.}
+
+\item{scaled_nldr_hexid}{A tibble that contains the scaled embedding with hexagonal bin IDs.}
 }
 \value{
 A tibble with the average values of the high-dimensional data within each hexagonal bin.
@@ -17,8 +18,7 @@ A tibble with the average values of the high-dimensional data within each hexago
 This function calculates the average values of high-dimensional data within each hexagonal bin.
 }
 \examples{
-umap_with_hb_id <- s_curve_obj$s_curve_umap_hb_obj$data_hb_id
-df_all <- dplyr::bind_cols(s_curve_noise_training, umap_data_with_hb_id)
-avg_highd_data(data = df_all)
+umap_with_hb_id <- scurve_model_obj$hb_obj$data_hb_id
+avg_highd_data(highd_data = scurve, scaled_nldr_hexid = umap_with_hb_id)
 
 }

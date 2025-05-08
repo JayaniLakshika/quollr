@@ -4,13 +4,13 @@
 \alias{extract_hexbin_centroids}
 \title{Extract hexagonal bin centroids coordinates and the corresponding standardise counts.}
 \usage{
-extract_hexbin_centroids(centroids_df, counts_df)
+extract_hexbin_centroids(centroids_data, counts_data)
 }
 \arguments{
-\item{centroids_df}{A tibble that contains all hexagonal bin centroid
+\item{centroids_data}{A tibble that contains all hexagonal bin centroid
 coordinates with hexagon IDs.}
 
-\item{counts_df}{A tibble that contains hexagon IDs with the standardise
+\item{counts_data}{A tibble that contains hexagon IDs with the standardise
 number of points within each hexagon.}
 }
 \value{
@@ -21,8 +21,8 @@ Extract hexagonal bin centroids coordinates and the corresponding standardise co
 }
 \examples{
 all_centroids_df <- s_curve_obj$s_curve_umap_hb_obj$centroids
-counts_df <- s_curve_obj$s_curve_umap_hb_obj$std_cts
-extract_hexbin_centroids(centroids_df = all_centroids_df,
-counts_df = counts_df)
+counts_data <- s_curve_obj$s_curve_umap_hb_obj$std_cts
+extract_hexbin_centroids(centroids_data = all_centroids_df,
+counts_data = counts_data)
 
 }

@@ -4,12 +4,12 @@
 \alias{gen_edges}
 \title{Generate edge information}
 \usage{
-gen_edges(tri_object, threshold = 0)
+gen_edges(tri_object, benchmark_highdens = 5)
 }
 \arguments{
 \item{tri_object}{The triangular object from which to generate edge information.}
 
-\item{threshold}{A numeric value to filter high-density hexagons.}
+\item{benchmark_highdens}{A numeric value to filter high-density hexagons.}
 }
 \value{
 A tibble that contains the edge information, including the from-to
@@ -21,7 +21,12 @@ including the coordinates of the vertices and the from-to relationships
 between the vertices.
 }
 \examples{
-tr1_object <- s_curve_obj$s_curve_umap_model_tr1_object
+all_centroids_df <- s_curve_obj$s_curve_umap_hb_obj$centroids
+counts_data <- s_curve_obj$s_curve_umap_hb_obj$std_cts
+umap_with_hb_id <- s_curve_obj$s_curve_umap_hb_obj$data_hb_id
+df_bin_centroids <- extract_hexbin_mean(data_hb = umap_with_hb_id, counts_data = counts_data,
+centroids_data = all_centroids_df)
+tr1_object <- tri_bin_centroids(centroids_data = df_bin_centroids)
 gen_edges(tri_object = tr1_object)
 
 }

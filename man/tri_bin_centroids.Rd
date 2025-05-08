@@ -4,14 +4,10 @@
 \alias{tri_bin_centroids}
 \title{Triangulate bin centroids}
 \usage{
-tri_bin_centroids(hex_df, x, y)
+tri_bin_centroids(centroids_data)
 }
 \arguments{
-\item{hex_df}{The tibble containing the bin centroids.}
-
-\item{x}{The name of the column that contains x coordinates of bin centroids.}
-
-\item{y}{The name of the column that contains y coordinates of bin centroids.}
+\item{centroids_data}{The tibble containing the all the bin centroids.}
 }
 \value{
 A triangular object representing the triangulated bin centroids.
@@ -21,7 +17,11 @@ This function triangulates the bin centroids using the x and y coordinates
 provided in the input data frame and returns the triangular object.
 }
 \examples{
-df_bin_centroids <- s_curve_obj$s_curve_umap_model_obj$df_bin_centroids
-tri_bin_centroids(hex_df = df_bin_centroids, x = "c_x", y = "c_y")
+all_centroids_df <- s_curve_obj$s_curve_umap_hb_obj$centroids
+counts_data <- s_curve_obj$s_curve_umap_hb_obj$std_cts
+umap_with_hb_id <- s_curve_obj$s_curve_umap_hb_obj$data_hb_id
+df_bin_centroids <- extract_hexbin_mean(data_hb = umap_with_hb_id, counts_data = counts_data,
+centroids_data = all_centroids_df)
+tri_bin_centroids(centroids_data = df_bin_centroids)
 
 }

@@ -4,10 +4,10 @@
 \alias{compute_std_counts}
 \title{Compute standardize counts in hexagons}
 \usage{
-compute_std_counts(data_hb)
+compute_std_counts(scaled_nldr_hexid)
 }
 \arguments{
-\item{data_hb}{A tibble with embedding and hexagonal bin IDs.}
+\item{scaled_nldr_hexid}{A tibble that contains the scaled embedding with hexagonal bin IDs.}
 }
 \value{
 A tibble that contains hexagon IDs and the corresponding standardize counts.
@@ -16,7 +16,7 @@ A tibble that contains hexagon IDs and the corresponding standardize counts.
 This function computes the standardize number of points within each hexagon.
 }
 \examples{
-umap_with_hb_id <- s_curve_obj$s_curve_umap_hb_obj$data_hb_id
-compute_std_counts(data_hb = umap_with_hb_id)
+umap_with_hb_id <- scurve_model_obj$hb_obj$data_hb_id
+compute_std_counts(scaled_nldr_hexid = umap_with_hb_id)
 
 }

@@ -10,7 +10,7 @@ comb_all_data_model_error(
   nldr_data,
   model_highd,
   model_2d,
-  error_df
+  error_data
 )
 }
 \arguments{
@@ -22,7 +22,7 @@ comb_all_data_model_error(
 
 \item{model_2d}{The dataset with hexagonal bin centroids.}
 
-\item{error_df}{A tibble that high-dimesional model error.}
+\item{error_data}{A tibble that high-dimesional model error.}
 }
 \value{
 A tibble with the average values of the high-dimensional data within
@@ -34,11 +34,9 @@ hexagonal bin and high-dimensional data, non-linear dimension reduction data,
 model error data.
 }
 \examples{
-df_bin_centroids <- s_curve_obj$s_curve_umap_model_obj$df_bin_centroids
-df_bin <- s_curve_obj$s_curve_umap_model_obj$df_bin
-model_error <- augment(model_2d = df_bin_centroids, model_highd = df_bin,
-highd_data = s_curve_noise_training)
-comb_all_data_model_error(highd_data = s_curve_noise_training, nldr_data = s_curve_obj$s_curve_umap_scaled_obj$scaled_nldr,
-model_highd = df_bin, model_2d = df_bin_centroids, error_df = model_error)
+model_error <- augment(highd_data = scurve, model_highd = scurve_model_obj$model_highd,
+model_2d = scurve_model_obj$model_2d)
+comb_all_data_model_error(highd_data = scurve, nldr_data = scurve_umap,
+model_highd = scurve_model_obj$model_highd, model_2d = scurve_model_obj$model_2d, error_data = model_error)
 
 }

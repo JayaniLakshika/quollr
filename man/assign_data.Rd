@@ -4,12 +4,12 @@
 \alias{assign_data}
 \title{Assign data to hexagons}
 \usage{
-assign_data(data, centroid_df)
+assign_data(nldr_obj, centroids_data)
 }
 \arguments{
-\item{data}{data A tibble or data frame.}
+\item{centroids_data}{The dataset with centroid coordinates.}
 
-\item{centroid_df}{The dataset with centroid coordinates.}
+\item{nldr_data}{A tibble that contains embedding components in the first and second columns.}
 }
 \value{
 A tibble contains embedding components and corresponding hexagon ID.
@@ -18,7 +18,7 @@ A tibble contains embedding components and corresponding hexagon ID.
 This function assigns the data to hexagons.
 }
 \examples{
-all_centroids_df <- s_curve_obj$s_curve_umap_hb_obj$centroids
-assign_data(data = s_curve_noise_umap_scaled, centroid_df = all_centroids_df)
+all_centroids_df <- scurve_model_obj$hb_obj$centroids
+assign_data(nldr_obj = scurve_umap_obj, centroids_data = all_centroids_df)
 
 }

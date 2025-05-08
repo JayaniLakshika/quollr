@@ -4,16 +4,14 @@
 \alias{hex_binning}
 \title{Hexagonal binning}
 \usage{
-hex_binning(data, bin1 = 4, r2, q = 0.1)
+hex_binning(nldr_obj, bin1 = 4, q = 0.1)
 }
 \arguments{
-\item{data}{A tibble that contains embedding components.}
-
 \item{bin1}{Number of bins along the x axis.}
 
-\item{r2}{The ratio of the ranges of the original embedding components.}
-
 \item{q}{The buffer amount as proportion of data range.}
+
+\item{nldr_data}{A tibble that contains embedding with a unique identifier.}
 }
 \value{
 A object that contains numeric vector that contains binwidths (a1),
@@ -30,12 +28,6 @@ and points within each hexagon (pts_bins).
 This function generates the hexagonal object.
 }
 \examples{
-scurve_umap_scaled_obj <- s_curve_obj$s_curve_umap_scaled_obj
-lim1 <- scurve_umap_scaled_obj$lim1
-lim2 <- scurve_umap_scaled_obj$lim2
-r2 <- diff(lim2)/diff(lim1)
-num_bins_x <- 4
-hex_binning(data = s_curve_noise_umap_scaled, bin1 = num_bins_x,
-r2 = r2, q = 0.1)
+hex_binning(nldr_obj = scurve_umap_obj, bin1 = 4, q = 0.1)
 
 }

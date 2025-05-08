@@ -25,9 +25,7 @@ This function combine the average values of high-dimensional data within each
 hexagonal bin and high-dimensional data, non-linear dimension reduction data.
 }
 \examples{
-df_bin_centroids <- s_curve_obj$s_curve_umap_model_obj$df_bin_centroids
-df_bin <- s_curve_obj$s_curve_umap_model_obj$df_bin
-comb_all_data_model(highd_data = s_curve_noise_training, nldr_data = s_curve_obj$s_curve_umap_scaled_obj$scaled_nldr,
-model_highd = df_bin, model_2d = df_bin_centroids)
+comb_all_data_model(highd_data = scurve, nldr_data = scurve_umap,
+model_highd = scurve_model_obj$model_highd, model_2d = scurve_model_obj$model_2d)
 
 }

@@ -4,10 +4,10 @@
 \alias{find_pts}
 \title{Find points in hexagonal bins}
 \usage{
-find_pts(data_hb)
+find_pts(scaled_nldr_hexid)
 }
 \arguments{
-\item{data_hb}{A data frame with data, ID and hexagonal bin IDs.}
+\item{scaled_nldr_hexid}{A tibble that contains the scaled embedding with hexagonal bin IDs.}
 }
 \value{
 A tibble with hexagonal bin IDs and the corresponding points.
@@ -16,7 +16,7 @@ A tibble with hexagonal bin IDs and the corresponding points.
 This function maps points to their corresponding hexagonal bins.
 }
 \examples{
-umap_with_hb_id <- s_curve_obj$s_curve_umap_hb_obj$data_hb_id
-find_pts(data_hb = umap_with_hb_id)
+umap_with_hb_id <- scurve_model_obj$hb_obj$data_hb_id
+find_pts(scaled_nldr_hexid = umap_with_hb_id)
 
 }

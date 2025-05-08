@@ -4,12 +4,12 @@
 \alias{show_langevitour}
 \title{Visualize the model overlaid on high-dimensional data}
 \usage{
-show_langevitour(point_df, edge_df)
+show_langevitour(point_data, edge_data)
 }
 \arguments{
-\item{point_df}{A tibble that contains the high-dimensional data and model in high-dimensions.}
+\item{point_data}{A tibble that contains the high-dimensional data and model in high-dimensions.}
 
-\item{edge_df}{A tibble that contains the wireframe data (from and to).}
+\item{edge_data}{A tibble that contains the wireframe data (from and to).}
 }
 \value{
 A langevitour object with the model and the high-dimensional data.
@@ -19,11 +19,9 @@ This function generates a LangeviTour visualization based on different
 conditions and input parameters.
 }
 \examples{
-df_bin_centroids <- s_curve_obj$s_curve_umap_model_obj$df_bin_centroids
-df_bin <- s_curve_obj$s_curve_umap_model_obj$df_bin
-df_exe <- comb_data_model(highd_data = s_curve_noise_training, model_highd = df_bin,
-model_2d = df_bin_centroids)
-edge_data <- s_curve_obj$s_curve_umap_model_tr_from_to_df
-show_langevitour(point_df = df_exe, edge_df = edge_data)
+df_exe <- comb_data_mode(highd_data = scurve, model_highd = scurve_model_obj$model_highd,
+model_2d = scurve_model_obj$model_2d)
+edge_data <- scurve_model_obj$trimesh_data
+show_langevitour(point_data = df_exe, edge_data = edge_data)
 
 }

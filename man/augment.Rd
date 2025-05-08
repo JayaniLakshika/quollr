@@ -27,9 +27,7 @@ This function augments a dataset with predictions and error metrics obtained
 from a nonlinear dimension reduction (NLDR) model.
 }
 \examples{
-df_bin_centroids <- s_curve_obj$s_curve_umap_model_obj$df_bin_centroids
-df_bin <- s_curve_obj$s_curve_umap_model_obj$df_bin
-augment(highd_data = s_curve_noise_training, model_2d = df_bin_centroids,
-model_highd = df_bin)
+augment(highd_data = scurve, model_highd = scurve_model_obj$model_highd,
+model_2d = scurve_model_obj$model_2d)
 
 }

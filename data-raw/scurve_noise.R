@@ -44,16 +44,16 @@ umap_config$min_dist <- 0.1
 
 UMAP_fit <- umap(scurve |> dplyr::select(-ID), config = umap_config)
 
-scurve_umap <- UMAP_fit$layout |>
+scurve_umap6 <- UMAP_fit$layout |>
   as.data.frame() |>
   tibble::as_tibble()
 
-names(scurve_umap)[1:(ncol(scurve_umap))] <- paste0(rep("emb",(ncol(scurve_umap))), 1:(ncol(scurve_umap)))
+names(scurve_umap6)[1:(ncol(scurve_umap6))] <- paste0(rep("emb",(ncol(scurve_umap6))), 1:(ncol(scurve_umap6)))
 
-scurve_umap <- scurve_umap |>
+scurve_umap6 <- scurve_umap6 |>
   dplyr::mutate(ID = scurve$ID)
 
-usethis::use_data(scurve_umap, overwrite = TRUE)
+usethis::use_data(scurve_umap6, overwrite = TRUE)
 
 ## predict umap embeddings
 scurve_umap_predict <- predict(UMAP_fit, scurve |> dplyr::select(-ID)) |>
