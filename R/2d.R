@@ -510,7 +510,7 @@ calc_2d_dist <- function(edge_data) {
 #' gen_edges(tri_object = tr1_object)
 #'
 #' @export
-gen_edges <- function(tri_object, binwidth_vec) { #centroids_data
+gen_edges <- function(tri_object, a1) { #centroids_data
   # Access the trimesh object and bin counts
   tri <- tri_object$trimesh_object
   counts <- tri_object$bin_counts
@@ -568,8 +568,7 @@ gen_edges <- function(tri_object, binwidth_vec) { #centroids_data
     select(-new_value)    # Remove the temporary column
 
   edge_data <- calc_2d_dist(edge_data = tr_from_to_df_coord) |>
-    dplyr::filter(distance <= 2 * binwidth_vec[1]) |>
-    dplyr::filter(distance <= 2 * binwidth_vec[2]) |>
+    dplyr::filter(distance == 2 * a1) |>
     dplyr::select(from, to, x_from, y_from, x_to, y_to, from_count, to_count)
 
   return(edge_data)
