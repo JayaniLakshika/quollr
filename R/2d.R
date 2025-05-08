@@ -455,7 +455,7 @@ tri_bin_centroids <- function(centroids_data){
 #' between the vertices.
 #'
 #' @param tri_object The triangular object from which to generate edge information.
-#' @param benchmark_highd A numeric value to filter high-density hexagons.
+#' @param benchmark_highdens A numeric value to filter high-density hexagons.
 #'
 #' @return A tibble that contains the edge information, including the from-to
 #' relationships and the corresponding x and y coordinates.
@@ -473,7 +473,7 @@ tri_bin_centroids <- function(centroids_data){
 #' gen_edges(tri_object = tr1_object)
 #'
 #' @export
-gen_edges <- function(tri_object, benchmark_highd = 5) { #centroids_data
+gen_edges <- function(tri_object, benchmark_highdens = 5) { #centroids_data
   # Access the trimesh object and bin counts
   tri <- tri_object$trimesh_object
   counts <- tri_object$bin_counts
@@ -502,7 +502,7 @@ gen_edges <- function(tri_object, benchmark_highd = 5) { #centroids_data
     rename(from_count = n_obs) |>
     left_join(tr_df |> select(ID, n_obs), by = c("to" = "ID")) |>
     rename(to_count = n_obs) |>
-    filter(from_count > benchmark_highd & to_count > benchmark_highd) |>
+    filter(from_count > benchmark_highdens & to_count > benchmark_highdens) |>
     select(from, to) |>
     mutate(x = pmin(from, to), y = pmax(from, to)) |>
     distinct(x, y) |>

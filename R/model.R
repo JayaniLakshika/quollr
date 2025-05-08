@@ -8,7 +8,7 @@
 #' @param nldr_data A tibble that contains the embedding with a unique identifier.
 #' @param bin1 (default: 4) A numeric value representing the number of bins along the x axis.
 #' @param q (default: 0.1) A numeric value representing the buffer amount as proportion of data range.
-#' @param benchmark_highd (default: 5) A numeric value using to filter high-density hexagons.
+#' @param benchmark_highdens (default: 5) A numeric value using to filter high-density hexagons.
 #'
 #' @return A list containing the data frame with high-dimensional coordinates
 #' for 2D bin centroids (\code{df_bin}) and the data frame containing
@@ -19,10 +19,10 @@
 #'
 #' @examples
 #' fit_highd_model(highd_data = scurve, nldr_data = scurve_umap, bin1 = 4,
-#' q = 0.1, benchmark_highd = 5)
+#' q = 0.1, benchmark_highdens = 5)
 #'
 #' @export
-fit_highd_model <- function(highd_data, nldr_data, bin1 = 4, q = 0.1, benchmark_highd = 5) {
+fit_highd_model <- function(highd_data, nldr_data, bin1 = 4, q = 0.1, benchmark_highdens = 5) {
 
   ## To pre-process the data
   nldr_obj <- gen_scaled_data(nldr_data = nldr_data)
@@ -39,7 +39,7 @@ fit_highd_model <- function(highd_data, nldr_data, bin1 = 4, q = 0.1, benchmark_
 
   ## Wireframe
   tr_object <- tri_bin_centroids(centroids_data = df_bin_centroids)
-  trimesh_data <- gen_edges(tri_object = tr_object, benchmark_highd = benchmark_highd)
+  trimesh_data <- gen_edges(tri_object = tr_object, benchmark_highdens = benchmark_highdens)
 
   ## averaged high-D data
   nldr_df_with_hex_id <- hb_obj$data_hb_id
@@ -47,7 +47,7 @@ fit_highd_model <- function(highd_data, nldr_data, bin1 = 4, q = 0.1, benchmark_
 
   ## To extract high-densed bins
   model_2d <- df_bin_centroids |>
-    dplyr::filter(bin_counts > benchmark_highd)
+    dplyr::filter(bin_counts > benchmark_highdens)
 
   model_highd <- model_highd |>
     dplyr::filter(hexID %in% model_2d$hexID)
