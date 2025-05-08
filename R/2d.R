@@ -457,41 +457,33 @@ tri_bin_centroids <- function(centroids_data){
 #'
 #' @param tr_coord_df A tibble that contains the x and y coordinates of start
 #' and end points.
-#' @param start_x Column name for the x-coordinate of the starting point.
-#' @param start_y Column name for the y-coordinate of the starting point.
-#' @param end_x Column name for the x-coordinate of the ending point.
-#' @param end_y Column name for the y-coordinate of the ending point.
-#' @param select_vars A character vector specifying the columns to be
 #' selected in the resulting data frame.
 #'
 #' @return A tibble with columns for the starting point, ending point,
 #' and calculated distances.
-#' @importFrom dplyr select
+#' @importFrom dplyr select mutate
 #' @importFrom tidyselect all_of
 #'
 #' @examples
 #' tr_from_to_df <- s_curve_obj$s_curve_umap_model_tr_from_to_df
-#' cal_2d_dist(tr_coord_df = tr_from_to_df, start_x = "x_from", start_y = "y_from",
-#' end_x = "x_to", end_y = "y_to", select_vars = c("from", "to", "distance"))
+#' cal_2d_dist(edge_data = tr_from_to_df))
 #'
 #' @export
-calc_2d_dist <- function(tr_coord_df, start_x, start_y, end_x, end_y,
-                        select_vars) {
+calc_2d_dist <- function(edge_data) {
 
   # Calculate the 2D distances
-  tr_coord_df$distance <- lapply(seq(nrow(tr_coord_df)), function(x) {
-    start <- unlist(tr_coord_df[x, c(start_x, start_y)], use.names = FALSE)
-    end <- unlist(tr_coord_df[x, c(end_x, end_y)], use.names = FALSE)
+  dist <- lapply(seq(nrow(edge_data)), function(x) {
+    start <- unlist(edge_data[x, c("x_from", "y_from")], use.names = FALSE)
+    end <- unlist(edge_data[x, c("x_to", "y_to")], use.names = FALSE)
     sqrt(sum((start - end)^2))
   })
 
   # Create a data frame with the from-to relationships and distances
-  tr_coord_df <- tr_coord_df |>
-    select(from, to, distance)
+  edge_data <- edge_data |>
+    mutate(distance = unlist(dist, use.names = FALSE)) |>
+    select(from, to, x_from, y_from, x_to, y_to, from_count, to_count, distance)
 
-  # Convert the distances to a vector and return the data frame
-  tr_coord_df$distance <- unlist(tr_coord_df$distance, use.names = FALSE)
-  return(tr_coord_df)
+  return(edge_data)
 }
 
 #' Generate edge information
@@ -518,7 +510,7 @@ calc_2d_dist <- function(tr_coord_df, start_x, start_y, end_x, end_y,
 #' gen_edges(tri_object = tr1_object)
 #'
 #' @export
-gen_edges <- function(tri_object) { #centroids_data
+gen_edges <- function(tri_object, binwidth_vec) { #centroids_data
   # Access the trimesh object and bin counts
   tri <- tri_object$trimesh_object
   counts <- tri_object$bin_counts
@@ -575,7 +567,12 @@ gen_edges <- function(tri_object) { #centroids_data
     mutate(to = new_value) |>
     select(-new_value)    # Remove the temporary column
 
-  return(tr_from_to_df_coord)
+  edge_data <- calc_2d_dist(edge_data = tr_from_to_df_coord) |>
+    dplyr::filter(distance < 2 * binwidth_vec[1]) |>
+    dplyr::filter(distance < 2 * binwidth_vec[2]) |>
+    dplyr::select(from, to, x_from, y_from, x_to, y_to, from_count, to_count)
+
+  return(edge_data)
 }
 
 #' Visualize triangular mesh after removing the long edges
