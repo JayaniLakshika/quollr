@@ -568,7 +568,7 @@ gen_edges <- function(tri_object, a1) { #centroids_data
     select(-new_value)    # Remove the temporary column
 
   edge_data <- calc_2d_dist(edge_data = tr_from_to_df_coord) |>
-    dplyr::filter(distance == 2 * a1) |>
+    dplyr::filter(distance == a1) |>
     dplyr::select(from, to, x_from, y_from, x_to, y_to, from_count, to_count)
 
   return(edge_data)
