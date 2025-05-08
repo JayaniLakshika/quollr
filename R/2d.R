@@ -522,7 +522,7 @@ gen_edges <- function(tri_object) { #centroids_data
     rename(x_from = x, y_from = y) |>
     left_join(tr_df, by = c("to" = "ID")) |>
     rename(x_to = x, y_to = y) |>
-    select(from, to, x_from, y_from, x_to, y_to) # Keep only necessary columns
+    select(from, to, x_from, y_from, x_to, y_to, from_count, to_count) # Keep only necessary columns
 
   ## Updated the from and to
   # Find the unique values in `from` and `to`, and sort them.
