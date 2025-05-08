@@ -451,6 +451,48 @@ tri_bin_centroids <- function(centroids_data){
   return(result)
 }
 
+#' Calculate 2D Euclidean distances between vertices
+#'
+#' This function calculates the 2D distances between pairs of points in a data frame.
+#'
+#' @param tr_coord_df A tibble that contains the x and y coordinates of start
+#' and end points.
+#' @param start_x Column name for the x-coordinate of the starting point.
+#' @param start_y Column name for the y-coordinate of the starting point.
+#' @param end_x Column name for the x-coordinate of the ending point.
+#' @param end_y Column name for the y-coordinate of the ending point.
+#' @param select_vars A character vector specifying the columns to be
+#' selected in the resulting data frame.
+#'
+#' @return A tibble with columns for the starting point, ending point,
+#' and calculated distances.
+#' @importFrom dplyr select
+#' @importFrom tidyselect all_of
+#'
+#' @examples
+#' tr_from_to_df <- s_curve_obj$s_curve_umap_model_tr_from_to_df
+#' cal_2d_dist(tr_coord_df = tr_from_to_df, start_x = "x_from", start_y = "y_from",
+#' end_x = "x_to", end_y = "y_to", select_vars = c("from", "to", "distance"))
+#'
+#' @export
+calc_2d_dist <- function(tr_coord_df, start_x, start_y, end_x, end_y,
+                        select_vars) {
+
+  # Calculate the 2D distances
+  tr_coord_df$distance <- lapply(seq(nrow(tr_coord_df)), function(x) {
+    start <- unlist(tr_coord_df[x, c(start_x, start_y)], use.names = FALSE)
+    end <- unlist(tr_coord_df[x, c(end_x, end_y)], use.names = FALSE)
+    sqrt(sum((start - end)^2))
+  })
+
+  # Create a data frame with the from-to relationships and distances
+  tr_coord_df <- tr_coord_df |>
+    select(from, to, distance)
+
+  # Convert the distances to a vector and return the data frame
+  tr_coord_df$distance <- unlist(tr_coord_df$distance, use.names = FALSE)
+  return(tr_coord_df)
+}
 
 #' Generate edge information
 #'
