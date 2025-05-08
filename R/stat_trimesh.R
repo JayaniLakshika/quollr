@@ -84,8 +84,11 @@ StatTrimesh <- ggplot2::ggproto(
       rename(x_to = x, y_to = y) |>
       select(from, to, x_from, y_from, x_to, y_to) # Keep only necessary columns
 
-    trimesh_data <- calc_2d_dist(edge_data = tr_from_to_df_coord) |>
-      dplyr::filter(distance <= sqrt(a1^2 + a2^2)) |>
+    trimesh_data <- calc_2d_dist(edge_data = tr_from_to_df_coord, select_vars = c("from", "to", "x_from", "y_from", "x_to", "y_to", "distance"))
+    a1 <- min(trimesh_data$distance)
+
+    trimesh_data <- trimesh_data |>
+      dplyr::filter(distance <= sqrt(a1^2 + (sqrt(3) * a1/2)^2)) |> # a2 = sqrt(3) * a1/2
       dplyr::select(-distance)
 
     trimesh <- tibble::tibble(x = trimesh_data$x_from,

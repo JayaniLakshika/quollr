@@ -12,7 +12,7 @@
 #' @return A `ggplot2` layer object.
 #'
 #' @examples
-#' df_bin_centroids <- s_curve_obj$s_curve_umap_model_distance_df$df_bin_centroids
+#' df_bin_centroids <- scurve_model_obj$model_2d |> dplyr::filter(bin_counts > 10)
 #' ggplot2::ggplot() +
 #' geom_trimesh(data = df_bin_centroids, mapping = ggplot2::aes(x = c_x, y = c_y))
 #'

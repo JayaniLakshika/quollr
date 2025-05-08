@@ -4,7 +4,11 @@
 \alias{calc_2d_dist}
 \title{Calculate 2D Euclidean distances between vertices}
 \usage{
-calc_2d_dist(edge_data)
+calc_2d_dist(
+  edge_data,
+  select_vars = c("from", "to", "x_from", "y_from", "x_to", "y_to", "from_count",
+    "to_count", "distance")
+)
 }
 \arguments{
 \item{tr_coord_df}{A tibble that contains the x and y coordinates of start
