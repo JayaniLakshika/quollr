@@ -4,7 +4,7 @@
 \alias{gen_edges}
 \title{Generate edge information}
 \usage{
-gen_edges(tri_object, a1)
+gen_edges(tri_object, a1, a2)
 }
 \arguments{
 \item{tri_object}{The triangular object from which to generate edge information.}
