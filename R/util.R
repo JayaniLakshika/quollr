@@ -18,12 +18,12 @@ calc_bins_y <- function(nldr_obj, bin1 = 4, q = 0.1) {
 
   ## To check whether bin2 greater than 2
   if (bin1 < 2) {
-    stop("Number of bins along the x-axis at least should be 2.")
+    cli::cli_abort("Number of bins along the x-axis at least should be 2.")
   }
 
   ## To check whether q is between a specific range
   if (!dplyr::between(q, 0.05, 0.2)) {
-    stop("The buffer should be within 0.05 and 0.2.")
+    cli::cli_abort("The buffer should be within 0.05 and 0.2.")
   }
 
   ## To compute the range

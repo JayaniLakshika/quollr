@@ -15,9 +15,14 @@
 #' @export
 gen_centroids <- function(nldr_obj, bin1 = 4, q = 0.1){
 
+  ## To check whether bin2 greater than 2
+  if (bin1 < 2) {
+    cli::cli_abort("Number of bins along the x-axis at least should be 2.")
+  }
+
   ## To check whether q is between a specific range
   if (!dplyr::between(q, 0.05, 0.2)) {
-    stop("The buffer should be within 0.05 and 0.2.")
+    cli::cli_abort("The buffer should be within 0.05 and 0.2.")
   }
 
   ## To compute the range
@@ -91,7 +96,7 @@ gen_hex_coord <- function(centroids_data, a1){
 
   # If the hexagonal width is missing
   if (missing(a1)) {
-    stop("Need to initialize the width of the hexagon.")
+    cli::cli_abort("Need to initialize the width of the hexagon.")
   }
 
   ## Obtain centroid info
@@ -424,7 +429,6 @@ extract_hexbin_mean <- function(data_hb, counts_data, centroids_data) {
 #'
 #' @return A triangular object representing the triangulated bin centroids.
 #' @importFrom interp tri.mesh
-#' @importFrom rlang sym as_string
 #'
 #' @examples
 #' all_centroids_df <- s_curve_obj$s_curve_umap_hb_obj$centroids
@@ -585,10 +589,11 @@ vis_mesh <- function(trimesh_data) {
 #' find_non_empty_bins(nldr_obj = scurve_umap_obj, non_empty_bins = 5)
 #'
 #' @export
-find_non_empty_bins <- function(nldr_obj, non_empty_bins, q = 0.1) {
+find_non_empty_bins <- function(nldr_obj, non_empty_bins = 2, q = 0.1) {
 
-  if (missing(non_empty_bins)) {
-    stop("Required number of non-empty bins is not defined.")
+  ## To check whether q is between a specific range
+  if (!dplyr::between(q, 0.05, 0.2)) {
+    cli::cli_abort("The buffer should be within 0.05 and 0.2.")
   }
 
   scaled_nldr_data <- nldr_obj$scaled_nldr
