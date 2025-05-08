@@ -504,24 +504,17 @@ gen_edges <- function(tri_object) { #centroids_data
     left_join(tr_df |> select(ID, n_obs), by = c("from" = "ID")) |>
     rename(from_count = n_obs) |>
     left_join(tr_df |> select(ID, n_obs), by = c("to" = "ID")) |>
-    rename(to_count = n_obs)
-
-  unique_edges <- edges_all |>
+    rename(to_count = n_obs) |>
     select(from, to) |>
     mutate(x = pmin(from, to), y = pmax(from, to)) |>
     distinct(x, y) |>
     rename(from = x, to = y)
 
-  ## To bind the bin counts of from to hexagons
-  edges_counts <- unique_edges |>
-    left_join(edges_all, by = c("from", "to")) |>
-    filter(!is.na(from_count), !is.na(to_count))
-
   # Map from and to coordinates for the filtered edges
-  tr_from_to_df_coord <- left_join(edges_counts, tr_df, by = c("from" = "ID")) |>
-    rename(x_from = x, y_from = y) |>
+  tr_from_to_df_coord <- left_join(edges_all, tr_df, by = c("from" = "ID")) |>
+    rename(x_from = x, y_from = y, from_count = n_obs) |>
     left_join(tr_df, by = c("to" = "ID")) |>
-    rename(x_to = x, y_to = y) |>
+    rename(x_to = x, y_to = y, to_count = n_obs) |>
     select(from, to, x_from, y_from, x_to, y_to, from_count, to_count) # Keep only necessary columns
 
   ## Updated the from and to
