@@ -565,7 +565,6 @@ vis_mesh <- function(trimesh_data) {
                           data = trimesh_data,
                  colour = "#33a02c") +
     geom_point(size = 1, colour = "#33a02c") +
-    coord_equal() +
     labs(color=NULL)
   return(tri_mesh_plot)
 
