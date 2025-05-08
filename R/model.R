@@ -39,7 +39,9 @@ fit_highd_model <- function(highd_data, nldr_data, bin1 = 4, q = 0.1, benchmark_
 
   ## Wireframe
   tr_object <- tri_bin_centroids(centroids_data = df_bin_centroids)
-  trimesh_data <- gen_edges(tri_object = tr_object, benchmark_highdens = benchmark_highdens)
+  trimesh_data <- gen_edges(tri_object = tr_object) |>
+    dplyr::filter(from_count > benchmark_highdens,
+                  to_count > benchmark_highdens)
 
   ## averaged high-D data
   nldr_df_with_hex_id <- hb_obj$data_hb_id

@@ -459,7 +459,6 @@ tri_bin_centroids <- function(centroids_data){
 #' between the vertices.
 #'
 #' @param tri_object The triangular object from which to generate edge information.
-#' @param benchmark_highdens A numeric value to filter high-density hexagons.
 #'
 #' @return A tibble that contains the edge information, including the from-to
 #' relationships and the corresponding x and y coordinates.
@@ -477,7 +476,7 @@ tri_bin_centroids <- function(centroids_data){
 #' gen_edges(tri_object = tr1_object)
 #'
 #' @export
-gen_edges <- function(tri_object, benchmark_highdens = 5) { #centroids_data
+gen_edges <- function(tri_object) { #centroids_data
   # Access the trimesh object and bin counts
   tri <- tri_object$trimesh_object
   counts <- tri_object$bin_counts
@@ -501,19 +500,25 @@ gen_edges <- function(tri_object, benchmark_highdens = 5) { #centroids_data
   )
 
   # Filter edges based on the bin counts of the connected nodes
-  filtered_edges <- tr_arcs_df |>
+  edges_all <- tr_arcs_df |>
     left_join(tr_df |> select(ID, n_obs), by = c("from" = "ID")) |>
     rename(from_count = n_obs) |>
     left_join(tr_df |> select(ID, n_obs), by = c("to" = "ID")) |>
-    rename(to_count = n_obs) |>
-    filter(from_count > benchmark_highdens & to_count > benchmark_highdens) |>
+    rename(to_count = n_obs)
+
+  unique_edges <- edges_all |>
     select(from, to) |>
     mutate(x = pmin(from, to), y = pmax(from, to)) |>
     distinct(x, y) |>
     rename(from = x, to = y)
 
+  ## To bind the bin counts of from to hexagons
+  edges_counts <- unique_edges |>
+    left_join(edges_all, by = c("from", "to")) |>
+    filter(!is.na(from_count), !is.na(to_count))
+
   # Map from and to coordinates for the filtered edges
-  tr_from_to_df_coord <- left_join(filtered_edges, tr_df, by = c("from" = "ID")) |>
+  tr_from_to_df_coord <- left_join(edges_counts, tr_df, by = c("from" = "ID")) |>
     rename(x_from = x, y_from = y) |>
     left_join(tr_df, by = c("to" = "ID")) |>
     rename(x_to = x, y_to = y) |>

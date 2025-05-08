@@ -4,12 +4,10 @@
 \alias{gen_edges}
 \title{Generate edge information}
 \usage{
-gen_edges(tri_object, benchmark_highdens = 5)
+gen_edges(tri_object)
 }
 \arguments{
 \item{tri_object}{The triangular object from which to generate edge information.}
-
-\item{benchmark_highdens}{A numeric value to filter high-density hexagons.}
 }
 \value{
 A tibble that contains the edge information, including the from-to
