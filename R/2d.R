@@ -455,7 +455,7 @@ tri_bin_centroids <- function(centroids_data){
 #'
 #' This function calculates the 2D distances between pairs of points in a data frame.
 #'
-#' @param tr_coord_df A tibble that contains the x and y coordinates of start
+#' @param trimesh_data A tibble that contains the x and y coordinates of start
 #' and end points.
 #' selected in the resulting data frame.
 #'
@@ -466,24 +466,24 @@ tri_bin_centroids <- function(centroids_data){
 #'
 #' @examples
 #' tr_from_to_df <- s_curve_obj$s_curve_umap_model_tr_from_to_df
-#' cal_2d_dist(edge_data = tr_from_to_df))
+#' cal_2d_dist(trimesh_data = tr_from_to_df))
 #'
 #' @export
-calc_2d_dist <- function(edge_data, select_vars = c("from", "to", "x_from", "y_from", "x_to", "y_to", "from_count", "to_count", "distance")) {
+calc_2d_dist <- function(trimesh_data, select_vars = c("from", "to", "x_from", "y_from", "x_to", "y_to", "from_count", "to_count", "distance")) {
 
   # Calculate the 2D distances
-  dist <- lapply(seq(nrow(edge_data)), function(x) {
-    start <- unlist(edge_data[x, c("x_from", "y_from")], use.names = FALSE)
-    end <- unlist(edge_data[x, c("x_to", "y_to")], use.names = FALSE)
+  dist <- lapply(seq(nrow(trimesh_data)), function(x) {
+    start <- unlist(trimesh_data[x, c("x_from", "y_from")], use.names = FALSE)
+    end <- unlist(trimesh_data[x, c("x_to", "y_to")], use.names = FALSE)
     sqrt(sum((start - end)^2))
   })
 
   # Create a data frame with the from-to relationships and distances
-  edge_data <- edge_data |>
+  trimesh_data <- trimesh_data |>
     mutate(distance = unlist(dist, use.names = FALSE)) |>
     select(all_of(select_vars))
 
-  return(edge_data)
+  return(trimesh_data)
 }
 
 #' Generate edge information
@@ -551,15 +551,39 @@ gen_edges <- function(tri_object, a1) { #centroids_data
     rename(x_to = x, y_to = y, to_count = n_obs) |>
     select(from, to, x_from, y_from, x_to, y_to, from_count, to_count) # Keep only necessary columns
 
+  edge_data <- calc_2d_dist(trimesh_data = tr_from_to_df_coord) |>
+    dplyr::filter(distance <= sqrt(a1^2 + (sqrt(3) * a1/2)^2)) |> # a2 = sqrt(3) * a1/2
+    dplyr::select(from, to, x_from, y_from, x_to, y_to, from_count, to_count)
+
+  return(edge_data)
+}
+
+#' Update from and to values in trimesh data
+#'
+#' This function update the from and to indexes.
+#'
+#' @param trimesh_data A tibble that contains wireframe data.
+#'
+#' @return A tibble that contains the updated edge information.
+#'
+#' @importFrom dplyr left_join mutate select
+#'
+#' @examples
+#' tr_from_to_df <- scurve_model_obj$trimesh_data
+#' update_trimesh_index(trimesh_data = tr_from_to_df)
+#'
+#' @export
+update_trimesh_index <- function(trimesh_data) {
+
   ## Updated the from and to
   # Find the unique values in `from` and `to`, and sort them.
-  unique_values <- sort(unique(c(tr_from_to_df_coord$from, tr_from_to_df_coord$to)))
+  unique_values <- sort(unique(c(trimesh_data$from, trimesh_data$to)))
 
   # Create a mapping between the old values and the new, renumbered values (starting from 1).
   value_map <- tibble::tibble(old_value = unique_values, new_value = 1:length(unique_values))
 
   # Join this mapping to your data frame to replace the old values with the new ones.
-  tr_from_to_df_coord <- tr_from_to_df_coord |>
+  trimesh_data <- trimesh_data |>
     left_join(value_map, by = c("from" = "old_value")) |>
     mutate(from = new_value) |>
     select(-new_value) |> # Remove the temporary column
@@ -567,11 +591,8 @@ gen_edges <- function(tri_object, a1) { #centroids_data
     mutate(to = new_value) |>
     select(-new_value)    # Remove the temporary column
 
-  edge_data <- calc_2d_dist(edge_data = tr_from_to_df_coord) |>
-    dplyr::filter(distance <= sqrt(a1^2 + (sqrt(3) * a1/2)^2)) |> # a2 = sqrt(3) * a1/2
-    dplyr::select(from, to, x_from, y_from, x_to, y_to, from_count, to_count)
+  trimesh_data
 
-  return(edge_data)
 }
 
 #' Visualize triangular mesh after removing the long edges
