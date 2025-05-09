@@ -61,6 +61,7 @@ comb_data_model <- function(highd_data, model_highd, model_2d) {
 
   ## Reorder the rows of df_b according to the hexID order in model_2d
   df_b <- df_b[match(model_2d$hexID, df_b$hexID),] |>
+    tidyr::drop_na() |>
     select(-hexID)
 
   df_exe <- bind_rows(df_b, df)
@@ -82,7 +83,7 @@ comb_data_model <- function(highd_data, model_highd, model_2d) {
 #'
 #'
 #' @examples
-#' df_exe <- comb_data_mode(highd_data = scurve, model_highd = scurve_model_obj$model_highd,
+#' df_exe <- comb_data_model(highd_data = scurve, model_highd = scurve_model_obj$model_highd,
 #' model_2d = scurve_model_obj$model_2d)
 #' edge_data <- scurve_model_obj$trimesh_data
 #' show_langevitour(point_data = df_exe, edge_data = edge_data)

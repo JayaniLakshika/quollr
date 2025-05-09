@@ -19,7 +19,7 @@ This function generates a LangeviTour visualization based on different
 conditions and input parameters.
 }
 \examples{
-df_exe <- comb_data_mode(highd_data = scurve, model_highd = scurve_model_obj$model_highd,
+df_exe <- comb_data_model(highd_data = scurve, model_highd = scurve_model_obj$model_highd,
 model_2d = scurve_model_obj$model_2d)
 edge_data <- scurve_model_obj$trimesh_data
 show_langevitour(point_data = df_exe, edge_data = edge_data)

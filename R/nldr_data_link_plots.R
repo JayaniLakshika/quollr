@@ -35,6 +35,7 @@ comb_all_data_model <- function(highd_data, nldr_data, model_highd, model_2d) {
 
   ## Reorder the rows of df_b according to the hexID order in model_2d
   df_b <- df_b[match(model_2d$hexID, df_b$hexID),] |>
+    tidyr::drop_na() |>
     select(-hexID)
 
   df_exe <- bind_rows(df_b, df)
