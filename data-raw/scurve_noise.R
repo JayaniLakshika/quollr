@@ -176,20 +176,26 @@ scurve_model_obj <- fit_highd_model(
 usethis::use_data(scurve_model_obj, overwrite = TRUE)
 
 ########################Generate errors for different bin widths################
-scurve_umap_mse <- gen_diffbin1_errors(highd_data = scurve, nldr_data = scurve_umap)
+scurve_umap_mse <- gen_diffbin1_errors(highd_data = scurve, nldr_data = scurve_umap) |>
+  dplyr::mutate(method = "UMAP")
 usethis::use_data(scurve_umap_mse, overwrite = TRUE)
 
-scurve_umap_mse2 <- gen_diffbin1_errors(highd_data = scurve, nldr_data = scurve_umap2)
+scurve_umap_mse2 <- gen_diffbin1_errors(highd_data = scurve, nldr_data = scurve_umap2) |>
+  dplyr::mutate(method = "UMAP2")
 usethis::use_data(scurve_umap_mse2, overwrite = TRUE)
 
-scurve_umap_mse3 <- gen_diffbin1_errors(highd_data = scurve, nldr_data = scurve_umap3)
+scurve_umap_mse3 <- gen_diffbin1_errors(highd_data = scurve, nldr_data = scurve_umap3) |>
+  dplyr::mutate(method = "UMAP3")
 usethis::use_data(scurve_umap_mse3, overwrite = TRUE)
 
-scurve_umap_mse4 <- gen_diffbin1_errors(highd_data = scurve, nldr_data = scurve_umap4)
+scurve_umap_mse4 <- gen_diffbin1_errors(highd_data = scurve, nldr_data = scurve_umap4) |>
+  dplyr::mutate(method = "UMAP4")
 usethis::use_data(scurve_umap_mse4, overwrite = TRUE)
 
-scurve_umap_mse5 <- gen_diffbin1_errors(highd_data = scurve, nldr_data = scurve_umap5)
+scurve_umap_mse5 <- gen_diffbin1_errors(highd_data = scurve, nldr_data = scurve_umap5) |>
+  dplyr::mutate(method = "UMAP5")
 usethis::use_data(scurve_umap_mse5, overwrite = TRUE)
 
-scurve_umap_mse6 <- gen_diffbin1_errors(highd_data = scurve, nldr_data = scurve_umap6)
+scurve_umap_mse6 <- gen_diffbin1_errors(highd_data = scurve, nldr_data = scurve_umap6) |>
+  dplyr::mutate(method = "UMAP6")
 usethis::use_data(scurve_umap_mse6, overwrite = TRUE)
