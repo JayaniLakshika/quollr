@@ -174,3 +174,22 @@ scurve_model_obj <- fit_highd_model(
   benchmark_highd = 10)
 
 usethis::use_data(scurve_model_obj, overwrite = TRUE)
+
+########################Generate errors for different bin widths################
+scurve_umap_mse <- gen_diffbin1_errors(highd_data = scurve, nldr_data = scurve_umap)
+usethis::use_data(scurve_umap_mse, overwrite = TRUE)
+
+scurve_umap_mse2 <- gen_diffbin1_errors(highd_data = scurve, nldr_data = scurve_umap2)
+usethis::use_data(scurve_umap_mse2, overwrite = TRUE)
+
+scurve_umap_mse3 <- gen_diffbin1_errors(highd_data = scurve, nldr_data = scurve_umap3)
+usethis::use_data(scurve_umap_mse3, overwrite = TRUE)
+
+scurve_umap_mse4 <- gen_diffbin1_errors(highd_data = scurve, nldr_data = scurve_umap4)
+usethis::use_data(scurve_umap_mse4, overwrite = TRUE)
+
+scurve_umap_mse5 <- gen_diffbin1_errors(highd_data = scurve, nldr_data = scurve_umap5)
+usethis::use_data(scurve_umap_mse5, overwrite = TRUE)
+
+scurve_umap_mse6 <- gen_diffbin1_errors(highd_data = scurve, nldr_data = scurve_umap6)
+usethis::use_data(scurve_umap_mse6, overwrite = TRUE)

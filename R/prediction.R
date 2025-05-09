@@ -174,3 +174,72 @@ augment <- function(highd_data, model_2d, model_highd) {
 
 }
 
+#' Generate erros and MSE for different bin widths
+#'
+#' This function augments a dataset with predictions and error metrics obtained
+#' from a nonlinear dimension reduction (NLDR) model.
+#'
+#' @param df_bin_centroids Centroid coordinates of hexagonal bins in 2D space.
+#' @param df_bin Centroid coordinates of hexagonal bins in high dimensions.
+#' @param training_data Training data used to fit the model.
+#' If NULL, the training data is used (default is NULL).
+#' @param type_NLDR The type of non-linear dimensionality reduction (NLDR) used.
+#' @param col_start The text that begin the column name of the high-dimensional data.
+#'
+#' @return A tibble containing the augmented data with predictions,
+#' error metrics, and absolute error metrics.
+#'
+#' @examples
+#' gen_diffbin1_errors(highd_data = scurve, nldr_data = scurve_umap)
+#'
+#' @export
+gen_diffbin1_errors <- function(highd_data, nldr_data) {
+
+  nldr_obj <- gen_scaled_data(nldr_data = nldr_data)
+  ## To compute the range
+  lim1 <- nldr_obj$lim1
+  lim2 <- nldr_obj$lim2
+  r2 <- diff(lim2)/diff(lim1)
+
+
+  ## To initialize number of bins along the x-axis
+  bin1_vec <- 5:sqrt(NROW(highd_data)/r2)
+
+  error_df_umap <- data.frame(matrix(nrow = 0, ncol = 0))
+
+  for (xbins in bin1_vec) {
+
+    scurve_model <- fit_highd_model(
+      highd_data = highd_data,
+      nldr_data = nldr_data,
+      bin1 = xbins,
+      q = 0.1,
+      benchmark_highdens = 5
+    )
+
+    df_bin_centroids_scurve <- scurve_model$model_2d
+    df_bin_scurve <- scurve_model$model_highd
+    bin2 <- scurve_model$hb_obj$bins[2]
+    a1 <- scurve_model$hb_obj$a1
+    a2 <- scurve_model$hb_obj$a2
+
+    ## Compute error
+    error_df <- glance(
+      model_2d = df_bin_centroids_scurve,
+      model_highd = df_bin_scurve,
+      highd_data = highd_data) |>
+      dplyr::mutate(bin1 = xbins,
+                    bin2 = bin2,
+                    b = bin1 * bin2,
+                    b_non_empty = NROW(df_bin_centroids_scurve),
+                    a1 = round(a1, 2),
+                    a2 = round(a2, 2))
+
+    error_df_umap <- dplyr::bind_rows(error_df_umap, error_df)
+
+  }
+
+  error_df_umap
+
+}
+
