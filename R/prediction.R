@@ -214,7 +214,7 @@ gen_diffbin1_errors <- function(highd_data, nldr_data) {
       nldr_data = nldr_data,
       bin1 = xbins,
       q = 0.1,
-      benchmark_highdens = 5
+      benchmark_highdens = 1
     )
 
     df_bin_centroids_scurve <- scurve_model$model_2d
