@@ -5,10 +5,7 @@
 \title{Plot Projected Data with Axes and Circles}
 \usage{
 plot_proj(
-  projected_df,
-  model_df,
-  axes,
-  circle,
+  proj_obj,
   point_param = c(1.5, 0.5, "#000000"),
   line_param = c(0.5, 0.5, "#000000"),
   plot_limits,
@@ -19,14 +16,6 @@ plot_proj(
 )
 }
 \arguments{
-\item{projected_df}{A data frame containing the projected data.}
-
-\item{model_df}{A data frame containing the model reference data.}
-
-\item{axes}{A data frame or list specifying the axes details.}
-
-\item{circle}{A list defining circle parameters.}
-
 \item{point_param}{A vector specifying point size, alpha, and color (default: c(1.5, 0.5, "#000000")).}
 
 \item{line_param}{A vector specifying line width, alpha, and color (default: c(0.5, 0.5, "#000000")).}
@@ -40,6 +29,14 @@ plot_proj(
 \item{axis_text_size}{Size of axis text (default: 3).}
 
 \item{is_category}{Logical indicating if the data is categorical (default: FALSE).}
+
+\item{projected_df}{A data frame containing the projected data.}
+
+\item{model_df}{A data frame containing the model reference data.}
+
+\item{axes}{A data frame or list specifying the axes details.}
+
+\item{circle}{A list defining circle parameters.}
 }
 \value{
 A ggplot object.
@@ -61,11 +58,5 @@ trimesh_data = edge_data,
 axis_param = list(limits = 1, axis_scaled = 1, axis_pos_x = -0.72,
 axis_pos_y = -0.72,threshold = 0))
 
-projected_df_n <- proj_obj1$projected_df
-model_df <- proj_obj1$model_df
-axes <- proj_obj1$axes
-circle <- proj_obj1$circle
-
-plot_proj(projected_df = projected_df_n, model_df = model_df,
-axes = axes, circle = circle, plot_limits = c(-1, 1))
+plot_proj(proj_obj = proj_obj1, plot_limits = c(-1, 1))
 }

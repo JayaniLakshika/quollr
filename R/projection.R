@@ -175,20 +175,19 @@ get_projection <- function(projection, proj_scale, highd_data, model_highd,
 #' axis_param = list(limits = 1, axis_scaled = 1, axis_pos_x = -0.72,
 #' axis_pos_y = -0.72,threshold = 0))
 #'
-#' projected_df_n <- proj_obj1$projected_df
-#' model_df <- proj_obj1$model_df
-#' axes <- proj_obj1$axes
-#' circle <- proj_obj1$circle
-#'
-#' plot_proj(projected_df = projected_df_n, model_df = model_df,
-#' axes = axes, circle = circle, plot_limits = c(-1, 1))
-plot_proj <- function(projected_df, model_df, axes, circle,
+#' plot_proj(proj_obj = proj_obj1, plot_limits = c(-1, 1))
+plot_proj <- function(proj_obj,
                       point_param = c(1.5, 0.5, "#000000"), # size, alpha, color
                       line_param = c(0.5, 0.5, "#000000"), #linewidth, alpha
                       plot_limits, cex = 2,
                       position = c(0.92, 0.92),
                       axis_text_size = 3,
                       is_category = FALSE) {
+
+    projected_df <- proj_obj$projected_df
+    model_df <- proj_obj$model_df
+    axes <- proj_obj$axes
+    circle <- proj_obj$circle
 
   if(is_category == FALSE) {
 
