@@ -213,6 +213,9 @@ plot_proj <- function(proj_obj,
 
   } else {
 
+    projected_df <- projected_df |>
+      dplyr::mutate(cluster = proj_obj$cluster)
+
     initial_plot <- projected_df |>
       ggplot(
         aes(
