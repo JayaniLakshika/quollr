@@ -111,10 +111,10 @@ get_projection <- function(projection, proj_scale, highd_data, model_highd,
     projected_model_df,
     by = c("from" = "ID"))
 
-  names(model_df)[7:NCOL(model_df)] <- paste0(names(projected_model_df)[-NCOL(projected_model_df)], "_from")
+  names(model_df)[(length(names(model_df))-1):length(names(model_df))] <- paste0(names(projected_model_df)[-NCOL(projected_model_df)], "_from")
 
   model_df <- dplyr::left_join(model_df, projected_model_df, by = c("to" = "ID"))
-  names(model_df)[(6 + NCOL(projected_model_df)):NCOL(model_df)] <- paste0(names(projected_model_df)[-NCOL(projected_model_df)], "_to")
+  names(model_df)[(length(names(model_df))-1):length(names(model_df))] <- paste0(names(projected_model_df)[-NCOL(projected_model_df)], "_to")
 
   limits <- axis_param$limits
   axis_scaled <- axis_param$axis_scaled
