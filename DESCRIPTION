@@ -28,12 +28,9 @@ Depends:
 Imports: 
     dplyr,
     ggplot2,
-    grid,
     interp (>= 1.1-6),
     langevitour,
     proxy,
-    rlang,
-    rsample,
     stats,
     tibble,
     tidyselect,

@@ -273,7 +273,7 @@ find_pts <- function(scaled_nldr_hexid) {
 #' vertical distance (a2), bins along the x and y axes respectively (bins),
 #' numeric vector that contains hexagonal
 #' starting point coordinates all hexagonal bin centroids (centroids),
-#' hexagonal coordinates of the full grid(hex_poly),
+#' hexagonal coordinates of the full grid (hex_poly),
 #' embedding components with their corresponding hexagon IDs (data_hb_id),
 #' hex bins with their corresponding standardise counts (std_cts),
 #' total number of hex bins(tot_bins), number of non-empty hex bins (non_bins)

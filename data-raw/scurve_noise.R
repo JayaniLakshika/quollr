@@ -1,7 +1,5 @@
 ## This script is to generate the S-curve data in 7-D, the UMAP embedding with different (hyper)parameters, and highd-vis-model
 library(umap)
-library(rsample)
-library(scales)
 library(quollr)
 
 set.seed(20230531)
