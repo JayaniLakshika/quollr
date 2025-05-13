@@ -102,9 +102,9 @@ glance <- function(highd_data, model_2d, model_highd) {
   names(abs_summary_df) <- abs_error_cols
   error <- sum(rowSums(abs_summary_df[, abs_error_cols]))
 
-  mse <-  mean(row_wise_total_error)
+  rmse <-  sqrt(mean(row_wise_total_error))
 
-  summary_df <- tibble(Error = error, MSE = mse)
+  summary_df <- tibble(Error = error, RMSE = rmse)
 
   return(summary_df)
 
