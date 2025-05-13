@@ -196,20 +196,20 @@ plot_proj <- function(proj_obj,
         aes(
           x = proj1,
           y = proj2)) +
-      geom_segment(
-        data = model_df,
-        aes(
-          x = proj1_from,
-          y = proj2_from,
-          xend = proj1_to,
-          yend = proj2_to),
-        color = line_param[3],
-        linewidth = as.numeric(line_param[1]),
-        alpha = as.numeric(line_param[2])) +
       geom_point(
         size = as.numeric(point_param[1]),
         alpha = as.numeric(point_param[2]),
-        color = point_param[3])
+        color = point_param[3]) +
+      geom_segment(
+          data = model_df,
+          aes(
+            x = proj1_from,
+            y = proj2_from,
+            xend = proj1_to,
+            yend = proj2_to),
+          color = line_param[3],
+          linewidth = as.numeric(line_param[1]),
+          alpha = as.numeric(line_param[2]))
 
   } else {
 
@@ -222,6 +222,9 @@ plot_proj <- function(proj_obj,
           x = proj1,
           y = proj2,
           colour = cluster)) +
+      geom_point(
+        size = as.numeric(point_param[1]),
+        alpha = as.numeric(point_param[2])) +
       geom_segment(
         data = model_df,
         aes(
@@ -231,10 +234,7 @@ plot_proj <- function(proj_obj,
           yend = proj2_to),
         color = line_param[3],
         linewidth = as.numeric(line_param[1]),
-        alpha = as.numeric(line_param[2])) +
-      geom_point(
-        size = as.numeric(point_param[1]),
-        alpha = as.numeric(point_param[2]))
+        alpha = as.numeric(line_param[2]))
 
   }
 

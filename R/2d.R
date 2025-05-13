@@ -595,40 +595,6 @@ update_trimesh_index <- function(trimesh_data) {
 
 }
 
-#' Visualize triangular mesh after removing the long edges
-#'
-#' This function visualize the triangular mesh after removing the long edges.
-#'
-#' @param trimesh_data A tibble that contains the x and y coordinates of start and end points.
-#'
-#' @return A ggplot object with the triangular mesh plot where long edges are removed.
-#'
-#' @importFrom dplyr distinct if_else mutate inner_join
-#' @importFrom ggplot2 ggplot geom_segment geom_point coord_equal scale_colour_manual aes labs
-#' @importFrom tibble tibble
-#'
-#' @examples
-#' tr_from_to_df <- scurve_model_obj$trimesh_data
-#' vis_mesh(trimesh_data = tr_from_to_df)
-#'
-#' @export
-vis_mesh <- function(trimesh_data) {
-  # Create the tibble with x and y coordinates
-  tr_df <- tibble::tibble(x = c(trimesh_data[["x_from"]], trimesh_data[["x_to"]]),
-                          y = c(trimesh_data[["y_from"]], trimesh_data[["y_to"]])) |>
-    distinct()
-
-  ## Create the triangular mesh plot after removing the long edges
-  tri_mesh_plot <- ggplot(tr_df, aes(x = x, y = y)) +
-    geom_segment(aes(x = x_from, y = y_from, xend = x_to, yend = y_to),
-                          data = trimesh_data,
-                 colour = "#33a02c") +
-    geom_point(size = 1, colour = "#33a02c") +
-    labs(color=NULL)
-  return(tri_mesh_plot)
-
-}
-
 #' Find the number of bins required to achieve required number of non-empty bins.
 #'
 #' This function determines the number of bins along the x and y axes

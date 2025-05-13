@@ -84,35 +84,6 @@
 #' @source This dataset is generated for illustrative purposes.
 "scurve_umap_predict"
 
-#' Scaled UMAP embedding for S-curve dataset which with noise dimensions
-#'
-#' The `scurve_umap_obj` dataset contains the scaled UMAP (Uniform Manifold
-#' Approximation and Projection) embeddings.
-#'
-#' @format ## `scurve_umap_obj`
-#' A data frame with 25 rows and 3 columns:
-#' \describe{
-#'   \item{UMAP1}{Numeric, Scaled first UMAP 2D embeddings.}
-#'   \item{UMAP2}{Numeric, Scaled second UMAP 2D embedding.}
-#'   \item{ID}{Numeric, identifier for each data point.}
-#' }
-#' @examples
-#' # Load the scurve_umap_obj dataset
-#' data(scurve_umap_obj)
-#'
-#' # Display the first few rows of the dataset
-#' head(scurve_umap_obj)
-#'
-#' @keywords datasets
-#'
-#' @rdname scurve_umap_obj
-#' @docType data
-#' @usage data(scurve_umap_obj)
-#'
-#' @source This dataset is generated for illustrative purposes.
-"scurve_umap_obj"
-
-
 #' Object for S-curve dataset
 #'
 #' The `scurve_model_obj` contains object of scaled umap embedding, x and y limits,
