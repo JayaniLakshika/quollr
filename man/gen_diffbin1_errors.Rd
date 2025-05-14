@@ -4,7 +4,7 @@
 \alias{gen_diffbin1_errors}
 \title{Generate erros and MSE for different bin widths}
 \usage{
-gen_diffbin1_errors(highd_data, nldr_data)
+gen_diffbin1_errors(highd_data, nldr_data, benchmark_highdens = 1)
 }
 \arguments{
 \item{df_bin_centroids}{Centroid coordinates of hexagonal bins in 2D space.}

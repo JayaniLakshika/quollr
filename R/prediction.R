@@ -193,7 +193,7 @@ augment <- function(highd_data, model_2d, model_highd) {
 #' gen_diffbin1_errors(highd_data = scurve, nldr_data = scurve_umap)
 #'
 #' @export
-gen_diffbin1_errors <- function(highd_data, nldr_data) {
+gen_diffbin1_errors <- function(highd_data, nldr_data, benchmark_highdens = 1) {
 
   nldr_obj <- gen_scaled_data(nldr_data = nldr_data)
   ## To compute the range
@@ -214,7 +214,7 @@ gen_diffbin1_errors <- function(highd_data, nldr_data) {
       nldr_data = nldr_data,
       bin1 = xbins,
       q = 0.1,
-      benchmark_highdens = 1
+      benchmark_highdens = benchmark_highdens
     )
 
     df_bin_centroids_scurve <- scurve_model$model_2d
