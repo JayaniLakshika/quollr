@@ -35,7 +35,8 @@ Imports:
     tibble,
     tidyselect,
     crosstalk,
-    plotly
+    plotly,
+    cli
 Suggests: 
     knitr,
     rmarkdown,
