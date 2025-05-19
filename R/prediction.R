@@ -188,6 +188,7 @@ augment <- function(highd_data, model_2d, model_highd) {
 #'
 #' @return A tibble containing the augmented data with predictions,
 #' error metrics, and absolute error metrics.
+#' @importFrom foreach %dopar%
 #'
 #' @examples
 #' gen_diffbin1_errors(highd_data = scurve, nldr_data = scurve_umap)
