@@ -1,7 +1,7 @@
 Type: Package
 Package: quollr
 Title: Visualising How Nonlinear Dimension Reduction Warps Your Data
-Version: 0.2.8
+Version: 0.2.9
 Authors@R: c(
     person("Jayani P.", "Gamage", , "jayanilakshika76@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-6265-6481")),
@@ -36,7 +36,9 @@ Imports:
     tidyselect,
     crosstalk,
     plotly,
-    cli
+    cli,
+    foreach,
+    doParallel
 Suggests: 
     knitr,
     rmarkdown,

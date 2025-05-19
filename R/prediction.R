@@ -205,17 +205,54 @@ gen_diffbin1_errors <- function(highd_data, nldr_data, benchmark_highdens = 1) {
   ## To initialize number of bins along the x-axis
   bin1_vec <- 5:sqrt(NROW(highd_data)/r2)
 
-  error_df_umap <- data.frame(matrix(nrow = 0, ncol = 0))
+  bin_error_df <- data.frame(matrix(nrow = 0, ncol = 0))
 
-  for (xbins in bin1_vec) {
+  num_cores <- parallel::detectCores() - 1 # Leave one core free for system processes
+  if (num_cores < 1) num_cores <- 1     # Ensure at least one core is used
 
-    scurve_model <- fit_highd_model(
-      highd_data = highd_data,
-      nldr_data = nldr_data,
+  # Check if a cluster is already registered and use it, or create a new one
+  if (!foreach::getDoParRegistered() || foreach::getDoParWorkers() < num_cores) {
+    if (exists("cl") && inherits(cl, "cluster")) {
+      parallel::stopCluster(cl) # Stop existing cluster if not suitable
+    }
+    cl <- parallel::makeCluster(num_cores)
+    doParallel::registerDoParallel(cl)
+  }
+  cat("Using", foreach::getDoParWorkers(), "cores for parallel processing.\n")
+
+
+  # 4. Run the loop in parallel
+  bin_error_df <- foreach::foreach(
+    xbins = bin1_vec,
+    .combine = 'bind_rows', # Combine results using dplyr::bind_rows
+    .packages = c("dplyr", "quollr"), # <<< CRITICAL: Load dplyr and quollr on each worker
+    .export = c("highd_data", "nldr_data", "benchmark_highdens") # Data objects to send
+  ) %dopar% { # %dopar% for parallel execution
+
+    # This code now runs in parallel for each value of xbins
+    # fit_highd_model and glance will be found because 'quollr' is loaded on workers
+
+    scurve_model <- fit_highd_model( # Using quollr:: explicitly for clarity if preferred
+      highd_data = highd_data,              # This data is from .export
+      nldr_data = nldr_data,                # This data is from .export
       bin1 = xbins,
       q = 0.1,
-      benchmark_highdens = benchmark_highdens
+      benchmark_highdens = benchmark_highdens # This data is from .export
     )
+
+    # It's good practice to check the output of functions like fit_highd_model
+    if (is.null(scurve_model) || !is.list(scurve_model) ||
+        is.null(scurve_model$model_2d) || is.null(scurve_model$model_highd) ||
+        is.null(scurve_model$hb_obj) || !all(c("bins", "a1", "a2") %in% names(scurve_model$hb_obj))) {
+
+      warning(paste("Skipping xbins =", xbins, "due to unexpected output from fit_highd_model."))
+      # Return an empty data frame with expected column names if you want to avoid errors with bind_rows
+      # Or, if your glance function can handle NULLs gracefully or you have other means, adjust as needed.
+      # For bind_rows to work smoothly, all returned data frames should have compatible structures.
+      # If 'glance' is robust to NULLs or if you define expected columns, you can do:
+      # return(tibble::tibble(bin1 = numeric(0), bin2 = numeric(0), ... other_cols = type(0) ))
+      return(NULL) # or an empty data.frame()
+    }
 
     df_bin_centroids_scurve <- scurve_model$model_2d
     df_bin_scurve <- scurve_model$model_highd
@@ -223,23 +260,38 @@ gen_diffbin1_errors <- function(highd_data, nldr_data, benchmark_highdens = 1) {
     a1 <- scurve_model$hb_obj$a1
     a2 <- scurve_model$hb_obj$a2
 
-    ## Compute error
-    error_df <- glance(
+    ## Compute error using quollr::glance
+    error_df <- glance( # Using quollr:: explicitly for clarity
       model_2d = df_bin_centroids_scurve,
       model_highd = df_bin_scurve,
-      highd_data = highd_data) |>
-      dplyr::mutate(bin1 = xbins,
-                    bin2 = bin2,
-                    b = bin1 * bin2,
-                    b_non_empty = NROW(df_bin_centroids_scurve),
-                    a1 = round(a1, 2),
-                    a2 = round(a2, 2))
+      highd_data = highd_data # highd_data is available via .export
+    )
 
-    error_df_umap <- dplyr::bind_rows(error_df_umap, error_df)
+    # Check if glance returned a valid data frame
+    if (is.null(error_df) || !is.data.frame(error_df) || nrow(error_df) == 0) {
+      warning(paste("glance returned no data for xbins =", xbins))
+      return(NULL) # or an empty data.frame() with expected structure
+    }
 
+    error_df <- error_df |>
+      dplyr::mutate(
+        bin1_val = xbins, # Renamed to avoid conflict if 'glance' already produces 'bin1'
+        bin2_val = bin2,  # Renamed to avoid conflict if 'glance' already produces 'bin2'
+        b = xbins * bin2,
+        b_non_empty = NROW(df_bin_centroids_scurve),
+        a1_val = round(a1, 2), # Renamed
+        a2_val = round(a2, 2)  # Renamed
+      )
+
+    # Return the processed data frame for this iteration
+    error_df
   }
 
-  error_df_umap
+  if (exists("cl") && inherits(cl, "cluster")) {
+    parallel::stopCluster(cl)
+  }
+
+  bin_error_df
 
 }
 
