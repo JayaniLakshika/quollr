@@ -119,8 +119,9 @@ show_link_plots <- function(point_data, edge_data) {
   linked_plt <- crosstalk::bscols(
     htmltools::div(style="display: grid; grid-template-columns: 1fr 1fr;",
                    nldr_plt,
-                   langevitour_output),
-    device = "sm"
+                   htmltools::div(style = "margin-top: 20px;", langevitour_output)
+                   ),
+    device = "xs"
   )
 
   linked_plt

@@ -162,15 +162,16 @@ show_error_link_plots <- function(point_data, edge_data) {
                                                  levelColors = c("#000000", "#33a02c"),
                                                  link=shared_df,
                                                  linkFilter=FALSE,
-                                                 width = "450",
-                                                 height = "450")
+                                                 width = "458",
+                                                 height = "458")
 
   linked_plt <- crosstalk::bscols(
     htmltools::div(style="display: grid; grid-template-columns: 1fr 1fr 1fr;",
         error_plt,
         nldr_plt,
-        langevitour_output),
-    device = "sm"
+        htmltools::div(style = "margin-top: 20px;", langevitour_output)
+        ),
+    device = "xs"
   )
 
   linked_plt
