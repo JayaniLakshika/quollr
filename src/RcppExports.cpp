@@ -11,15 +11,15 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
-// predict_emb_indices
-IntegerVector predict_emb_indices(NumericMatrix test_data, NumericMatrix centroids);
-RcppExport SEXP _quollr_predict_emb_indices(SEXP test_dataSEXP, SEXP centroidsSEXP) {
+// compute_highd_dist
+IntegerVector compute_highd_dist(NumericMatrix test_data, NumericMatrix centroids);
+RcppExport SEXP _quollr_compute_highd_dist(SEXP test_dataSEXP, SEXP centroidsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< NumericMatrix >::type test_data(test_dataSEXP);
     Rcpp::traits::input_parameter< NumericMatrix >::type centroids(centroidsSEXP);
-    rcpp_result_gen = Rcpp::wrap(predict_emb_indices(test_data, centroids));
+    rcpp_result_gen = Rcpp::wrap(compute_highd_dist(test_data, centroids));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -35,10 +35,25 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// calc_2d_dist_cpp
+NumericVector calc_2d_dist_cpp(NumericVector x_from, NumericVector y_from, NumericVector x_to, NumericVector y_to);
+RcppExport SEXP _quollr_calc_2d_dist_cpp(SEXP x_fromSEXP, SEXP y_fromSEXP, SEXP x_toSEXP, SEXP y_toSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type x_from(x_fromSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type y_from(y_fromSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type x_to(x_toSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type y_to(y_toSEXP);
+    rcpp_result_gen = Rcpp::wrap(calc_2d_dist_cpp(x_from, y_from, x_to, y_to));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_quollr_predict_emb_indices", (DL_FUNC) &_quollr_predict_emb_indices, 2},
+    {"_quollr_compute_highd_dist", (DL_FUNC) &_quollr_compute_highd_dist, 2},
     {"_quollr_compute_errors", (DL_FUNC) &_quollr_compute_errors, 2},
+    {"_quollr_calc_2d_dist_cpp", (DL_FUNC) &_quollr_calc_2d_dist_cpp, 4},
     {NULL, NULL, 0}
 };
 

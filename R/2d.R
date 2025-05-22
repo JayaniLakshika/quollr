@@ -180,31 +180,18 @@ assign_data <- function(nldr_obj, centroids_data) {
 
   scaled_nldr_df <- nldr_obj$scaled_nldr
 
-  ## To select first and second embedding components
-  select_emb <- scaled_nldr_df |>
-    dplyr::select(c(1, 2))
+  # Select embedding dimensions
+  matrix_nldr <- as.matrix(scaled_nldr_df[, 1:2])
+  centroid_matrix <- as.matrix(centroids_data[, 2:3])
 
-  ## To select coordinates for the centroids
-  select_centroid <- centroids_data |>
-    dplyr::select(c(2, 3))
+  # Use C++ function to find nearest centroid indices
+  min_column <- compute_highd_dist(matrix_nldr, centroid_matrix)
 
-  ## Convert to a matrix
-  matrix_nldr <- as.matrix(select_emb)
-  centroid_matrix <- as.matrix(select_centroid)
-
-  ## Compute distances between embedding points and hex bin centroids
-  dist_df <- proxy::dist(matrix_nldr, centroid_matrix, method = "Euclidean")
-
-  # Get the column indices of minimum distances (if there are multiple minimum,
-  # get the minimum indicies)
-  min_column <- apply(dist_df, 1, get_min_indices)
-
-  # Extract hex bin IDs corresponding to minimum distances
+  # Map to hex bin IDs
   hb_ids <- centroids_data$hexID[min_column]
 
-  # Add hex bin IDs to the data
-  scaled_nldr_df <- scaled_nldr_df |>
-    dplyr::mutate(hexID = hb_ids)
+  # Add hex bin ID column
+  scaled_nldr_df$hexID <- hb_ids
 
   return(scaled_nldr_df)
 }
@@ -465,23 +452,24 @@ tri_bin_centroids <- function(centroids_data){
 #' @importFrom tidyselect all_of
 #'
 #' @examples
-#' tr_from_to_df <- s_curve_obj$s_curve_umap_model_tr_from_to_df
-#' cal_2d_dist(trimesh_data = tr_from_to_df))
+#' tr_from_to_df <- scurve_model_obj$trimesh_data
+#' calc_2d_dist(trimesh_data = tr_from_to_df)
 #'
 #' @export
 calc_2d_dist <- function(trimesh_data, select_vars = c("from", "to", "x_from", "y_from", "x_to", "y_to", "from_count", "to_count", "distance")) {
 
-  # Calculate the 2D distances
-  dist <- lapply(seq(nrow(trimesh_data)), function(x) {
-    start <- unlist(trimesh_data[x, c("x_from", "y_from")], use.names = FALSE)
-    end <- unlist(trimesh_data[x, c("x_to", "y_to")], use.names = FALSE)
-    sqrt(sum((start - end)^2))
-  })
+  # Calculate distances using Rcpp
+  dist <- calc_2d_dist_cpp(
+    trimesh_data$x_from,
+    trimesh_data$y_from,
+    trimesh_data$x_to,
+    trimesh_data$y_to
+  )
 
-  # Create a data frame with the from-to relationships and distances
+  # Add distances and return selected columns
   trimesh_data <- trimesh_data |>
-    mutate(distance = unlist(dist, use.names = FALSE)) |>
-    select(all_of(select_vars))
+    dplyr::mutate(distance = dist) |>
+    dplyr::select(dplyr::all_of(select_vars))
 
   return(trimesh_data)
 }

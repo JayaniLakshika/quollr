@@ -24,7 +24,7 @@ predict_emb <- function(highd_data, model_2d, model_highd) {
   test_data_matrix <- highd_data |> select(-ID) |> as.matrix()
   df_bin_matrix <- model_highd |> select(-hexID) |> as.matrix()
 
-  min_column <- predict_emb_indices(test_data_matrix, df_bin_matrix)
+  min_column <- compute_highd_dist(test_data_matrix, df_bin_matrix)
   pred_hb_id <- model_highd$hexID[min_column]
 
   match_indices <- match(pred_hb_id, model_2d$hexID)

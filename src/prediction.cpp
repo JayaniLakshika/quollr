@@ -4,7 +4,7 @@ using namespace Rcpp;
 
 // Efficient nearest centroid lookup
 // [[Rcpp::export]]
-IntegerVector predict_emb_indices(NumericMatrix test_data, NumericMatrix centroids) {
+IntegerVector compute_highd_dist(NumericMatrix test_data, NumericMatrix centroids) {
   int n = test_data.nrow();    // Number of test points
   int m = centroids.nrow();    // Number of centroids
   int d = test_data.ncol();    // Dimensionality
@@ -56,4 +56,19 @@ List compute_errors(NumericMatrix true_data, NumericMatrix pred_data) {
 
   double rmse = std::sqrt(total_squared_error / n);
   return List::create(Named("Error") = total_abs_error, Named("RMSE") = rmse);
+}
+
+// [[Rcpp::export]]
+NumericVector calc_2d_dist_cpp(NumericVector x_from, NumericVector y_from,
+                               NumericVector x_to, NumericVector y_to) {
+  int n = x_from.size();
+  NumericVector dist(n);
+
+  for (int i = 0; i < n; ++i) {
+    double dx = x_from[i] - x_to[i];
+    double dy = y_from[i] - y_to[i];
+    dist[i] = std::sqrt(dx * dx + dy * dy);
+  }
+
+  return dist;
 }
