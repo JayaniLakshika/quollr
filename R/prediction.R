@@ -11,6 +11,8 @@
 #' @importFrom dplyr select
 #' @importFrom proxy dist
 #' @importFrom tibble tibble
+#' @useDynLib quollr, .registration = TRUE
+#' @importFrom Rcpp evalCpp
 #'
 #' @examples
 #' predict_emb(highd_data = scurve, model_highd = scurve_model_obj$model_highd,
@@ -19,38 +21,19 @@
 #' @export
 predict_emb <- function(highd_data, model_2d, model_highd) {
 
-  test_data_matrix <- highd_data |>
-    select(-ID) |>
-    as.matrix()
+  test_data_matrix <- highd_data |> select(-ID) |> as.matrix()
+  df_bin_matrix <- model_highd |> select(-hexID) |> as.matrix()
 
-  df_bin_matrix <- model_highd |>
-    select(-hexID) |>
-    as.matrix()
-
-  ## Compute distances between nldr coordinates and hex bin centroids
-  dist_df <- dist(test_data_matrix, df_bin_matrix, method = "Euclidean")
-
-  ## Columns that gives minimum distances
-  min_column <- apply(dist_df, 1, which.min)
-
+  min_column <- predict_emb_indices(test_data_matrix, df_bin_matrix)
   pred_hb_id <- model_highd$hexID[min_column]
 
-  ## Obtain 2D coordinate of the nearest high-D centroid
   match_indices <- match(pred_hb_id, model_2d$hexID)
-
-  pred_emb1 = model_2d$c_x[match_indices]
-  pred_emb2 = model_2d$c_y[match_indices]
-
-  pred_obj <- tibble(pred_emb1 = pred_emb1, pred_emb2 = pred_emb2,
-                     ID = highd_data$ID, pred_hb_id = pred_hb_id)
-
-  ## Rename column names
-  names(pred_obj) <- c(paste0("pred_emb_", 1:2), "ID", "pred_hb_id")
-
-  return(pred_obj)
+  tibble(pred_emb_1 = model_2d$c_x[match_indices],
+         pred_emb_2 = model_2d$c_y[match_indices],
+         ID = highd_data$ID,
+         pred_hb_id = pred_hb_id)
 
 }
-
 
 #' Generate evaluation metrics
 #'
@@ -72,43 +55,25 @@ predict_emb <- function(highd_data, model_2d, model_highd) {
 #' @export
 glance <- function(highd_data, model_2d, model_highd) {
 
-  ## Rename columns to avoid conflicts
   names(model_highd)[-1] <- paste0("model_high_d_", names(model_highd)[-1])
 
-  ## Map high-D averaged mean coordinates
   prediction_df <- predict_emb(highd_data = highd_data,
                                model_2d = model_2d,
                                model_highd = model_highd)
 
-  ## Map high-D averaged mean coordinates
   prediction_df <- prediction_df |>
-    left_join(model_highd, by = c("pred_hb_id" = "hexID"))
-
-  prediction_df <- prediction_df |>
-    left_join(highd_data, by = c("ID" = "ID")) ## Map high-D data
+    left_join(model_highd, by = c("pred_hb_id" = "hexID")) |>
+    left_join(highd_data, by = "ID")
 
   cols <- paste0("x", 1:(NCOL(model_highd) - 1))
   high_d_model_cols <- paste0("model_high_d_x", 1:(NCOL(model_highd) - 1))
-  error_cols <- paste0("error_square_x", 1:(NCOL(model_highd) - 1))
-  abs_error_cols <- paste0("abs_error_x", 1:(NCOL(model_highd) - 1))
 
-  summary_df <- (prediction_df[, cols] - prediction_df[, high_d_model_cols])^2
-  names(summary_df) <- error_cols
+  res <- compute_errors(as.matrix(prediction_df[, cols]),
+                        as.matrix(prediction_df[, high_d_model_cols]))
 
-  row_wise_total_error <- rowSums(summary_df[, error_cols])
-
-  ## To obtain absolute error
-  abs_summary_df <- abs(prediction_df[, cols] - prediction_df[, high_d_model_cols])
-  names(abs_summary_df) <- abs_error_cols
-  error <- sum(rowSums(abs_summary_df[, abs_error_cols]))
-
-  rmse <-  sqrt(mean(row_wise_total_error))
-
-  summary_df <- tibble(Error = error, RMSE = rmse)
-
-  return(summary_df)
-
+  tibble(Error = res$Error, RMSE = res$RMSE)
 }
+
 
 #' Augment Data with Predictions and Error Metrics
 #'
