@@ -142,26 +142,6 @@ gen_hex_coord <- function(centroids_data, a1){
   return(hex_coord_df)
 }
 
-#' Get indices of all minimum distances
-#'
-#' This function returns the indices of all minimum distances.
-#'
-#' @param x A numeric vector.
-#' @return A numeric vector containing the indices of all minimum distances.
-#' @examples
-#' x <- c(1, 2, 1, 3)
-#' get_min_indices(x)
-#' @export
-get_min_indices <- function(x) {
-  min_indices <- which(abs(x - min(x)) < 0.00001, arr.ind = TRUE)
-  # If there are multiple minimum values, return the minimum index
-  if (length(min_indices) > 1) {
-    min_indices <- min(min_indices)
-  }
-  return(min_indices)
-}
-
-
 #' Assign data to hexagons
 #'
 #' This function assigns the data to hexagons.
@@ -347,19 +327,14 @@ hex_binning <- function(nldr_obj, bin1 = 4, q = 0.1) {
 #' @export
 extract_hexbin_centroids <- function(centroids_data, counts_data) {
 
-  ## To arrange the hexagon IDs
-  counts_data <- counts_data |>
-    dplyr::arrange(hexID)
+  # Fast merge without unnecessary sorting
+  merged_data <- merge(centroids_data, counts_data, by = "hexID", all = TRUE)
 
-  ## To join the datasets
-  centroids_data <- dplyr::full_join(centroids_data, counts_data, by = "hexID")
+  # Replace NA values with 0 for both columns
+  merged_data$std_counts[is.na(merged_data$std_counts)] <- 0
+  merged_data$bin_counts[is.na(merged_data$bin_counts)] <- 0
 
-  ## Map the standardize counts
-  centroids_data <- centroids_data |>
-    dplyr::mutate(std_counts = dplyr::if_else(is.na(std_counts), 0, std_counts)) |>
-    dplyr::mutate(bin_counts = dplyr::if_else(is.na(bin_counts), 0, bin_counts))
-
-  return(centroids_data)
+  return(merged_data)
 }
 
 #' Extract hexagonal bin mean coordinates and the corresponding standardize counts.
@@ -489,59 +464,69 @@ calc_2d_dist <- function(trimesh_data, select_vars = c("from", "to", "x_from", "
 #' @importFrom interp triangles
 #'
 #' @examples
-#' all_centroids_df <- s_curve_obj$s_curve_umap_hb_obj$centroids
-#' counts_data <- s_curve_obj$s_curve_umap_hb_obj$std_cts
-#' umap_with_hb_id <- s_curve_obj$s_curve_umap_hb_obj$data_hb_id
-#' df_bin_centroids <- extract_hexbin_mean(data_hb = umap_with_hb_id, counts_data = counts_data,
-#' centroids_data = all_centroids_df)
+#' all_centroids_df <- scurve_model_obj$hb_obj$centroids
+#' counts_data <- scurve_model_obj$hb_obj$std_cts
+#' umap_with_hb_id <- scurve_model_obj$hb_obj$data_hb_id
+#' df_bin_centroids <- extract_hexbin_centroids(counts_data = counts_data, centroids_data = all_centroids_df)
 #' tr1_object <- tri_bin_centroids(centroids_data = df_bin_centroids)
-#' gen_edges(tri_object = tr1_object)
+#' gen_edges(tri_object = tr1_object, a1 = scurve_model_obj$hb_obj$a1)
 #'
 #' @export
 gen_edges <- function(tri_object, a1) { #centroids_data
-  # Access the trimesh object and bin counts
   tri <- tri_object$trimesh_object
   counts <- tri_object$bin_counts
 
-  # Create a data frame with x, y coordinates, and bin counts
-  tr_df <- tibble(
+  # Create tr_df with coordinates and bin counts
+  n <- length(tri$x)
+  tr_df <- data.frame(
+    ID = seq_len(n),
     x = tri$x,
     y = tri$y,
-    ID = 1:length(tri$x),
-    n_obs = counts # Assuming 'n_obs' is how you named the counts
+    n_obs = counts
   )
 
-  # Extract the triangles
+  # Get triangles
   trang <- triangles(tri)
-  trang <- as_tibble(trang)
 
-  # Create initial from-to edges
-  tr_arcs_df <- tibble(
-    from = c(trang$node1, trang$node1, trang$node2),
-    to = c(trang$node2, trang$node3, trang$node3)
+  # Build edges: from-to
+  tr_arcs_df <- data.frame(
+    from = c(trang[, 1], trang[, 1], trang[, 2]),
+    to = c(trang[, 2], trang[, 3], trang[, 3])
   )
 
-  # Filter edges based on the bin counts of the connected nodes
-  edges_all <- tr_arcs_df |>
-    left_join(tr_df |> select(ID, n_obs), by = c("from" = "ID")) |>
-    rename(from_count = n_obs) |>
-    left_join(tr_df |> select(ID, n_obs), by = c("to" = "ID")) |>
-    rename(to_count = n_obs) |>
-    select(from, to) |>
-    mutate(x = pmin(from, to), y = pmax(from, to)) |>
-    distinct(x, y) |>
-    rename(from = x, to = y)
+  # Canonical edge representation: lower ID first
+  from <- pmin(tr_arcs_df$from, tr_arcs_df$to)
+  to   <- pmax(tr_arcs_df$from, tr_arcs_df$to)
+  edges_all <- unique(data.frame(from, to))
 
-  # Map from and to coordinates for the filtered edges
-  tr_from_to_df_coord <- left_join(edges_all, tr_df, by = c("from" = "ID")) |>
-    rename(x_from = x, y_from = y, from_count = n_obs) |>
-    left_join(tr_df, by = c("to" = "ID")) |>
-    rename(x_to = x, y_to = y, to_count = n_obs) |>
-    select(from, to, x_from, y_from, x_to, y_to, from_count, to_count) # Keep only necessary columns
+  # Vectorized coordinate and count lookup
+  x_from <- tri$x[edges_all$from]
+  y_from <- tri$y[edges_all$from]
+  x_to   <- tri$x[edges_all$to]
+  y_to   <- tri$y[edges_all$to]
+  from_count <- counts[edges_all$from]
+  to_count   <- counts[edges_all$to]
 
-  edge_data <- calc_2d_dist(trimesh_data = tr_from_to_df_coord) |>
-    dplyr::filter(distance <= sqrt(a1^2 + (sqrt(3) * a1/2)^2)) |> # a2 = sqrt(3) * a1/2
-    dplyr::select(from, to, x_from, y_from, x_to, y_to, from_count, to_count)
+  # Compute Euclidean distance directly (vectorized)
+  dx <- x_from - x_to
+  dy <- y_from - y_to
+  dist <- sqrt(dx^2 + dy^2)
+
+  # Keep only close-enough edges
+  max_dist <- sqrt(a1^2 + (sqrt(3) * a1 / 2)^2)
+  keep <- dist <= max_dist
+
+  # Final output
+  edge_data <- tibble::tibble(
+    from = edges_all$from[keep],
+    to = edges_all$to[keep],
+    x_from = x_from[keep],
+    y_from = y_from[keep],
+    x_to = x_to[keep],
+    y_to = y_to[keep],
+    from_count = from_count[keep],
+    to_count = to_count[keep]
+  )
 
   return(edge_data)
 }
@@ -563,23 +548,17 @@ gen_edges <- function(tri_object, a1) { #centroids_data
 #' @export
 update_trimesh_index <- function(trimesh_data) {
 
-  ## Updated the from and to
-  # Find the unique values in `from` and `to`, and sort them.
+  # Create unique sorted vector of node IDs
   unique_values <- sort(unique(c(trimesh_data$from, trimesh_data$to)))
 
-  # Create a mapping between the old values and the new, renumbered values (starting from 1).
-  value_map <- tibble::tibble(old_value = unique_values, new_value = 1:length(unique_values))
+  # Create named vector mapping old IDs to new ones
+  id_map <- setNames(seq_along(unique_values), unique_values)
 
-  # Join this mapping to your data frame to replace the old values with the new ones.
-  trimesh_data <- trimesh_data |>
-    left_join(value_map, by = c("from" = "old_value")) |>
-    mutate(from = new_value) |>
-    select(-new_value) |> # Remove the temporary column
-    left_join(value_map, by = c("to" = "old_value")) |>
-    mutate(to = new_value) |>
-    select(-new_value)    # Remove the temporary column
+  # Vectorized replacement using the map
+  trimesh_data$from <- id_map[as.character(trimesh_data$from)]
+  trimesh_data$to   <- id_map[as.character(trimesh_data$to)]
 
-  trimesh_data
+  return(trimesh_data)
 
 }
 

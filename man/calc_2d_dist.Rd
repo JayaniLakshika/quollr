@@ -23,7 +23,7 @@ and calculated distances.
 This function calculates the 2D distances between pairs of points in a data frame.
 }
 \examples{
-tr_from_to_df <- s_curve_obj$s_curve_umap_model_tr_from_to_df
-cal_2d_dist(trimesh_data = tr_from_to_df))
+tr_from_to_df <- scurve_model_obj$trimesh_data
+calc_2d_dist(trimesh_data = tr_from_to_df)
 
 }
