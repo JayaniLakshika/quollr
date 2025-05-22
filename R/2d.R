@@ -92,54 +92,9 @@ gen_centroids <- function(nldr_obj, bin1 = 4, q = 0.1){
 #' gen_hex_coord(centroids_data = all_centroids_df, a1 = width)
 #'
 #' @export
-gen_hex_coord <- function(centroids_data, a1){
-
-  # If the hexagonal width is missing
-  if (missing(a1)) {
-    cli::cli_abort("Need to initialize the width of the hexagon.")
-  }
-
-  ## Obtain centroid info
-  hex_ids <- centroids_data$hexID
-  c_x_vec <- centroids_data$c_x
-  c_y_vec <- centroids_data$c_y
-
-  ## To compute vertical spacing factor
-  vs_factor <- a1/(2 * sqrt(3))
-
-  dx <- a1/2
-  dy <- a1/sqrt(3)
-
-  ## Assign coordinates for 6 directions
-  x_add_factor <- c(0, -dx, -dx, 0, dx, dx)
-  y_add_factor <- c(dy, vs_factor, -vs_factor, -dy, -vs_factor, vs_factor)
-
-  ## Initialize vectors to store hexagonal coordinates
-  hex_poly_id <- integer(0)
-  x <- numeric(0)
-  y <- numeric(0)
-
-  for (hexID in hex_ids) {
-
-    ## Since each hexagon has 6 coordinates
-    hexID_rep <- rep(hex_ids[hexID], each = 6)
-    c_x_rep <- rep(c_x_vec[hexID], each = 6)
-    c_y_rep <- rep(c_y_vec[hexID], each = 6)
-
-    ## Generate the 6 coordinates
-    x_spec <- c_x_rep + x_add_factor
-    y_spec <- c_y_rep + y_add_factor
-
-    ## Append to existing vectors
-    x <- append(x, x_spec)
-    y <- append(y, y_spec)
-    hex_poly_id <- append(hex_poly_id, hexID_rep)
-
-  }
-
-  hex_coord_df <- tibble::tibble(hex_poly_id = hex_poly_id, x = x, y = y)
-
-  return(hex_coord_df)
+gen_hex_coord <- function(centroids_data, a1) {
+  if (missing(a1)) cli::cli_abort("Need to initialize the width of the hexagon.")
+  gen_hex_coord_cpp(centroids_data$hexID, centroids_data$c_x, centroids_data$c_y, a1)
 }
 
 #' Assign data to hexagons

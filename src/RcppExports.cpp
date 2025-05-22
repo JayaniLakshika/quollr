@@ -11,6 +11,20 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
+// gen_hex_coord_cpp
+DataFrame gen_hex_coord_cpp(IntegerVector hexID, NumericVector c_x, NumericVector c_y, double a1);
+RcppExport SEXP _quollr_gen_hex_coord_cpp(SEXP hexIDSEXP, SEXP c_xSEXP, SEXP c_ySEXP, SEXP a1SEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< IntegerVector >::type hexID(hexIDSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type c_x(c_xSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type c_y(c_ySEXP);
+    Rcpp::traits::input_parameter< double >::type a1(a1SEXP);
+    rcpp_result_gen = Rcpp::wrap(gen_hex_coord_cpp(hexID, c_x, c_y, a1));
+    return rcpp_result_gen;
+END_RCPP
+}
 // compute_highd_dist
 IntegerVector compute_highd_dist(NumericMatrix test_data, NumericMatrix centroids);
 RcppExport SEXP _quollr_compute_highd_dist(SEXP test_dataSEXP, SEXP centroidsSEXP) {
@@ -51,6 +65,7 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_quollr_gen_hex_coord_cpp", (DL_FUNC) &_quollr_gen_hex_coord_cpp, 4},
     {"_quollr_compute_highd_dist", (DL_FUNC) &_quollr_compute_highd_dist, 2},
     {"_quollr_compute_errors", (DL_FUNC) &_quollr_compute_errors, 2},
     {"_quollr_calc_2d_dist_cpp", (DL_FUNC) &_quollr_calc_2d_dist_cpp, 4},
