@@ -31,6 +31,7 @@ Imports:
     interp (>= 1.1-6),
     langevitour,
     proxy,
+    rsample,
     stats,
     tibble,
     tidyselect,
