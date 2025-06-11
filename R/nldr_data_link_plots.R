@@ -52,6 +52,7 @@ comb_all_data_model <- function(highd_data, nldr_data, model_highd, model_2d) {
 #' @param point_data A tibble that contains the high-dimensional data, non-linear dimension reductions
 #' and model in high-dimensions.
 #' @param edge_data A tibble that contains the wireframe data (from and to).
+#' @param point_colour A hex color code specifying the color to be used for the data points.
 #'
 #'
 #' @return A browsable HTML element.
@@ -68,7 +69,7 @@ comb_all_data_model <- function(highd_data, nldr_data, model_highd, model_2d) {
 #' show_link_plots(point_data = df_exe, edge_data = edge_data)
 #'
 #' @export
-show_link_plots <- function(point_data, edge_data) {
+show_link_plots <- function(point_data, edge_data, point_colour = c("#000000")) {
 
   num_highd_col <- point_data |>
     dplyr::select(starts_with("x")) |>
@@ -84,7 +85,7 @@ show_link_plots <- function(point_data, edge_data) {
 
   nldr_plt <- shared_df |>
     ggplot(aes(x = emb1, y = emb2)) +
-    geom_point(alpha=0.5, colour="#000000", size = 0.5) +
+    geom_point(alpha=0.5, colour=point_colour, size = 0.5) +
     theme_linedraw() +
     theme(
       #aspect.ratio = 1,
@@ -110,9 +111,9 @@ show_link_plots <- function(point_data, edge_data) {
                                                  lineFrom = edge_data$from,
                                                  lineTo = edge_data$to,
                                                  group = point_data$type,
-                                                 pointSize = append(rep(2, NROW(df_b)),
+                                                 pointSize = append(rep(0, NROW(df_b)),
                                                                     rep(1, NROW(df_all))),
-                                                 levelColors = c("#000000", "#33a02c"),
+                                                 levelColors = c(point_colour, "#33a02c"),
                                                  link=shared_df,
                                                  linkFilter=FALSE)
 

@@ -4,13 +4,15 @@
 \alias{show_link_plots}
 \title{Visualize the model overlaid on high-dimensional data along with 2D wireframe model.}
 \usage{
-show_link_plots(point_data, edge_data)
+show_link_plots(point_data, edge_data, point_colour = c("#000000"))
 }
 \arguments{
 \item{point_data}{A tibble that contains the high-dimensional data, non-linear dimension reductions
 and model in high-dimensions.}
 
 \item{edge_data}{A tibble that contains the wireframe data (from and to).}
+
+\item{point_colour}{A hex color code specifying the color to be used for the data points.}
 }
 \value{
 A browsable HTML element.

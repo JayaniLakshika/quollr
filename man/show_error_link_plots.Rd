@@ -4,13 +4,15 @@
 \alias{show_error_link_plots}
 \title{Visualize the model overlaid on high-dimensional data along with 2D wireframe model and error.}
 \usage{
-show_error_link_plots(point_data, edge_data)
+show_error_link_plots(point_data, edge_data, point_colour = "#000000")
 }
 \arguments{
 \item{point_data}{A tibble that contains the high-dimensional data, no-linear dimension reductions
 and model in high-dimensions.}
 
 \item{edge_data}{A tibble that contains the wireframe data (from and to).}
+
+\item{point_colour}{A hex color code specifying the color to be used for the data points.}
 
 \item{error_data}{A tibble that high-dimesional model error.}
 }
