@@ -107,7 +107,7 @@ show_error_link_plots <- function(point_data, edge_data, point_colour = "#000000
 
   error_plt <- shared_df |>
     ggplot(aes(x=sqrt_row_wise_total_error, y = density)) +
-    geom_point() +
+    geom_point(colour = point_colour) +
     xlab(expression(e[hj])) +
     ylab("") +
     theme_bw() +
