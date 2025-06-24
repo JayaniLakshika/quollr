@@ -9,8 +9,6 @@ plot_proj(
   point_param = c(1.5, 0.5, "#000000"),
   line_param = c(0.5, 0.5, "#000000"),
   plot_limits,
-  cex = 2,
-  position = c(0.92, 0.92),
   axis_text_size = 3,
   is_category = FALSE
 )
@@ -21,10 +19,6 @@ plot_proj(
 \item{line_param}{A vector specifying line width, alpha, and color (default: c(0.5, 0.5, "#000000")).}
 
 \item{plot_limits}{Limits for the plot axes.}
-
-\item{cex}{Scaling factor for point size (default: 2).}
-
-\item{position}{Position of elements within the plot (default: c(0.92, 0.92)).}
 
 \item{axis_text_size}{Size of axis text (default: 3).}
 

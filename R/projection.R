@@ -150,8 +150,6 @@ get_projection <- function(projection, proj_scale, highd_data, model_highd,
 #' @param point_param A vector specifying point size, alpha, and color (default: c(1.5, 0.5, "#000000")).
 #' @param line_param A vector specifying line width, alpha, and color (default: c(0.5, 0.5, "#000000")).
 #' @param plot_limits Limits for the plot axes.
-#' @param cex Scaling factor for point size (default: 2).
-#' @param position Position of elements within the plot (default: c(0.92, 0.92)).
 #' @param axis_text_size Size of axis text (default: 3).
 #' @param is_category Logical indicating if the data is categorical (default: FALSE).
 #'
@@ -179,8 +177,7 @@ get_projection <- function(projection, proj_scale, highd_data, model_highd,
 plot_proj <- function(proj_obj,
                       point_param = c(1.5, 0.5, "#000000"), # size, alpha, color
                       line_param = c(0.5, 0.5, "#000000"), #linewidth, alpha
-                      plot_limits, cex = 2,
-                      position = c(0.92, 0.92),
+                      plot_limits,
                       axis_text_size = 3,
                       is_category = FALSE) {
 

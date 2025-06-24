@@ -208,3 +208,60 @@ gen_diffbin1_errors <- function(highd_data, nldr_data, benchmark_highdens = 1) {
 
 }
 
+#' Generate a design to layout 2-D representations
+#'
+#' This function generates a design which can be passed to `plot_layout()`
+#' to arrange 2-D layouts.
+#'
+#' @param n_right The number of plots in right side.
+#' @param ncol_right The number of columns in right side.
+#'
+#' @return A patchwork area object.
+#'
+#' @examples
+#' gen_design(n_right = 8, ncol_right = 2)
+#'
+#' @export
+gen_design <- function(n_right, ncol_right = 2) {
+  nrow_right <- ceiling(n_right / ncol_right)
+
+  # Create tibble of grid positions for right panel
+  right_positions <- tidyr::expand_grid(
+    row = 1:nrow_right,
+    col = 1:ncol_right
+  ) |>
+    dplyr::slice_head(n = n_right) |>  # Keep only as many as needed
+    dplyr::mutate(
+      col = col + 1  # Offset columns for right panel
+    )
+
+  # Create area objects for right panel
+  right_areas <- purrr::pmap(right_positions, ~ patchwork::area(..1, ..2, ..1, ..2))
+
+  # Add left panel spanning all rows in column 1
+  left_area <- patchwork::area(1, 1, nrow_right, 1)
+
+  # Return combined layout
+  purrr::reduce(right_areas, c, .init = left_area)
+}
+
+#' Arrange RMSE plot and 2-D layouts
+#'
+#' This function arranges RMSE plot in left and 2-D layouts in right.
+#'
+#' @param plots A list of plots which include RMSE plot and 2-D layouts.
+#' @param design The design of plots need to be arranged.
+#'
+#' @return A patchwork object.
+#'
+#' @examples
+#' design <- gen_design(n_right = 8, ncol_right = 2)
+#' plot_rmse_layouts(plots, design = design)
+#'
+#' @export
+plot_rmse_layouts <- function(plots, design){
+
+  patchwork::wrap_plots(plots) +
+    patchwork::plot_layout(design = design)
+
+}
