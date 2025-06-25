@@ -196,7 +196,7 @@ gen_diffbin1_errors <- function(highd_data, nldr_data, benchmark_highdens = 1) {
       dplyr::mutate(bin1 = xbins,
                     bin2 = bin2,
                     b = bin1 * bin2,
-                    b_non_empty = NROW(df_bin_centroids_scurve),
+                    m = NROW(df_bin_centroids_scurve),
                     a1 = round(a1, 2),
                     a2 = round(a2, 2))
 

@@ -39,7 +39,7 @@ A `ggplot2` layer object.
 Create a hexgrid plot
 }
 \examples{
-all_centroids_df <- s_curve_obj$s_curve_umap_hb_obj$centroids
+all_centroids_df <- scurve_model_obj$hb_obj$centroids
 ggplot2::ggplot() +
 geom_hexgrid(data = all_centroids_df, mapping = ggplot2::aes(x = c_x, y = c_y))
 
