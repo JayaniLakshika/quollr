@@ -6,7 +6,7 @@
 #'
 #' @param highd_data A tibble that contains the high-dimensional data with a unique identifier.
 #' @param nldr_data A tibble that contains the embedding with a unique identifier.
-#' @param bin1 (default: 4) A numeric value representing the number of bins along the x axis.
+#' @param b1 (default: 4) A numeric value representing the number of bins along the x axis.
 #' @param q (default: 0.1) A numeric value representing the buffer amount as proportion of data range.
 #' @param benchmark_highdens (default: 5) A numeric value using to filter high-density hexagons.
 #'
@@ -18,17 +18,17 @@
 #' @importFrom stats quantile
 #'
 #' @examples
-#' fit_highd_model(highd_data = scurve, nldr_data = scurve_umap, bin1 = 4,
+#' fit_highd_model(highd_data = scurve, nldr_data = scurve_umap, b1 = 4,
 #' q = 0.1, benchmark_highdens = 5)
 #'
 #' @export
-fit_highd_model <- function(highd_data, nldr_data, bin1 = 4, q = 0.1, benchmark_highdens = 5) {
+fit_highd_model <- function(highd_data, nldr_data, b1 = 4, q = 0.1, benchmark_highdens = 5) {
 
   ## To pre-process the data
   nldr_obj <- gen_scaled_data(nldr_data = nldr_data)
 
   ## Obtain the hexbin object
-  hb_obj <- hex_binning(nldr_obj = nldr_obj, bin1 = bin1, q = q)
+  hb_obj <- hex_binning(nldr_obj = nldr_obj, b1 = b1, q = q)
 
   all_centroids_df <- hb_obj$centroids
   counts_df <- hb_obj$std_cts
@@ -52,10 +52,10 @@ fit_highd_model <- function(highd_data, nldr_data, bin1 = 4, q = 0.1, benchmark_
 
   ## To extract high-densed bins
   model_2d <- df_bin_centroids |>
-    dplyr::filter(bin_counts > benchmark_highdens)
+    dplyr::filter(n_h > benchmark_highdens)
 
   model_highd <- model_highd |>
-    dplyr::filter(hexID %in% model_2d$hexID)
+    dplyr::filter(h %in% model_2d$h)
 
   cli::cli_alert_success("Model generated successfully! 🎉")
 

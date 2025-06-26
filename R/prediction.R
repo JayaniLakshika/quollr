@@ -22,12 +22,12 @@
 predict_emb <- function(highd_data, model_2d, model_highd) {
 
   test_data_matrix <- highd_data |> select(-ID) |> as.matrix()
-  df_bin_matrix <- model_highd |> select(-hexID) |> as.matrix()
+  df_bin_matrix <- model_highd |> select(-h) |> as.matrix()
 
   min_column <- compute_highd_dist(test_data_matrix, df_bin_matrix)
-  pred_hb_id <- model_highd$hexID[min_column]
+  pred_hb_id <- model_highd$h[min_column]
 
-  match_indices <- match(pred_hb_id, model_2d$hexID)
+  match_indices <- match(pred_hb_id, model_2d$h)
   tibble(pred_emb_1 = model_2d$c_x[match_indices],
          pred_emb_2 = model_2d$c_y[match_indices],
          ID = highd_data$ID,
@@ -62,7 +62,7 @@ glance <- function(highd_data, model_2d, model_highd) {
                                model_highd = model_highd)
 
   prediction_df <- prediction_df |>
-    left_join(model_highd, by = c("pred_hb_id" = "hexID")) |>
+    left_join(model_highd, by = c("pred_hb_id" = "h")) |>
     left_join(highd_data, by = "ID")
 
   cols <- paste0("x", 1:(NCOL(model_highd) - 1))
@@ -109,7 +109,7 @@ augment <- function(highd_data, model_2d, model_highd) {
                                model_highd = model_highd)
 
   prediction_df <- prediction_df |>
-    left_join(model_highd, by = c("pred_hb_id" = "hexID"))
+    left_join(model_highd, by = c("pred_hb_id" = "h"))
 
   prediction_df <- prediction_df |>
     left_join(highd_data, by = c("ID" = "ID")) ## Map high-D data
@@ -177,28 +177,35 @@ gen_diffbin1_errors <- function(highd_data, nldr_data, benchmark_highdens = 1) {
     scurve_model <- fit_highd_model(
       highd_data = highd_data,
       nldr_data = nldr_data,
-      bin1 = xbins,
+      b1 = xbins,
       q = 0.1,
       benchmark_highdens = benchmark_highdens
     )
 
     df_bin_centroids_scurve <- scurve_model$model_2d
     df_bin_scurve <- scurve_model$model_highd
-    bin2 <- scurve_model$hb_obj$bins[2]
+    b2 <- scurve_model$hb_obj$bins[2]
     a1 <- scurve_model$hb_obj$a1
     a2 <- scurve_model$hb_obj$a2
+
+    df_bin_centroids_scurve <- df_bin_centroids_scurve |>
+      dplyr::mutate(l = quad(a=3, b = 2 * a2, c = -(a2^2 + a1^2))) |>
+      dplyr::mutate(A = (3 * sqrt(3)/2) * l^2) |>
+      dplyr::mutate(m = unique(df_bin_centroids_scurve))
+      dplyr::mutate(d = w_h/(m*A))
 
     ## Compute error
     error_df <- glance(
       model_2d = df_bin_centroids_scurve,
       model_highd = df_bin_scurve,
       highd_data = highd_data) |>
-      dplyr::mutate(bin1 = xbins,
-                    bin2 = bin2,
-                    b = bin1 * bin2,
-                    m = NROW(df_bin_centroids_scurve),
+      dplyr::mutate(b1 = xbins,
+                    b2 = b2,
+                    b = b1 * b2,
+                    m = unique(df_bin_centroids_scurve),
                     a1 = round(a1, 2),
-                    a2 = round(a2, 2))
+                    a2 = round(a2, 2),
+                    d_bar = mean(d))
 
     bin_error_df <- dplyr::bind_rows(bin_error_df, error_df)
 

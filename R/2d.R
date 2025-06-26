@@ -3,20 +3,20 @@
 #' This function generates all possible centroids in the hexagonal grid.
 #'
 #' @param nldr_data A tibble that contains embedding components in the first and second columns.
-#' @param bin1 Number of bins along the x axis.
+#' @param b1 Number of bins along the x axis.
 #' @param q The buffer amount as proportion of data range.
 #'
-#' @return A tibble contains hexIDs, x and y coordinates (hexID, c_x, c_y respectively)
+#' @return A tibble contains hexIDs, x and y coordinates (h, c_x, c_y respectively)
 #' of all hexagon bin centroids.
 #'
 #' @examples
-#' gen_centroids(nldr_obj = scurve_umap_obj, bin1 = 4, q = 0.1)
+#' gen_centroids(nldr_obj = scurve_umap_obj, b1 = 4, q = 0.1)
 #'
 #' @export
-gen_centroids <- function(nldr_obj, bin1 = 4, q = 0.1){
+gen_centroids <- function(nldr_obj, b1 = 4, q = 0.1){
 
-  ## To check whether bin2 greater than 2
-  if (bin1 < 2) {
+  ## To check whether b2 greater than 2
+  if (b1 < 2) {
     cli::cli_abort("Number of bins along the x-axis at least should be 2.")
   }
 
@@ -31,10 +31,10 @@ gen_centroids <- function(nldr_obj, bin1 = 4, q = 0.1){
   r2 <- diff(lim2)/diff(lim1)
 
   ## To compute hexagonal configurations
-  bin_obj <- calc_bins_y(nldr_obj = nldr_obj, bin1 = bin1, q = q)
+  bin_obj <- calc_bins_y(nldr_obj = nldr_obj, b1 = b1, q = q)
 
   # To obtain the bins along the y-axis
-  bin2 <- bin_obj$bin2
+  b2 <- bin_obj$b2
 
   # To obtain the width of the hexagon
   a1 <- bin_obj$a1
@@ -44,7 +44,7 @@ gen_centroids <- function(nldr_obj, bin1 = 4, q = 0.1){
   s2 <- -q * r2
 
   # Generate x-coordinate of centroids for odd rows
-  c_x_vec_odd <- seq(s1, by = a1, length.out = bin1) ## since x range is 0-1
+  c_x_vec_odd <- seq(s1, by = a1, length.out = b1) ## since x range is 0-1
 
   # Generate x-coordinate of centroids for even rows
   c_x_vec_even <- c_x_vec_odd + a1/2
@@ -54,21 +54,21 @@ gen_centroids <- function(nldr_obj, bin1 = 4, q = 0.1){
   a2 <- sqrt(3) * a1/2
 
   # Generate y-coordinate of centroids
-  c_y_vec <- seq(s2, by = a2, length.out = bin2)
-  c_y <- rep(c_y_vec, each = bin1)
+  c_y_vec <- seq(s2, by = a2, length.out = b2)
+  c_y <- rep(c_y_vec, each = b1)
 
   ## Do the number of belongs y axis is even or odd and adjust the x-coordinates
-  if ((bin2 %% 2) == 0) {
+  if ((b2 %% 2) == 0) {
 
-    c_x <- rep(c_x_vec, bin2/2)
+    c_x <- rep(c_x_vec, b2/2)
 
   } else {
 
-    c_x <- append(rep(c_x_vec, floor(bin2/2)), c_x_vec_odd)
+    c_x <- append(rep(c_x_vec, floor(b2/2)), c_x_vec_odd)
 
   }
 
-  centroids_data <- tibble::tibble(hexID = 1:length(c_x), c_x = c_x, c_y = c_y)
+  centroids_data <- tibble::tibble(h = 1:length(c_x), c_x = c_x, c_y = c_y)
 
   return(centroids_data)
 
@@ -94,7 +94,7 @@ gen_centroids <- function(nldr_obj, bin1 = 4, q = 0.1){
 #' @export
 gen_hex_coord <- function(centroids_data, a1) {
   if (missing(a1)) cli::cli_abort("Need to initialize the width of the hexagon.")
-  gen_hex_coord_cpp(centroids_data$hexID, centroids_data$c_x, centroids_data$c_y, a1)
+  gen_hex_coord_cpp(centroids_data$h, centroids_data$c_x, centroids_data$c_y, a1)
 }
 
 #' Assign data to hexagons
@@ -123,10 +123,10 @@ assign_data <- function(nldr_obj, centroids_data) {
   min_column <- compute_highd_dist(matrix_nldr, centroid_matrix)
 
   # Map to hex bin IDs
-  hb_ids <- centroids_data$hexID[min_column]
+  hb_ids <- centroids_data$h[min_column]
 
   # Add hex bin ID column
-  scaled_nldr_df$hexID <- hb_ids
+  scaled_nldr_df$h <- hb_ids
 
   return(scaled_nldr_df)
 }
@@ -149,9 +149,9 @@ compute_std_counts <- function(scaled_nldr_hexid) {
 
   ## Group by hexagon IDs
   std_df <- scaled_nldr_hexid |>
-    count(hexID) |>
-    mutate(std_counts = n/sum(n)) |>
-    rename(bin_counts = n)
+    count(h) |>
+    mutate(w_h = n/sum(n)) |>
+    rename(n_h = n)
 
   return(std_df)
 
@@ -175,7 +175,7 @@ compute_std_counts <- function(scaled_nldr_hexid) {
 find_pts <- function(scaled_nldr_hexid) {
 
   pts_df <- scaled_nldr_hexid |>
-    group_by(hexID) |>
+    group_by(h) |>
     summarize(pts_list = list(ID), .groups = "drop")
 
   return(pts_df)
@@ -188,7 +188,7 @@ find_pts <- function(scaled_nldr_hexid) {
 #' This function generates the hexagonal object.
 #'
 #' @param nldr_data A tibble that contains embedding with a unique identifier.
-#' @param bin1 Number of bins along the x axis.
+#' @param b1 Number of bins along the x axis.
 #' @param q The buffer amount as proportion of data range.
 #'
 #' @return A object that contains numeric vector that contains binwidths (a1),
@@ -203,10 +203,10 @@ find_pts <- function(scaled_nldr_hexid) {
 #'
 #'
 #' @examples
-#' hex_binning(nldr_obj = scurve_umap_obj, bin1 = 4, q = 0.1)
+#' hex_binning(nldr_obj = scurve_umap_obj, b1 = 4, q = 0.1)
 #'
 #' @export
-hex_binning <- function(nldr_obj, bin1 = 4, q = 0.1) {
+hex_binning <- function(nldr_obj, b1 = 4, q = 0.1) {
 
   scaled_nldr <- nldr_obj$scaled_nldr
 
@@ -216,8 +216,8 @@ hex_binning <- function(nldr_obj, bin1 = 4, q = 0.1) {
   r2 <- diff(lim2)/diff(lim1)
 
   ## To compute the number of bins along the y-axis
-  bin_obj <- calc_bins_y(nldr_obj = nldr_obj, bin1 = bin1, q = q)
-  bin2 <- bin_obj$bin2
+  bin_obj <- calc_bins_y(nldr_obj = nldr_obj, b1 = b1, q = q)
+  b2 <- bin_obj$b2
 
   ## To obtain the width of the hexagon
   a1 <- bin_obj$a1
@@ -230,7 +230,7 @@ hex_binning <- function(nldr_obj, bin1 = 4, q = 0.1) {
   s2 <- -q * r2
 
   ## To generate all the centroids of the grid
-  all_centroids_df <- gen_centroids(nldr_obj = nldr_obj, bin1 = bin1, q = q)
+  all_centroids_df <- gen_centroids(nldr_obj = nldr_obj, b1 = b1, q = q)
 
   ## To generate the hexagon coordinates
   all_hex_coord <- gen_hex_coord(centroids_data = all_centroids_df, a1 = a1)
@@ -247,14 +247,14 @@ hex_binning <- function(nldr_obj, bin1 = 4, q = 0.1) {
   ## To generate the object of hexagon info
   hex_bin_obj <- list(a1 = a1,
                       a2 = a2,
-                      bins = c(bin1, bin2),
+                      bins = c(b1, b2),
                       start_point = c(s1, s2),
                       centroids = all_centroids_df,
                       hex_poly = all_hex_coord,
                       data_hb_id = nldr_hex_id,
                       std_cts = std_df,
                       tot_bins = NROW(all_centroids_df),
-                      non_bins = length(std_df$hexID),
+                      non_bins = length(std_df$h),
                       pts_bins = pts_df
   )
   class(hex_bin_obj) <- "hex_bin_obj"
@@ -283,11 +283,11 @@ hex_binning <- function(nldr_obj, bin1 = 4, q = 0.1) {
 extract_hexbin_centroids <- function(centroids_data, counts_data) {
 
   # Fast merge without unnecessary sorting
-  merged_data <- merge(centroids_data, counts_data, by = "hexID", all = TRUE)
+  merged_data <- merge(centroids_data, counts_data, by = "h", all = TRUE)
 
   # Replace NA values with 0 for both columns
-  merged_data$std_counts[is.na(merged_data$std_counts)] <- 0
-  merged_data$bin_counts[is.na(merged_data$bin_counts)] <- 0
+  merged_data$w_h[is.na(merged_data$w_h)] <- 0
+  merged_data$n_h[is.na(merged_data$n_h)] <- 0
 
   return(merged_data)
 }
@@ -314,25 +314,25 @@ extract_hexbin_mean <- function(data_hb, counts_data, centroids_data) {
 
   ## To arrange the hexagon IDs
   counts_data <- counts_data |>
-    dplyr::arrange(hexID)
+    dplyr::arrange(h)
 
   ## To join the datasets
-  centroids_data <- dplyr::full_join(centroids_data, counts_data, by = "hexID") |>
+  centroids_data <- dplyr::full_join(centroids_data, counts_data, by = "h") |>
     dplyr::select(-c(c_x, c_y))
 
   ## To compute hexagonal bin means
   hex_mean_df <- data_hb |>
     dplyr::select(-ID) |>
-    dplyr::group_by(hexID) |>
+    dplyr::group_by(h) |>
     dplyr::summarise(dplyr::across(tidyselect::everything(), mean)) |>
-    dplyr::arrange(hexID)
+    dplyr::arrange(h)
 
   ## Rename columns
-  names(hex_mean_df) <- c("hexID", "c_x", "c_y")
+  names(hex_mean_df) <- c("h", "c_x", "c_y")
 
-  centroids_data <- dplyr::full_join(centroids_data, hex_mean_df, by = c("hexID" = "hexID")) |>
-    dplyr::rename(bin_counts = n) |>
-    dplyr::select(hexID, c_x, c_y, bin_counts, std_counts)
+  centroids_data <- dplyr::full_join(centroids_data, hex_mean_df, by = c("h" = "h")) |>
+    dplyr::rename(n_h = n) |>
+    dplyr::select(h, c_x, c_y, n_h, w_h)
 
   return(centroids_data)
 }
@@ -362,7 +362,7 @@ tri_bin_centroids <- function(centroids_data){
   # Create a list to store the triangulation object and the counts
   result <- list(
     trimesh_object = tr,
-    bin_counts = centroids_data[["bin_counts"]]
+    n_h = centroids_data[["n_h"]]
   )
 
   return(result)
@@ -429,7 +429,7 @@ calc_2d_dist <- function(trimesh_data, select_vars = c("from", "to", "x_from", "
 #' @export
 gen_edges <- function(tri_object, a1) { #centroids_data
   tri <- tri_object$trimesh_object
-  counts <- tri_object$bin_counts
+  counts <- tri_object$n_h
 
   # Create tr_df with coordinates and bin counts
   n <- length(tri$x)
@@ -548,13 +548,13 @@ find_non_empty_bins <- function(nldr_obj, non_empty_bins = 2, q = 0.1) {
   num_bins_x_vec <- 4:max_bins_along_axis
 
   ## To initialise the number of bins along the x-axis
-  bin1 <- num_bins_x_vec[1]
+  b1 <- num_bins_x_vec[1]
 
   ### Generate the full grid
-  hb_obj <- hex_binning(nldr_obj = nldr_obj, bin1 = bin1, q = q)
+  hb_obj <- hex_binning(nldr_obj = nldr_obj, b1 = b1, q = q)
 
   ## To compute the number of bins along the y-axis
-  bin2 <- hb_obj$bins[2]
+  b2 <- hb_obj$bins[2]
 
   num_of_non_empty_bins <- hb_obj$non_bins
 
@@ -569,18 +569,18 @@ find_non_empty_bins <- function(nldr_obj, non_empty_bins = 2, q = 0.1) {
            for the required number of non empty bins.")
     }
 
-    bin1 <- num_bins_x_vec[2]
+    b1 <- num_bins_x_vec[2]
 
     ### Generate the full grid
-    hb_obj <- hex_binning(nldr_obj = nldr_obj, bin1 = bin1, q = q)
+    hb_obj <- hex_binning(nldr_obj = nldr_obj, b1 = b1, q = q)
 
     ## To compute the number of bins along the y-axis
-    bin2 <- hb_obj$bins[2]
+    b2 <- hb_obj$bins[2]
 
     num_of_non_empty_bins <- hb_obj$non_bins
 
     if (num_of_non_empty_bins >= non_empty_bins) {
-      return(list(bin1 = bin1, bin2 = bin2))
+      return(list(b1 = b1, b2 = b2))
       break
     } else {
       next

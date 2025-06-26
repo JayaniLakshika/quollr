@@ -4,20 +4,14 @@
 \alias{fit_highd_model}
 \title{Construct the 2D model and lift into high-D}
 \usage{
-fit_highd_model(
-  highd_data,
-  nldr_data,
-  bin1 = 4,
-  q = 0.1,
-  benchmark_highdens = 5
-)
+fit_highd_model(highd_data, nldr_data, b1 = 4, q = 0.1, benchmark_highdens = 5)
 }
 \arguments{
 \item{highd_data}{A tibble that contains the high-dimensional data with a unique identifier.}
 
 \item{nldr_data}{A tibble that contains the embedding with a unique identifier.}
 
-\item{bin1}{(default: 4) A numeric value representing the number of bins along the x axis.}
+\item{b1}{(default: 4) A numeric value representing the number of bins along the x axis.}
 
 \item{q}{(default: 0.1) A numeric value representing the buffer amount as proportion of data range.}
 
@@ -34,7 +28,7 @@ to customize the modeling process, including the choice of bin centroids or bin 
 removal of low-density hexagons, and averaging of high-dimensional data.
 }
 \examples{
-fit_highd_model(highd_data = scurve, nldr_data = scurve_umap, bin1 = 4,
+fit_highd_model(highd_data = scurve, nldr_data = scurve_umap, b1 = 4,
 q = 0.1, benchmark_highdens = 5)
 
 }

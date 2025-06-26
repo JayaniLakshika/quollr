@@ -94,13 +94,13 @@ StatHexgrid <- ggplot2::ggproto(
     )
 
     # Create coordinated for from and to
-    edges_all <- bind_rows(lapply(hexIDs, function(id) mutate(edges, hexID = id)))
+    edges_all <- bind_rows(lapply(hexIDs, function(id) mutate(edges, h = id)))
 
-    edges_all <- left_join(edges_all, hex_coord_df, c("hexID" = "hex_poly_id", "from" = "edge_order")) |>
+    edges_all <- left_join(edges_all, hex_coord_df, c("h" = "hex_poly_id", "from" = "edge_order")) |>
       rename(c("x_from" = "x",
                "y_from" = "y"))
 
-    edges_all <- left_join(edges_all, hex_coord_df, c("hexID" = "hex_poly_id", "to" = "edge_order")) |>
+    edges_all <- left_join(edges_all, hex_coord_df, c("h" = "hex_poly_id", "to" = "edge_order")) |>
       rename(c("x_to" = "x",
                "y_to" = "y"))
 

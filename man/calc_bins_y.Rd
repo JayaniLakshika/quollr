@@ -4,10 +4,10 @@
 \alias{calc_bins_y}
 \title{Calculate the effective number of bins along x-axis and y-axis}
 \usage{
-calc_bins_y(nldr_obj, bin1 = 4, q = 0.1)
+calc_bins_y(nldr_obj, b1 = 4, q = 0.1)
 }
 \arguments{
-\item{bin1}{Number of bins along the x axis.}
+\item{b1}{Number of bins along the x axis.}
 
 \item{q}{The buffer amount as proportion of data range.}
 
@@ -22,6 +22,6 @@ This function calculates the effective number of bins along the x and y axes
 of a hexagonal grid.
 }
 \examples{
-calc_bins_y(nldr_obj = scurve_umap_obj, bin1 = 4, q = 0.1)
+calc_bins_y(nldr_obj = scurve_umap_obj, b1 = 4, q = 0.1)
 
 }

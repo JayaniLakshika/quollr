@@ -4,10 +4,10 @@
 \alias{hex_binning}
 \title{Hexagonal binning}
 \usage{
-hex_binning(nldr_obj, bin1 = 4, q = 0.1)
+hex_binning(nldr_obj, b1 = 4, q = 0.1)
 }
 \arguments{
-\item{bin1}{Number of bins along the x axis.}
+\item{b1}{Number of bins along the x axis.}
 
 \item{q}{The buffer amount as proportion of data range.}
 
@@ -28,6 +28,6 @@ and points within each hexagon (pts_bins).
 This function generates the hexagonal object.
 }
 \examples{
-hex_binning(nldr_obj = scurve_umap_obj, bin1 = 4, q = 0.1)
+hex_binning(nldr_obj = scurve_umap_obj, b1 = 4, q = 0.1)
 
 }
