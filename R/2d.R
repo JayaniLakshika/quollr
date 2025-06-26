@@ -150,7 +150,7 @@ compute_std_counts <- function(scaled_nldr_hexid) {
   ## Group by hexagon IDs
   std_df <- scaled_nldr_hexid |>
     count(hexID) |>
-    mutate(std_counts = n/max(n)) |>
+    mutate(std_counts = n/sum(n)) |>
     rename(bin_counts = n)
 
   return(std_df)
