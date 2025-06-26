@@ -191,7 +191,7 @@ gen_diffbin1_errors <- function(highd_data, nldr_data, benchmark_highdens = 1) {
     df_bin_centroids_scurve <- df_bin_centroids_scurve |>
       dplyr::mutate(l = quad(a=3, b = 2 * a2, c = -(a2^2 + a1^2))) |>
       dplyr::mutate(A = (3 * sqrt(3)/2) * l^2) |>
-      dplyr::mutate(m = unique(df_bin_centroids_scurve))
+      dplyr::mutate(m = NROW(df_bin_centroids_scurve)) |>
       dplyr::mutate(d = w_h/(m*A))
 
     ## Compute error
