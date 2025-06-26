@@ -139,6 +139,40 @@ augment <- function(highd_data, model_2d, model_highd) {
 
 }
 
+#' Solve Quadratic Equation for Positive Real Roots
+#'
+#' This function solves a quadratic equation of the form `ax^2 + bx + c = 0`
+#' and returns only the positive real roots. It handles complex intermediate
+#' calculations and returns real numbers if the roots are real.
+#'
+#' @param a The coefficient of the x^2 term. Can be complex.
+#' @param b The coefficient of the x term.
+#' @param c The constant term.
+#' @param a1 A numeric value used in the calculation of `c` if `c`'s default is used.
+#'           Must be provided if default `c` is used.
+#' @param a2 A numeric value used in the calculation of `b` and `c` if their defaults are used.
+#'           Must be provided if default `b` or `c` are used.
+#' @return A numeric vector containing the positive real root(s) of the quadratic equation.
+#'         Returns `numeric(0)` if no positive real roots are found.
+#'         Returns a single value if both positive roots are identical.
+#' @examples
+#' # Example 1: With default a, b, c (assuming a1 and a2 are provided)
+#' quad(a1 = 1, a2 = 2)
+#'
+#' # Example 2: With specific coefficients
+#' quad(a = 1, b = -3, c = 2) # x^2 - 3x + 2 = 0
+#'
+#' @export
+quad <- function(a = 3, b = 2 * a2, c = -(a2^2 + a1^2))
+{
+  a <- as.complex(a)
+  answer <- c((-b + sqrt(b^2 - 4 * a * c)) / (2 * a),
+              (-b - sqrt(b^2 - 4 * a * c)) / (2 * a))
+  if(all(Im(answer) == 0)) answer <- Re(answer)
+  if(answer[1] == answer[2]) return(answer[1])
+  answer[answer>0] ## only positive
+}
+
 #' Generate erros and MSE for different bin widths
 #'
 #' This function augments a dataset with predictions and error metrics obtained
