@@ -17,8 +17,7 @@ developed an algorithm to create a model that is then used to display as
 a wireframe in high dimensions. The `quollr` package provides functions
 to implement the algorithm.
 
-<!--For a thorough background and discussion on this work, please read our paper [link to the paper].
--->
+For a thorough background and discussion on this work, please read our paper [https://arxiv.org/abs/2506.22051](https://arxiv.org/abs/2506.22051).
 
 ## Installation
 
