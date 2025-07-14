@@ -12,9 +12,9 @@
 #' @return A `ggplot2` layer object.
 #'
 #' @examples
-#' all_centroids_df <- scurve_model_obj$hb_obj$centroids
+#' df_bin_centroids <- scurve_model_obj$model_2d |> dplyr::filter(n_h > 10)
 #' ggplot2::ggplot() +
-#' geom_hexgrid(data = all_centroids_df, mapping = ggplot2::aes(x = c_x, y = c_y))
+#' geom_hexgrid(data = df_bin_centroids, mapping = ggplot2::aes(x = c_x, y = c_y))
 #'
 #' @importFrom ggplot2 layer
 #' @importFrom ggplot2 aes

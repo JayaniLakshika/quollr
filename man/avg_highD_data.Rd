@@ -2,7 +2,7 @@
 % Please edit documentation in R/highd.R
 \name{avg_highd_data}
 \alias{avg_highd_data}
-\title{Create a dataframe with averaged high-dimensional data}
+\title{Create a tibble with averaged high-dimensional data}
 \usage{
 avg_highd_data(highd_data, scaled_nldr_hexid)
 }

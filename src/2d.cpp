@@ -32,7 +32,7 @@ DataFrame gen_hex_coord_cpp(IntegerVector hexID, NumericVector c_x, NumericVecto
   }
 
   return DataFrame::create(
-    Named("hex_poly_id") = hex_poly_id,
+    Named("h") = hex_poly_id,
     Named("x") = x,
     Named("y") = y
   );

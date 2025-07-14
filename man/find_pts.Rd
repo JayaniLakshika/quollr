@@ -10,7 +10,7 @@ find_pts(scaled_nldr_hexid)
 \item{scaled_nldr_hexid}{A tibble that contains the scaled embedding with hexagonal bin IDs.}
 }
 \value{
-A tibble with hexagonal bin IDs and the corresponding points.
+A tibble with hexagonal bin IDs (\code{h}) and the corresponding points.
 }
 \description{
 This function maps points to their corresponding hexagonal bins.

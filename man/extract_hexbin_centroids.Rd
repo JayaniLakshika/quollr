@@ -14,14 +14,15 @@ coordinates with hexagon IDs.}
 number of points within each hexagon.}
 }
 \value{
-A tibble contains hexagon ID, centroid coordinates, and standardise counts.
+A tibble contains hexagon ID (\code{h}), centroid coordinates (\code{c_x}, \code{c_y}),
+bin counts (\code{n_h}), and standardise counts (\code{w_h}).
 }
 \description{
 Extract hexagonal bin centroids coordinates and the corresponding standardise counts.
 }
 \examples{
-all_centroids_df <- s_curve_obj$s_curve_umap_hb_obj$centroids
-counts_data <- s_curve_obj$s_curve_umap_hb_obj$std_cts
+all_centroids_df <- scurve_model_obj$hb_obj$centroids
+counts_data <- scurve_model_obj$hb_obj$std_cts
 extract_hexbin_centroids(centroids_data = all_centroids_df,
 counts_data = counts_data)
 

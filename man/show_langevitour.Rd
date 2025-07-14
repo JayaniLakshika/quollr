@@ -2,21 +2,32 @@
 % Please edit documentation in R/highd.R
 \name{show_langevitour}
 \alias{show_langevitour}
-\title{Visualize the model overlaid on high-dimensional data}
+\title{Visualise the model overlaid on high-dimensional data}
 \usage{
-show_langevitour(point_data, edge_data)
+show_langevitour(
+  point_data,
+  edge_data,
+  point_colours = c("#66B2CC", "#FF7755"),
+  point_sizes = c(2, 1)
+)
 }
 \arguments{
 \item{point_data}{A tibble that contains the high-dimensional data and model in high-dimensions.}
 
 \item{edge_data}{A tibble that contains the wireframe data (from and to).}
+
+\item{point_colours}{A character vector that contains the colours of points in
+the high-dimensional data and model.}
+
+\item{point_sizes}{A numeric vector that contains the sizes of points in
+the high-dimensional data and model.}
 }
 \value{
 A langevitour object with the model and the high-dimensional data.
 }
 \description{
-This function generates a LangeviTour visualization based on different
-conditions and input parameters.
+This function generates a langevitour which visualise the model
+overlaid on high-dimensional data.
 }
 \examples{
 df_exe <- comb_data_model(highd_data = scurve, model_highd = scurve_model_obj$model_highd,

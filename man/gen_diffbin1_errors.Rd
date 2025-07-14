@@ -7,16 +7,11 @@
 gen_diffbin1_errors(highd_data, nldr_data, benchmark_highdens = 1)
 }
 \arguments{
-\item{df_bin_centroids}{Centroid coordinates of hexagonal bins in 2D space.}
+\item{highd_data}{A tibble that contains the high-dimensional data with a unique identifier.}
 
-\item{df_bin}{Centroid coordinates of hexagonal bins in high dimensions.}
+\item{nldr_data}{A tibble that contains the embedding with a unique identifier.}
 
-\item{training_data}{Training data used to fit the model.
-If NULL, the training data is used (default is NULL).}
-
-\item{type_NLDR}{The type of non-linear dimensionality reduction (NLDR) used.}
-
-\item{col_start}{The text that begin the column name of the high-dimensional data.}
+\item{benchmark_highdens}{(default: 1) A numeric value using to filter high-density hexagons.}
 }
 \value{
 A tibble containing the augmented data with predictions,

@@ -1,13 +1,14 @@
-#' Predict 2D embeddings
+#' Predict 2-D embeddings
 #'
-#' Given a test dataset, the centroid coordinates of hexagonal bins in  2D and high-dimensional space,
-#' predict the 2D embeddings for each data point in the test dataset.
+#' Given a test dataset, the centroid coordinates of hexagonal bins in  2-D and high-dimensional space,
+#' predict the 2-D embeddings for each data point in the test dataset.
 #'
-#' @param highd_data The test dataset containing high-dimensional coordinates and an unique identifier.
-#' @param model_2d Centroid coordinates of hexagonal bins in 2D space.
+#' @param highd_data The tibble contains high-dimensional data and an unique identifier.
+#' @param model_2d Centroid coordinates of hexagonal bins in 2-D space.
 #' @param model_highd Centroid coordinates of hexagonal bins in high dimensions.
 #'
-#' @return A tibble contains predicted 2D embeddings, ID in the test data, and predicted hexagonal IDs.
+#' @return A tibble contains predicted 2-D embeddings,
+#' ID in the test data, and predicted hexagonal IDs.
 #' @importFrom dplyr select
 #' @importFrom proxy dist
 #' @importFrom tibble tibble
@@ -31,7 +32,7 @@ predict_emb <- function(highd_data, model_2d, model_highd) {
   tibble(pred_emb_1 = model_2d$c_x[match_indices],
          pred_emb_2 = model_2d$c_y[match_indices],
          ID = highd_data$ID,
-         pred_hb_id = pred_hb_id)
+         pred_h = pred_hb_id)
 
 }
 
@@ -40,7 +41,7 @@ predict_emb <- function(highd_data, model_2d, model_highd) {
 #' This function generates an evaluation data frame based on the provided data and predictions.
 #'
 #' @param highd_data The dataset containing high-dimensional coordinates and an unique identifier.
-#' @param model_2d Centroid coordinates of hexagonal bins in 2D space.
+#' @param model_2d Centroid coordinates of hexagonal bins in 2-D space.
 #' @param model_highd Centroid coordinates of hexagonal bins in high dimensions.
 #'
 #' @return A tibble contains Error, and MSE values.
@@ -62,7 +63,7 @@ glance <- function(highd_data, model_2d, model_highd) {
                                model_highd = model_highd)
 
   prediction_df <- prediction_df |>
-    left_join(model_highd, by = c("pred_hb_id" = "h")) |>
+    left_join(model_highd, by = c("pred_h" = "h")) |>
     left_join(highd_data, by = "ID")
 
   cols <- paste0("x", 1:(NCOL(model_highd) - 1))
@@ -80,12 +81,9 @@ glance <- function(highd_data, model_2d, model_highd) {
 #' This function augments a dataset with predictions and error metrics obtained
 #' from a nonlinear dimension reduction (NLDR) model.
 #'
-#' @param df_bin_centroids Centroid coordinates of hexagonal bins in 2D space.
-#' @param df_bin Centroid coordinates of hexagonal bins in high dimensions.
-#' @param training_data Training data used to fit the model.
-#' If NULL, the training data is used (default is NULL).
-#' @param type_NLDR The type of non-linear dimensionality reduction (NLDR) used.
-#' @param col_start The text that begin the column name of the high-dimensional data.
+#' @param highd_data The dataset containing high-dimensional coordinates and an unique identifier.
+#' @param model_2d Centroid coordinates of hexagonal bins in 2-D space.
+#' @param model_highd Centroid coordinates of hexagonal bins in high dimensions.
 #'
 #' @return A tibble containing the augmented data with predictions,
 #' error metrics, and absolute error metrics.
@@ -109,14 +107,14 @@ augment <- function(highd_data, model_2d, model_highd) {
                                model_highd = model_highd)
 
   prediction_df <- prediction_df |>
-    left_join(model_highd, by = c("pred_hb_id" = "h"))
+    left_join(model_highd, by = c("pred_h" = "h"))
 
   prediction_df <- prediction_df |>
     left_join(highd_data, by = c("ID" = "ID")) ## Map high-D data
 
   prediction_df <- prediction_df |>
     select("ID", starts_with("x"),
-           "pred_hb_id", starts_with("model_high_d_"))
+           "pred_h", starts_with("model_high_d_"))
 
   cols <- paste0("x", 1:(NCOL(model_highd) - 1))
   high_d_model_cols <- paste0("model_high_d_x", 1:(NCOL(model_highd) - 1))
@@ -178,12 +176,9 @@ quad <- function(a = 3, b = 2 * a2, c = -(a2^2 + a1^2))
 #' This function augments a dataset with predictions and error metrics obtained
 #' from a nonlinear dimension reduction (NLDR) model.
 #'
-#' @param df_bin_centroids Centroid coordinates of hexagonal bins in 2D space.
-#' @param df_bin Centroid coordinates of hexagonal bins in high dimensions.
-#' @param training_data Training data used to fit the model.
-#' If NULL, the training data is used (default is NULL).
-#' @param type_NLDR The type of non-linear dimensionality reduction (NLDR) used.
-#' @param col_start The text that begin the column name of the high-dimensional data.
+#' @param highd_data A tibble that contains the high-dimensional data with a unique identifier.
+#' @param nldr_data A tibble that contains the embedding with a unique identifier.
+#' @param benchmark_highdens (default: 1) A numeric value using to filter high-density hexagons.
 #'
 #' @return A tibble containing the augmented data with predictions,
 #' error metrics, and absolute error metrics.
@@ -296,8 +291,8 @@ gen_design <- function(n_right, ncol_right = 2) {
 #' @return A patchwork object.
 #'
 #' @examples
-#' design <- gen_design(n_right = 8, ncol_right = 2)
-#' plot_rmse_layouts(plots, design = design)
+#' design <- gen_design(n_right = 6, ncol_right = 2)
+#' plot_rmse_layouts(plots = scurve_plts, design = design)
 #'
 #' @export
 plot_rmse_layouts <- function(plots, design){

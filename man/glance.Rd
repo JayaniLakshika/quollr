@@ -9,7 +9,7 @@ glance(highd_data, model_2d, model_highd)
 \arguments{
 \item{highd_data}{The dataset containing high-dimensional coordinates and an unique identifier.}
 
-\item{model_2d}{Centroid coordinates of hexagonal bins in 2D space.}
+\item{model_2d}{Centroid coordinates of hexagonal bins in 2-D space.}
 
 \item{model_highd}{Centroid coordinates of hexagonal bins in high dimensions.}
 }

@@ -4,14 +4,15 @@
 \alias{find_non_empty_bins}
 \title{Find the number of bins required to achieve required number of non-empty bins.}
 \usage{
-find_non_empty_bins(nldr_obj, non_empty_bins = 2, q = 0.1)
+find_non_empty_bins(nldr_obj, m = 2, q = 0.1)
 }
 \arguments{
-\item{non_empty_bins}{The desired number of non-empty bins.}
+\item{nldr_obj}{A list of a tibble contains scaled first and second columns
+of NLDR data, and numeric vectors representing the limits of the original NLDR data.}
+
+\item{m}{The desired number of non-empty bins.}
 
 \item{q}{The buffer amount as proportion of data range.}
-
-\item{data}{A tibble that contains the embedding.}
 }
 \value{
 The number of bins along the x and y axes
@@ -22,6 +23,6 @@ This function determines the number of bins along the x and y axes
 to obtain a specific number of non-empty bins.
 }
 \examples{
-find_non_empty_bins(nldr_obj = scurve_umap_obj, non_empty_bins = 5)
+find_non_empty_bins(nldr_obj = scurve_model_obj$nldr_obj, m = 5)
 
 }

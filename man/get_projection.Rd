@@ -43,7 +43,7 @@ edge_data <- scurve_model_obj$trimesh_data
 get_projection(projection = projection_df, proj_scale = 1,
 highd_data = scurve, model_highd = df_bin,
 trimesh_data = edge_data,
-axis_param = list(limits = 1, axis_scaled = 1, axis_pos_x = -0.72,
-axis_pos_y = -0.72,threshold = 0))
+axis_param = list(limits = 1, axis_scaled = 3, axis_pos_x = -0.72,
+axis_pos_y = -0.72,threshold = 0.09))
 
 }

@@ -7,16 +7,11 @@
 augment(highd_data, model_2d, model_highd)
 }
 \arguments{
-\item{df_bin_centroids}{Centroid coordinates of hexagonal bins in 2D space.}
+\item{highd_data}{The dataset containing high-dimensional coordinates and an unique identifier.}
 
-\item{df_bin}{Centroid coordinates of hexagonal bins in high dimensions.}
+\item{model_2d}{Centroid coordinates of hexagonal bins in 2-D space.}
 
-\item{training_data}{Training data used to fit the model.
-If NULL, the training data is used (default is NULL).}
-
-\item{type_NLDR}{The type of non-linear dimensionality reduction (NLDR) used.}
-
-\item{col_start}{The text that begin the column name of the high-dimensional data.}
+\item{model_highd}{Centroid coordinates of hexagonal bins in high dimensions.}
 }
 \value{
 A tibble containing the augmented data with predictions,

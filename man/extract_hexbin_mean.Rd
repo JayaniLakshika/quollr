@@ -16,15 +16,16 @@ number of points within each hexagon.}
 coordinates with hexagon IDs.}
 }
 \value{
-A tibble contains hexagon ID, bin mean coordinates, and standardize counts.
+A tibble contains hexagon ID (\code{h}), bin means (\code{c_x}, \code{c_y}),
+bin counts (\code{n_h}), and standardise counts (\code{w_h}).
 }
 \description{
 Extract hexagonal bin mean coordinates and the corresponding standardize counts.
 }
 \examples{
-all_centroids_df <- s_curve_obj$s_curve_umap_hb_obj$centroids
-counts_data <- s_curve_obj$s_curve_umap_hb_obj$std_cts
-umap_with_hb_id <- s_curve_obj$s_curve_umap_hb_obj$data_hb_id
+all_centroids_df <- scurve_model_obj$hb_obj$centroids
+counts_data <- scurve_model_obj$hb_obj$std_cts
+umap_with_hb_id <- scurve_model_obj$hb_obj$data_hb_id
 extract_hexbin_mean(data_hb = umap_with_hb_id, counts_data = counts_data,
 centroids_data = all_centroids_df)
 

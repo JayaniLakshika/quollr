@@ -6,7 +6,15 @@
 \title{Object for S-curve dataset}
 \format{
 ## `scurve_model_obj`
-An object of 6 elements
+An object of five elements
+\describe{
+  \item{nldr_obj}{A tibble contains scaled first and second columns of NLDR
+  data, and numeric vectors representing the limits of the original NLDR data.}
+  \item{hb_obj}{A object that contains hexagonal binning information.}
+  \item{model_highd}{A tibble with high-dimensional model.}
+  \item{model_2d}{A tibble containing hexagonal bin centroids in 2-D}
+  \item{trimesh_data}{A tibble that contains the edge information.}
+}
 }
 \source{
 This object is generated for illustrative purposes.

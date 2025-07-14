@@ -77,8 +77,8 @@ gen_axes <- function(proj, limits = 1, axis_pos_x = NULL, axis_pos_y = NULL,
 #' get_projection(projection = projection_df, proj_scale = 1,
 #' highd_data = scurve, model_highd = df_bin,
 #' trimesh_data = edge_data,
-#' axis_param = list(limits = 1, axis_scaled = 1, axis_pos_x = -0.72,
-#' axis_pos_y = -0.72,threshold = 0))
+#' axis_param = list(limits = 1, axis_scaled = 3, axis_pos_x = -0.72,
+#' axis_pos_y = -0.72,threshold = 0.09))
 #'
 get_projection <- function(projection, proj_scale, highd_data, model_highd,
                            trimesh_data, axis_param) {
@@ -147,7 +147,7 @@ get_projection <- function(projection, proj_scale, highd_data, model_highd,
 #' @param model_df A data frame containing the model reference data.
 #' @param axes A data frame or list specifying the axes details.
 #' @param circle A list defining circle parameters.
-#' @param point_param A vector specifying point size, alpha, and color (default: c(1.5, 0.5, "#000000")).
+#' @param point_param A vector specifying point size, alpha, and color (default: c(1, 0.3, "#66B2CC")).
 #' @param line_param A vector specifying line width, alpha, and color (default: c(0.5, 0.5, "#000000")).
 #' @param plot_limits Limits for the plot axes.
 #' @param axis_text_size Size of axis text (default: 3).
@@ -170,12 +170,12 @@ get_projection <- function(projection, proj_scale, highd_data, model_highd,
 #' proj_obj1 <- get_projection(projection = projection_df, proj_scale = 1,
 #' highd_data = scurve, model_highd = df_bin,
 #' trimesh_data = edge_data,
-#' axis_param = list(limits = 1, axis_scaled = 1, axis_pos_x = -0.72,
-#' axis_pos_y = -0.72,threshold = 0))
+#' axis_param = list(limits = 1, axis_scaled = 3, axis_pos_x = -0.72,
+#' axis_pos_y = -0.72, threshold = 0.09))
 #'
 #' plot_proj(proj_obj = proj_obj1, plot_limits = c(-1, 1))
 plot_proj <- function(proj_obj,
-                      point_param = c(1.5, 0.5, "#000000"), # size, alpha, color
+                      point_param = c(1, 0.3, "#66B2CC"), # size, alpha, color
                       line_param = c(0.5, 0.5, "#000000"), #linewidth, alpha
                       plot_limits,
                       axis_text_size = 3,
@@ -250,7 +250,10 @@ plot_proj <- function(proj_obj,
       data=circle,
       aes(x=c1, y=c2), colour="grey70") +
     xlim(plot_limits) +
-    ylim(plot_limits)
+    ylim(plot_limits) +
+    theme(
+      aspect.ratio = 1
+    )
 
   initial_plot
 

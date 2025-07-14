@@ -2,23 +2,24 @@
 % Please edit documentation in R/prediction.R
 \name{predict_emb}
 \alias{predict_emb}
-\title{Predict 2D embeddings}
+\title{Predict 2-D embeddings}
 \usage{
 predict_emb(highd_data, model_2d, model_highd)
 }
 \arguments{
-\item{highd_data}{The test dataset containing high-dimensional coordinates and an unique identifier.}
+\item{highd_data}{The tibble contains high-dimensional data and an unique identifier.}
 
-\item{model_2d}{Centroid coordinates of hexagonal bins in 2D space.}
+\item{model_2d}{Centroid coordinates of hexagonal bins in 2-D space.}
 
 \item{model_highd}{Centroid coordinates of hexagonal bins in high dimensions.}
 }
 \value{
-A tibble contains predicted 2D embeddings, ID in the test data, and predicted hexagonal IDs.
+A tibble contains predicted 2-D embeddings,
+ID in the test data, and predicted hexagonal IDs.
 }
 \description{
-Given a test dataset, the centroid coordinates of hexagonal bins in  2D and high-dimensional space,
-predict the 2D embeddings for each data point in the test dataset.
+Given a test dataset, the centroid coordinates of hexagonal bins in  2-D and high-dimensional space,
+predict the 2-D embeddings for each data point in the test dataset.
 }
 \examples{
 predict_emb(highd_data = scurve, model_highd = scurve_model_obj$model_highd,

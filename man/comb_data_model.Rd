@@ -2,7 +2,7 @@
 % Please edit documentation in R/highd.R
 \name{comb_data_model}
 \alias{comb_data_model}
-\title{Create a dataframe with averaged high-dimensional data and high-dimensional data}
+\title{Create a tibble with averaged high-dimensional data and high-dimensional data}
 \usage{
 comb_data_model(highd_data, model_highd, model_2d)
 }
@@ -11,7 +11,7 @@ comb_data_model(highd_data, model_highd, model_2d)
 
 \item{model_highd}{A tibble that contains the high-dimensional coordinates of bin centroids.}
 
-\item{model_2d}{The dataset with hexagonal bin centroids.}
+\item{model_2d}{A tibble that contains hexagonal bin centroids in 2-D.}
 }
 \value{
 A tibble with the average values of the high-dimensional data within
@@ -22,7 +22,8 @@ This function combine the average values of high-dimensional data within each
 hexagonal bin and high-dimensional data.
 }
 \examples{
-comb_data_mode(highd_data = scurve, model_highd = scurve_model_obj$model_highd,
+comb_data_model(highd_data = scurve,
+model_highd = scurve_model_obj$model_highd,
 model_2d = scurve_model_obj$model_2d)
 
 }

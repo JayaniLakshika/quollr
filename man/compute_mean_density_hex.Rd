@@ -4,13 +4,13 @@
 \alias{compute_mean_density_hex}
 \title{Compute mean density of hexagonal bins}
 \usage{
-compute_mean_density_hex(centroids_data, b1 = 4)
+compute_mean_density_hex(model_2d, b1 = 4)
 }
 \arguments{
-\item{b1}{The number of bins along the x-axis for the hexagonal grid.}
+\item{model_2d}{A tibble that contains information about hexagonal bin centroids,
+including the hexagon ID and the standardised counts (\code{w_h}).}
 
-\item{df_bin_centroids}{A tibble that contains information about hexagonal bin centroids,
-including the hexagon ID and the standard normalized counts (\code{std_counts}).}
+\item{b1}{The number of bins along the x-axis for the hexagonal grid.}
 }
 \value{
 A tibble contains hexagonal IDs and the mean
@@ -20,6 +20,6 @@ density of each hexagonal bin based on its neighboring bins.
 This function calculates the mean density of hexagonal bins based on their neighboring bins.
 }
 \examples{
-compute_mean_density_hex(centroids_data = scurve_model_obj$model_2d, b1 = 4)
+compute_mean_density_hex(model_2d = scurve_model_obj$model_2d, b1 = 4)
 
 }

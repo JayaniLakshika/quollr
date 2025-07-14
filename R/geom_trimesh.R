@@ -12,7 +12,7 @@
 #' @return A `ggplot2` layer object.
 #'
 #' @examples
-#' df_bin_centroids <- scurve_model_obj$model_2d |> dplyr::filter(bin_counts > 10)
+#' df_bin_centroids <- scurve_model_obj$model_2d |> dplyr::filter(n_h > 10)
 #' ggplot2::ggplot() +
 #' geom_trimesh(data = df_bin_centroids, mapping = ggplot2::aes(x = c_x, y = c_y))
 #'
@@ -51,7 +51,7 @@ GeomTrimesh <- ggplot2::ggproto("GeomTrimesh",
                                   linewidth = 0.5,
                                   size = 0.5,
                                   alpha = NA,
-                                  colour = "#33a02c"
+                                  colour = "#FF7755"
                                 ),
                                 draw_key = ggplot2::draw_key_point,
                                 draw_panel = function(data, panel_scales, coord) {
@@ -65,10 +65,10 @@ GeomTrimesh <- ggplot2::ggproto("GeomTrimesh",
                                   vertices <- tibble::tibble(
                                     x = point_info$x,
                                     y = point_info$y,
-                                    colour = rep("#33a02c", nrow(point_info)),
+                                    colour = rep("#FF7755", nrow(point_info)),
                                     shape = rep(data$shape[1], nrow(point_info)),
                                     size = rep(2, nrow(point_info)),
-                                    fill = rep("#33a02c", nrow(point_info)),
+                                    fill = rep("#FF7755", nrow(point_info)),
                                     alpha = rep(data$alpha[1], nrow(point_info)),
                                     stroke = 0.5,
                                     stringsAsFactors = FALSE

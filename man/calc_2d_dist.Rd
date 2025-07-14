@@ -2,7 +2,7 @@
 % Please edit documentation in R/2d.R
 \name{calc_2d_dist}
 \alias{calc_2d_dist}
-\title{Calculate 2D Euclidean distances between vertices}
+\title{Calculate 2-D Euclidean distances between vertices}
 \usage{
 calc_2d_dist(
   trimesh_data,
@@ -20,7 +20,7 @@ A tibble with columns for the starting point, ending point,
 and calculated distances.
 }
 \description{
-This function calculates the 2D distances between pairs of points in a data frame.
+This function calculates the 2-D distances between pairs of points in a data frame.
 }
 \examples{
 tr_from_to_df <- scurve_model_obj$trimesh_data

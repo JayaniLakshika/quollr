@@ -1,4 +1,4 @@
-#' Create a dataframe with averaged high-dimensional data
+#' Create a tibble with averaged high-dimensional data
 #'
 #' This function calculates the average values of high-dimensional data within each hexagonal bin.
 #'
@@ -28,14 +28,14 @@ avg_highd_data <- function(highd_data, scaled_nldr_hexid) {
   return(df_b)
 }
 
-#' Create a dataframe with averaged high-dimensional data and high-dimensional data
+#' Create a tibble with averaged high-dimensional data and high-dimensional data
 #'
 #' This function combine the average values of high-dimensional data within each
 #' hexagonal bin and high-dimensional data.
 #'
 #' @param highd_data A tibble that contains the high-dimensional data.
 #' @param model_highd A tibble that contains the high-dimensional coordinates of bin centroids.
-#' @param model_2d The dataset with hexagonal bin centroids.
+#' @param model_2d A tibble that contains hexagonal bin centroids in 2-D.
 #'
 #' @return A tibble with the average values of the high-dimensional data within
 #' each hexagonal bin and high-dimensional data.
@@ -44,7 +44,8 @@ avg_highd_data <- function(highd_data, scaled_nldr_hexid) {
 #' @importFrom rsample starts_with
 #'
 #' @examples
-#' comb_data_mode(highd_data = scurve, model_highd = scurve_model_obj$model_highd,
+#' comb_data_model(highd_data = scurve,
+#' model_highd = scurve_model_obj$model_highd,
 #' model_2d = scurve_model_obj$model_2d)
 #'
 #' @export
@@ -71,13 +72,17 @@ comb_data_model <- function(highd_data, model_highd, model_2d) {
 }
 
 
-#' Visualize the model overlaid on high-dimensional data
+#' Visualise the model overlaid on high-dimensional data
 #'
-#' This function generates a LangeviTour visualization based on different
-#' conditions and input parameters.
+#' This function generates a langevitour which visualise the model
+#' overlaid on high-dimensional data.
 #'
 #' @param point_data A tibble that contains the high-dimensional data and model in high-dimensions.
 #' @param edge_data A tibble that contains the wireframe data (from and to).
+#' @param point_colours A character vector that contains the colours of points in
+#' the high-dimensional data and model.
+#' @param point_sizes A numeric vector that contains the sizes of points in
+#' the high-dimensional data and model.
 #'
 #' @return A langevitour object with the model and the high-dimensional data.
 #'
@@ -89,7 +94,9 @@ comb_data_model <- function(highd_data, model_highd, model_2d) {
 #' show_langevitour(point_data = df_exe, edge_data = edge_data)
 #'
 #' @export
-show_langevitour <- function(point_data, edge_data) {
+show_langevitour <- function(point_data, edge_data,
+                             point_colours = c("#66B2CC", "#FF7755"),
+                             point_sizes = c(2, 1)) {
 
   df <- point_data |>
     dplyr::filter(type == "data") ## original dataset
@@ -101,8 +108,9 @@ show_langevitour <- function(point_data, edge_data) {
                            lineFrom = edge_data$from,
                            lineTo = edge_data$to,
                            group = point_data$type,
-                           pointSize = append(rep(2, NROW(df_b)), rep(1, NROW(df))),
-                           levelColors = c("#000000", "#33a02c"))
+                           pointSize = append(rep(point_sizes[1], NROW(df_b)),
+                                              rep(point_sizes[2], NROW(df))),
+                           levelColors = point_colours)
 
 
 }

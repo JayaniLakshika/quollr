@@ -13,8 +13,8 @@ and centroid coordinates.}
 \item{a1}{The width of the hexagon.}
 }
 \value{
-A tibble contains polygon id, x and y coordinates (hex_poly_id, x,
-and y respectively) of hexagons.
+A tibble contains hexagon id (\code{h}),
+x and y coordinates (\code{x}, \code{y}) of hexagons.
 }
 \description{
 This function generates the coordinates of hexagons after passing

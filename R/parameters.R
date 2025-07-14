@@ -2,8 +2,8 @@
 #'
 #' This function calculates the mean density of hexagonal bins based on their neighboring bins.
 #'
-#' @param df_bin_centroids A tibble that contains information about hexagonal bin centroids,
-#' including the hexagon ID and the standard normalized counts (\code{std_counts}).
+#' @param model_2d A tibble that contains information about hexagonal bin centroids,
+#' including the hexagon ID and the standardised counts (\code{w_h}).
 #' @param b1 The number of bins along the x-axis for the hexagonal grid.
 #'
 #' @return A tibble contains hexagonal IDs and the mean
@@ -13,16 +13,16 @@
 #' @importFrom tibble tibble
 #'
 #' @examples
-#' compute_mean_density_hex(centroids_data = scurve_model_obj$model_2d, b1 = 4)
+#' compute_mean_density_hex(model_2d = scurve_model_obj$model_2d, b1 = 4)
 #'
 #' @export
-compute_mean_density_hex <- function(centroids_data, b1 = 4) {
+compute_mean_density_hex <- function(model_2d, b1 = 4) {
 
   if (missing(b1)) {
     stop("Number of bins along x axis is not defined.")
   }
 
-  hexID_vec <- centroids_data$h
+  hexID_vec <- model_2d$h
 
   # To store mean densities of hexagons
   mean_density_vec <- c()
@@ -30,7 +30,7 @@ compute_mean_density_hex <- function(centroids_data, b1 = 4) {
   for (hb_id in hexID_vec) {
 
     ## Identify neighbors of a specific hex bin
-    neighbor_df <- centroids_data |>
+    neighbor_df <- model_2d |>
       filter((h == (hb_id + 1)) | (h == (hb_id - 1)) |
                       (h == (hb_id + (b1 + 1))) |
                       (h == (hb_id + b1)) |
@@ -38,7 +38,7 @@ compute_mean_density_hex <- function(centroids_data, b1 = 4) {
                       (h == (hb_id - b1)))
 
     ## The reason to take the mean is to check the density in a considerable amount
-    mean_density <- sum(neighbor_df$std_counts)/NROW(neighbor_df)
+    mean_density <- sum(neighbor_df$w_h)/NROW(neighbor_df)
 
     mean_density_vec <- append(mean_density_vec, mean_density)
 
@@ -60,27 +60,27 @@ compute_mean_density_hex <- function(centroids_data, b1 = 4) {
 #' This function identifies hexagons with low density based on the mean density
 #' of their neighboring hexagons.
 #'
-#' @param df_bin_centroids_all The tibble that contains all hexagonal bin centroids.
+#' @param model_2d The tibble that contains all hexagonal bin centroids.
 #' @param b1 Number of bins along the x-axis for hexagon binning.
-#' @param df_bin_centroids_low The tibble that contains identified low-density hexagonal bin centroids.
+#' @param benchmark_mean_dens A numeric value that contains
 #'
 #' @return A vector containing the IDs of hexagons to be removed after investigating their neighboring bins.
 #' @importFrom dplyr filter pull
 #' @importFrom stats quantile
 #'
 #' @examples
-#' find_low_dens_hex(centroids_data = scurve_model_obj$model_2d, b1 = 4,
+#' find_low_dens_hex(model_2d = scurve_model_obj$model_2d, b1 = 4,
 #' benchmark_mean_dens = 0.05)
 #'
 #' @export
-find_low_dens_hex <- function(centroids_data, b1 = 4, benchmark_mean_dens = 0.05) {
+find_low_dens_hex <- function(model_2d, b1 = 4, benchmark_mean_dens = 0.05) {
 
   if (is.na(b1)) {
     stop("Number of bins along x-axis is not defined.")
   }
 
   ## To compute mean density of hexagons
-  mean_density_df <- compute_mean_density_hex(centroids_data = centroids_data,
+  mean_density_df <- compute_mean_density_hex(model_2d = model_2d,
                                               b1 = b1)
 
   ## Obtain the hexagonal bins need to remove

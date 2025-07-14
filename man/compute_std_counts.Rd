@@ -2,7 +2,7 @@
 % Please edit documentation in R/2d.R
 \name{compute_std_counts}
 \alias{compute_std_counts}
-\title{Compute standardize counts in hexagons}
+\title{Compute standardise counts in hexagons}
 \usage{
 compute_std_counts(scaled_nldr_hexid)
 }
@@ -10,7 +10,8 @@ compute_std_counts(scaled_nldr_hexid)
 \item{scaled_nldr_hexid}{A tibble that contains the scaled embedding with hexagonal bin IDs.}
 }
 \value{
-A tibble that contains hexagon IDs and the corresponding standardize counts.
+A tibble that contains hexagon IDs (\code{h}), bin counts (\code{n_h}),
+and standardize counts (\code{w_h}).
 }
 \description{
 This function computes the standardize number of points within each hexagon.

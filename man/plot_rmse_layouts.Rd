@@ -18,7 +18,7 @@ A patchwork object.
 This function arranges RMSE plot in left and 2-D layouts in right.
 }
 \examples{
-design <- gen_design(n_right = 8, ncol_right = 2)
-plot_rmse_layouts(plots, design = design)
+design <- gen_design(n_right = 6, ncol_right = 2)
+plot_rmse_layouts(plots = scurve_plts, design = design)
 
 }

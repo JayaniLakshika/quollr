@@ -2,7 +2,7 @@
 % Please edit documentation in R/model.R
 \name{fit_highd_model}
 \alias{fit_highd_model}
-\title{Construct the 2D model and lift into high-D}
+\title{Construct the 2-D model and lift into high-dimensions}
 \usage{
 fit_highd_model(highd_data, nldr_data, b1 = 4, q = 0.1, benchmark_highdens = 5)
 }
@@ -18,9 +18,12 @@ fit_highd_model(highd_data, nldr_data, b1 = 4, q = 0.1, benchmark_highdens = 5)
 \item{benchmark_highdens}{(default: 5) A numeric value using to filter high-density hexagons.}
 }
 \value{
-A list containing the data frame with high-dimensional coordinates
-for 2D bin centroids (\code{df_bin}) and the data frame containing
-information about hexagonal bin centroids (\code{df_bin_centroids}) in 2D.
+A list containing a list of a tibble contains scaled first and second columns
+of NLDR data, and numeric vectors representing the limits of the original NLDR data (\code{nldr_obj}),
+a object that contains hexagonal binning information (\code{hb_obj}),
+a tibble with high-dimensional model (\code{model_highd}) and a tibble containing
+hexagonal bin centroids in 2-D (\code{model_2d}), and
+a tibble that contains the edge information (\code{trimesh_data}).
 }
 \description{
 This function fits a high-dimensional model using hexagonal bins and provides options

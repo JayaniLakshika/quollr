@@ -2,15 +2,17 @@
 #'
 #' This function generates all possible centroids in the hexagonal grid.
 #'
-#' @param nldr_data A tibble that contains embedding components in the first and second columns.
+#' @param nldr_obj A list of a tibble contains scaled first and second columns
+#' of NLDR data, and numeric vectors representing the limits of the original NLDR data.
 #' @param b1 Number of bins along the x axis.
 #' @param q The buffer amount as proportion of data range.
 #'
-#' @return A tibble contains hexIDs, x and y coordinates (h, c_x, c_y respectively)
+#' @return A tibble contains hexIDs (\code{h}),
+#' x and y coordinates (\code{c_x}, \code{c_y} respectively)
 #' of all hexagon bin centroids.
 #'
 #' @examples
-#' gen_centroids(nldr_obj = scurve_umap_obj, b1 = 4, q = 0.1)
+#' gen_centroids(nldr_obj = scurve_model_obj$nldr_obj, b1 = 4, q = 0.1)
 #'
 #' @export
 gen_centroids <- function(nldr_obj, b1 = 4, q = 0.1){
@@ -83,8 +85,8 @@ gen_centroids <- function(nldr_obj, b1 = 4, q = 0.1){
 #' and centroid coordinates.
 #' @param a1 The width of the hexagon.
 #'
-#' @return A tibble contains polygon id, x and y coordinates (hex_poly_id, x,
-#' and y respectively) of hexagons.
+#' @return A tibble contains hexagon id (\code{h}),
+#' x and y coordinates (\code{x}, \code{y}) of hexagons.
 #'
 #' @examples
 #' width <- scurve_model_obj$hb_obj$a1
@@ -101,14 +103,17 @@ gen_hex_coord <- function(centroids_data, a1) {
 #'
 #' This function assigns the data to hexagons.
 #'
-#' @param nldr_data A tibble that contains embedding components in the first and second columns.
+#' @param nldr_obj A list of a tibble contains scaled first and second columns
+#' of NLDR data, and numeric vectors representing the limits of the original NLDR data.
 #' @param centroids_data The dataset with centroid coordinates.
 #'
-#' @return A tibble contains embedding components and corresponding hexagon ID.
+#' @return A tibble contains embedding components (\code{emb1}, \code{emb2})
+#' and corresponding hexagon ID (\code{h}).
 #'
 #' @examples
 #' all_centroids_df <- scurve_model_obj$hb_obj$centroids
-#' assign_data(nldr_obj = scurve_umap_obj, centroids_data = all_centroids_df)
+#' assign_data(nldr_obj = scurve_model_obj$nldr_obj,
+#' centroids_data = all_centroids_df)
 #'
 #' @export
 assign_data <- function(nldr_obj, centroids_data) {
@@ -131,13 +136,14 @@ assign_data <- function(nldr_obj, centroids_data) {
   return(scaled_nldr_df)
 }
 
-#' Compute standardize counts in hexagons
+#' Compute standardise counts in hexagons
 #'
 #' This function computes the standardize number of points within each hexagon.
 #'
 #' @param scaled_nldr_hexid A tibble that contains the scaled embedding with hexagonal bin IDs.
 #'
-#' @return A tibble that contains hexagon IDs and the corresponding standardize counts.
+#' @return A tibble that contains hexagon IDs (\code{h}), bin counts (\code{n_h}),
+#' and standardize counts (\code{w_h}).
 #' @importFrom dplyr count mutate rename
 #'
 #' @examples
@@ -163,7 +169,7 @@ compute_std_counts <- function(scaled_nldr_hexid) {
 #'
 #' @param scaled_nldr_hexid A tibble that contains the scaled embedding with hexagonal bin IDs.
 #'
-#' @return A tibble with hexagonal bin IDs and the corresponding points.
+#' @return A tibble with hexagonal bin IDs (\code{h}) and the corresponding points.
 #' @importFrom dplyr filter pull summarize
 #' @importFrom tibble tibble
 #'
@@ -187,23 +193,24 @@ find_pts <- function(scaled_nldr_hexid) {
 #'
 #' This function generates the hexagonal object.
 #'
-#' @param nldr_data A tibble that contains embedding with a unique identifier.
+#' @param nldr_obj A list of a tibble contains scaled first and second columns
+#' of NLDR data, and numeric vectors representing the limits of the original NLDR data.
 #' @param b1 Number of bins along the x axis.
 #' @param q The buffer amount as proportion of data range.
 #'
-#' @return A object that contains numeric vector that contains binwidths (a1),
-#' vertical distance (a2), bins along the x and y axes respectively (bins),
+#' @return A object that contains numeric vector that contains binwidths (\code{a1}),
+#' vertical distance (\code{a2}), bins along the x and y axes respectively (\code{bins}),
 #' numeric vector that contains hexagonal
-#' starting point coordinates all hexagonal bin centroids (centroids),
-#' hexagonal coordinates of the full grid (hex_poly),
-#' embedding components with their corresponding hexagon IDs (data_hb_id),
-#' hex bins with their corresponding standardise counts (std_cts),
-#' total number of hex bins(tot_bins), number of non-empty hex bins (non_bins)
-#' and points within each hexagon (pts_bins).
+#' starting point coordinates all hexagonal bin centroids (\code{centroids}),
+#' hexagonal coordinates of the full grid (\code{hex_poly}),
+#' embedding components with their corresponding hexagon IDs (\code{data_hb_id}),
+#' hex bins with their corresponding standardise counts (\code{std_cts}),
+#' total number of hex bins (\code{b}), number of non-empty hex bins (\code{m})
+#' and points within each hexagon (\code{pts_bins}).
 #'
 #'
 #' @examples
-#' hex_binning(nldr_obj = scurve_umap_obj, b1 = 4, q = 0.1)
+#' hex_binning(nldr_obj = scurve_model_obj$nldr_obj, b1 = 4, q = 0.1)
 #'
 #' @export
 hex_binning <- function(nldr_obj, b1 = 4, q = 0.1) {
@@ -235,7 +242,7 @@ hex_binning <- function(nldr_obj, b1 = 4, q = 0.1) {
   ## To generate the hexagon coordinates
   all_hex_coord <- gen_hex_coord(centroids_data = all_centroids_df, a1 = a1)
 
-  ## To find which 2D embedding assigned to which hexagon
+  ## To find which 2-D embedding assigned to which hexagon
   nldr_hex_id <- assign_data(nldr_obj = nldr_obj, centroids_data = all_centroids_df)
 
   ## To generate standardize counts of each hexagon
@@ -253,8 +260,8 @@ hex_binning <- function(nldr_obj, b1 = 4, q = 0.1) {
                       hex_poly = all_hex_coord,
                       data_hb_id = nldr_hex_id,
                       std_cts = std_df,
-                      tot_bins = NROW(all_centroids_df),
-                      non_bins = length(std_df$h),
+                      b = NROW(all_centroids_df),
+                      m = length(std_df$h),
                       pts_bins = pts_df
   )
   class(hex_bin_obj) <- "hex_bin_obj"
@@ -271,11 +278,12 @@ hex_binning <- function(nldr_obj, b1 = 4, q = 0.1) {
 #' @param counts_data A tibble that contains hexagon IDs with the standardise
 #' number of points within each hexagon.
 #'
-#' @return A tibble contains hexagon ID, centroid coordinates, and standardise counts.
+#' @return A tibble contains hexagon ID (\code{h}), centroid coordinates (\code{c_x}, \code{c_y}),
+#' bin counts (\code{n_h}), and standardise counts (\code{w_h}).
 #'
 #' @examples
-#' all_centroids_df <- s_curve_obj$s_curve_umap_hb_obj$centroids
-#' counts_data <- s_curve_obj$s_curve_umap_hb_obj$std_cts
+#' all_centroids_df <- scurve_model_obj$hb_obj$centroids
+#' counts_data <- scurve_model_obj$hb_obj$std_cts
 #' extract_hexbin_centroids(centroids_data = all_centroids_df,
 #' counts_data = counts_data)
 #'
@@ -300,12 +308,13 @@ extract_hexbin_centroids <- function(centroids_data, counts_data) {
 #' @param centroids_data A tibble that contains all hexagonal bin centroid
 #' coordinates with hexagon IDs.
 #'
-#' @return A tibble contains hexagon ID, bin mean coordinates, and standardize counts.
+#' @return A tibble contains hexagon ID (\code{h}), bin means (\code{c_x}, \code{c_y}),
+#' bin counts (\code{n_h}), and standardise counts (\code{w_h}).
 #'
 #' @examples
-#' all_centroids_df <- s_curve_obj$s_curve_umap_hb_obj$centroids
-#' counts_data <- s_curve_obj$s_curve_umap_hb_obj$std_cts
-#' umap_with_hb_id <- s_curve_obj$s_curve_umap_hb_obj$data_hb_id
+#' all_centroids_df <- scurve_model_obj$hb_obj$centroids
+#' counts_data <- scurve_model_obj$hb_obj$std_cts
+#' umap_with_hb_id <- scurve_model_obj$hb_obj$data_hb_id
 #' extract_hexbin_mean(data_hb = umap_with_hb_id, counts_data = counts_data,
 #' centroids_data = all_centroids_df)
 #'
@@ -330,9 +339,12 @@ extract_hexbin_mean <- function(data_hb, counts_data, centroids_data) {
   ## Rename columns
   names(hex_mean_df) <- c("h", "c_x", "c_y")
 
-  centroids_data <- dplyr::full_join(centroids_data, hex_mean_df, by = c("h" = "h")) |>
-    dplyr::rename(n_h = n) |>
+  centroids_data <- dplyr::right_join(centroids_data, hex_mean_df, by = "h") |>
     dplyr::select(h, c_x, c_y, n_h, w_h)
+
+  # Replace NA values with 0 for both columns
+  centroids_data$w_h[is.na(centroids_data$w_h)] <- 0
+  centroids_data$n_h[is.na(centroids_data$n_h)] <- 0
 
   return(centroids_data)
 }
@@ -348,11 +360,11 @@ extract_hexbin_mean <- function(data_hb, counts_data, centroids_data) {
 #' @importFrom interp tri.mesh
 #'
 #' @examples
-#' all_centroids_df <- s_curve_obj$s_curve_umap_hb_obj$centroids
-#' counts_data <- s_curve_obj$s_curve_umap_hb_obj$std_cts
-#' umap_with_hb_id <- s_curve_obj$s_curve_umap_hb_obj$data_hb_id
-#' df_bin_centroids <- extract_hexbin_mean(data_hb = umap_with_hb_id, counts_data = counts_data,
-#' centroids_data = all_centroids_df)
+#' all_centroids_df <- scurve_model_obj$hb_obj$centroids
+#' counts_data <- scurve_model_obj$hb_obj$std_cts
+#' umap_with_hb_id <- scurve_model_obj$hb_obj$data_hb_id
+#' df_bin_centroids <- extract_hexbin_mean(data_hb = umap_with_hb_id,
+#' counts_data = counts_data, centroids_data = all_centroids_df)
 #' tri_bin_centroids(centroids_data = df_bin_centroids)
 #'
 #' @export
@@ -368,9 +380,9 @@ tri_bin_centroids <- function(centroids_data){
   return(result)
 }
 
-#' Calculate 2D Euclidean distances between vertices
+#' Calculate 2-D Euclidean distances between vertices
 #'
-#' This function calculates the 2D distances between pairs of points in a data frame.
+#' This function calculates the 2-D distances between pairs of points in a data frame.
 #'
 #' @param trimesh_data A tibble that contains the x and y coordinates of start
 #' and end points.
@@ -386,7 +398,9 @@ tri_bin_centroids <- function(centroids_data){
 #' calc_2d_dist(trimesh_data = tr_from_to_df)
 #'
 #' @export
-calc_2d_dist <- function(trimesh_data, select_vars = c("from", "to", "x_from", "y_from", "x_to", "y_to", "from_count", "to_count", "distance")) {
+calc_2d_dist <- function(trimesh_data,
+                         select_vars = c("from", "to", "x_from", "y_from", "x_to",
+                                         "y_to", "from_count", "to_count", "distance")) {
 
   # Calculate distances using Rcpp
   dist <- calc_2d_dist_cpp(
@@ -522,18 +536,19 @@ update_trimesh_index <- function(trimesh_data) {
 #' This function determines the number of bins along the x and y axes
 #' to obtain a specific number of non-empty bins.
 #'
-#' @param data A tibble that contains the embedding.
-#' @param non_empty_bins The desired number of non-empty bins.
+#' @param nldr_obj A list of a tibble contains scaled first and second columns
+#' of NLDR data, and numeric vectors representing the limits of the original NLDR data.
+#' @param m The desired number of non-empty bins.
 #' @param q The buffer amount as proportion of data range.
 #'
 #' @return The number of bins along the x and y axes
 #' needed to achieve a specific number of non-empty bins.
 #'
 #' @examples
-#' find_non_empty_bins(nldr_obj = scurve_umap_obj, non_empty_bins = 5)
+#' find_non_empty_bins(nldr_obj = scurve_model_obj$nldr_obj, m = 5)
 #'
 #' @export
-find_non_empty_bins <- function(nldr_obj, non_empty_bins = 2, q = 0.1) {
+find_non_empty_bins <- function(nldr_obj, m = 2, q = 0.1) {
 
   ## To check whether q is between a specific range
   if (!dplyr::between(q, 0.05, 0.2)) {
@@ -545,7 +560,7 @@ find_non_empty_bins <- function(nldr_obj, non_empty_bins = 2, q = 0.1) {
   max_bins_along_axis <- ceiling(sqrt(NROW(scaled_nldr_data)))
 
   ## Since having 1 bin along x or y-axis is not obvious therefore started from 2
-  num_bins_x_vec <- 4:max_bins_along_axis
+  num_bins_x_vec <- 2:max_bins_along_axis
 
   ## To initialise the number of bins along the x-axis
   b1 <- num_bins_x_vec[1]
@@ -556,11 +571,11 @@ find_non_empty_bins <- function(nldr_obj, non_empty_bins = 2, q = 0.1) {
   ## To compute the number of bins along the y-axis
   b2 <- hb_obj$bins[2]
 
-  num_of_non_empty_bins <- hb_obj$non_bins
+  num_of_non_empty_bins <- hb_obj$m
 
   i <- 1
 
-  while (num_of_non_empty_bins < non_empty_bins) {
+  while (num_of_non_empty_bins < m) {
 
     i <- i + 1
 
@@ -577,9 +592,9 @@ find_non_empty_bins <- function(nldr_obj, non_empty_bins = 2, q = 0.1) {
     ## To compute the number of bins along the y-axis
     b2 <- hb_obj$bins[2]
 
-    num_of_non_empty_bins <- hb_obj$non_bins
+    num_of_non_empty_bins <- hb_obj$m
 
-    if (num_of_non_empty_bins >= non_empty_bins) {
+    if (num_of_non_empty_bins >= m) {
       return(list(b1 = b1, b2 = b2))
       break
     } else {

@@ -10,8 +10,8 @@ gen_scaled_data(nldr_data)
 \item{nldr_data}{A tibble that contains embedding components in the first and second columns.}
 }
 \value{
-A list of a tibble contains scaled first and second columns, and
-numeric vectors representing the limits of the original data.
+A list of a tibble contains scaled first and second columns NLDR data,
+and numeric vectors representing the limits of the original NLDR data.
 }
 \description{
 This function scales first and second columns.

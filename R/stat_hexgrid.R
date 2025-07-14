@@ -35,7 +35,7 @@ stat_hexgrid <- function(mapping = NULL, data = NULL, geom = GeomHexgrid$default
 #' @importFrom ggplot2 GeomSegment
 #' @importFrom tibble tibble
 #' @importFrom tibble as_tibble
-#' @importFrom dplyr mutate rename left_join bind_rows
+#' @importFrom dplyr mutate rename left_join bind_rows filter arrange first group_by ungroup n
 StatHexgrid <- ggplot2::ggproto(
   "StatHexgrid",
   ggplot2::Stat,
@@ -46,8 +46,23 @@ StatHexgrid <- ggplot2::ggproto(
     c_x_vec <- data$x
     c_y_vec <- data$y
 
+    ## To find consecutive values
+
+    df_consec <- data |>
+      group_by(y) |>
+      arrange(x, .by_group = TRUE) |>
+      mutate(
+        dx = x - lag(x),              # Difference in x between rows
+        consec_group = cumsum(is.na(dx) | dx != first(na.omit(dx)))  # New group when jump changes
+      )
+
+    df_consec <- df_consec |>
+      group_by(y, consec_group) |>
+      filter(n() >= 3) |>
+      ungroup()
+
     ## Hexagonal width
-    a1 <- sqrt(sum((data[1,1:2] - data[2,1:2])^2))
+    a1 <- sqrt(sum((df_consec[1,1:2] - df_consec[2,1:2])^2))
 
     ## To compute vertical spacing factor
     vs_factor <- a1/(2 * sqrt(3))
@@ -117,4 +132,5 @@ StatHexgrid <- ggplot2::ggproto(
     hexgrid
   },
   required_aes = c("x", "y")
+
 )

@@ -4,8 +4,8 @@
 #'
 #' @param nldr_data A tibble that contains embedding components in the first and second columns.
 #'
-#' @return A list of a tibble contains scaled first and second columns, and
-#' numeric vectors representing the limits of the original data.
+#' @return A list of a tibble contains scaled first and second columns NLDR data,
+#' and numeric vectors representing the limits of the original NLDR data.
 #'
 #' @examples
 #' gen_scaled_data(nldr_data = scurve_umap)

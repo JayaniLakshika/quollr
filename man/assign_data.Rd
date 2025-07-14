@@ -7,18 +7,21 @@
 assign_data(nldr_obj, centroids_data)
 }
 \arguments{
-\item{centroids_data}{The dataset with centroid coordinates.}
+\item{nldr_obj}{A list of a tibble contains scaled first and second columns
+of NLDR data, and numeric vectors representing the limits of the original NLDR data.}
 
-\item{nldr_data}{A tibble that contains embedding components in the first and second columns.}
+\item{centroids_data}{The dataset with centroid coordinates.}
 }
 \value{
-A tibble contains embedding components and corresponding hexagon ID.
+A tibble contains embedding components (\code{emb1}, \code{emb2})
+and corresponding hexagon ID (\code{h}).
 }
 \description{
 This function assigns the data to hexagons.
 }
 \examples{
 all_centroids_df <- scurve_model_obj$hb_obj$centroids
-assign_data(nldr_obj = scurve_umap_obj, centroids_data = all_centroids_df)
+assign_data(nldr_obj = scurve_model_obj$nldr_obj,
+centroids_data = all_centroids_df)
 
 }

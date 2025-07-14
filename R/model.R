@@ -1,4 +1,4 @@
-#' Construct the 2D model and lift into high-D
+#' Construct the 2-D model and lift into high-dimensions
 #'
 #' This function fits a high-dimensional model using hexagonal bins and provides options
 #' to customize the modeling process, including the choice of bin centroids or bin means,
@@ -10,9 +10,12 @@
 #' @param q (default: 0.1) A numeric value representing the buffer amount as proportion of data range.
 #' @param benchmark_highdens (default: 5) A numeric value using to filter high-density hexagons.
 #'
-#' @return A list containing the data frame with high-dimensional coordinates
-#' for 2D bin centroids (\code{df_bin}) and the data frame containing
-#' information about hexagonal bin centroids (\code{df_bin_centroids}) in 2D.
+#' @return A list containing a list of a tibble contains scaled first and second columns
+#' of NLDR data, and numeric vectors representing the limits of the original NLDR data (\code{nldr_obj}),
+#' a object that contains hexagonal binning information (\code{hb_obj}),
+#' a tibble with high-dimensional model (\code{model_highd}) and a tibble containing
+#' hexagonal bin centroids in 2-D (\code{model_2d}), and
+#' a tibble that contains the edge information (\code{trimesh_data}).
 #'
 #' @importFrom dplyr bind_cols filter select between
 #' @importFrom stats quantile
@@ -22,7 +25,8 @@
 #' q = 0.1, benchmark_highdens = 5)
 #'
 #' @export
-fit_highd_model <- function(highd_data, nldr_data, b1 = 4, q = 0.1, benchmark_highdens = 5) {
+fit_highd_model <- function(highd_data, nldr_data, b1 = 4, q = 0.1,
+                            benchmark_highdens = 5) {
 
   ## To pre-process the data
   nldr_obj <- gen_scaled_data(nldr_data = nldr_data)
@@ -59,7 +63,8 @@ fit_highd_model <- function(highd_data, nldr_data, b1 = 4, q = 0.1, benchmark_hi
 
   cli::cli_alert_success("Model generated successfully! 🎉")
 
-  return(list(nldr_obj = nldr_obj, hb_obj = hb_obj, model_highd = model_highd, model_2d = model_2d, trimesh_data = trimesh_data))
+  return(list(nldr_obj = nldr_obj, hb_obj = hb_obj, model_highd = model_highd,
+              model_2d = model_2d, trimesh_data = trimesh_data))
 
 }
 

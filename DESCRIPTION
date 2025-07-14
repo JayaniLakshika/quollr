@@ -1,7 +1,7 @@
 Type: Package
 Package: quollr
 Title: Visualising How Nonlinear Dimension Reduction Warps Your Data
-Version: 0.3.3
+Version: 0.3.4
 Authors@R: c(
     person("Jayani P.", "Gamage", , "jayanilakshika76@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-6265-6481")),
@@ -15,11 +15,10 @@ Authors@R: c(
            comment = c(ORCID = "0000-0002-0656-9789"))
   )
 Description: To construct a model in 2D
-    space from 2D embedding data and then lift it to the high-dimensional
-    space. Additionally, it provides tools to visualize the model in 2D
-    space and to overlay the fitted model on data using the tour
-    technique. Furthermore, it facilitates the generation of summaries of
-    high-dimensional distributions.
+    space from 2D NLDR data and then lift it to the high-dimensional
+    space. Additionally, provides tools to visualise the model overlay 
+    the data in 2D and high-dimensional space. Furthermore, provides summaries 
+    and diagnostics to evaluate the NLDR layout.
 License: MIT + file LICENSE
 URL: https://jayanilakshika.github.io/quollr
 BugReports: https://github.com/jayanilakshika/quollr/issues
@@ -55,7 +54,7 @@ Language: en-GB
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.3.2
-Year: 2024
+Year: 2025
 LinkingTo: 
     Rcpp,
     RcppArmadillo

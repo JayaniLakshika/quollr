@@ -3,13 +3,13 @@
 \docType{data}
 \name{scurve_umap_predict}
 \alias{scurve_umap_predict}
-\title{Predicted UMAP embedding for S-curve dataset which with noise dimensions}
+\title{Predicted UMAP embedding for `scurve` data}
 \format{
 ## `scurve_umap_predict`
-A data frame with 75 rows and 3 columns:
+A data frame with 5000 rows and 3 columns:
 \describe{
-  \item{UMAP1}{Numeric, predicted first UMAP 2D embeddings.}
-  \item{UMAP2}{Numeric, predicted second UMAP 2D embeddings.}
+  \item{UMAP1}{Numeric, predicted first UMAP 2-D embeddings.}
+  \item{UMAP2}{Numeric, predicted second UMAP 2-D embeddings.}
   \item{ID}{Numeric, identifier for each data point.}
 }
 }

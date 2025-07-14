@@ -7,27 +7,28 @@
 hex_binning(nldr_obj, b1 = 4, q = 0.1)
 }
 \arguments{
+\item{nldr_obj}{A list of a tibble contains scaled first and second columns
+of NLDR data, and numeric vectors representing the limits of the original NLDR data.}
+
 \item{b1}{Number of bins along the x axis.}
 
 \item{q}{The buffer amount as proportion of data range.}
-
-\item{nldr_data}{A tibble that contains embedding with a unique identifier.}
 }
 \value{
-A object that contains numeric vector that contains binwidths (a1),
-vertical distance (a2), bins along the x and y axes respectively (bins),
+A object that contains numeric vector that contains binwidths (\code{a1}),
+vertical distance (\code{a2}), bins along the x and y axes respectively (\code{bins}),
 numeric vector that contains hexagonal
-starting point coordinates all hexagonal bin centroids (centroids),
-hexagonal coordinates of the full grid (hex_poly),
-embedding components with their corresponding hexagon IDs (data_hb_id),
-hex bins with their corresponding standardise counts (std_cts),
-total number of hex bins(tot_bins), number of non-empty hex bins (non_bins)
-and points within each hexagon (pts_bins).
+starting point coordinates all hexagonal bin centroids (\code{centroids}),
+hexagonal coordinates of the full grid (\code{hex_poly}),
+embedding components with their corresponding hexagon IDs (\code{data_hb_id}),
+hex bins with their corresponding standardise counts (\code{std_cts}),
+total number of hex bins (\code{b}), number of non-empty hex bins (\code{m})
+and points within each hexagon (\code{pts_bins}).
 }
 \description{
 This function generates the hexagonal object.
 }
 \examples{
-hex_binning(nldr_obj = scurve_umap_obj, b1 = 4, q = 0.1)
+hex_binning(nldr_obj = scurve_model_obj$nldr_obj, b1 = 4, q = 0.1)
 
 }

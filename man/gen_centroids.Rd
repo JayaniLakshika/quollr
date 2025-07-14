@@ -7,20 +7,22 @@
 gen_centroids(nldr_obj, b1 = 4, q = 0.1)
 }
 \arguments{
+\item{nldr_obj}{A list of a tibble contains scaled first and second columns
+of NLDR data, and numeric vectors representing the limits of the original NLDR data.}
+
 \item{b1}{Number of bins along the x axis.}
 
 \item{q}{The buffer amount as proportion of data range.}
-
-\item{nldr_data}{A tibble that contains embedding components in the first and second columns.}
 }
 \value{
-A tibble contains hexIDs, x and y coordinates (h, c_x, c_y respectively)
+A tibble contains hexIDs (\code{h}),
+x and y coordinates (\code{c_x}, \code{c_y} respectively)
 of all hexagon bin centroids.
 }
 \description{
 This function generates all possible centroids in the hexagonal grid.
 }
 \examples{
-gen_centroids(nldr_obj = scurve_umap_obj, b1 = 4, q = 0.1)
+gen_centroids(nldr_obj = scurve_model_obj$nldr_obj, b1 = 4, q = 0.1)
 
 }

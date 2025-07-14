@@ -3,13 +3,13 @@
 \docType{data}
 \name{scurve_umap2}
 \alias{scurve_umap2}
-\title{UMAP embedding for S-curve dataset which with noise dimensions}
+\title{UMAP embedding for `scurve` with n_neighbors = 10 and min_dist = 0.4}
 \format{
 ## `scurve_umap2`
-A data frame with 75 rows and 3 columns:
+A data frame with 5000 rows and 3 columns:
 \describe{
-  \item{UMAP1}{Numeric, first UMAP 2D embeddings.}
-  \item{UMAP2}{Numeric, second UMAP 2D embeddings.}
+  \item{UMAP1}{Numeric, first UMAP 2-D embeddings.}
+  \item{UMAP2}{Numeric, second UMAP 2-D embeddings.}
   \item{ID}{Numeric, identifier for each data point.}
 }
 }

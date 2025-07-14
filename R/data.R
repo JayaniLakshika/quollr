@@ -3,7 +3,7 @@
 #' The `scurve` dataset contains a 3-dimensional S-curve with added noise dimensions.
 #' Each data point is represented by seven dimensions (x1 to x7) and an ID.
 #'
-#' @format A data frame with 100 rows and 8 columns:
+#' @format A data frame with 5000 rows and 8 columns:
 #' \describe{
 #'   \item{ID}{Identification number}
 #'   \item{x1, x2, x3, x4, x5, x6, x7}{High-dimensional coordinates}
@@ -24,7 +24,7 @@
 #' @source This dataset is generated for illustrative purposes.
 "scurve"
 
-#' UMAP embedding for S-curve dataset which with noise dimensions
+#' UMAP embedding for `scurve` with n_neighbors = 15 and min_dist = 0.1
 #'
 #' The `scurve_umap` dataset contains the UMAP (Uniform Manifold
 #' Approximation and Projection) embeddings of a three-dimensional S-curve with
@@ -32,10 +32,10 @@
 #' and UMAP2) and an ID.
 #'
 #' @format ## `scurve_umap`
-#' A data frame with 75 rows and 3 columns:
+#' A data frame with 5000 rows and 3 columns:
 #' \describe{
-#'   \item{UMAP1}{Numeric, first UMAP 2D embeddings.}
-#'   \item{UMAP2}{Numeric, second UMAP 2D embeddings.}
+#'   \item{UMAP1}{Numeric, first UMAP 2-D embeddings.}
+#'   \item{UMAP2}{Numeric, second UMAP 2-D embeddings.}
 #'   \item{ID}{Numeric, identifier for each data point.}
 #' }
 #' @examples
@@ -54,7 +54,7 @@
 #' @source This dataset is generated for illustrative purposes.
 "scurve_umap"
 
-#' Predicted UMAP embedding for S-curve dataset which with noise dimensions
+#' Predicted UMAP embedding for `scurve` data
 #'
 #' The `scurve_umap_predict` dataset contains the predicted UMAP (Uniform Manifold
 #' Approximation and Projection) embeddings of a three-dimensional S-curve with
@@ -62,10 +62,10 @@
 #' and UMAP2) and an ID.
 #'
 #' @format ## `scurve_umap_predict`
-#' A data frame with 75 rows and 3 columns:
+#' A data frame with 5000 rows and 3 columns:
 #' \describe{
-#'   \item{UMAP1}{Numeric, predicted first UMAP 2D embeddings.}
-#'   \item{UMAP2}{Numeric, predicted second UMAP 2D embeddings.}
+#'   \item{UMAP1}{Numeric, predicted first UMAP 2-D embeddings.}
+#'   \item{UMAP2}{Numeric, predicted second UMAP 2-D embeddings.}
 #'   \item{ID}{Numeric, identifier for each data point.}
 #' }
 #' @examples
@@ -94,7 +94,15 @@
 #' edge distance information.
 #'
 #' @format ## `scurve_model_obj`
-#' An object of 6 elements
+#' An object of five elements
+#' \describe{
+#'   \item{nldr_obj}{A tibble contains scaled first and second columns of NLDR
+#'   data, and numeric vectors representing the limits of the original NLDR data.}
+#'   \item{hb_obj}{A object that contains hexagonal binning information.}
+#'   \item{model_highd}{A tibble with high-dimensional model.}
+#'   \item{model_2d}{A tibble containing hexagonal bin centroids in 2-D}
+#'   \item{trimesh_data}{A tibble that contains the edge information.}
+#' }
 #' @examples
 #' # Load the scurve_model_obj
 #' data(scurve_model_obj)
@@ -108,7 +116,7 @@
 #' @source This object is generated for illustrative purposes.
 "scurve_model_obj"
 
-#' UMAP embedding for S-curve dataset which with noise dimensions
+#' UMAP embedding for `scurve` with n_neighbors = 10 and min_dist = 0.4
 #'
 #' The `scurve_umap2` dataset contains the UMAP (Uniform Manifold
 #' Approximation and Projection) embeddings of a three-dimensional S-curve with
@@ -116,10 +124,10 @@
 #' and UMAP2) and an ID.
 #'
 #' @format ## `scurve_umap2`
-#' A data frame with 75 rows and 3 columns:
+#' A data frame with 5000 rows and 3 columns:
 #' \describe{
-#'   \item{UMAP1}{Numeric, first UMAP 2D embeddings.}
-#'   \item{UMAP2}{Numeric, second UMAP 2D embeddings.}
+#'   \item{UMAP1}{Numeric, first UMAP 2-D embeddings.}
+#'   \item{UMAP2}{Numeric, second UMAP 2-D embeddings.}
 #'   \item{ID}{Numeric, identifier for each data point.}
 #' }
 #' @examples
@@ -138,7 +146,7 @@
 #' @source This dataset is generated for illustrative purposes.
 "scurve_umap2"
 
-#' UMAP embedding for S-curve dataset which with noise dimensions
+#' UMAP embedding for `scurve` with n_neighbors = 62 and min_dist = 0.1
 #'
 #' The `scurve_umap3` dataset contains the UMAP (Uniform Manifold
 #' Approximation and Projection) embeddings of a three-dimensional S-curve with
@@ -146,10 +154,10 @@
 #' and UMAP2) and an ID.
 #'
 #' @format ## `scurve_umap3`
-#' A data frame with 75 rows and 3 columns:
+#' A data frame with 5000 rows and 3 columns:
 #' \describe{
-#'   \item{UMAP1}{Numeric, first UMAP 2D embeddings.}
-#'   \item{UMAP2}{Numeric, second UMAP 2D embeddings.}
+#'   \item{UMAP1}{Numeric, first UMAP 2-D embeddings.}
+#'   \item{UMAP2}{Numeric, second UMAP 2-D embeddings.}
 #'   \item{ID}{Numeric, identifier for each data point.}
 #' }
 #' @examples
@@ -168,7 +176,7 @@
 #' @source This dataset is generated for illustrative purposes.
 "scurve_umap3"
 
-#' UMAP embedding for S-curve dataset which with noise dimensions
+#' UMAP embedding for `scurve` with n_neighbors = 30 and min_dist = 0.5
 #'
 #' The `scurve_umap4` dataset contains the UMAP (Uniform Manifold
 #' Approximation and Projection) embeddings of a three-dimensional S-curve with
@@ -176,10 +184,10 @@
 #' and UMAP2) and an ID.
 #'
 #' @format ## `scurve_umap4`
-#' A data frame with 75 rows and 3 columns:
+#' A data frame with 5000 rows and 3 columns:
 #' \describe{
-#'   \item{UMAP1}{Numeric, first UMAP 2D embeddings.}
-#'   \item{UMAP2}{Numeric, second UMAP 2D embeddings.}
+#'   \item{UMAP1}{Numeric, first UMAP 2-D embeddings.}
+#'   \item{UMAP2}{Numeric, second UMAP 2-D embeddings.}
 #'   \item{ID}{Numeric, identifier for each data point.}
 #' }
 #' @examples
@@ -198,7 +206,7 @@
 #' @source This dataset is generated for illustrative purposes.
 "scurve_umap4"
 
-#' UMAP embedding for S-curve dataset which with noise dimensions
+#' UMAP embedding for `scurve` with n_neighbors = 15 and min_dist = 0.5
 #'
 #' The `scurve_umap5` dataset contains the UMAP (Uniform Manifold
 #' Approximation and Projection) embeddings of a three-dimensional S-curve with
@@ -206,10 +214,10 @@
 #' and UMAP2) and an ID.
 #'
 #' @format ## `scurve_umap5`
-#' A data frame with 75 rows and 3 columns:
+#' A data frame with 5000 rows and 3 columns:
 #' \describe{
-#'   \item{UMAP1}{Numeric, first UMAP 2D embeddings.}
-#'   \item{UMAP2}{Numeric, second UMAP 2D embeddings.}
+#'   \item{UMAP1}{Numeric, first UMAP 2-D embeddings.}
+#'   \item{UMAP2}{Numeric, second UMAP 2-D embeddings.}
 #'   \item{ID}{Numeric, identifier for each data point.}
 #' }
 #' @examples
@@ -228,7 +236,7 @@
 #' @source This dataset is generated for illustrative purposes.
 "scurve_umap5"
 
-#' UMAP embedding for S-curve dataset which with noise dimensions
+#' UMAP embedding for `scurve` with n_neighbors = 46 and min_dist = 0.9
 #'
 #' The `scurve_umap6` dataset contains the UMAP (Uniform Manifold
 #' Approximation and Projection) embeddings of a three-dimensional S-curve with
@@ -236,10 +244,10 @@
 #' and UMAP2) and an ID.
 #'
 #' @format ## `scurve_umap6`
-#' A data frame with 75 rows and 3 columns:
+#' A data frame with 5000 rows and 3 columns:
 #' \describe{
-#'   \item{UMAP1}{Numeric, first UMAP 2D embeddings.}
-#'   \item{UMAP2}{Numeric, second UMAP 2D embeddings.}
+#'   \item{UMAP1}{Numeric, first UMAP 2-D embeddings.}
+#'   \item{UMAP2}{Numeric, second UMAP 2-D embeddings.}
 #'   \item{ID}{Numeric, identifier for each data point.}
 #' }
 #' @examples
@@ -258,183 +266,243 @@
 #' @source This dataset is generated for illustrative purposes.
 "scurve_umap6"
 
-#' UMAP embedding for S-curve dataset which with noise dimensions
+#' Summary with different number of bins for `scurve_umap`
 #'
-#' The `scurve_umap_mse` dataset contains the UMAP (Uniform Manifold
-#' Approximation and Projection) embeddings of a three-dimensional S-curve with
-#' added noise. Each data point is represented by two UMAP coordinates (UMAP1
-#' and UMAP2) and an ID.
+#' The `scurve_umap_rmse` dataset contains error, RMSE, b2, b, m, a1, a2,
+#' and mean density (d_bar) for different number of bins in x-axis (b1).
 #'
-#' @format ## `scurve_umap_mse`
-#' A data frame with 75 rows and 3 columns:
+#' @format ## `scurve_umap_rmse`
+#' A data frame with 70 rows and 10 columns:
 #' \describe{
-#'   \item{UMAP1}{Numeric, first UMAP 2D embeddings.}
-#'   \item{UMAP2}{Numeric, second UMAP 2D embeddings.}
-#'   \item{ID}{Numeric, identifier for each data point.}
+#'   \item{Error}{Numeric, model error.}
+#'   \item{RMSE}{Numeric, Root Mean Square Error.}
+#'   \item{b1}{Numeric, number of bins along x-axis.}
+#'   \item{b2}{Numeric, number of bins along y-axis.}
+#'   \item{b}{Numeric, number of total bins.}
+#'   \item{m}{Numeric, number of non-empty bins.}
+#'   \item{a1}{Numeric, hexagon bin width.}
+#'   \item{a2}{Numeric, hexagon bin height.}
+#'   \item{d_bar}{Numeric, mean desnity.}
+#'   \item{method}{Character, NLDR method.}
 #' }
 #' @examples
-#' # Load the scurve_umap_mse dataset
-#' data(scurve_umap_mse)
+#' # Load the scurve_umap_rmse dataset
+#' data(scurve_umap_rmse)
 #'
 #' # Display the first few rows of the dataset
-#' head(scurve_umap_mse)
+#' head(scurve_umap_rmse)
 #'
 #' @keywords datasets
 #'
-#' @rdname scurve_umap_mse
+#' @rdname scurve_umap_rmse
 #' @docType data
-#' @usage data(scurve_umap_mse)
+#' @usage data(scurve_umap_rmse)
 #'
 #' @source This dataset is generated for illustrative purposes.
-"scurve_umap_mse"
+"scurve_umap_rmse"
 
-#' UMAP embedding for S-curve dataset which with noise dimensions
+#' Summary with different number of bins for `scurve_umap2`
 #'
-#' The `scurve_umap_mse2` dataset contains the UMAP (Uniform Manifold
-#' Approximation and Projection) embeddings of a three-dimensional S-curve with
-#' added noise. Each data point is represented by two UMAP coordinates (UMAP1
-#' and UMAP2) and an ID.
+#' The `scurve_umap_rmse2` dataset contains error, RMSE, b2, b, m, a1, a2,
+#' and mean density (d_bar) for different number of bins in x-axis (b1).
 #'
-#' @format ## `scurve_umap_mse2`
-#' A data frame with 75 rows and 3 columns:
+#' @format ## `scurve_umap_rmse2`
+#' A data frame with 70 rows and 10 columns:
 #' \describe{
-#'   \item{UMAP1}{Numeric, first UMAP 2D embeddings.}
-#'   \item{UMAP2}{Numeric, second UMAP 2D embeddings.}
-#'   \item{ID}{Numeric, identifier for each data point.}
+#'   \item{Error}{Numeric, model error.}
+#'   \item{RMSE}{Numeric, Root Mean Square Error.}
+#'   \item{b1}{Numeric, number of bins along x-axis.}
+#'   \item{b2}{Numeric, number of bins along y-axis.}
+#'   \item{b}{Numeric, number of total bins.}
+#'   \item{m}{Numeric, number of non-empty bins.}
+#'   \item{a1}{Numeric, hexagon bin width.}
+#'   \item{a2}{Numeric, hexagon bin height.}
+#'   \item{d_bar}{Numeric, mean desnity.}
+#'   \item{method}{Character, NLDR method.}
 #' }
 #' @examples
-#' # Load the scurve_umap_mse2 dataset
-#' data(scurve_umap_mse2)
+#' # Load the scurve_umap_rmse2 dataset
+#' data(scurve_umap_rmse2)
 #'
 #' # Display the first few rows of the dataset
-#' head(scurve_umap_mse2)
+#' head(scurve_umap_rmse2)
 #'
 #' @keywords datasets
 #'
-#' @rdname scurve_umap_mse2
+#' @rdname scurve_umap_rmse2
 #' @docType data
-#' @usage data(scurve_umap_mse2)
+#' @usage data(scurve_umap_rmse2)
 #'
 #' @source This dataset is generated for illustrative purposes.
-"scurve_umap_mse2"
+"scurve_umap_rmse2"
 
-#' UMAP embedding for S-curve dataset which with noise dimensions
+#' Summary with different number of bins for `scurve_umap3`
 #'
-#' The `scurve_umap_mse3` dataset contains the UMAP (Uniform Manifold
-#' Approximation and Projection) embeddings of a three-dimensional S-curve with
-#' added noise. Each data point is represented by two UMAP coordinates (UMAP1
-#' and UMAP2) and an ID.
+#' The `scurve_umap_rmse3` dataset contains error, RMSE, b2, b, m, a1, a2,
+#' and mean density (d_bar) for different number of bins in x-axis (b1).
 #'
-#' @format ## `scurve_umap_mse3`
-#' A data frame with 75 rows and 3 columns:
+#' @format ## `scurve_umap_rmse3`
+#' A data frame with 70 rows and 10 columns:
 #' \describe{
-#'   \item{UMAP1}{Numeric, first UMAP 2D embeddings.}
-#'   \item{UMAP2}{Numeric, second UMAP 2D embeddings.}
-#'   \item{ID}{Numeric, identifier for each data point.}
+#'   \item{Error}{Numeric, model error.}
+#'   \item{RMSE}{Numeric, Root Mean Square Error.}
+#'   \item{b1}{Numeric, number of bins along x-axis.}
+#'   \item{b2}{Numeric, number of bins along y-axis.}
+#'   \item{b}{Numeric, number of total bins.}
+#'   \item{m}{Numeric, number of non-empty bins.}
+#'   \item{a1}{Numeric, hexagon bin width.}
+#'   \item{a2}{Numeric, hexagon bin height.}
+#'   \item{d_bar}{Numeric, mean desnity.}
+#'   \item{method}{Character, NLDR method.}
 #' }
 #' @examples
-#' # Load the scurve_umap_mse3 dataset
-#' data(scurve_umap_mse3)
+#' # Load the scurve_umap_rmse3 dataset
+#' data(scurve_umap_rmse3)
 #'
 #' # Display the first few rows of the dataset
-#' head(scurve_umap_mse3)
+#' head(scurve_umap_rmse3)
 #'
 #' @keywords datasets
 #'
-#' @rdname scurve_umap_mse3
+#' @rdname scurve_umap_rmse3
 #' @docType data
-#' @usage data(scurve_umap_mse3)
+#' @usage data(scurve_umap_rmse3)
 #'
 #' @source This dataset is generated for illustrative purposes.
-"scurve_umap_mse3"
+"scurve_umap_rmse3"
 
-#' UMAP embedding for S-curve dataset which with noise dimensions
+#' Summary with different number of bins for `scurve_umap4`
 #'
-#' The `scurve_umap_mse4` dataset contains the UMAP (Uniform Manifold
-#' Approximation and Projection) embeddings of a three-dimensional S-curve with
-#' added noise. Each data point is represented by two UMAP coordinates (UMAP1
-#' and UMAP2) and an ID.
+#' The `scurve_umap_rmse4` dataset contains error, RMSE, b2, b, m, a1, a2,
+#' and mean density (d_bar) for different number of bins in x-axis (b1).
 #'
-#' @format ## `scurve_umap_mse4`
-#' A data frame with 75 rows and 3 columns:
+#' @format ## `scurve_umap_rmse4`
+#' A data frame with 70 rows and 10 columns:
 #' \describe{
-#'   \item{UMAP1}{Numeric, first UMAP 2D embeddings.}
-#'   \item{UMAP2}{Numeric, second UMAP 2D embeddings.}
-#'   \item{ID}{Numeric, identifier for each data point.}
+#'   \item{Error}{Numeric, model error.}
+#'   \item{RMSE}{Numeric, Root Mean Square Error.}
+#'   \item{b1}{Numeric, number of bins along x-axis.}
+#'   \item{b2}{Numeric, number of bins along y-axis.}
+#'   \item{b}{Numeric, number of total bins.}
+#'   \item{m}{Numeric, number of non-empty bins.}
+#'   \item{a1}{Numeric, hexagon bin width.}
+#'   \item{a2}{Numeric, hexagon bin height.}
+#'   \item{d_bar}{Numeric, mean desnity.}
+#'   \item{method}{Character, NLDR method.}
 #' }
 #' @examples
-#' # Load the scurve_umap_mse4 dataset
-#' data(scurve_umap_mse4)
+#' # Load the scurve_umap_rmse4 dataset
+#' data(scurve_umap_rmse4)
 #'
 #' # Display the first few rows of the dataset
-#' head(scurve_umap_mse4)
+#' head(scurve_umap_rmse4)
 #'
 #' @keywords datasets
 #'
-#' @rdname scurve_umap_mse4
+#' @rdname scurve_umap_rmse4
 #' @docType data
-#' @usage data(scurve_umap_mse4)
+#' @usage data(scurve_umap_rmse4)
 #'
 #' @source This dataset is generated for illustrative purposes.
-"scurve_umap_mse4"
+"scurve_umap_rmse4"
 
-#' UMAP embedding for S-curve dataset which with noise dimensions
+#' Summary with different number of bins for `scurve_umap5`
 #'
-#' The `scurve_umap_mse5` dataset contains the UMAP (Uniform Manifold
-#' Approximation and Projection) embeddings of a three-dimensional S-curve with
-#' added noise. Each data point is represented by two UMAP coordinates (UMAP1
-#' and UMAP2) and an ID.
+#' The `scurve_umap_rmse5` dataset contains error, RMSE, b2, b, m, a1, a2,
+#' and mean density (d_bar) for different number of bins in x-axis (b1).
 #'
-#' @format ## `scurve_umap_mse5`
-#' A data frame with 75 rows and 3 columns:
+#' @format ## `scurve_umap_rmse5`
+#' A data frame with 70 rows and 10 columns:
 #' \describe{
-#'   \item{UMAP1}{Numeric, first UMAP 2D embeddings.}
-#'   \item{UMAP2}{Numeric, second UMAP 2D embeddings.}
-#'   \item{ID}{Numeric, identifier for each data point.}
+#'   \item{Error}{Numeric, model error.}
+#'   \item{RMSE}{Numeric, Root Mean Square Error.}
+#'   \item{b1}{Numeric, number of bins along x-axis.}
+#'   \item{b2}{Numeric, number of bins along y-axis.}
+#'   \item{b}{Numeric, number of total bins.}
+#'   \item{m}{Numeric, number of non-empty bins.}
+#'   \item{a1}{Numeric, hexagon bin width.}
+#'   \item{a2}{Numeric, hexagon bin height.}
+#'   \item{d_bar}{Numeric, mean desnity.}
+#'   \item{method}{Character, NLDR method.}
 #' }
 #' @examples
-#' # Load the scurve_umap_mse5 dataset
-#' data(scurve_umap_mse5)
+#' # Load the scurve_umap_rmse5 dataset
+#' data(scurve_umap_rmse5)
 #'
 #' # Display the first few rows of the dataset
-#' head(scurve_umap_mse5)
+#' head(scurve_umap_rmse5)
 #'
 #' @keywords datasets
 #'
-#' @rdname scurve_umap_mse5
+#' @rdname scurve_umap_rmse5
 #' @docType data
-#' @usage data(scurve_umap_mse5)
+#' @usage data(scurve_umap_rmse5)
 #'
 #' @source This dataset is generated for illustrative purposes.
-"scurve_umap_mse5"
+"scurve_umap_rmse5"
 
-#' UMAP embedding for S-curve dataset which with noise dimensions
+#' Summary with different number of bins for `scurve_umap6`
 #'
-#' The `scurve_umap_mse6` dataset contains the UMAP (Uniform Manifold
-#' Approximation and Projection) embeddings of a three-dimensional S-curve with
-#' added noise. Each data point is represented by two UMAP coordinates (UMAP1
-#' and UMAP2) and an ID.
+#' The `scurve_umap_rmse6` dataset contains error, RMSE, b2, b, m, a1, a2,
+#' and mean density (d_bar) for different number of bins in x-axis (b1).
 #'
-#' @format ## `scurve_umap_mse6`
-#' A data frame with 75 rows and 3 columns:
+#' @format ## `scurve_umap_rmse6`
+#' A data frame with 70 rows and 10 columns:
 #' \describe{
-#'   \item{UMAP1}{Numeric, first UMAP 2D embeddings.}
-#'   \item{UMAP2}{Numeric, second UMAP 2D embeddings.}
-#'   \item{ID}{Numeric, identifier for each data point.}
+#'   \item{Error}{Numeric, model error.}
+#'   \item{RMSE}{Numeric, Root Mean Square Error.}
+#'   \item{b1}{Numeric, number of bins along x-axis.}
+#'   \item{b2}{Numeric, number of bins along y-axis.}
+#'   \item{b}{Numeric, number of total bins.}
+#'   \item{m}{Numeric, number of non-empty bins.}
+#'   \item{a1}{Numeric, hexagon bin width.}
+#'   \item{a2}{Numeric, hexagon bin height.}
+#'   \item{d_bar}{Numeric, mean desnity.}
+#'   \item{method}{Character, NLDR method.}
 #' }
 #' @examples
-#' # Load the scurve_umap_mse6 dataset
-#' data(scurve_umap_mse6)
+#' # Load the scurve_umap_rmse6 dataset
+#' data(scurve_umap_rmse6)
 #'
 #' # Display the first few rows of the dataset
-#' head(scurve_umap_mse6)
+#' head(scurve_umap_rmse6)
 #'
 #' @keywords datasets
 #'
-#' @rdname scurve_umap_mse6
+#' @rdname scurve_umap_rmse6
 #' @docType data
-#' @usage data(scurve_umap_mse6)
+#' @usage data(scurve_umap_rmse6)
 #'
 #' @source This dataset is generated for illustrative purposes.
-"scurve_umap_mse6"
+"scurve_umap_rmse6"
+
+#' List of plots
+#'
+#' The `scurve_plts` contains the RMSE plot and the 2-D NLDR layouts for
+#' `scurve_umap`, `scurve_umap2`, `scurve_umap3`, `scurve_umap4`,
+#' `scurve_umap5`, and `scurve_umap6`.
+#'
+#' @format ## `scurve_plts`
+#' A list of 5 elements:
+#' \describe{
+#'   \item{scurve_plts[[1]]}{ggplot object, RMSE plot.}
+#'   \item{scurve_plts[[2]]}{ggplot object, 2-D NLDR layout for `scurve_umap`.}
+#'   \item{scurve_plts[[3]]}{ggplot object, 2-D NLDR layout for `scurve_umap2`.}
+#'   \item{scurve_plts[[4]]}{ggplot object, 2-D NLDR layout for `scurve_umap3`.}
+#'   \item{scurve_plts[[5]]}{ggplot object, 2-D NLDR layout for `scurve_umap4`.}
+#'   \item{scurve_plts[[6]]}{ggplot object, 2-D NLDR layout for `scurve_umap5`.}
+#'   \item{scurve_plts[[7]]}{ggplot object, 2-D NLDR layout for `scurve_umap6`.}
+#' }
+#' @examples
+#' # Show the scurve_plts
+#' scurve_plts
+#'
+#' @keywords plots
+#'
+#' @rdname scurve_plts
+#' @docType data
+#'
+#' @source This list of plots is generated for illustrative purposes.
+"scurve_plts"
+
 
