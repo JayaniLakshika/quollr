@@ -1,10 +1,9 @@
 test_that("calc_bins_y() works", {
 
-  r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
-  testthat::expect_length(calc_bins_y(bin1 = 4, r2 = r2), 3)
+  testthat::expect_length(calc_bins_y(nldr_obj = scurve_model_obj$nldr_obj, b1 = 4, q = 0.1), 3)
 
-  testthat::expect_error(calc_bins_y(bin1 = 1, r2 = r2))
-  testthat::expect_error(calc_bins_y(bin1 = 4, q = 0.3, r2 = r2))
-  testthat::expect_error(calc_bins_y(bin1 = 4, q = 0.01, r2 = r2))
+  testthat::expect_error(calc_bins_y(nldr_obj = scurve_model_obj$nldr_obj, b1 = 1, q = 0.1))
+  testthat::expect_error(calc_bins_y(calc_bins_y(nldr_obj = scurve_model_obj$nldr_obj, b1 = 4, q = 0.3)))
+  testthat::expect_error(calc_bins_y(calc_bins_y(nldr_obj = scurve_model_obj$nldr_obj, b1 = 4, q = 0.01)))
 
 })

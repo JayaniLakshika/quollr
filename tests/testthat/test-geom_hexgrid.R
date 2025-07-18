@@ -1,9 +1,13 @@
 test_that("geom_hexgrid() works", {
-  r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
-  hb_obj <- hex_binning(data = s_curve_noise_umap_scaled, bin1 = 4, r2 = r2)
 
-  all_centroids_df <- hb_obj$centroids
+  ## To draw only for selected hexagons
+  df_bin_centroids <- scurve_model_obj$model_2d |> dplyr::filter(n_h > 10)
+  vdiffr::expect_doppelganger("geom_hexgrid basic with selected bin centroids", ggplot2::ggplot() +
+                                geom_hexgrid(data = df_bin_centroids, mapping = ggplot2::aes(x = c_x, y = c_y)))
 
-  vdiffr::expect_doppelganger("geom_hexgrid basic with bin centroids", ggplot2::ggplot() +
-                                geom_hexgrid(data = all_centroids_df, mapping = ggplot2::aes(x = c_x, y = c_y)))
+  ## To draw the full hexagon grid
+  df_bin_centroids_all <- scurve_model_obj$hb_obj$centroids
+
+  vdiffr::expect_doppelganger("geom_hexgrid basic with all bin centroids", ggplot2::ggplot() +
+                                geom_hexgrid(data = df_bin_centroids_all, mapping = ggplot2::aes(x = c_x, y = c_y)))
 })

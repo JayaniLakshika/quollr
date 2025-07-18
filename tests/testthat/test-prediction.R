@@ -1,72 +1,41 @@
 test_that("predict_emb() works", {
 
-  r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
-  model <- fit_highd_model(training_data = s_curve_noise_training,
-                           emb_df = s_curve_noise_umap_scaled,
-                           r2 = r2,
-                           col_start_highd = "x")
-
-  df_bin_centroids <- model$df_bin_centroids
-  df_bin <- model$df_bin
-
-  testthat::expect_snapshot(predict_emb(test_data = s_curve_noise_training,
-                                        df_bin_centroids = df_bin_centroids,
-                                        df_bin = df_bin, type_NLDR = "UMAP"))
-
-  testthat::expect_snapshot(predict_emb(test_data = s_curve_noise_test,
-                                        df_bin_centroids = df_bin_centroids,
-                                        df_bin = df_bin, type_NLDR = "UMAP"))
+  testthat::expect_snapshot(predict_emb(highd_data = scurve,
+                                        model_highd = scurve_model_obj$model_highd,
+                                        model_2d = scurve_model_obj$model_2d))
 
 })
 
 test_that("glance() works", {
 
-  r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
-  model <- fit_highd_model(training_data = s_curve_noise_training,
-                           emb_df = s_curve_noise_umap_scaled,
-                           r2 = r2,
-                           col_start_highd = "x")
-
-  df_bin_centroids <- model$df_bin_centroids
-  df_bin <- model$df_bin
-
-
-  testthat::expect_snapshot(glance(df_bin_centroids = df_bin_centroids,
-                                   df_bin = df_bin,
-                                   training_data = s_curve_noise_training,
-                                   newdata = NULL, type_NLDR = "UMAP",
-                                   col_start = "x"))
-
-  testthat::expect_snapshot(glance(df_bin_centroids = df_bin_centroids,
-                                   df_bin = df_bin,
-                                   training_data = s_curve_noise_training,
-                                   newdata = s_curve_noise_test,
-                                   type_NLDR = "UMAP", col_start = "x"))
+  testthat::expect_snapshot(glance(highd_data = scurve,
+                                   model_highd = scurve_model_obj$model_highd,
+                                   model_2d = scurve_model_obj$model_2d))
 
 })
 
 
 test_that("augment() works", {
 
-  r2 <- diff(range(s_curve_noise_umap$UMAP2))/diff(range(s_curve_noise_umap$UMAP1))
-  model <- fit_highd_model(training_data = s_curve_noise_training,
-                           emb_df = s_curve_noise_umap_scaled,
-                           r2 = r2,
-                           col_start_highd = "x")
+  testthat::expect_snapshot(augment(highd_data = scurve,
+                                    model_highd = scurve_model_obj$model_highd,
+                                    model_2d = scurve_model_obj$model_2d))
 
-  df_bin_centroids <- model$df_bin_centroids
-  df_bin <- model$df_bin
-  testthat::expect_snapshot(augment(df_bin_centroids = df_bin_centroids,
-                                    df_bin = df_bin,
-                                    training_data = s_curve_noise_training,
-                                    newdata = NULL, type_NLDR = "UMAP",
-                                    col_start = "x"))
+})
 
-  testthat::expect_snapshot(augment(df_bin_centroids = df_bin_centroids,
-                                    df_bin = df_bin,
-                                    training_data = s_curve_noise_training,
-                                    newdata = s_curve_noise_test,
-                                    type_NLDR = "UMAP", col_start = "x"))
+test_that("gen_diffbin1_errors() works", {
+
+  testthat::expect_snapshot(gen_diffbin1_errors(highd_data = scurve,
+                                                nldr_data = scurve_umap))
+
+})
+
+test_that("plot_rmse_layouts() works", {
+
+  design <- gen_design(n_right = 6, ncol_right = 2)
+
+  testthat::expect_snapshot(plot_rmse_layouts(plots = scurve_plts,
+                                              design = design))
 
 })
 
