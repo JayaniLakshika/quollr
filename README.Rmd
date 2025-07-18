@@ -21,8 +21,7 @@ knitr::opts_chunk$set(
 
 Nonlinear dimension reduction (NLDR) techniques provide a low-dimensional representation of high-dimensional data by applying a non-linear transformation. The complexity of the transformations and data structure can create wildly different representations depending on the method and parameter choices. It is difficult to determine whether any are accurate, which is best, or whether they have missed structure. To help assess the NLDR and decide on which, if any, is best, we have developed an algorithm to create a model that is then used to display as a wireframe in high dimensions. The `quollr` package provides functions to implement the algorithm.
 
-<!--For a thorough background and discussion on this work, please read our paper [link to the paper].
--->
+For a thorough background and discussion on this work, please read our paper [https://arxiv.org/abs/2506.22051](https://arxiv.org/abs/2506.22051).
 
 ## Installation
 
@@ -35,13 +34,13 @@ install.packages("quollr")
 The development version from [GitHub](https://github.com/) with:
 
 ``` r
-install.packages("remotes")
-remotes::install_github("JayaniLakshika/quollr")
+install.packages("pak")
+pak::pak("JayaniLakshika/quollr")
 ```
 
 ## Usage
 
-Our approach involves dividing the high-dimensional data set into two parts: a training set to construct the model and a test set to generate model summaries. To implement our approach, first we use a 2D embedding data set as the initial point. The output of our algorithm is a tour that displays the model overlaid on high-dimensional data. Our algorithm comprises two main phases:(1) generate the model in the 2D space, and (2) generate the model in the high-dimensional space. This methodology is available in this package.
+Our approach involves dividing the high-dimensional data set into two parts: a training set to construct the model and a test set to generate model summaries. To implement our approach, first we use a 2D embedding data set as the initial point. The output of our algorithm is a tour that displays the model overlaid on high-dimensional data. Our algorithm comprises two main phases: (1) generate the model in the 2D space, and (2) generate the model in the high-dimensional space. This methodology is available in this package.
 
 ```{r echo = FALSE, out.width="80%", fig.align='center'}
 knitr::include_graphics("man/figures/quollr-methodology.png")
