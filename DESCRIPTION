@@ -1,7 +1,7 @@
 Type: Package
 Package: quollr
 Title: Visualising How Nonlinear Dimension Reduction Warps Your Data
-Version: 0.3.5
+Version: 0.3.6
 Authors@R: c(
     person("Jayani P.", "Gamage", , "jayanilakshika76@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-6265-6481")),
@@ -14,16 +14,17 @@ Authors@R: c(
     person("Thiyanga S.", "Talagala", , "ttalagala@sjp.ac.lk", role = "aut",
            comment = c(ORCID = "0000-0002-0656-9789"))
   )
-Description: To construct a model in 2-D space from 2-D NLDR data and then
-    lift it to the high-dimensional space. Additionally, provides tools to
-    visualise the model overlay the data in 2-D and high-dimensional
-    space.  Furthermore, provides summaries and diagnostics to evaluate
-    the NLDR layout.
+Description: To construct a model in 2-D space from 2-D nonlinear
+    dimension reduction data and then lift it to the high-dimensional
+    space. Additionally, provides tools to visualise the model overlay the
+    data in 2-D and high-dimensional space. Furthermore, provides
+    summaries and diagnostics to evaluate the nonlinear dimension
+    reduction layout.
 License: MIT + file LICENSE
 URL: https://jayanilakshika.github.io/quollr/
 BugReports: https://github.com/jayanilakshika/quollr/issues
 Depends: 
-    R (>= 3.5.0)
+    R (>= 4.1.0)
 Imports: 
     cli,
     crosstalk,
