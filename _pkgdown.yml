@@ -7,18 +7,22 @@ reference:
 - title: "Data"
   desc: The example data sets.
   contents:
-  - s_curve_noise
-  - s_curve_noise_training
-  - s_curve_noise_test
-  - s_curve_noise_umap
-  - s_curve_noise_umap_scaled
-  - s_curve_noise_umap_predict
-  - s_curve_noise_umap2
-  - s_curve_noise_umap3
-  - s_curve_noise_umap4
-  - s_curve_noise_umap5
-  - s_curve_noise_umap6
-  - s_curve_obj
+  - scurve
+  - scurve_model_obj
+  - scurve_plts
+  - scurve_umap
+  - scurve_umap_predict
+  - scurve_umap2
+  - scurve_umap3
+  - scurve_umap4
+  - scurve_umap5
+  - scurve_umap6
+  - scurve_umap_rmse
+  - scurve_umap_rmse2
+  - scurve_umap_rmse3
+  - scurve_umap_rmse4
+  - scurve_umap_rmse5
+  - scurve_umap_rmse6
 - title: "Data preprocessing"
   desc: These are for data preprocessing.
   contents:
@@ -32,20 +36,21 @@ reference:
   - assign_data
   - compute_std_counts
   - hex_binning
-- title: "2D model construction"
-  desc: These are to construct the 2D model.
+- title: "2-D model construction"
+  desc: These are to construct the 2-D model.
   contents:
   - extract_hexbin_centroids
   - extract_hexbin_mean
   - tri_bin_centroids
   - gen_edges
+  - update_trimesh_index
 - title: "Parameters"
   desc: These are to compute default parameter values.
   contents:
   - compute_mean_density_hex
   - find_low_dens_hex
 - title: "Lift to high dimensions"
-  desc: The function is to lift the constructed 2D model into high-dimensions.
+  desc: The function is to lift the constructed 2-D model into high-dimensions.
   contents:
   - avg_highd_data
 - title: "Fit the model"
@@ -58,8 +63,10 @@ reference:
   - glance
   - predict_emb
   - augment
-- title: "2D visualisation"
-  desc: These are to visualise the model in 2D.
+  - gen_diffbin1_errors
+  - plot_rmse_layouts
+- title: "2-D visualisation"
+  desc: These are to visualise the model in 2-D.
   contents:
   - GeomHexgrid
   - stat_hexgrid
@@ -67,14 +74,13 @@ reference:
   - GeomTrimesh
   - stat_trimesh
   - geom_trimesh
-  - vis_rmlg_mesh
 - title: "High-dimensional visualisation"
   desc: These are to visualise the model in high-dimensional space.
   contents:
   - comb_data_model
   - show_langevitour
 - title: "Projection"
-  desc: These are to generate 2D projections from tour.
+  desc: These are to generate 2-D projections from tour.
   contents:
   - gen_axes
   - get_projection
@@ -91,4 +97,6 @@ reference:
   contents:
   - find_pts
   - find_non_empty_bins
-  - get_min_indices
+  - gen_design
+  - quad
+  - calc_2d_dist

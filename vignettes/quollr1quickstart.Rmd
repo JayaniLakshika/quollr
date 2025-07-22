@@ -1,0 +1,48 @@
+---
+title: "1. Quick start"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{1. Quick start}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(quollr)
+library(tibble)
+```
+
+This provides a quick introduction. We'll walk through fitting models to high-dimensional data and a 2-D embedding, and show how to inspect the key outputs.
+
+```{r, message=FALSE}
+model <- fit_highd_model(highd_data = scurve, 
+                         nldr_data = scurve_umap, 
+                         b1 = 4, q = 0.1, 
+                         benchmark_highdens = 5)
+```
+
+The output of `fit_highd_model()` is a named list containing several components. Let’s take a quick look at each:
+
+```{r, message=FALSE}
+## 2-D model
+glimpse(model$model_2d)
+
+## high-D model
+glimpse(model$model_highd)
+
+## wireframe data
+glimpse(model$trimesh_data)
+
+## NLDR object
+glimpse(model$nldr_obj)
+
+## Hexagonal object
+glimpse(model$hb_obj)
+```

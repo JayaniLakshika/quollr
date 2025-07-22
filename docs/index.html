@@ -17,8 +17,8 @@
 <script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Visualising How Nonlinear Dimension Reduction Warps Your Data">
-<meta name="description" content="To construct a model in 2D space from 2D embedding data and then lift it to the high-dimensional space. Additionally, it provides tools to visualize the model in 2D space and to overlay the fitted model on data using the tour technique. Furthermore, it facilitates the generation of summaries of high-dimensional distributions.">
-<meta property="og:description" content="To construct a model in 2D space from 2D embedding data and then lift it to the high-dimensional space. Additionally, it provides tools to visualize the model in 2D space and to overlay the fitted model on data using the tour technique. Furthermore, it facilitates the generation of summaries of high-dimensional distributions.">
+<meta name="description" content="To construct a model in 2D space from 2D NLDR data and then lift it to the high-dimensional space. Additionally, provides tools to visualise the model overlay the data in 2D and high-dimensional space. Furthermore, provides summaries and diagnostics to evaluate the NLDR layout.">
+<meta property="og:description" content="To construct a model in 2D space from 2D NLDR data and then lift it to the high-dimensional space. Additionally, provides tools to visualise the model overlay the data in 2D and high-dimensional space. Furthermore, provides summaries and diagnostics to evaluate the NLDR layout.">
 <meta property="og:image" content="https://jayanilakshika.github.io/quollr/logo.png">
 </head>
 <body>
@@ -29,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="index.html">quollr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.6</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.4</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -42,11 +42,11 @@
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="articles/quollr1dataprocessing.html">1. Data preprocessing</a></li>
-    <li><a class="dropdown-item" href="articles/quollr2hexbin.html">2. Algorithm for binning data</a></li>
-    <li><a class="dropdown-item" href="articles/quollr3algo.html">3. Algorithm for visualising the model overlaid on high-dimensional data</a></li>
-    <li><a class="dropdown-item" href="articles/quollr4summary.html">4. Generating model summaries</a></li>
-    <li><a class="dropdown-item" href="articles/quollr5quickstart.html">5. Quick start</a></li>
+<li><a class="dropdown-item" href="articles/quollr1quickstart.html">1. Quick start</a></li>
+    <li><a class="dropdown-item" href="articles/quollr2dataprocessing.html">2. Data preprocessing</a></li>
+    <li><a class="dropdown-item" href="articles/quollr3hexbin.html">3. Algorithm for binning data</a></li>
+    <li><a class="dropdown-item" href="articles/quollr4algo.html">4. Algorithm for visualising the model overlaid on high-dimensional data</a></li>
+    <li><a class="dropdown-item" href="articles/quollr5summary.html">5. Generating model summaries</a></li>
     <li><a class="dropdown-item" href="articles/quollr6bestbinwidth.html">6. Selecting the optimal bin width</a></li>
     <li><a class="dropdown-item" href="articles/quollr7bestfit.html">7. Selecting the best fit</a></li>
     <li><a class="dropdown-item" href="articles/quollr8interactivity.html">8. Interactivity</a></li>
@@ -73,8 +73,7 @@
 </div>
 <p><a href="https://CRAN.R-project.org/package=quollr" class="external-link"><img src="http://www.r-pkg.org/badges/version/quollr" alt="CRAN_Status_Badge"></a> <a href="https://cran.r-project.org/package=quollr" class="external-link"><img src="http://cranlogs.r-pkg.org/badges/quollr" alt="Downloads"></a></p>
 <p>Nonlinear dimension reduction (NLDR) techniques provide a low-dimensional representation of high-dimensional data by applying a non-linear transformation. The complexity of the transformations and data structure can create wildly different representations depending on the method and parameter choices. It is difficult to determine whether any are accurate, which is best, or whether they have missed structure. To help assess the NLDR and decide on which, if any, is best, we have developed an algorithm to create a model that is then used to display as a wireframe in high dimensions. The <code>quollr</code> package provides functions to implement the algorithm.</p>
-<!--For a thorough background and discussion on this work, please read our paper [link to the paper].
--->
+<p>For a thorough background and discussion on this work, please read our paper <a href="https://arxiv.org/abs/2506.22051" class="external-link uri">https://arxiv.org/abs/2506.22051</a>.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
@@ -83,14 +82,14 @@
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"quollr"</span><span class="op">)</span> </span></code></pre></div>
 <p>The development version from <a href="https://github.com/" class="external-link">GitHub</a> with:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span></span>
-<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"JayaniLakshika/quollr"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"pak"</span><span class="op">)</span></span>
+<span><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="https://pak.r-lib.org/reference/pak.html" class="external-link">pak</a></span><span class="op">(</span><span class="st">"JayaniLakshika/quollr"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a>
 </h2>
-<p>Our approach involves dividing the high-dimensional data set into two parts: a training set to construct the model and a test set to generate model summaries. To implement our approach, first we use a 2D embedding data set as the initial point. The output of our algorithm is a tour that displays the model overlaid on high-dimensional data. Our algorithm comprises two main phases:(1) generate the model in the 2D space, and (2) generate the model in the high-dimensional space. This methodology is available in this package.</p>
-<p><img src="reference/figures/quollr-methodology.png" width="80%" style="display: block; margin: auto;" alt="Methodology diagram"></p>
+<p>Our approach involves dividing the high-dimensional data set into two parts: a training set to construct the model and a test set to generate model summaries. To implement our approach, first we use a 2-D embedding data set as the initial point. The output of our algorithm is a tour that displays the model overlaid on high-dimensional data. Our algorithm comprises two main phases: (1) generate the model in the 2-D space, and (2) lift the model into high-dimensional space. This methodology is available in this package.</p>
+<p><img src="reference/figures/quollr-methodology.png" width="80%" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level2">
 <h2 id="about-the-name">About the name<a class="anchor" aria-label="anchor" href="#about-the-name"></a>
@@ -101,19 +100,21 @@
 <h2 id="roadmap">Roadmap<a class="anchor" aria-label="anchor" href="#roadmap"></a>
 </h2>
 <ul>
-<li>To learn more about the data preprocessing: <a href="https://jayanilakshika.github.io/quollr/articles/quollr1dataprocessing.html">1. Data preprocessing</a>
+<li>Quick start guide: <a href="https://jayanilakshika.github.io/quollr/articles/quollr1quickstart.html">1. Quick start</a>
 </li>
-<li>To create the full hexagonal grid: <a href="https://jayanilakshika.github.io/quollr/articles/quollr2hexbin.html">2. Algorithm for binning data</a>
+<li>To learn more about the data preprocessing: <a href="https://jayanilakshika.github.io/quollr/articles/quollr2dataprocessing.html">2. Data preprocessing</a>
 </li>
-<li>To learn more about the main steps of the algorithm: <a href="https://jayanilakshika.github.io/quollr/articles/quollr3algo.html">3. Algorithm for visualising the model overlaid on high-dimensional data</a>
+<li>To create the full hexagonal grid: <a href="https://jayanilakshika.github.io/quollr/articles/quollr3hexbin.html">3. Algorithm for binning data</a>
 </li>
-<li>To generate model summaries: <a href="https://jayanilakshika.github.io/quollr/articles/quollr4summary.html">4. Generating model summaries</a>
+<li>To learn more about the main steps of the algorithm: <a href="https://jayanilakshika.github.io/quollr/articles/quollr4algo.html">4. Algorithm for visualising the model overlaid on high-dimensional data</a>
 </li>
-<li>Quick start guide: <a href="https://jayanilakshika.github.io/quollr/articles/quollr5quickstart.html">5. Quick start</a>
+<li>To generate model summaries: <a href="https://jayanilakshika.github.io/quollr/articles/quollr5summary.html">5. Generating model summaries</a>
 </li>
 <li>To select the optimal bin width: <a href="https://jayanilakshika.github.io/quollr/articles/quollr6bestbinwidth.html">6. Selecting the best bin width</a>
 </li>
 <li>To select the most reasonable NLDR layout: <a href="https://jayanilakshika.github.io/quollr/articles/quollr7bestfit.html">7. Selecting the best fit</a>
+</li>
+<li>Interactivity: <a href="https://jayanilakshika.github.io/quollr/articles/quollr8interactivity.html">8. Interactivity</a>
 </li>
 </ul>
 </div>

@@ -1,0 +1,102 @@
+---
+title: "5. Generating model summaries"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{5. Generating model summaries}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+options(rmarkdown.html_vignette.check_title = FALSE)
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  warning = FALSE, 
+  message = FALSE
+)
+```
+
+This demonstrates how to generate and inspect model summaries. Summarising models fitted to both the high-dimensional space and its corresponding 2-D embedding is an essential step in evaluating how well a low-dimensional representation captures the structure of the original data.
+
+```{r setup}
+library(quollr)
+library(dplyr)
+library(ggplot2)
+```
+
+## Step 1: Fitting the model
+
+Begin by fitting a high-dimensional model and its corresponding 2-D model using the `fit_highd_model()` function. This generates the 2-D bin centroids (the 2-D model) and their corresponding coordinates in the high-dimensional space (the lifted model).
+
+```{r}
+model <- fit_highd_model(
+  highd_data = scurve, 
+  nldr_data = scurve_umap, 
+  b1 = 4, 
+  q = 0.1, 
+  benchmark_highdens = 5
+)
+
+df_bin_centroids <- model$model_2d
+df_bin <- model$model_highd
+```
+
+## Step 2: Predicting 2-D embedding for data
+
+To evaluate model fit, you can predict the 2-D embedding for each observation in the original high-dimensional dataset.
+
+```{r}
+pred_df_training <- predict_emb(
+  highd_data = scurve, 
+  model_highd = scurve_model_obj$model_highd,
+  model_2d = scurve_model_obj$model_2d
+)
+
+glimpse(pred_df_training)
+```
+
+### Visualising predictions
+
+The plot below shows the original UMAP embedding of the training data in grey, overlaid with the predicted 2-D coordinates in red.
+
+```{r, fig.alt="UMAP embedding of the S-curve training data with predictions in red."}
+umap_scaled <- scurve_model_obj$nldr_obj$scaled_nldr
+
+umap_scaled |>
+  ggplot(aes(x = emb1, y = emb2, label = ID)) +
+  geom_point(alpha = 0.5) +
+  geom_point(data = pred_df_training, aes(x = pred_emb_1, y = pred_emb_2), 
+             color = "red", alpha = 0.5) +
+  coord_equal() +
+  theme(
+    plot.title = element_text(hjust = 0.5, size = 18, face = "bold"),
+    axis.text = element_text(size = 5),
+    axis.title = element_text(size = 7)
+  )
+```
+
+## Step 3: Computing model summaries
+
+Use the `glance()` function to compute summary statistics that describe how well the 2-D model captures structure in the high-dimensional space.
+
+```{r}
+glance(
+  highd_data = scurve, 
+  model_highd = scurve_model_obj$model_highd,
+  model_2d = scurve_model_obj$model_2d
+)
+```
+
+## Step 4: Augmenting the dataset
+
+To obtain a detailed data frame that includes the high-dimensional observations, their assigned bins, predicted embeddings, and summary metrics, use the `augment()` function:
+  
+```{r}
+augment(
+  highd_data = scurve, 
+  model_highd = scurve_model_obj$model_highd,
+  model_2d = scurve_model_obj$model_2d
+) |>
+  head(5)
+```

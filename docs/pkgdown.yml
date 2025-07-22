@@ -1,16 +1,16 @@
-pandoc: '3.2'
+pandoc: '3.4'
 pkgdown: 2.1.1
 pkgdown_sha: ~
 articles:
-  quollr1dataprocessing: quollr1dataprocessing.html
-  quollr2hexbin: quollr2hexbin.html
-  quollr3algo: quollr3algo.html
-  quollr4summary: quollr4summary.html
-  quollr5quickstart: quollr5quickstart.html
+  quollr1quickstart: quollr1quickstart.html
+  quollr2dataprocessing: quollr2dataprocessing.html
+  quollr3hexbin: quollr3hexbin.html
+  quollr4algo: quollr4algo.html
+  quollr5summary: quollr5summary.html
   quollr6bestbinwidth: quollr6bestbinwidth.html
   quollr7bestfit: quollr7bestfit.html
   quollr8interactivity: quollr8interactivity.html
-last_built: 2025-05-05T14:43Z
+last_built: 2025-07-22T00:13Z
 urls:
   reference: https://jayanilakshika.github.io/quollr/reference
   article: https://jayanilakshika.github.io/quollr/articles

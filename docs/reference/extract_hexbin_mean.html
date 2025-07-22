@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">quollr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.6</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.4</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -18,11 +18,11 @@
       <ul class="navbar-nav me-auto"><li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/quollr1dataprocessing.html">1. Data preprocessing</a></li>
-    <li><a class="dropdown-item" href="../articles/quollr2hexbin.html">2. Algorithm for binning data</a></li>
-    <li><a class="dropdown-item" href="../articles/quollr3algo.html">3. Algorithm for visualising the model overlaid on high-dimensional data</a></li>
-    <li><a class="dropdown-item" href="../articles/quollr4summary.html">4. Generating model summaries</a></li>
-    <li><a class="dropdown-item" href="../articles/quollr5quickstart.html">5. Quick start</a></li>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/quollr1quickstart.html">1. Quick start</a></li>
+    <li><a class="dropdown-item" href="../articles/quollr2dataprocessing.html">2. Data preprocessing</a></li>
+    <li><a class="dropdown-item" href="../articles/quollr3hexbin.html">3. Algorithm for binning data</a></li>
+    <li><a class="dropdown-item" href="../articles/quollr4algo.html">4. Algorithm for visualising the model overlaid on high-dimensional data</a></li>
+    <li><a class="dropdown-item" href="../articles/quollr5summary.html">5. Generating model summaries</a></li>
     <li><a class="dropdown-item" href="../articles/quollr6bestbinwidth.html">6. Selecting the optimal bin width</a></li>
     <li><a class="dropdown-item" href="../articles/quollr7bestfit.html">7. Selecting the best fit</a></li>
     <li><a class="dropdown-item" href="../articles/quollr8interactivity.html">8. Interactivity</a></li>
@@ -49,7 +49,7 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">extract_hexbin_mean</span><span class="op">(</span><span class="va">data_hb</span>, <span class="va">counts_df</span>, <span class="va">centroids_df</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">extract_hexbin_mean</span><span class="op">(</span><span class="va">data_hb</span>, <span class="va">counts_data</span>, <span class="va">centroids_data</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -60,42 +60,43 @@
 <dd><p>A tibble with embedding components and hexagonal bin IDs.</p></dd>
 
 
-<dt id="arg-counts-df">counts_df<a class="anchor" aria-label="anchor" href="#arg-counts-df"></a></dt>
+<dt id="arg-counts-data">counts_data<a class="anchor" aria-label="anchor" href="#arg-counts-data"></a></dt>
 <dd><p>A tibble that contains hexagon IDs with the standardise
 number of points within each hexagon.</p></dd>
 
 
-<dt id="arg-centroids-df">centroids_df<a class="anchor" aria-label="anchor" href="#arg-centroids-df"></a></dt>
+<dt id="arg-centroids-data">centroids_data<a class="anchor" aria-label="anchor" href="#arg-centroids-data"></a></dt>
 <dd><p>A tibble that contains all hexagonal bin centroid
 coordinates with hexagon IDs.</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A tibble contains hexagon ID, bin mean coordinates, and standardize counts.</p>
+    <p>A tibble contains hexagon ID (<code>h</code>), bin means (<code>c_x</code>, <code>c_y</code>),
+bin counts (<code>n_h</code>), and standardise counts (<code>w_h</code>).</p>
     </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">all_centroids_df</span> <span class="op">&lt;-</span> <span class="va">s_curve_obj</span><span class="op">$</span><span class="va">s_curve_umap_hb_obj</span><span class="op">$</span><span class="va">centroids</span></span></span>
-<span class="r-in"><span><span class="va">counts_df</span> <span class="op">&lt;-</span> <span class="va">s_curve_obj</span><span class="op">$</span><span class="va">s_curve_umap_hb_obj</span><span class="op">$</span><span class="va">std_cts</span></span></span>
-<span class="r-in"><span><span class="va">umap_with_hb_id</span> <span class="op">&lt;-</span> <span class="va">s_curve_obj</span><span class="op">$</span><span class="va">s_curve_umap_hb_obj</span><span class="op">$</span><span class="va">data_hb_id</span></span></span>
-<span class="r-in"><span><span class="fu">extract_hexbin_mean</span><span class="op">(</span>data_hb <span class="op">=</span> <span class="va">umap_with_hb_id</span>, counts_df <span class="op">=</span> <span class="va">counts_df</span>,</span></span>
-<span class="r-in"><span>centroids_df <span class="op">=</span> <span class="va">all_centroids_df</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 240 × 6</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    hexID   c_x   c_y bin_counts std_counts drop_empty</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span>     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span>     1    <span style="color: #BB0000;">NA</span>    <span style="color: #BB0000;">NA</span>         <span style="color: #BB0000;">NA</span>         <span style="color: #BB0000;">NA</span> TRUE      </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span>     2    <span style="color: #BB0000;">NA</span>    <span style="color: #BB0000;">NA</span>         <span style="color: #BB0000;">NA</span>         <span style="color: #BB0000;">NA</span> TRUE      </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span>     3    <span style="color: #BB0000;">NA</span>    <span style="color: #BB0000;">NA</span>         <span style="color: #BB0000;">NA</span>         <span style="color: #BB0000;">NA</span> TRUE      </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span>     4    <span style="color: #BB0000;">NA</span>    <span style="color: #BB0000;">NA</span>         <span style="color: #BB0000;">NA</span>         <span style="color: #BB0000;">NA</span> TRUE      </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span>     5    <span style="color: #BB0000;">NA</span>    <span style="color: #BB0000;">NA</span>         <span style="color: #BB0000;">NA</span>         <span style="color: #BB0000;">NA</span> TRUE      </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span>     6    <span style="color: #BB0000;">NA</span>    <span style="color: #BB0000;">NA</span>         <span style="color: #BB0000;">NA</span>         <span style="color: #BB0000;">NA</span> TRUE      </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span>     7    <span style="color: #BB0000;">NA</span>    <span style="color: #BB0000;">NA</span>         <span style="color: #BB0000;">NA</span>         <span style="color: #BB0000;">NA</span> TRUE      </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span>     8    <span style="color: #BB0000;">NA</span>    <span style="color: #BB0000;">NA</span>         <span style="color: #BB0000;">NA</span>         <span style="color: #BB0000;">NA</span> TRUE      </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span>     9    <span style="color: #BB0000;">NA</span>    <span style="color: #BB0000;">NA</span>         <span style="color: #BB0000;">NA</span>         <span style="color: #BB0000;">NA</span> TRUE      </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span>    10    <span style="color: #BB0000;">NA</span>    <span style="color: #BB0000;">NA</span>         <span style="color: #BB0000;">NA</span>         <span style="color: #BB0000;">NA</span> TRUE      </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 230 more rows</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">all_centroids_df</span> <span class="op">&lt;-</span> <span class="va">scurve_model_obj</span><span class="op">$</span><span class="va">hb_obj</span><span class="op">$</span><span class="va">centroids</span></span></span>
+<span class="r-in"><span><span class="va">counts_data</span> <span class="op">&lt;-</span> <span class="va">scurve_model_obj</span><span class="op">$</span><span class="va">hb_obj</span><span class="op">$</span><span class="va">std_cts</span></span></span>
+<span class="r-in"><span><span class="va">umap_with_hb_id</span> <span class="op">&lt;-</span> <span class="va">scurve_model_obj</span><span class="op">$</span><span class="va">hb_obj</span><span class="op">$</span><span class="va">data_hb_id</span></span></span>
+<span class="r-in"><span><span class="fu">extract_hexbin_mean</span><span class="op">(</span>data_hb <span class="op">=</span> <span class="va">umap_with_hb_id</span>, counts_data <span class="op">=</span> <span class="va">counts_data</span>,</span></span>
+<span class="r-in"><span>centroids_data <span class="op">=</span> <span class="va">all_centroids_df</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 142 × 5</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        h   c_x     c_y   n_h    w_h</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span>    21 0.373 0.014<span style="text-decoration: underline;">1</span>     12 0.002<span style="text-decoration: underline;">4</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span>    22 0.443 0.006<span style="text-decoration: underline;">68</span>    17 0.003<span style="text-decoration: underline;">4</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span>    23 0.523 0.009<span style="text-decoration: underline;">14</span>    22 0.004<span style="text-decoration: underline;">4</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span>    24 0.615 0.015<span style="text-decoration: underline;">0</span>     10 0.002 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span>    25 0.686 0.018<span style="text-decoration: underline;">7</span>      7 0.001<span style="text-decoration: underline;">4</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span>    26 0.774 0.017<span style="text-decoration: underline;">7</span>     12 0.002<span style="text-decoration: underline;">4</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span>    27 0.857 0.027<span style="text-decoration: underline;">6</span>      1 0.000<span style="text-decoration: underline;">2</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span>    36 0.326 0.065<span style="text-decoration: underline;">6</span>     42 0.008<span style="text-decoration: underline;">4</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span>    37 0.393 0.053<span style="text-decoration: underline;">7</span>     42 0.008<span style="text-decoration: underline;">4</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span>    38 0.480 0.054<span style="text-decoration: underline;">7</span>     44 0.008<span style="text-decoration: underline;">8</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 132 more rows</span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

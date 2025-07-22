@@ -24,79 +24,44 @@ library(ggplot2)
 set.seed(20240110)
 ```
 
+We demonstrate how to identify the optimal bin width for hexagonal binning in the 2-D embedding space. Selecting an appropriate bin width is crucial for balancing model complexity and prediction accuracy when comparing structures between high-dimensional data and their 2-D layout.
+
+We begin by computing model errors across a range of bin width values using the `gen_diffbin1_errors()` function. This function fits models for multiple bin widths and returns root mean squared error (RMSE) values for each configuration.
+
 ```{r}
 
-lim1 <- s_curve_obj$s_curve_umap_scaled_obj$lim1
-lim2 <- s_curve_obj$s_curve_umap_scaled_obj$lim2
-r2 <- diff(lim2)/diff(lim1)
-
-umap_scaled <- s_curve_obj$s_curve_umap_scaled_obj$scaled_nldr
-
-## To initialize number of bins along the x-axis
-bin1_vec <- 5:sqrt(NROW(s_curve_noise_training)/r2)
-
-error_df_all <- data.frame(matrix(nrow = 0, ncol = 0))
-
-for (xbins in bin1_vec) {
-
-  hb_obj <- calc_bins_y(bin1 = xbins, r2 = r2, q = 0.1)
-
-  bin2 <- hb_obj$bin2
-  a1 <- hb_obj$a1
-  a2 <- hb_obj$a2
-
-  scurve_model <- fit_highd_model(
-    highd_data = s_curve_noise_training,
-    nldr_data = umap_scaled,
-    bin1 = xbins,
-    r2 = r2,
-    q = 0.1,
-    is_bin_centroid = TRUE
-  )
-
-  df_bin_centroids_scurve <- scurve_model$df_bin_centroids
-  df_bin_scurve <- scurve_model$df_bin
-
-  ## Compute error
-  error_df <- glance(
-    model_2d = df_bin_centroids_scurve,
-    model_highd = df_bin_scurve,
-    highd_data = s_curve_noise_training) |>
-    mutate(bin1 = xbins,
-           bin2 = bin2,
-           b = bin1 * bin2,
-           b_non_empty = NROW(df_bin_centroids_scurve),
-           method = "UMAP",
-           a1 = round(a1, 2),
-           a2 = round(a2, 2))
-
-  error_df_all <- bind_rows(error_df_all, error_df)
-
-}
+error_df_all <- gen_diffbin1_errors(highd_data = scurve, 
+                                    nldr_data = scurve_umap)
 
 error_df_all <- error_df_all |>
   mutate(a1 = round(a1, 2)) |>
-  filter(bin1 >= 5) |>
+  filter(b1 >= 5) |>
   group_by(a1) |>
-  filter(MSE == min(MSE)) |>
+  filter(RMSE == min(RMSE)) |>
   ungroup()
+```
 
+We round the bin width values (`a1`), filter for sufficient bin resolution (`b1 >= 5`), and select the configuration with the lowest RMSE for each unique bin width.
+
+```{r}
 error_df_all |>
   arrange(-a1) |>
   head(5)
 ```
 
-```{r, fig.alt="MSE Vs binw idths."}
+The plot below shows the relationship between bin width (`a1`) and RMSE. The goal is to identify a bin width that minimizes RMSE while avoiding overly coarse or fine binning.
+
+```{r, fig.alt="RMSE Vs binw idths."}
 #| fig-height: 4
 #| fig-width: 6
 #| out-width: 100%
 
 ggplot(error_df_all,
          aes(x = a1,
-             y = MSE)) +
+             y = RMSE)) +
     geom_point(size = 0.8) +
     geom_line(linewidth = 0.3) +
-    ylab("MSE") +
+    ylab("RMSE") +
     xlab(expression(paste("binwidth (", a[1], ")"))) +
     theme_minimal() +
     theme(panel.border = element_rect(fill = 'transparent'),

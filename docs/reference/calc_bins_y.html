@@ -9,7 +9,7 @@ of a hexagonal grid."><meta property="og:image" content="https://jayanilakshika.
 
     <a class="navbar-brand me-2" href="../index.html">quollr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.6</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.4</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -20,11 +20,11 @@ of a hexagonal grid."><meta property="og:image" content="https://jayanilakshika.
       <ul class="navbar-nav me-auto"><li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/quollr1dataprocessing.html">1. Data preprocessing</a></li>
-    <li><a class="dropdown-item" href="../articles/quollr2hexbin.html">2. Algorithm for binning data</a></li>
-    <li><a class="dropdown-item" href="../articles/quollr3algo.html">3. Algorithm for visualising the model overlaid on high-dimensional data</a></li>
-    <li><a class="dropdown-item" href="../articles/quollr4summary.html">4. Generating model summaries</a></li>
-    <li><a class="dropdown-item" href="../articles/quollr5quickstart.html">5. Quick start</a></li>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/quollr1quickstart.html">1. Quick start</a></li>
+    <li><a class="dropdown-item" href="../articles/quollr2dataprocessing.html">2. Data preprocessing</a></li>
+    <li><a class="dropdown-item" href="../articles/quollr3hexbin.html">3. Algorithm for binning data</a></li>
+    <li><a class="dropdown-item" href="../articles/quollr4algo.html">4. Algorithm for visualising the model overlaid on high-dimensional data</a></li>
+    <li><a class="dropdown-item" href="../articles/quollr5summary.html">5. Generating model summaries</a></li>
     <li><a class="dropdown-item" href="../articles/quollr6bestbinwidth.html">6. Selecting the optimal bin width</a></li>
     <li><a class="dropdown-item" href="../articles/quollr7bestfit.html">7. Selecting the best fit</a></li>
     <li><a class="dropdown-item" href="../articles/quollr8interactivity.html">8. Interactivity</a></li>
@@ -52,19 +52,20 @@ of a hexagonal grid.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">calc_bins_y</span><span class="op">(</span>bin1 <span class="op">=</span> <span class="fl">4</span>, <span class="va">r2</span>, q <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">calc_bins_y</span><span class="op">(</span><span class="va">nldr_obj</span>, b1 <span class="op">=</span> <span class="fl">4</span>, q <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
 
 
-<dl><dt id="arg-bin-">bin1<a class="anchor" aria-label="anchor" href="#arg-bin-"></a></dt>
+<dl><dt id="arg-nldr-obj">nldr_obj<a class="anchor" aria-label="anchor" href="#arg-nldr-obj"></a></dt>
+<dd><p>A list of a tibble contains scaled first and second columns
+of NLDR data, and numeric vectors representing the limits of the original NLDR data.</p></dd>
+
+
+<dt id="arg-b-">b1<a class="anchor" aria-label="anchor" href="#arg-b-"></a></dt>
 <dd><p>Number of bins along the x axis.</p></dd>
-
-
-<dt id="arg-r-">r2<a class="anchor" aria-label="anchor" href="#arg-r-"></a></dt>
-<dd><p>The ratio of the ranges of the original embedding components.</p></dd>
 
 
 <dt id="arg-q">q<a class="anchor" aria-label="anchor" href="#arg-q"></a></dt>
@@ -79,19 +80,15 @@ bins along the y axis, height and, width of the hexagon.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">scurve_umap_scaled_obj</span> <span class="op">&lt;-</span> <span class="va">s_curve_obj</span><span class="op">$</span><span class="va">s_curve_umap_scaled_obj</span></span></span>
-<span class="r-in"><span><span class="va">lim1</span> <span class="op">&lt;-</span> <span class="va">scurve_umap_scaled_obj</span><span class="op">$</span><span class="va">lim1</span></span></span>
-<span class="r-in"><span><span class="va">lim2</span> <span class="op">&lt;-</span> <span class="va">scurve_umap_scaled_obj</span><span class="op">$</span><span class="va">lim2</span></span></span>
-<span class="r-in"><span><span class="va">r2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/diff.html" class="external-link">diff</a></span><span class="op">(</span><span class="va">lim2</span><span class="op">)</span><span class="op">/</span><span class="fu"><a href="https://rdrr.io/r/base/diff.html" class="external-link">diff</a></span><span class="op">(</span><span class="va">lim1</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">calc_bins_y</span><span class="op">(</span>bin1 <span class="op">=</span> <span class="fl">4</span>, r2 <span class="op">=</span> <span class="va">r2</span>, q <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $bin2</span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">calc_bins_y</span><span class="op">(</span>nldr_obj <span class="op">=</span> <span class="va">scurve_model_obj</span><span class="op">$</span><span class="va">nldr_obj</span>, b1 <span class="op">=</span> <span class="fl">4</span>, q <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $b2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $a1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.3098829</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.3122301</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $a2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.2683664</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.2703992</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
