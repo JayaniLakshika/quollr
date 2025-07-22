@@ -17,18 +17,20 @@ test_that("comb_data_model() works", {
 
 test_that("show_langevitour() works", {
 
-  skip_if_not_interactive()
+  if(interactive()) {
 
-  df_exe <- comb_data_model(highd_data = scurve,
-                            model_highd = scurve_model_obj$model_highd,
-                            model_2d = scurve_model_obj$model_2d)
+    df_exe <- comb_data_model(highd_data = scurve,
+                              model_highd = scurve_model_obj$model_highd,
+                              model_2d = scurve_model_obj$model_2d)
 
-  edge_data <- scurve_model_obj$trimesh_data
+    edge_data <- scurve_model_obj$trimesh_data
 
-  tour_widget <- show_langevitour(point_data = df_exe, edge_data = edge_data)
+    tour_widget <- show_langevitour(point_data = df_exe, edge_data = edge_data)
 
-  # Test if the output is an HTML widget object
-  #testthat::expect_type(tour_widget, "list")
-  testthat::expect_s3_class(tour_widget, "langevitour")
+    # Test if the output is an HTML widget object
+    #testthat::expect_type(tour_widget, "list")
+    testthat::expect_s3_class(tour_widget, "langevitour")
+
+  }
 
 })
