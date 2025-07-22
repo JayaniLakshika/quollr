@@ -22,6 +22,8 @@ This function augments a dataset with predictions and error metrics obtained
 from a nonlinear dimension reduction (NLDR) model.
 }
 \examples{
-gen_diffbin1_errors(highd_data = scurve, nldr_data = scurve_umap)
+scurve_sample <- scurve |> head(100)
+scurve_umap_sample <- scurve_umap |> head(100)
+gen_diffbin1_errors(highd_data = scurve_sample, nldr_data = scurve_umap_sample)
 
 }

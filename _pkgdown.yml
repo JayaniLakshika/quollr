@@ -15,14 +15,10 @@ reference:
   - scurve_umap2
   - scurve_umap3
   - scurve_umap4
-  - scurve_umap5
-  - scurve_umap6
   - scurve_umap_rmse
   - scurve_umap_rmse2
   - scurve_umap_rmse3
   - scurve_umap_rmse4
-  - scurve_umap_rmse5
-  - scurve_umap_rmse6
 - title: "Data preprocessing"
   desc: These are for data preprocessing.
   contents:

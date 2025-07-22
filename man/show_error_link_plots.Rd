@@ -22,8 +22,6 @@ the high-dimensional data and model.}
 
 \item{point_sizes}{A numeric vector that contains the sizes of points in
 the high-dimensional data and model.}
-
-\item{error_data}{A tibble that high-dimesional model error.}
 }
 \value{
 A browsable HTML element.

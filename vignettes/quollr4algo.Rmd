@@ -57,7 +57,7 @@ Next, we extract the centroid coordinates and standardised bin counts. These wil
 df_bin_centroids <- extract_hexbin_centroids(centroids_data = all_centroids_df,
                                              counts_data = counts_df)
 
-benchmark_highdens <- 5
+benchmark_highdens <- 0
 
 ## To extract high-densed bins
 model_2d <- df_bin_centroids |>

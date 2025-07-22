@@ -143,10 +143,9 @@ get_projection <- function(projection, proj_scale, highd_data, model_highd,
 
 #' Plot Projected Data with Axes and Circles
 #'
-#' @param projected_df A data frame containing the projected data.
-#' @param model_df A data frame containing the model reference data.
-#' @param axes A data frame or list specifying the axes details.
-#' @param circle A list defining circle parameters.
+#' @param proj_obj An object contains a tibble containing the projected data,
+#' a tibble containing the model reference data, a list specifying the axes details,
+#' and a list defining circle parameters.
 #' @param point_param A vector specifying point size, alpha, and color (default: c(1, 0.3, "#66B2CC")).
 #' @param line_param A vector specifying line width, alpha, and color (default: c(0.5, 0.5, "#000000")).
 #' @param plot_limits Limits for the plot axes.

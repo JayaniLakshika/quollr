@@ -157,7 +157,8 @@ show_link_plots <- function(point_data, edge_data,
 #' model_error <- augment(highd_data = scurve, model_highd = scurve_model_obj$model_highd,
 #' model_2d = scurve_model_obj$model_2d)
 #' comb_all_data_model_error(highd_data = scurve, nldr_data = scurve_umap,
-#' model_highd = scurve_model_obj$model_highd, model_2d = scurve_model_obj$model_2d, error_data = model_error)
+#' model_highd = scurve_model_obj$model_highd, model_2d = scurve_model_obj$model_2d,
+#' error_data = model_error)
 #'
 #' @export
 comb_all_data_model_error <- function(highd_data, nldr_data, model_highd,
@@ -208,7 +209,6 @@ comb_all_data_model_error <- function(highd_data, nldr_data, model_highd,
 #' @param point_data A tibble that contains the high-dimensional data, no-linear dimension reductions
 #' and model in high-dimensions.
 #' @param edge_data A tibble that contains the wireframe data (from and to).
-#' @param error_data A tibble that high-dimesional model error.
 #' @param point_colours A character vector that contains the colours of points in
 #' the high-dimensional data and model.
 #' @param point_sizes A numeric vector that contains the sizes of points in

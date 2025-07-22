@@ -13,8 +13,6 @@ A list of 5 elements:
   \item{scurve_plts[[3]]}{ggplot object, 2-D NLDR layout for `scurve_umap2`.}
   \item{scurve_plts[[4]]}{ggplot object, 2-D NLDR layout for `scurve_umap3`.}
   \item{scurve_plts[[5]]}{ggplot object, 2-D NLDR layout for `scurve_umap4`.}
-  \item{scurve_plts[[6]]}{ggplot object, 2-D NLDR layout for `scurve_umap5`.}
-  \item{scurve_plts[[7]]}{ggplot object, 2-D NLDR layout for `scurve_umap6`.}
 }
 }
 \source{
@@ -25,8 +23,7 @@ scurve_plts
 }
 \description{
 The `scurve_plts` contains the RMSE plot and the 2-D NLDR layouts for
-`scurve_umap`, `scurve_umap2`, `scurve_umap3`, `scurve_umap4`,
-`scurve_umap5`, and `scurve_umap6`.
+`scurve_umap`, `scurve_umap2`, `scurve_umap3`, and `scurve_umap4`
 }
 \examples{
 # Show the scurve_plts

@@ -12,8 +12,9 @@ calc_2d_dist(
 }
 \arguments{
 \item{trimesh_data}{A tibble that contains the x and y coordinates of start
-and end points.
-selected in the resulting data frame.}
+and end points.}
+
+\item{select_vars}{selected columns in the resulting data frame.}
 }
 \value{
 A tibble with columns for the starting point, ending point,

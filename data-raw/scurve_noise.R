@@ -24,7 +24,7 @@ s_curve <- function(n = 100) {
 
 # Simulate some S-curve
 
-sample_size <- 5000
+sample_size <- 1000
 scurve <- s_curve(n = sample_size) |>
   dplyr::mutate(x4 = stats::runif(sample_size, -0.02, 0.02),
                 x5 = stats::runif(sample_size, -0.02, 0.02),
@@ -36,24 +36,24 @@ usethis::use_data(scurve, overwrite = TRUE)
 
 #############################Generate UMAP #####################################
 
-# Fit umap1
-umap_config <- umap.defaults
-umap_config$n_neighbors <- 15      # Set the number of neighbors
-umap_config$n_components <- 2    # Set the number of output dimensions (typically 2 or 3)
-umap_config$min_dist <- 0.1
-
-UMAP_fit <- umap(scurve |> dplyr::select(-ID), config = umap_config)
-
-scurve_umap6 <- UMAP_fit$layout |>
-  as.data.frame() |>
-  tibble::as_tibble()
-
-names(scurve_umap6)[1:(ncol(scurve_umap6))] <- paste0(rep("emb",(ncol(scurve_umap6))), 1:(ncol(scurve_umap6)))
-
-scurve_umap6 <- scurve_umap6 |>
-  dplyr::mutate(ID = scurve$ID)
-
-usethis::use_data(scurve_umap6, overwrite = TRUE)
+# # Fit umap1
+# umap_config <- umap.defaults
+# umap_config$n_neighbors <- 15      # Set the number of neighbors
+# umap_config$n_components <- 2    # Set the number of output dimensions (typically 2 or 3)
+# umap_config$min_dist <- 0.1
+#
+# UMAP_fit <- umap(scurve |> dplyr::select(-ID), config = umap_config)
+#
+# scurve_umap6 <- UMAP_fit$layout |>
+#   as.data.frame() |>
+#   tibble::as_tibble()
+#
+# names(scurve_umap6)[1:(ncol(scurve_umap6))] <- paste0(rep("emb",(ncol(scurve_umap6))), 1:(ncol(scurve_umap6)))
+#
+# scurve_umap6 <- scurve_umap6 |>
+#   dplyr::mutate(ID = scurve$ID)
+#
+# usethis::use_data(scurve_umap6, overwrite = TRUE)
 
 ## Fit umap2
 umap_config <- umap.defaults
@@ -112,25 +112,25 @@ scurve_umap4 <- scurve_umap4 |>
 
 usethis::use_data(scurve_umap4, overwrite = TRUE)
 
-## Fit umap5
-umap_config <- umap.defaults
-umap_config$n_neighbors <- 15      # Set the number of neighbors
-umap_config$n_components <- 2    # Set the number of output dimensions (typically 2 or 3)
-umap_config$min_dist <- 0.5
-
-UMAP_fit <- umap(scurve |> dplyr::select(-ID), config = umap_config)
-
-scurve_umap5 <- UMAP_fit$layout |>
-  as.data.frame() |>
-  tibble::as_tibble()
-
-names(scurve_umap5)[1:(ncol(scurve_umap5))] <- paste0(rep("emb",(ncol(scurve_umap5))), 1:(ncol(scurve_umap5)))
-
-scurve_umap5 <- scurve_umap5 |>
-  dplyr::mutate(ID = scurve$ID)
-
-usethis::use_data(scurve_umap5, overwrite = TRUE)
-
+# ## Fit umap5
+# umap_config <- umap.defaults
+# umap_config$n_neighbors <- 15      # Set the number of neighbors
+# umap_config$n_components <- 2    # Set the number of output dimensions (typically 2 or 3)
+# umap_config$min_dist <- 0.5
+#
+# UMAP_fit <- umap(scurve |> dplyr::select(-ID), config = umap_config)
+#
+# scurve_umap5 <- UMAP_fit$layout |>
+#   as.data.frame() |>
+#   tibble::as_tibble()
+#
+# names(scurve_umap5)[1:(ncol(scurve_umap5))] <- paste0(rep("emb",(ncol(scurve_umap5))), 1:(ncol(scurve_umap5)))
+#
+# scurve_umap5 <- scurve_umap5 |>
+#   dplyr::mutate(ID = scurve$ID)
+#
+# usethis::use_data(scurve_umap5, overwrite = TRUE)
+#
 ## Fit umap6
 umap_config <- umap.defaults
 umap_config$n_neighbors <- 46      # Set the number of neighbors
@@ -189,19 +189,11 @@ scurve_umap_rmse4 <- gen_diffbin1_errors(highd_data = scurve, nldr_data = scurve
   dplyr::mutate(method = "UMAP4")
 usethis::use_data(scurve_umap_rmse4, overwrite = TRUE)
 
-scurve_umap_rmse5 <- gen_diffbin1_errors(highd_data = scurve, nldr_data = scurve_umap5) |>
-  dplyr::mutate(method = "UMAP5")
-usethis::use_data(scurve_umap_rmse5, overwrite = TRUE)
-
-scurve_umap_rmse6 <- gen_diffbin1_errors(highd_data = scurve, nldr_data = scurve_umap6) |>
-  dplyr::mutate(method = "UMAP6")
-usethis::use_data(scurve_umap_rmse6, overwrite = TRUE)
 
 #####################################Plot RMSE #############################
 
 error_df <- bind_rows(scurve_umap_rmse, scurve_umap_rmse2,
-                      scurve_umap_rmse3, scurve_umap_rmse4,
-                      scurve_umap_rmse5, scurve_umap_rmse6) |>
+                      scurve_umap_rmse3, scurve_umap_rmse4) |>
   mutate(a1 = round(a1, 2)) |>
   filter(b1 >= 5) |>
   group_by(method, a1) |>
@@ -287,31 +279,7 @@ nldr4 <- scurve_umap4 |>
         axis.text.x = element_blank(), axis.ticks.x = element_blank(),
         axis.text.y = element_blank(), axis.ticks.y = element_blank())
 
-nldr5 <- scurve_umap5 |>
-  ggplot(aes(x = emb1,
-             y = emb2)) +
-  geom_point(alpha=0.1, size=1, colour="#636363") +
-  theme_linedraw() +
-  theme(plot.background = element_rect(fill = 'transparent', colour = NA),
-        panel.grid.major = element_blank(),
-        panel.grid.minor = element_blank(),
-        axis.title.x = element_blank(), axis.title.y = element_blank(),
-        axis.text.x = element_blank(), axis.ticks.x = element_blank(),
-        axis.text.y = element_blank(), axis.ticks.y = element_blank())
-
-nldr6 <- scurve_umap6 |>
-  ggplot(aes(x = emb1,
-             y = emb2)) +
-  geom_point(alpha=0.1, size=1, colour="#984ea3") +
-  theme_linedraw() +
-  theme(plot.background = element_rect(fill = 'transparent', colour = NA),
-        panel.grid.major = element_blank(),
-        panel.grid.minor = element_blank(),
-        axis.title.x = element_blank(), axis.title.y = element_blank(),
-        axis.text.x = element_blank(), axis.ticks.x = element_blank(),
-        axis.text.y = element_blank(), axis.ticks.y = element_blank())
-
 scurve_plts <- list(rmse_plot, nldr1, nldr2,
-                    nldr3, nldr4, nldr5, nldr6)
+                    nldr3, nldr4)
 
 usethis::use_data(scurve_plts, overwrite = TRUE)

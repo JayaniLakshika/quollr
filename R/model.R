@@ -61,7 +61,7 @@ fit_highd_model <- function(highd_data, nldr_data, b1 = 4, q = 0.1,
   model_highd <- model_highd |>
     dplyr::filter(h %in% model_2d$h)
 
-  cli::cli_alert_success("Model generated successfully! 🎉")
+  cli::cli_alert_success("Model generated successfully!!!")
 
   return(list(nldr_obj = nldr_obj, hb_obj = hb_obj, model_highd = model_highd,
               model_2d = model_2d, trimesh_data = trimesh_data))

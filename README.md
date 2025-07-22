@@ -71,8 +71,6 @@ available in this package.
   width](https://jayanilakshika.github.io/quollr/articles/quollr6bestbinwidth.html)
 - To select the most reasonable NLDR layout: [7. Selecting the best
   fit](https://jayanilakshika.github.io/quollr/articles/quollr7bestfit.html)
-- Interactivity: [8.
-  Interactivity](https://jayanilakshika.github.io/quollr/articles/quollr8interactivity.html)
 
 ## Copyright
 

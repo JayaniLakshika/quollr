@@ -13,10 +13,10 @@
 #' @importFrom tibble tibble
 #'
 #' @examples
-#' compute_mean_density_hex(model_2d = scurve_model_obj$model_2d, b1 = 4)
+#' compute_mean_density_hex(model_2d = scurve_model_obj$model_2d, b1 = 5)
 #'
 #' @export
-compute_mean_density_hex <- function(model_2d, b1 = 4) {
+compute_mean_density_hex <- function(model_2d, b1 = 5) {
 
   if (missing(b1)) {
     stop("Number of bins along x axis is not defined.")
@@ -69,11 +69,11 @@ compute_mean_density_hex <- function(model_2d, b1 = 4) {
 #' @importFrom stats quantile
 #'
 #' @examples
-#' find_low_dens_hex(model_2d = scurve_model_obj$model_2d, b1 = 4,
+#' find_low_dens_hex(model_2d = scurve_model_obj$model_2d, b1 = 5,
 #' benchmark_mean_dens = 0.05)
 #'
 #' @export
-find_low_dens_hex <- function(model_2d, b1 = 4, benchmark_mean_dens = 0.05) {
+find_low_dens_hex <- function(model_2d, b1 = 5, benchmark_mean_dens = 0.05) {
 
   if (is.na(b1)) {
     stop("Number of bins along x-axis is not defined.")

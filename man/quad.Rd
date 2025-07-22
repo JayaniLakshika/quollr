@@ -4,7 +4,7 @@
 \alias{quad}
 \title{Solve Quadratic Equation for Positive Real Roots}
 \usage{
-quad(a = 3, b = 2 * a2, c = -(a2^2 + a1^2))
+quad(a = 3, b = 2, c = -1)
 }
 \arguments{
 \item{a}{The coefficient of the x^2 term. Can be complex.}
@@ -12,12 +12,6 @@ quad(a = 3, b = 2 * a2, c = -(a2^2 + a1^2))
 \item{b}{The coefficient of the x term.}
 
 \item{c}{The constant term.}
-
-\item{a1}{A numeric value used in the calculation of `c` if `c`'s default is used.
-Must be provided if default `c` is used.}
-
-\item{a2}{A numeric value used in the calculation of `b` and `c` if their defaults are used.
-Must be provided if default `b` or `c` are used.}
 }
 \value{
 A numeric vector containing the positive real root(s) of the quadratic equation.
@@ -30,10 +24,8 @@ and returns only the positive real roots. It handles complex intermediate
 calculations and returns real numbers if the roots are real.
 }
 \examples{
-# Example 1: With default a, b, c (assuming a1 and a2 are provided)
-quad(a1 = 1, a2 = 2)
 
-# Example 2: With specific coefficients
+# Example 1: With specific coefficients
 quad(a = 1, b = -3, c = 2) # x^2 - 3x + 2 = 0
 
 }

@@ -28,7 +28,7 @@ library(dplyr)
 By passing the preprocessed 2-D embedding data and hexagonal grid configurations, you can obtain the hexagonal binning information like centroid coordinates, hexagonal polygon coordinates, the standardise counts within each hexagon etc.  
 
 ```{r}
-hb_obj <- hex_binning(nldr_obj = scurve_model_obj$nldr_obj, b1 = 4, q = 0.1)
+hb_obj <- hex_binning(nldr_obj = scurve_model_obj$nldr_obj, b1 = 5, q = 0.1)
 ```
 
 ```{r}

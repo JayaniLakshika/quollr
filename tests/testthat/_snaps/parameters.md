@@ -2,47 +2,44 @@
 
     Code
       compute_mean_density_hex(model_2d = scurve_model_obj$model_2d, b1 = 4)
+    Condition
+      Warning in `compute_mean_density_hex()`:
+      There are hexagonal bins that don't have any neighbouring bins.
     Output
-      # A tibble: 122 x 2
+      # A tibble: 26 x 2
          hb_id mean_density
          <int>        <dbl>
-       1    21      0.0029 
-       2    22      0.00307
-       3    23      0.0034 
-       4    26      0.0029 
-       5    36      0.0088 
-       6    37      0.0088 
-       7    38      0.00845
-       8    39      0.00795
-       9    40      0.0073 
-      10    41      0.0094 
-      # i 112 more rows
+       1    42     NaN     
+       2    49       0.012 
+       3    52       0.012 
+       4    53       0.0113
+       5    56       0.0115
+       6    57       0.0117
+       7    67     NaN     
+       8    69       0.011 
+       9    70       0.014 
+      10    86     NaN     
+      # i 16 more rows
 
 # find_low_dens_hex() works
 
     Code
       find_low_dens_hex(model_2d = scurve_model_obj$model_2d, b1 = 4,
       benchmark_mean_dens = 0.05)
+    Condition
+      Warning in `compute_mean_density_hex()`:
+      There are hexagonal bins that don't have any neighbouring bins.
     Output
-        [1]  21  22  23  26  36  37  38  39  40  41  42  43  44  50  51  52  53  54
-       [19]  55  56  57  58  64  65  66  67  68  69  70  71  72  73  78  79  80  81
-       [37]  82  83  84  85  86  87  88  92  93  94  95  96  97  98  99 100 101 102
-       [55] 103 104 107 108 109 110 116 117 118 123 124 125 126 127 137 138 139 140
-       [73] 141 142 143 145 146 147 148 153 154 155 156 157 158 159 160 161 162 163
-       [91] 164 168 169 170 171 172 173 174 175 176 177 178 184 185 186 187 188 189
-      [109] 190 191 192 193 194 200 201 202 204 205 206 207 208 209
+       [1]  49  52  53  56  57  69  70 197 200 202 205 222 227 232 258 259
 
 ---
 
     Code
       find_low_dens_hex(model_2d = scurve_model_obj$model_2d, b1 = 4,
       benchmark_mean_dens = 0.1)
+    Condition
+      Warning in `compute_mean_density_hex()`:
+      There are hexagonal bins that don't have any neighbouring bins.
     Output
-        [1]  21  22  23  26  36  37  38  39  40  41  42  43  44  50  51  52  53  54
-       [19]  55  56  57  58  64  65  66  67  68  69  70  71  72  73  78  79  80  81
-       [37]  82  83  84  85  86  87  88  92  93  94  95  96  97  98  99 100 101 102
-       [55] 103 104 107 108 109 110 116 117 118 123 124 125 126 127 137 138 139 140
-       [73] 141 142 143 145 146 147 148 153 154 155 156 157 158 159 160 161 162 163
-       [91] 164 168 169 170 171 172 173 174 175 176 177 178 184 185 186 187 188 189
-      [109] 190 191 192 193 194 200 201 202 204 205 206 207 208 209
+       [1]  49  52  53  56  57  69  70 197 200 202 205 222 227 232 258 259
 

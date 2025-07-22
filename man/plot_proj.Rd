@@ -14,6 +14,10 @@ plot_proj(
 )
 }
 \arguments{
+\item{proj_obj}{An object contains a tibble containing the projected data,
+a tibble containing the model reference data, a list specifying the axes details,
+and a list defining circle parameters.}
+
 \item{point_param}{A vector specifying point size, alpha, and color (default: c(1, 0.3, "#66B2CC")).}
 
 \item{line_param}{A vector specifying line width, alpha, and color (default: c(0.5, 0.5, "#000000")).}
@@ -23,14 +27,6 @@ plot_proj(
 \item{axis_text_size}{Size of axis text (default: 3).}
 
 \item{is_category}{Logical indicating if the data is categorical (default: FALSE).}
-
-\item{projected_df}{A data frame containing the projected data.}
-
-\item{model_df}{A data frame containing the model reference data.}
-
-\item{axes}{A data frame or list specifying the axes details.}
-
-\item{circle}{A list defining circle parameters.}
 }
 \value{
 A ggplot object.

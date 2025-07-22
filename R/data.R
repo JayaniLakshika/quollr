@@ -206,66 +206,6 @@
 #' @source This dataset is generated for illustrative purposes.
 "scurve_umap4"
 
-#' UMAP embedding for `scurve` with n_neighbors = 15 and min_dist = 0.5
-#'
-#' The `scurve_umap5` dataset contains the UMAP (Uniform Manifold
-#' Approximation and Projection) embeddings of a three-dimensional S-curve with
-#' added noise. Each data point is represented by two UMAP coordinates (UMAP1
-#' and UMAP2) and an ID.
-#'
-#' @format ## `scurve_umap5`
-#' A data frame with 5000 rows and 3 columns:
-#' \describe{
-#'   \item{UMAP1}{Numeric, first UMAP 2-D embeddings.}
-#'   \item{UMAP2}{Numeric, second UMAP 2-D embeddings.}
-#'   \item{ID}{Numeric, identifier for each data point.}
-#' }
-#' @examples
-#' # Load the scurve_umap5 dataset
-#' data(scurve_umap5)
-#'
-#' # Display the first few rows of the dataset
-#' head(scurve_umap5)
-#'
-#' @keywords datasets
-#'
-#' @rdname scurve_umap5
-#' @docType data
-#' @usage data(scurve_umap5)
-#'
-#' @source This dataset is generated for illustrative purposes.
-"scurve_umap5"
-
-#' UMAP embedding for `scurve` with n_neighbors = 46 and min_dist = 0.9
-#'
-#' The `scurve_umap6` dataset contains the UMAP (Uniform Manifold
-#' Approximation and Projection) embeddings of a three-dimensional S-curve with
-#' added noise. Each data point is represented by two UMAP coordinates (UMAP1
-#' and UMAP2) and an ID.
-#'
-#' @format ## `scurve_umap6`
-#' A data frame with 5000 rows and 3 columns:
-#' \describe{
-#'   \item{UMAP1}{Numeric, first UMAP 2-D embeddings.}
-#'   \item{UMAP2}{Numeric, second UMAP 2-D embeddings.}
-#'   \item{ID}{Numeric, identifier for each data point.}
-#' }
-#' @examples
-#' # Load the scurve_umap6 dataset
-#' data(scurve_umap6)
-#'
-#' # Display the first few rows of the dataset
-#' head(scurve_umap6)
-#'
-#' @keywords datasets
-#'
-#' @rdname scurve_umap6
-#' @docType data
-#' @usage data(scurve_umap6)
-#'
-#' @source This dataset is generated for illustrative purposes.
-"scurve_umap6"
-
 #' Summary with different number of bins for `scurve_umap`
 #'
 #' The `scurve_umap_rmse` dataset contains error, RMSE, b2, b, m, a1, a2,
@@ -406,81 +346,11 @@
 #' @source This dataset is generated for illustrative purposes.
 "scurve_umap_rmse4"
 
-#' Summary with different number of bins for `scurve_umap5`
-#'
-#' The `scurve_umap_rmse5` dataset contains error, RMSE, b2, b, m, a1, a2,
-#' and mean density (d_bar) for different number of bins in x-axis (b1).
-#'
-#' @format ## `scurve_umap_rmse5`
-#' A data frame with 70 rows and 10 columns:
-#' \describe{
-#'   \item{Error}{Numeric, model error.}
-#'   \item{RMSE}{Numeric, Root Mean Square Error.}
-#'   \item{b1}{Numeric, number of bins along x-axis.}
-#'   \item{b2}{Numeric, number of bins along y-axis.}
-#'   \item{b}{Numeric, number of total bins.}
-#'   \item{m}{Numeric, number of non-empty bins.}
-#'   \item{a1}{Numeric, hexagon bin width.}
-#'   \item{a2}{Numeric, hexagon bin height.}
-#'   \item{d_bar}{Numeric, mean desnity.}
-#'   \item{method}{Character, NLDR method.}
-#' }
-#' @examples
-#' # Load the scurve_umap_rmse5 dataset
-#' data(scurve_umap_rmse5)
-#'
-#' # Display the first few rows of the dataset
-#' head(scurve_umap_rmse5)
-#'
-#' @keywords datasets
-#'
-#' @rdname scurve_umap_rmse5
-#' @docType data
-#' @usage data(scurve_umap_rmse5)
-#'
-#' @source This dataset is generated for illustrative purposes.
-"scurve_umap_rmse5"
-
-#' Summary with different number of bins for `scurve_umap6`
-#'
-#' The `scurve_umap_rmse6` dataset contains error, RMSE, b2, b, m, a1, a2,
-#' and mean density (d_bar) for different number of bins in x-axis (b1).
-#'
-#' @format ## `scurve_umap_rmse6`
-#' A data frame with 70 rows and 10 columns:
-#' \describe{
-#'   \item{Error}{Numeric, model error.}
-#'   \item{RMSE}{Numeric, Root Mean Square Error.}
-#'   \item{b1}{Numeric, number of bins along x-axis.}
-#'   \item{b2}{Numeric, number of bins along y-axis.}
-#'   \item{b}{Numeric, number of total bins.}
-#'   \item{m}{Numeric, number of non-empty bins.}
-#'   \item{a1}{Numeric, hexagon bin width.}
-#'   \item{a2}{Numeric, hexagon bin height.}
-#'   \item{d_bar}{Numeric, mean desnity.}
-#'   \item{method}{Character, NLDR method.}
-#' }
-#' @examples
-#' # Load the scurve_umap_rmse6 dataset
-#' data(scurve_umap_rmse6)
-#'
-#' # Display the first few rows of the dataset
-#' head(scurve_umap_rmse6)
-#'
-#' @keywords datasets
-#'
-#' @rdname scurve_umap_rmse6
-#' @docType data
-#' @usage data(scurve_umap_rmse6)
-#'
-#' @source This dataset is generated for illustrative purposes.
-"scurve_umap_rmse6"
 
 #' List of plots
 #'
 #' The `scurve_plts` contains the RMSE plot and the 2-D NLDR layouts for
-#' `scurve_umap`, `scurve_umap2`, `scurve_umap3`, `scurve_umap4`,
-#' `scurve_umap5`, and `scurve_umap6`.
+#' `scurve_umap`, `scurve_umap2`, `scurve_umap3`, and `scurve_umap4`
 #'
 #' @format ## `scurve_plts`
 #' A list of 5 elements:
@@ -490,8 +360,6 @@
 #'   \item{scurve_plts[[3]]}{ggplot object, 2-D NLDR layout for `scurve_umap2`.}
 #'   \item{scurve_plts[[4]]}{ggplot object, 2-D NLDR layout for `scurve_umap3`.}
 #'   \item{scurve_plts[[5]]}{ggplot object, 2-D NLDR layout for `scurve_umap4`.}
-#'   \item{scurve_plts[[6]]}{ggplot object, 2-D NLDR layout for `scurve_umap5`.}
-#'   \item{scurve_plts[[7]]}{ggplot object, 2-D NLDR layout for `scurve_umap6`.}
 #' }
 #' @examples
 #' # Show the scurve_plts

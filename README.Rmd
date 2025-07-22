@@ -59,7 +59,6 @@ knitr::include_graphics("man/figures/quollr-methodology.png")
   * To generate model summaries: [5. Generating model summaries](https://jayanilakshika.github.io/quollr/articles/quollr5summary.html)
   * To select the optimal bin width: [6. Selecting the best bin width](https://jayanilakshika.github.io/quollr/articles/quollr6bestbinwidth.html)
   * To select the most reasonable NLDR layout: [7. Selecting the best fit](https://jayanilakshika.github.io/quollr/articles/quollr7bestfit.html)
-  * Interactivity: [8. Interactivity](https://jayanilakshika.github.io/quollr/articles/quollr8interactivity.html)
 
 ## Copyright
 

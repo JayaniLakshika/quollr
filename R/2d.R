@@ -12,10 +12,10 @@
 #' of all hexagon bin centroids.
 #'
 #' @examples
-#' gen_centroids(nldr_obj = scurve_model_obj$nldr_obj, b1 = 4, q = 0.1)
+#' gen_centroids(nldr_obj = scurve_model_obj$nldr_obj, b1 = 5, q = 0.1)
 #'
 #' @export
-gen_centroids <- function(nldr_obj, b1 = 4, q = 0.1){
+gen_centroids <- function(nldr_obj, b1 = 5, q = 0.1){
 
   ## To check whether b2 greater than 2
   if (b1 < 2) {
@@ -210,10 +210,10 @@ find_pts <- function(scaled_nldr_hexid) {
 #'
 #'
 #' @examples
-#' hex_binning(nldr_obj = scurve_model_obj$nldr_obj, b1 = 4, q = 0.1)
+#' hex_binning(nldr_obj = scurve_model_obj$nldr_obj, b1 = 5, q = 0.1)
 #'
 #' @export
-hex_binning <- function(nldr_obj, b1 = 4, q = 0.1) {
+hex_binning <- function(nldr_obj, b1 = 5, q = 0.1) {
 
   scaled_nldr <- nldr_obj$scaled_nldr
 
@@ -386,7 +386,7 @@ tri_bin_centroids <- function(centroids_data){
 #'
 #' @param trimesh_data A tibble that contains the x and y coordinates of start
 #' and end points.
-#' selected in the resulting data frame.
+#' @param select_vars selected columns in the resulting data frame.
 #'
 #' @return A tibble with columns for the starting point, ending point,
 #' and calculated distances.
@@ -425,6 +425,7 @@ calc_2d_dist <- function(trimesh_data,
 #' between the vertices.
 #'
 #' @param tri_object The triangular object from which to generate edge information.
+#' @param a1 A numeric value for bin width.
 #'
 #' @return A tibble that contains the edge information, including the from-to
 #' relationships and the corresponding x and y coordinates.
@@ -436,7 +437,8 @@ calc_2d_dist <- function(trimesh_data,
 #' all_centroids_df <- scurve_model_obj$hb_obj$centroids
 #' counts_data <- scurve_model_obj$hb_obj$std_cts
 #' umap_with_hb_id <- scurve_model_obj$hb_obj$data_hb_id
-#' df_bin_centroids <- extract_hexbin_centroids(counts_data = counts_data, centroids_data = all_centroids_df)
+#' df_bin_centroids <- extract_hexbin_centroids(counts_data = counts_data,
+#' centroids_data = all_centroids_df)
 #' tr1_object <- tri_bin_centroids(centroids_data = df_bin_centroids)
 #' gen_edges(tri_object = tr1_object, a1 = scurve_model_obj$hb_obj$a1)
 #'
