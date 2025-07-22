@@ -1,0 +1,150 @@
+---
+title: "4. Algorithm for visualising the model overlaid on high-dimensional data"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{4. Algorithm for visualising the model overlaid on high-dimensional data}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+options(rmarkdown.html_vignette.check_title = FALSE)
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  warning = FALSE, 
+  message = FALSE
+)
+```
+
+This walks through the algorithm for constructing a model from 2-D embedding data and visualising it alongside high-dimensional data. The process involves two major steps:
+
+1. **Constructing the model in the 2-D embedding space** using hexagonal binning and triangulation.
+2. **Lifting the model into high dimensions** to link it back to the original data space.
+
+
+```{r setup}
+library(quollr)
+library(ggplot2)
+library(tibble)
+library(dplyr)
+library(stats)
+```
+
+## Step 1: Construct the 2-D model
+  
+### Hexagonal Binning
+
+To begin, we preprocess the 2-D embedding and create hexagonal bins over the layout.
+
+```{r}
+## To pre-process the data
+nldr_obj <- gen_scaled_data(nldr_data = scurve_umap)
+
+## Obtain the hexbin object
+hb_obj <- hex_binning(nldr_obj = nldr_obj, b1 = 15, q = 0.1)
+
+all_centroids_df <- hb_obj$centroids
+counts_df <- hb_obj$std_cts
+```
+
+### Extract bin centroids
+
+Next, we extract the centroid coordinates and standardised bin counts. These will be used to identify densely populated regions in the 2-D space.
+
+```{r}
+## To extract all bin centroids with bin counts
+df_bin_centroids <- extract_hexbin_centroids(centroids_data = all_centroids_df,
+                                             counts_data = counts_df)
+
+benchmark_highdens <- 0
+
+## To extract high-densed bins
+model_2d <- df_bin_centroids |>
+  dplyr::filter(n_h > benchmark_highdens)
+
+glimpse(model_2d) 
+```
+
+### Triangulate the bin centroids
+
+We then triangulate the hexagon centroids to build a wireframe of neighborhood relationships.
+
+```{r}
+## Wireframe
+tr_object <- tri_bin_centroids(centroids_data = df_bin_centroids)
+str(tr_object)
+```
+
+### Generate edges from triangulation
+
+Using the triangulation object, we generate edges between centroids. We retain only edges connecting densely populated bins.
+
+```{r}
+trimesh_data <- gen_edges(tri_object = tr_object, a1 = hb_obj$a1) |>
+  dplyr::filter(from_count > benchmark_highdens,
+                to_count > benchmark_highdens)
+
+## Update the edge indexes to start from 1
+trimesh_data <- update_trimesh_index(trimesh_data)
+glimpse(trimesh_data)
+```
+
+### Visualise the triangular mesh
+
+```{r, fig.alt="Triangular mesh."}
+trimesh <- ggplot(model_2d, aes(x = c_x, y = c_y)) +
+  geom_trimesh() +
+  coord_equal() +
+  xlab(expression(C[x]^{(2)})) + ylab(expression(C[y]^{(2)})) +
+  theme(axis.text = element_text(size = 5),
+        axis.title = element_text(size = 7))
+
+trimesh
+```
+
+
+## Step 2: Lift the model into high dimensions
+  
+### Map bins to high-dimensional observations
+
+We begin by extracting the original data with their assigned hexagonal bin IDs.
+
+```{r}
+nldr_df_with_hex_id <- hb_obj$data_hb_id
+glimpse(nldr_df_with_hex_id)
+```
+
+### Compute high-dimensional coordinates for bins
+
+We calculate the average high-dimensional coordinates for each bin and retain only the ones matching the 2-D model bins.
+
+```{r} 
+model_highd <- avg_highd_data(highd_data = scurve, scaled_nldr_hexid = nldr_df_with_hex_id)
+
+model_highd <- model_highd |>
+  dplyr::filter(h %in% model_2d$h)
+
+glimpse(model_highd)
+```
+
+## Step 3: Visualise the high-dimensional model
+
+We now combine all components—high-dimensional data, the 2-D model, lifted high-dimensional centroids, and the triangulation—and render the model using an interactive tour.
+
+### Prepare data for visualisation
+
+```{r}
+df_exe <- comb_data_model(highd_data = scurve, 
+                          model_highd = model_highd, 
+                          model_2d = model_2d)
+
+```
+
+### Interactive tour of model overlay
+
+```{r}
+tour1 <- show_langevitour(point_data = df_exe, edge_data = trimesh_data)
+
+tour1
+```
