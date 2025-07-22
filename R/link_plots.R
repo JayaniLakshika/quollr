@@ -105,8 +105,8 @@ show_link_plots <- function(point_data, edge_data,
       axis.text.y = element_blank(), axis.ticks.y = element_blank()
     )
 
-  nldr_plt <- ggplotly(nldr_plt, width = "600",
-                       height = "600", tooltip = "none") |>
+  nldr_plt <- ggplotly(nldr_plt, width = 600,
+                       height = 600, tooltip = "none") |>
     style(unselected=list(marker=list(opacity=1))) |>
     highlight(on="plotly_selected", off="plotly_deselect") |>
     config(displayModeBar = FALSE)
@@ -266,8 +266,8 @@ show_error_link_plots <- function(point_data, edge_data,
       axis.text.y = element_blank(), axis.ticks.y = element_blank()
     )
 
-  error_plt <- ggplotly(error_plt, width = "400",
-                        height = "400", tooltip = "none") |>
+  error_plt <- ggplotly(error_plt, width = 400,
+                        height = 400, tooltip = "none") |>
     style(unselected=list(marker=list(opacity=1))) |>
     highlight(on="plotly_selected", off="plotly_deselect") |>
     config(displayModeBar = FALSE)
@@ -289,8 +289,8 @@ show_error_link_plots <- function(point_data, edge_data,
       axis.text.y = element_blank(), axis.ticks.y = element_blank()
     )
 
-  nldr_plt <- ggplotly(nldr_plt, width = "400",
-                       height = "400", tooltip = "none") |>
+  nldr_plt <- ggplotly(nldr_plt, width = 400,
+                       height = 400, tooltip = "none") |>
     style(unselected=list(marker=list(opacity=1))) |>
     highlight(on="plotly_selected", off="plotly_deselect") |>
     config(displayModeBar = FALSE)
