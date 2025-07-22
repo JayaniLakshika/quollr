@@ -9,6 +9,8 @@ test_that("comb_all_data_model() works", {
 
 test_that("show_link_plots() works", {
 
+  skip_if_not_interactive()
+
   df_exe <- comb_all_data_model(highd_data = scurve, nldr_data = scurve_umap,
   model_highd = scurve_model_obj$model_highd, model_2d = scurve_model_obj$model_2d)
   edge_data <- scurve_model_obj$trimesh_data
@@ -20,6 +22,8 @@ test_that("show_link_plots() works", {
 
 
 test_that("comb_all_data_model_error() works", {
+
+  skip_if_not_interactive()
 
   model_error <- augment(highd_data = scurve, model_highd = scurve_model_obj$model_highd,
   model_2d = scurve_model_obj$model_2d)

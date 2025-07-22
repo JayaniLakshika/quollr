@@ -69,7 +69,9 @@ comb_all_data_model <- function(highd_data, nldr_data, model_highd, model_2d) {
 #' df_exe <- comb_all_data_model(highd_data = scurve, nldr_data = scurve_umap,
 #' model_highd = scurve_model_obj$model_highd, model_2d = scurve_model_obj$model_2d)
 #' edge_data <- scurve_model_obj$trimesh_data
-#' show_link_plots(point_data = df_exe, edge_data = edge_data)
+#' if (interactive()) {
+#'   show_link_plots(point_data = df_exe, edge_data = edge_data)
+#' }
 #'
 #' @export
 show_link_plots <- function(point_data, edge_data,
@@ -228,7 +230,9 @@ comb_all_data_model_error <- function(highd_data, nldr_data, model_highd,
 #' model_highd = scurve_model_obj$model_highd, model_2d = scurve_model_obj$model_2d,
 #' error_data = model_error)
 #' edge_data <- scurve_model_obj$trimesh_data
-#' show_error_link_plots(point_data = df_exe, edge_data = edge_data)
+#' if (interactive()) {
+#'   show_error_link_plots(point_data = df_exe, edge_data = edge_data)
+#' }
 #'
 #' @export
 show_error_link_plots <- function(point_data, edge_data,

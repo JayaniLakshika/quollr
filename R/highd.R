@@ -91,7 +91,9 @@ comb_data_model <- function(highd_data, model_highd, model_2d) {
 #' df_exe <- comb_data_model(highd_data = scurve, model_highd = scurve_model_obj$model_highd,
 #' model_2d = scurve_model_obj$model_2d)
 #' edge_data <- scurve_model_obj$trimesh_data
-#' show_langevitour(point_data = df_exe, edge_data = edge_data)
+#' if (interactive()) {
+#'   show_langevitour(point_data = df_exe, edge_data = edge_data)
+#' }
 #'
 #' @export
 show_langevitour <- function(point_data, edge_data,
