@@ -47,7 +47,7 @@ comprises two main phases: (1) generate the model in the 2-D space, and
 (2) lift the model into high-dimensional space. This methodology is
 available in this package.
 
-<img src="man/figures/quollr-methodology.png" width="80%" style="display: block; margin: auto;" />
+<img src="man/figures/quollr-methodology.png" width="80%" style="display: block; margin: auto;" alt="Methodology diagram"/>
 
 ## About the name
 
