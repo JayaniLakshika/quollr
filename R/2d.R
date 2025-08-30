@@ -175,10 +175,10 @@ compute_std_counts <- function(scaled_nldr_hexid) {
 #'
 #' @examples
 #' umap_with_hb_id <- scurve_model_obj$hb_obj$data_hb_id
-#' grouped_hex_pts(scaled_nldr_hexid = umap_with_hb_id)
+#' group_hex_pts(scaled_nldr_hexid = umap_with_hb_id)
 #'
 #' @export
-grouped_hex_pts <- function(scaled_nldr_hexid) {
+group_hex_pts <- function(scaled_nldr_hexid) {
 
   pts_df <- scaled_nldr_hexid |>
     group_by(h) |>
