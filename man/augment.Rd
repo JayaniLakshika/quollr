@@ -2,27 +2,16 @@
 % Please edit documentation in R/prediction.R
 \name{augment}
 \alias{augment}
-\title{Augment Data with Predictions and Error Metrics}
+\title{S3 generic for augment}
 \usage{
-augment(highd_data, model_2d, model_highd)
+augment(x, ...)
 }
 \arguments{
-\item{highd_data}{The dataset containing high-dimensional coordinates and an unique identifier.}
+\item{x}{An object to augment.}
 
-\item{model_2d}{Centroid coordinates of hexagonal bins in 2-D space.}
-
-\item{model_highd}{Centroid coordinates of hexagonal bins in high dimensions.}
-}
-\value{
-A tibble containing the augmented data with predictions,
-error metrics, and absolute error metrics.
+\item{...}{Additional arguments passed to methods (e.g., high-dimensional data).}
 }
 \description{
-This function augments a dataset with predictions and error metrics obtained
-from a nonlinear dimension reduction (NLDR) model.
-}
-\examples{
-augment(highd_data = scurve, model_highd = scurve_model_obj$model_highd,
-model_2d = scurve_model_obj$model_2d)
-
+This is a generic function to augment datasets with predictions and error metrics
+from different models, including NLDR models.
 }

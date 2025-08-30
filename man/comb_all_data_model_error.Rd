@@ -34,8 +34,7 @@ hexagonal bin and high-dimensional data, non-linear dimension reduction data,
 model error data.
 }
 \examples{
-model_error <- augment(highd_data = scurve, model_highd = scurve_model_obj$model_highd,
-model_2d = scurve_model_obj$model_2d)
+model_error <- augment(model_object = scurve_model_obj, highd_data = scurve)
 comb_all_data_model_error(highd_data = scurve, nldr_data = scurve_umap,
 model_highd = scurve_model_obj$model_highd, model_2d = scurve_model_obj$model_2d,
 error_data = model_error)

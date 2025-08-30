@@ -31,19 +31,19 @@
       
       
       $hb_obj
-      $a1
+      $hb_obj$a1
       [1] 0.3962013
       
-      $a2
+      $hb_obj$a2
       [1] 0.3431204
       
-      $bins
+      $hb_obj$bins
       [1] 4 5
       
-      $start_point
+      $hb_obj$start_point
       [1] -0.1000000 -0.1156801
       
-      $centroids
+      $hb_obj$centroids
       # A tibble: 20 x 3
              h     c_x    c_y
          <int>   <dbl>  <dbl>
@@ -68,7 +68,7 @@
       19    19  0.692   1.26 
       20    20  1.09    1.26 
       
-      $hex_poly
+      $hb_obj$hex_poly
            h           x            y
       1    1 -0.10000000  0.113066785
       2    1 -0.29810065 -0.001306679
@@ -191,7 +191,7 @@
       119 20  1.28670455  1.142427959
       120 20  1.28670455  1.371174887
       
-      $data_hb_id
+      $hb_obj$data_hb_id
       # A tibble: 1,000 x 4
           emb1  emb2    ID     h
          <dbl> <dbl> <int> <int>
@@ -207,7 +207,7 @@
       10 0.932 0.410    10     7
       # i 990 more rows
       
-      $std_cts
+      $hb_obj$std_cts
       # A tibble: 13 x 3
              h   n_h   w_h
          <int> <int> <dbl>
@@ -225,13 +225,13 @@
       12    17     4 0.004
       13    18    44 0.044
       
-      $b
+      $hb_obj$b
       [1] 20
       
-      $m
+      $hb_obj$m
       [1] 13
       
-      $pts_bins
+      $hb_obj$pts_bins
       # A tibble: 13 x 2
              h pts_list   
          <int> <list>     
@@ -249,8 +249,6 @@
       12    17 <int [4]>  
       13    18 <int [44]> 
       
-      attr(,"class")
-      [1] "hex_bin_obj"
       
       $model_highd
       # A tibble: 12 x 8
@@ -300,6 +298,8 @@
       10     9    12 0.0981  0.914 0.296 1.26         140       44
       # i 13 more rows
       
+      attr(,"class")
+      [1] "highd_vis_model"
 
 ---
 
@@ -334,19 +334,19 @@
       
       
       $hb_obj
-      $a1
+      $hb_obj$a1
       [1] 0.0834108
       
-      $a2
+      $hb_obj$a2
       [1] 0.07223587
       
-      $bins
+      $hb_obj$bins
       [1] 15 20
       
-      $start_point
+      $hb_obj$start_point
       [1] -0.1000000 -0.1156801
       
-      $centroids
+      $hb_obj$centroids
       # A tibble: 300 x 3
              h     c_x    c_y
          <int>   <dbl>  <dbl>
@@ -362,7 +362,7 @@
       10    10  0.651  -0.116
       # i 290 more rows
       
-      $hex_poly
+      $hb_obj$hex_poly
              h          x            y
       1      1 -0.1000000 -0.067522894
       2      1 -0.1417054 -0.091601518
@@ -2165,7 +2165,7 @@
       1799 300  1.1511620  1.232722799
       1800 300  1.1511620  1.280880047
       
-      $data_hb_id
+      $hb_obj$data_hb_id
       # A tibble: 1,000 x 4
           emb1  emb2    ID     h
          <dbl> <dbl> <int> <int>
@@ -2181,7 +2181,7 @@
       10 0.932 0.410    10   118
       # i 990 more rows
       
-      $std_cts
+      $hb_obj$std_cts
       # A tibble: 137 x 3
              h   n_h   w_h
          <int> <int> <dbl>
@@ -2197,13 +2197,13 @@
       10    51     4 0.004
       # i 127 more rows
       
-      $b
+      $hb_obj$b
       [1] 300
       
-      $m
+      $hb_obj$m
       [1] 137
       
-      $pts_bins
+      $hb_obj$pts_bins
       # A tibble: 137 x 2
              h pts_list  
          <int> <list>    
@@ -2219,8 +2219,6 @@
       10    51 <int [4]> 
       # i 127 more rows
       
-      attr(,"class")
-      [1] "hex_bin_obj"
       
       $model_highd
       # A tibble: 92 x 8
@@ -2349,4 +2347,6 @@
       10    13    14  0.317 0.173  0.400 0.173          10       11
       # i 162 more rows
       
+      attr(,"class")
+      [1] "highd_vis_model"
 

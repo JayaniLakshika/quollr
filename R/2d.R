@@ -264,7 +264,6 @@ hex_binning <- function(nldr_obj, b1 = 5, q = 0.1) {
                       m = length(std_df$h),
                       pts_bins = pts_df
   )
-  class(hex_bin_obj) <- "hex_bin_obj"
 
   return(hex_bin_obj)
 

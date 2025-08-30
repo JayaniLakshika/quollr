@@ -2,25 +2,15 @@
 % Please edit documentation in R/prediction.R
 \name{glance}
 \alias{glance}
-\title{Generate evaluation metrics}
+\title{S3 generic for glance}
 \usage{
-glance(highd_data, model_2d, model_highd)
+glance(x, ...)
 }
 \arguments{
-\item{highd_data}{The dataset containing high-dimensional coordinates and an unique identifier.}
+\item{x}{An object to compute evaluation metrics for.}
 
-\item{model_2d}{Centroid coordinates of hexagonal bins in 2-D space.}
-
-\item{model_highd}{Centroid coordinates of hexagonal bins in high dimensions.}
-}
-\value{
-A tibble contains Error, and MSE values.
+\item{...}{Additional arguments passed to methods.}
 }
 \description{
-This function generates an evaluation data frame based on the provided data and predictions.
-}
-\examples{
-glance(highd_data = scurve, model_highd = scurve_model_obj$model_highd,
-model_2d = scurve_model_obj$model_2d)
-
+This is a generic function for computing evaluation metrics on different objects.
 }
