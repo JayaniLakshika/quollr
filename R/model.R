@@ -8,7 +8,7 @@
 #' @param nldr_data A tibble that contains the embedding with a unique identifier.
 #' @param b1 (default: 4) A numeric value representing the number of bins along the x axis.
 #' @param q (default: 0.1) A numeric value representing the buffer amount as proportion of data range.
-#' @param benchmark_highdens (default: 5) A numeric value using to filter high-density hexagons.
+#' @param hd_thresh (default: 0) A numeric value using to filter high-density hexagons.
 #'
 #' @return A list containing a list of a tibble contains scaled first and second columns
 #' of NLDR data, and numeric vectors representing the limits of the original NLDR data (\code{nldr_obj}),
@@ -22,11 +22,11 @@
 #'
 #' @examples
 #' fit_highd_model(highd_data = scurve, nldr_data = scurve_umap, b1 = 4,
-#' q = 0.1, benchmark_highdens = 5)
+#' q = 0.1, hd_thresh = 5)
 #'
 #' @export
 fit_highd_model <- function(highd_data, nldr_data, b1 = 4, q = 0.1,
-                            benchmark_highdens = 5) {
+                            hd_thresh = 5) {
 
   ## To pre-process the data
   nldr_obj <- gen_scaled_data(nldr_data = nldr_data)
@@ -44,8 +44,8 @@ fit_highd_model <- function(highd_data, nldr_data, b1 = 4, q = 0.1,
   ## Wireframe
   tr_object <- tri_bin_centroids(centroids_data = df_bin_centroids)
   trimesh_data <- gen_edges(tri_object = tr_object, a1 = hb_obj$a1) |>
-    dplyr::filter(from_count > benchmark_highdens,
-                  to_count > benchmark_highdens)
+    dplyr::filter(from_count > hd_thresh,
+                  to_count > hd_thresh)
 
   ## Update the edge indexes to start from 1
   trimesh_data <- update_trimesh_index(trimesh_data)
@@ -56,7 +56,7 @@ fit_highd_model <- function(highd_data, nldr_data, b1 = 4, q = 0.1,
 
   ## To extract high-densed bins
   model_2d <- df_bin_centroids |>
-    dplyr::filter(n_h > benchmark_highdens)
+    dplyr::filter(n_h > hd_thresh)
 
   model_highd <- model_highd |>
     dplyr::filter(h %in% model_2d$h)

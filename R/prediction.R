@@ -65,7 +65,7 @@ glance <- function(x, ...) {
 #' @examples
 #' # Assuming 'fit' is a hex_model object and 'scurve' contains the original data:
 #' fit <- fit_highd_model(highd_data = scurve, nldr_data = scurve_umap, b1 = 4,
-#' q = 0.1, benchmark_highdens = 5)
+#' q = 0.1, hd_thresh = 5)
 #' glance(fit, highd_data = scurve)
 #'
 #' @export
@@ -124,7 +124,7 @@ augment <- function(x, ...) {
 #' @examples
 #' # Assuming 'fit' is a highd_vis_model object and 'scurve' contains the original data:
 #' fit <- fit_highd_model(highd_data = scurve, nldr_data = scurve_umap, b1 = 4,
-#' q = 0.1, benchmark_highdens = 5)
+#' q = 0.1, hd_thresh = 5)
 #' augment(fit, highd_data = scurve)
 #'
 #'
@@ -208,7 +208,7 @@ quad <- function(a = 3, b = 2, c = -1)
 #'
 #' @param highd_data A tibble that contains the high-dimensional data with a unique identifier.
 #' @param nldr_data A tibble that contains the embedding with a unique identifier.
-#' @param benchmark_highdens (default: 1) A numeric value using to filter high-density hexagons.
+#' @param hd_thresh (default: 1) A numeric value using to filter high-density hexagons.
 #'
 #' @return A tibble containing the augmented data with predictions,
 #' error metrics, and absolute error metrics.
@@ -219,7 +219,7 @@ quad <- function(a = 3, b = 2, c = -1)
 #' gen_diffbin1_errors(highd_data = scurve_sample, nldr_data = scurve_umap_sample)
 #'
 #' @export
-gen_diffbin1_errors <- function(highd_data, nldr_data, benchmark_highdens = 1) {
+gen_diffbin1_errors <- function(highd_data, nldr_data, hd_thresh = 1) {
 
   nldr_obj <- gen_scaled_data(nldr_data = nldr_data)
   ## To compute the range
@@ -240,7 +240,7 @@ gen_diffbin1_errors <- function(highd_data, nldr_data, benchmark_highdens = 1) {
       nldr_data = nldr_data,
       b1 = xbins,
       q = 0.1,
-      benchmark_highdens = benchmark_highdens
+      hd_thresh = hd_thresh
     )
 
     df_bin_centroids_scurve <- scurve_model$model_2d

@@ -4,7 +4,7 @@
 \alias{fit_highd_model}
 \title{Construct the 2-D model and lift into high-dimensions}
 \usage{
-fit_highd_model(highd_data, nldr_data, b1 = 4, q = 0.1, benchmark_highdens = 5)
+fit_highd_model(highd_data, nldr_data, b1 = 4, q = 0.1, hd_thresh = 5)
 }
 \arguments{
 \item{highd_data}{A tibble that contains the high-dimensional data with a unique identifier.}
@@ -15,7 +15,7 @@ fit_highd_model(highd_data, nldr_data, b1 = 4, q = 0.1, benchmark_highdens = 5)
 
 \item{q}{(default: 0.1) A numeric value representing the buffer amount as proportion of data range.}
 
-\item{benchmark_highdens}{(default: 5) A numeric value using to filter high-density hexagons.}
+\item{hd_thresh}{(default: 0) A numeric value using to filter high-density hexagons.}
 }
 \value{
 A list containing a list of a tibble contains scaled first and second columns
@@ -32,6 +32,6 @@ removal of low-density hexagons, and averaging of high-dimensional data.
 }
 \examples{
 fit_highd_model(highd_data = scurve, nldr_data = scurve_umap, b1 = 4,
-q = 0.1, benchmark_highdens = 5)
+q = 0.1, hd_thresh = 5)
 
 }

@@ -62,7 +62,7 @@ compute_mean_density_hex <- function(model_2d, b1 = 5) {
 #'
 #' @param model_2d The tibble that contains all hexagonal bin centroids.
 #' @param b1 Number of bins along the x-axis for hexagon binning.
-#' @param benchmark_mean_dens A numeric value that contains
+#' @param md_thresh A numeric value that contains the threshold for mean density.
 #'
 #' @return A vector containing the IDs of hexagons to be removed after investigating their neighboring bins.
 #' @importFrom dplyr filter pull
@@ -70,10 +70,10 @@ compute_mean_density_hex <- function(model_2d, b1 = 5) {
 #'
 #' @examples
 #' find_low_dens_hex(model_2d = scurve_model_obj$model_2d, b1 = 5,
-#' benchmark_mean_dens = 0.05)
+#' md_thresh = 0.05)
 #'
 #' @export
-find_low_dens_hex <- function(model_2d, b1 = 5, benchmark_mean_dens = 0.05) {
+find_low_dens_hex <- function(model_2d, b1 = 5, md_thresh = 0.05) {
 
   if (is.na(b1)) {
     stop("Number of bins along x-axis is not defined.")
@@ -85,7 +85,7 @@ find_low_dens_hex <- function(model_2d, b1 = 5, benchmark_mean_dens = 0.05) {
 
   ## Obtain the hexagonal bins need to remove
   remove_bins <- mean_density_df |>
-    filter(mean_density < benchmark_mean_dens) |>
+    filter(mean_density < md_thresh) |>
     pull(hb_id)
 
   if (is.null(remove_bins)) {

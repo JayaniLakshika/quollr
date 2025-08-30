@@ -24,7 +24,7 @@ from a nonlinear dimension reduction (NLDR) model stored in a \code{highd_vis_mo
 \examples{
 # Assuming 'fit' is a highd_vis_model object and 'scurve' contains the original data:
 fit <- fit_highd_model(highd_data = scurve, nldr_data = scurve_umap, b1 = 4,
-q = 0.1, benchmark_highdens = 5)
+q = 0.1, hd_thresh = 5)
 augment(fit, highd_data = scurve)
 
 
