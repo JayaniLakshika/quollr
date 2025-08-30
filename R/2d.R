@@ -163,7 +163,7 @@ compute_std_counts <- function(scaled_nldr_hexid) {
 
 }
 
-#' Find points in hexagonal bins
+#' Grouped points in each hexagon
 #'
 #' This function maps points to their corresponding hexagonal bins.
 #'
@@ -175,10 +175,10 @@ compute_std_counts <- function(scaled_nldr_hexid) {
 #'
 #' @examples
 #' umap_with_hb_id <- scurve_model_obj$hb_obj$data_hb_id
-#' find_pts(scaled_nldr_hexid = umap_with_hb_id)
+#' grouped_hex_pts(scaled_nldr_hexid = umap_with_hb_id)
 #'
 #' @export
-find_pts <- function(scaled_nldr_hexid) {
+grouped_hex_pts <- function(scaled_nldr_hexid) {
 
   pts_df <- scaled_nldr_hexid |>
     group_by(h) |>
