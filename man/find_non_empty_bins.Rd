@@ -4,10 +4,10 @@
 \alias{find_non_empty_bins}
 \title{Find the number of bins required to achieve required number of non-empty bins.}
 \usage{
-find_non_empty_bins(nldr_obj, m = 2, q = 0.1)
+find_non_empty_bins(nldr_scaled_obj, m = 2, q = 0.1)
 }
 \arguments{
-\item{nldr_obj}{A list of a tibble contains scaled first and second columns
+\item{nldr_scaled_obj}{A list of a tibble contains scaled first and second columns
 of NLDR data, and numeric vectors representing the limits of the original NLDR data.}
 
 \item{m}{The desired number of non-empty bins.}
@@ -23,6 +23,6 @@ This function determines the number of bins along the x and y axes
 to obtain a specific number of non-empty bins.
 }
 \examples{
-find_non_empty_bins(nldr_obj = scurve_model_obj$nldr_obj, m = 5)
+find_non_empty_bins(nldr_scaled_obj = scurve_model_obj$nldr_scaled_obj, m = 5)
 
 }

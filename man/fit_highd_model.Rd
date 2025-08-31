@@ -19,7 +19,7 @@ fit_highd_model(highd_data, nldr_data, b1 = 4, q = 0.1, hd_thresh = 5)
 }
 \value{
 A list containing a list of a tibble contains scaled first and second columns
-of NLDR data, and numeric vectors representing the limits of the original NLDR data (\code{nldr_obj}),
+of NLDR data, and numeric vectors representing the limits of the original NLDR data (\code{nldr_scaled_obj}),
 a object that contains hexagonal binning information (\code{hb_obj}),
 a tibble with high-dimensional model (\code{model_highd}) and a tibble containing
 hexagonal bin centroids in 2-D (\code{model_2d}), and

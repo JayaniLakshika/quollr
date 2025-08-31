@@ -221,10 +221,10 @@ quad <- function(a = 3, b = 2, c = -1)
 #' @export
 gen_diffbin1_errors <- function(highd_data, nldr_data, hd_thresh = 1) {
 
-  nldr_obj <- gen_scaled_data(nldr_data = nldr_data)
+  nldr_scaled_obj <- gen_scaled_data(nldr_data = nldr_data)
   ## To compute the range
-  lim1 <- nldr_obj$lim1
-  lim2 <- nldr_obj$lim2
+  lim1 <- nldr_scaled_obj$lim1
+  lim2 <- nldr_scaled_obj$lim2
   r2 <- diff(lim2)/diff(lim1)
 
 

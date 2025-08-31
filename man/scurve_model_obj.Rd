@@ -8,7 +8,7 @@
 ## `scurve_model_obj`
 An object of five elements
 \describe{
-  \item{nldr_obj}{A tibble contains scaled first and second columns of NLDR
+  \item{nldr_scaled_obj}{A tibble contains scaled first and second columns of NLDR
   data, and numeric vectors representing the limits of the original NLDR data.}
   \item{hb_obj}{A object that contains hexagonal binning information.}
   \item{model_highd}{A tibble with high-dimensional model.}

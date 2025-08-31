@@ -4,10 +4,10 @@
 \alias{gen_centroids}
 \title{Generate centroid coordinate}
 \usage{
-gen_centroids(nldr_obj, b1 = 5, q = 0.1)
+gen_centroids(nldr_scaled_obj, b1 = 5, q = 0.1)
 }
 \arguments{
-\item{nldr_obj}{A list of a tibble contains scaled first and second columns
+\item{nldr_scaled_obj}{A list of a tibble contains scaled first and second columns
 of NLDR data, and numeric vectors representing the limits of the original NLDR data.}
 
 \item{b1}{Number of bins along the x axis.}
@@ -23,6 +23,6 @@ of all hexagon bin centroids.
 This function generates all possible centroids in the hexagonal grid.
 }
 \examples{
-gen_centroids(nldr_obj = scurve_model_obj$nldr_obj, b1 = 5, q = 0.1)
+gen_centroids(nldr_scaled_obj = scurve_model_obj$nldr_scaled_obj, b1 = 5, q = 0.1)
 
 }

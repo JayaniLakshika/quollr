@@ -4,10 +4,10 @@
 \alias{assign_data}
 \title{Assign data to hexagons}
 \usage{
-assign_data(nldr_obj, centroids_data)
+assign_data(nldr_scaled_obj, centroids_data)
 }
 \arguments{
-\item{nldr_obj}{A list of a tibble contains scaled first and second columns
+\item{nldr_scaled_obj}{A list of a tibble contains scaled first and second columns
 of NLDR data, and numeric vectors representing the limits of the original NLDR data.}
 
 \item{centroids_data}{The dataset with centroid coordinates.}
@@ -21,7 +21,7 @@ This function assigns the data to hexagons.
 }
 \examples{
 all_centroids_df <- scurve_model_obj$hb_obj$centroids
-assign_data(nldr_obj = scurve_model_obj$nldr_obj,
+assign_data(nldr_scaled_obj = scurve_model_obj$nldr_scaled_obj,
 centroids_data = all_centroids_df)
 
 }

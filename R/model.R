@@ -11,7 +11,7 @@
 #' @param hd_thresh (default: 0) A numeric value using to filter high-density hexagons.
 #'
 #' @return A list containing a list of a tibble contains scaled first and second columns
-#' of NLDR data, and numeric vectors representing the limits of the original NLDR data (\code{nldr_obj}),
+#' of NLDR data, and numeric vectors representing the limits of the original NLDR data (\code{nldr_scaled_obj}),
 #' a object that contains hexagonal binning information (\code{hb_obj}),
 #' a tibble with high-dimensional model (\code{model_highd}) and a tibble containing
 #' hexagonal bin centroids in 2-D (\code{model_2d}), and
@@ -29,10 +29,10 @@ fit_highd_model <- function(highd_data, nldr_data, b1 = 4, q = 0.1,
                             hd_thresh = 5) {
 
   ## To pre-process the data
-  nldr_obj <- gen_scaled_data(nldr_data = nldr_data)
+  nldr_scaled_obj <- gen_scaled_data(nldr_data = nldr_data)
 
   ## Obtain the hexbin object
-  hb_obj <- hex_binning(nldr_obj = nldr_obj, b1 = b1, q = q)
+  hb_obj <- hex_binning(nldr_scaled_obj = nldr_scaled_obj, b1 = b1, q = q)
 
   all_centroids_df <- hb_obj$centroids
   counts_df <- hb_obj$std_cts
@@ -65,7 +65,7 @@ fit_highd_model <- function(highd_data, nldr_data, b1 = 4, q = 0.1,
 
   ## Store as S3 object
   res <- list(
-    nldr_obj = nldr_obj,
+    nldr_scaled_obj = nldr_scaled_obj,
     hb_obj = hb_obj,
     model_highd = model_highd,
     model_2d = model_2d,

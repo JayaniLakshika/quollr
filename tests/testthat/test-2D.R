@@ -71,13 +71,13 @@ test_that("extract_hexbin_centroids() works", {
 
 })
 
-test_that("extract_hexbin_mean() works", {
+test_that("merge_hexbin_mean() works", {
 
   all_centroids_df <- scurve_model_obj$hb_obj$centroids
   counts_data <- scurve_model_obj$hb_obj$std_cts
   umap_with_hb_id <- scurve_model_obj$hb_obj$data_hb_id
 
-  testthat::expect_snapshot(extract_hexbin_mean(data_hb = umap_with_hb_id,
+  testthat::expect_snapshot(merge_hexbin_mean(data_hb = umap_with_hb_id,
                                                 counts_data = counts_data,
                                                 centroids_data = all_centroids_df))
 
@@ -88,7 +88,7 @@ test_that("tri_bin_centroids() works", {
   all_centroids_df <- scurve_model_obj$hb_obj$centroids
   counts_data <- scurve_model_obj$hb_obj$std_cts
   umap_with_hb_id <- scurve_model_obj$hb_obj$data_hb_id
-  df_bin_centroids <- extract_hexbin_mean(data_hb = umap_with_hb_id,
+  df_bin_centroids <- merge_hexbin_mean(data_hb = umap_with_hb_id,
   counts_data = counts_data, centroids_data = all_centroids_df)
 
   testthat::expect_snapshot(suppressWarnings(tri_bin_centroids(centroids_data = df_bin_centroids)))

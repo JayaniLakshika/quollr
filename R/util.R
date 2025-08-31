@@ -3,7 +3,7 @@
 #' This function calculates the effective number of bins along the x and y axes
 #' of a hexagonal grid.
 #'
-#' @param nldr_obj A list of a tibble contains scaled first and second columns
+#' @param nldr_scaled_obj A list of a tibble contains scaled first and second columns
 #' of NLDR data, and numeric vectors representing the limits of the original NLDR data.
 #' @param b1 Number of bins along the x axis.
 #' @param q The buffer amount as proportion of data range.
@@ -12,10 +12,10 @@
 #' bins along the y axis, height and, width of the hexagon.
 #'
 #' @examples
-#' calc_bins_y(nldr_obj = scurve_model_obj$nldr_obj, b1 = 4, q = 0.1)
+#' calc_bins_y(nldr_scaled_obj = scurve_model_obj$nldr_scaled_obj, b1 = 4, q = 0.1)
 #'
 #' @export
-calc_bins_y <- function(nldr_obj, b1 = 4, q = 0.1) {
+calc_bins_y <- function(nldr_scaled_obj, b1 = 4, q = 0.1) {
 
   ## To check whether b2 greater than 2
   if (b1 < 2) {
@@ -28,8 +28,8 @@ calc_bins_y <- function(nldr_obj, b1 = 4, q = 0.1) {
   }
 
   ## To compute the range
-  lim1 <- nldr_obj$lim1
-  lim2 <- nldr_obj$lim2
+  lim1 <- nldr_scaled_obj$lim1
+  lim2 <- nldr_scaled_obj$lim2
   r2 <- diff(lim2)/diff(lim1)
 
   ## To compute the number of bins along the x-axis

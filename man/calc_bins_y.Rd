@@ -4,10 +4,10 @@
 \alias{calc_bins_y}
 \title{Calculate the effective number of bins along x-axis and y-axis}
 \usage{
-calc_bins_y(nldr_obj, b1 = 4, q = 0.1)
+calc_bins_y(nldr_scaled_obj, b1 = 4, q = 0.1)
 }
 \arguments{
-\item{nldr_obj}{A list of a tibble contains scaled first and second columns
+\item{nldr_scaled_obj}{A list of a tibble contains scaled first and second columns
 of NLDR data, and numeric vectors representing the limits of the original NLDR data.}
 
 \item{b1}{Number of bins along the x axis.}
@@ -23,6 +23,6 @@ This function calculates the effective number of bins along the x and y axes
 of a hexagonal grid.
 }
 \examples{
-calc_bins_y(nldr_obj = scurve_model_obj$nldr_obj, b1 = 4, q = 0.1)
+calc_bins_y(nldr_scaled_obj = scurve_model_obj$nldr_scaled_obj, b1 = 4, q = 0.1)
 
 }
