@@ -283,11 +283,11 @@ hex_binning <- function(nldr_obj, b1 = 5, q = 0.1) {
 #' @examples
 #' all_centroids_df <- scurve_model_obj$hb_obj$centroids
 #' counts_data <- scurve_model_obj$hb_obj$std_cts
-#' extract_hexbin_centroids(centroids_data = all_centroids_df,
+#' merge_hexbin_centroids(centroids_data = all_centroids_df,
 #' counts_data = counts_data)
 #'
 #' @export
-extract_hexbin_centroids <- function(centroids_data, counts_data) {
+merge_hexbin_centroids <- function(centroids_data, counts_data) {
 
   # Fast merge without unnecessary sorting
   merged_data <- merge(centroids_data, counts_data, by = "h", all = TRUE)
@@ -314,11 +314,11 @@ extract_hexbin_centroids <- function(centroids_data, counts_data) {
 #' all_centroids_df <- scurve_model_obj$hb_obj$centroids
 #' counts_data <- scurve_model_obj$hb_obj$std_cts
 #' umap_with_hb_id <- scurve_model_obj$hb_obj$data_hb_id
-#' extract_hexbin_mean(data_hb = umap_with_hb_id, counts_data = counts_data,
+#' merge_hexbin_mean(data_hb = umap_with_hb_id, counts_data = counts_data,
 #' centroids_data = all_centroids_df)
 #'
 #' @export
-extract_hexbin_mean <- function(data_hb, counts_data, centroids_data) {
+merge_hexbin_mean <- function(data_hb, counts_data, centroids_data) {
 
   ## To arrange the hexagon IDs
   counts_data <- counts_data |>
@@ -362,7 +362,7 @@ extract_hexbin_mean <- function(data_hb, counts_data, centroids_data) {
 #' all_centroids_df <- scurve_model_obj$hb_obj$centroids
 #' counts_data <- scurve_model_obj$hb_obj$std_cts
 #' umap_with_hb_id <- scurve_model_obj$hb_obj$data_hb_id
-#' df_bin_centroids <- extract_hexbin_mean(data_hb = umap_with_hb_id,
+#' df_bin_centroids <- merge_hexbin_mean(data_hb = umap_with_hb_id,
 #' counts_data = counts_data, centroids_data = all_centroids_df)
 #' tri_bin_centroids(centroids_data = df_bin_centroids)
 #'
@@ -436,7 +436,7 @@ calc_2d_dist <- function(trimesh_data,
 #' all_centroids_df <- scurve_model_obj$hb_obj$centroids
 #' counts_data <- scurve_model_obj$hb_obj$std_cts
 #' umap_with_hb_id <- scurve_model_obj$hb_obj$data_hb_id
-#' df_bin_centroids <- extract_hexbin_centroids(counts_data = counts_data,
+#' df_bin_centroids <- merge_hexbin_centroids(counts_data = counts_data,
 #' centroids_data = all_centroids_df)
 #' tr1_object <- tri_bin_centroids(centroids_data = df_bin_centroids)
 #' gen_edges(tri_object = tr1_object, a1 = scurve_model_obj$hb_obj$a1)

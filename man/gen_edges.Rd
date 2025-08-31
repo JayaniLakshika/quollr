@@ -24,7 +24,7 @@ between the vertices.
 all_centroids_df <- scurve_model_obj$hb_obj$centroids
 counts_data <- scurve_model_obj$hb_obj$std_cts
 umap_with_hb_id <- scurve_model_obj$hb_obj$data_hb_id
-df_bin_centroids <- extract_hexbin_centroids(counts_data = counts_data,
+df_bin_centroids <- merge_hexbin_data(counts_data = counts_data,
 centroids_data = all_centroids_df)
 tr1_object <- tri_bin_centroids(centroids_data = df_bin_centroids)
 gen_edges(tri_object = tr1_object, a1 = scurve_model_obj$hb_obj$a1)

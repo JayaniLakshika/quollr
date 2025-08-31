@@ -36,11 +36,11 @@ test_that("compute_std_counts() works", {
 
 })
 
-test_that("find_pts() works", {
+test_that("group_hex_pts() works", {
 
   umap_with_hb_id <- scurve_model_obj$hb_obj$data_hb_id
 
-  testthat::expect_snapshot(find_pts(scaled_nldr_hexid = umap_with_hb_id))
+  testthat::expect_snapshot(group_hex_pts(scaled_nldr_hexid = umap_with_hb_id))
 
 })
 
