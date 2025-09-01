@@ -265,6 +265,8 @@ hex_binning <- function(nldr_scaled_obj, b1 = 30, q = 0.1) {
                       pts_bins = pts_df
   )
 
+  class(hex_bin_obj) <- "hex_bin_obj"
+
   return(hex_bin_obj)
 
 }
