@@ -12,10 +12,10 @@
 #' bins along the y axis, height and, width of the hexagon.
 #'
 #' @examples
-#' calc_bins_y(nldr_scaled_obj = scurve_model_obj$nldr_scaled_obj, b1 = 4, q = 0.1)
+#' calc_bins_y(nldr_scaled_obj = scurve_model_obj$nldr_scaled_obj, b1 = 30, q = 0.1)
 #'
 #' @export
-calc_bins_y <- function(nldr_scaled_obj, b1 = 4, q = 0.1) {
+calc_bins_y <- function(nldr_scaled_obj, b1 = 30, q = 0.1) {
 
   ## To check whether b2 greater than 2
   if (b1 < 2) {

@@ -4,7 +4,7 @@
 \alias{compute_mean_density_hex}
 \title{Compute mean density of hexagonal bins}
 \usage{
-compute_mean_density_hex(model_2d, b1 = 5)
+compute_mean_density_hex(model_2d, b1 = 30)
 }
 \arguments{
 \item{model_2d}{A tibble that contains information about hexagonal bin centroids,
@@ -20,6 +20,6 @@ density of each hexagonal bin based on its neighboring bins.
 This function calculates the mean density of hexagonal bins based on their neighboring bins.
 }
 \examples{
-compute_mean_density_hex(model_2d = scurve_model_obj$model_2d, b1 = 5)
+compute_mean_density_hex(model_2d = scurve_model_obj$model_2d, b1 = 30)
 
 }

@@ -12,10 +12,10 @@
 #' of all hexagon bin centroids.
 #'
 #' @examples
-#' gen_centroids(nldr_scaled_obj = scurve_model_obj$nldr_scaled_obj, b1 = 5, q = 0.1)
+#' gen_centroids(nldr_scaled_obj = scurve_model_obj$nldr_scaled_obj, b1 = 30, q = 0.1)
 #'
 #' @export
-gen_centroids <- function(nldr_scaled_obj, b1 = 5, q = 0.1){
+gen_centroids <- function(nldr_scaled_obj, b1 = 30, q = 0.1){
 
   ## To check whether b2 greater than 2
   if (b1 < 2) {
@@ -210,10 +210,10 @@ group_hex_pts <- function(scaled_nldr_hexid) {
 #'
 #'
 #' @examples
-#' hex_binning(nldr_scaled_obj = scurve_model_obj$nldr_scaled_obj, b1 = 5, q = 0.1)
+#' hex_binning(nldr_scaled_obj = scurve_model_obj$nldr_scaled_obj, b1 = 30, q = 0.1)
 #'
 #' @export
-hex_binning <- function(nldr_scaled_obj, b1 = 5, q = 0.1) {
+hex_binning <- function(nldr_scaled_obj, b1 = 30, q = 0.1) {
 
   scaled_nldr <- nldr_scaled_obj$scaled_nldr
 

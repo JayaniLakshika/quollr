@@ -21,11 +21,11 @@
 #' @importFrom stats quantile
 #'
 #' @examples
-#' fit_highd_model(highd_data = scurve, nldr_data = scurve_umap, b1 = 4,
+#' fit_highd_model(highd_data = scurve, nldr_data = scurve_umap, b1 = 30,
 #' q = 0.1, hd_thresh = 5)
 #'
 #' @export
-fit_highd_model <- function(highd_data, nldr_data, b1 = 4, q = 0.1,
+fit_highd_model <- function(highd_data, nldr_data, b1 = 30, q = 0.1,
                             hd_thresh = 5) {
 
   ## To pre-process the data

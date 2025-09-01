@@ -4,7 +4,7 @@
 \alias{find_low_dens_hex}
 \title{Find low-density Hexagons}
 \usage{
-find_low_dens_hex(model_2d, b1 = 5, md_thresh = 0.05)
+find_low_dens_hex(model_2d, b1 = 30, md_thresh = 0.05)
 }
 \arguments{
 \item{model_2d}{The tibble that contains all hexagonal bin centroids.}
@@ -21,7 +21,7 @@ This function identifies hexagons with low density based on the mean density
 of their neighboring hexagons.
 }
 \examples{
-find_low_dens_hex(model_2d = scurve_model_obj$model_2d, b1 = 5,
+find_low_dens_hex(model_2d = scurve_model_obj$model_2d, b1 = 30,
 md_thresh = 0.05)
 
 }

@@ -64,7 +64,7 @@ glance <- function(x, ...) {
 #'
 #' @examples
 #' # Assuming 'fit' is a hex_model object and 'scurve' contains the original data:
-#' fit <- fit_highd_model(highd_data = scurve, nldr_data = scurve_umap, b1 = 4,
+#' fit <- fit_highd_model(highd_data = scurve, nldr_data = scurve_umap, b1 = 30,
 #' q = 0.1, hd_thresh = 5)
 #' glance(fit, highd_data = scurve)
 #'
@@ -123,7 +123,7 @@ augment <- function(x, ...) {
 #'
 #' @examples
 #' # Assuming 'fit' is a highd_vis_model object and 'scurve' contains the original data:
-#' fit <- fit_highd_model(highd_data = scurve, nldr_data = scurve_umap, b1 = 4,
+#' fit <- fit_highd_model(highd_data = scurve, nldr_data = scurve_umap, b1 = 30,
 #' q = 0.1, hd_thresh = 5)
 #' augment(fit, highd_data = scurve)
 #'

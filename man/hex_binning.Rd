@@ -4,7 +4,7 @@
 \alias{hex_binning}
 \title{Hexagonal binning}
 \usage{
-hex_binning(nldr_scaled_obj, b1 = 5, q = 0.1)
+hex_binning(nldr_scaled_obj, b1 = 30, q = 0.1)
 }
 \arguments{
 \item{nldr_scaled_obj}{A list of a tibble contains scaled first and second columns
@@ -29,6 +29,6 @@ and points within each hexagon (\code{pts_bins}).
 This function generates the hexagonal object.
 }
 \examples{
-hex_binning(nldr_scaled_obj = scurve_model_obj$nldr_scaled_obj, b1 = 5, q = 0.1)
+hex_binning(nldr_scaled_obj = scurve_model_obj$nldr_scaled_obj, b1 = 30, q = 0.1)
 
 }
