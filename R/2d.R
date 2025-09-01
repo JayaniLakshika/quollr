@@ -249,7 +249,7 @@ hex_binning <- function(nldr_scaled_obj, b1 = 30, q = 0.1) {
   std_df <- compute_std_counts(scaled_nldr_hexid = nldr_hex_id)
 
   ## To find which points are within each hexagon
-  pts_df <- find_pts(scaled_nldr_hexid = nldr_hex_id)
+  pts_df <- group_hex_pts(scaled_nldr_hexid = nldr_hex_id)
 
   ## To generate the object of hexagon info
   hex_bin_obj <- list(a1 = a1,

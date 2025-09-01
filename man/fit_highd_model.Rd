@@ -4,7 +4,7 @@
 \alias{fit_highd_model}
 \title{Construct the 2-D model and lift into high-dimensions}
 \usage{
-fit_highd_model(highd_data, nldr_data, b1 = 30, q = 0.1, hd_thresh = 5)
+fit_highd_model(highd_data, nldr_data, b1 = 30, q = 0.1, hd_thresh = 0)
 }
 \arguments{
 \item{highd_data}{A tibble that contains the high-dimensional data with a unique identifier.}

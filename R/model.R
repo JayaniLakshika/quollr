@@ -22,11 +22,11 @@
 #'
 #' @examples
 #' fit_highd_model(highd_data = scurve, nldr_data = scurve_umap, b1 = 30,
-#' q = 0.1, hd_thresh = 5)
+#' q = 0.1, hd_thresh = 0)
 #'
 #' @export
 fit_highd_model <- function(highd_data, nldr_data, b1 = 30, q = 0.1,
-                            hd_thresh = 5) {
+                            hd_thresh = 0) {
 
   ## To pre-process the data
   nldr_scaled_obj <- gen_scaled_data(nldr_data = nldr_data)
