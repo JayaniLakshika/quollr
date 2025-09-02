@@ -527,8 +527,8 @@ update_trimesh_index <- function(trimesh_data) {
   id_map <- setNames(seq_along(unique_values), unique_values)
 
   # Vectorized replacement using the map
-  trimesh_data$from <- id_map[as.character(trimesh_data$from)]
-  trimesh_data$to   <- id_map[as.character(trimesh_data$to)]
+  trimesh_data$from_reindexed <- id_map[as.character(trimesh_data$from)]
+  trimesh_data$to_reindexed   <- id_map[as.character(trimesh_data$to)]
 
   return(trimesh_data)
 

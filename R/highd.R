@@ -130,8 +130,8 @@ show_langevitour <- function(point_data, edge_data,
     dplyr::filter(type == "model") ## High-d model
 
   langevitour::langevitour(point_data[1:(length(point_data)-1)],
-                           lineFrom = edge_data$from,
-                           lineTo = edge_data$to,
+                           lineFrom = edge_data$from_reindexed,
+                           lineTo = edge_data$to_reindexed,
                            group = point_data$type,
                            pointSize = append(rep(point_sizes[1], NROW(df_b)),
                                               rep(point_sizes[2], NROW(df))),

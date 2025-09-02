@@ -52,7 +52,8 @@ fit_highd_model <- function(highd_data, nldr_data, b1 = 30, q = 0.1,
 
   ## averaged high-D data
   nldr_df_with_hex_id <- hb_obj$data_hb_id
-  model_highd <- avg_highd_data(highd_data = highd_data, scaled_nldr_hexid = nldr_df_with_hex_id)
+  model_highd <- avg_highd_data(highd_data = highd_data,
+                                scaled_nldr_hexid = nldr_df_with_hex_id)
 
   ## To extract high-densed bins
   model_2d <- df_bin_centroids |>

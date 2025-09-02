@@ -115,8 +115,8 @@ show_link_plots <- function(point_data, edge_data,
 
 
   langevitour_output <- langevitour::langevitour(point_data[1:num_highd_col],
-                                                 lineFrom = edge_data$from,
-                                                 lineTo = edge_data$to,
+                                                 lineFrom = edge_data$from_reindexed,
+                                                 lineTo = edge_data$to_reindexed,
                                                  group = point_data$type,
                                                  pointSize = append(rep(point_sizes[1], NROW(df_b)),
                                                                     rep(point_sizes[2], NROW(df_all))),
@@ -300,8 +300,8 @@ show_error_link_plots <- function(point_data, edge_data,
 
 
   langevitour_output <- langevitour::langevitour(point_data[1:num_highd_col],
-                                                 lineFrom = edge_data$from,
-                                                 lineTo = edge_data$to,
+                                                 lineFrom = edge_data$from_reindexed,
+                                                 lineTo = edge_data$to_reindexed,
                                                  group = point_data$type,
                                                  pointSize = append(rep(point_sizes[1], NROW(df_b)),
                                                                     rep(point_sizes[2], NROW(df_all))),
