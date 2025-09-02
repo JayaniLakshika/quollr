@@ -32,6 +32,10 @@ gen_scaled_data <- function(nldr_data) {
   # Recombine with original data (if there are other columns)
   nldr_data[, 1:2] <- mat
 
-  return(list(scaled_nldr = nldr_data, lim1 = lim1, lim2 = lim2))
+  # Add ID for scaled nldr data
+  scaled_nldr_data <- tibble::as_tibble(mat) |>
+    dplyr::mutate(ID = dplyr::row_number())
+
+  return(list(scaled_nldr = scaled_nldr_data, lim1 = lim1, lim2 = lim2))
 }
 

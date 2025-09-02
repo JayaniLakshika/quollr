@@ -32,6 +32,6 @@ removal of low-density hexagons, and averaging of high-dimensional data.
 }
 \examples{
 fit_highd_model(highd_data = scurve, nldr_data = scurve_umap, b1 = 30,
-q = 0.1, hd_thresh = 5)
+q = 0.1, hd_thresh = 0)
 
 }
