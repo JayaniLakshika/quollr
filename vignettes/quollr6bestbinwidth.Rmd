@@ -1,0 +1,78 @@
+---
+title: "6. Selecting the optimal bin width"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{6. Selecting the optimal bin width}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  message = FALSE,
+  warning = FALSE
+)
+```
+
+```{r setup}
+library(quollr)
+library(dplyr)
+library(ggplot2)
+
+set.seed(20240110)
+```
+
+We demonstrate how to identify the optimal bin width for hexagonal binning in the 2-D embedding space. Selecting an appropriate bin width is crucial for balancing model complexity and prediction accuracy when comparing structures between high-dimensional data and their 2-D layout.
+
+We begin by computing model errors across a range of bin width values using the `gen_diffbin1_errors()` function. This function fits models for multiple bin widths and returns root mean squared error (RMSE) values for each configuration.
+
+```{r}
+
+error_df_all <- gen_diffbin1_errors(highd_data = scurve, 
+                                    nldr_data = scurve_umap)
+
+error_df_all <- error_df_all |>
+  mutate(a1 = round(a1, 2)) |>
+  filter(b1 >= 5) |>
+  group_by(a1) |>
+  filter(RMSE == min(RMSE)) |>
+  ungroup()
+```
+
+We round the bin width values (`a1`), filter for sufficient bin resolution (`b1 >= 5`), and select the configuration with the lowest RMSE for each unique bin width.
+
+```{r}
+error_df_all |>
+  arrange(-a1) |>
+  head(5)
+```
+
+The plot below shows the relationship between bin width (`a1`) and RMSE. The goal is to identify a bin width that minimizes RMSE while avoiding overly coarse or fine binning.
+
+```{r, fig.alt="RMSE Vs binw idths."}
+#| fig-height: 4
+#| fig-width: 6
+#| out-width: 100%
+
+ggplot(error_df_all,
+         aes(x = a1,
+             y = RMSE)) +
+    geom_point(size = 0.8) +
+    geom_line(linewidth = 0.3) +
+    ylab("RMSE") +
+    xlab(expression(paste("binwidth (", a[1], ")"))) +
+    theme_minimal() +
+    theme(panel.border = element_rect(fill = 'transparent'),
+          plot.title = element_text(size = 12, hjust = 0.5, vjust = -0.5),
+          axis.ticks.x = element_line(),
+          axis.ticks.y = element_line(),
+          legend.position = "none",
+          axis.text.x = element_text(size = 7),
+          axis.text.y = element_text(size = 7),
+          axis.title.x = element_text(size = 7),
+          axis.title.y = element_text(size = 7))
+
+```
+
