@@ -35,8 +35,8 @@ reference:
 - title: "2-D model construction"
   desc: These are to construct the 2-D model.
   contents:
-  - extract_hexbin_centroids
-  - extract_hexbin_mean
+  - merge_hexbin_centroids
+  - merge_hexbin_mean
   - tri_bin_centroids
   - gen_edges
   - update_trimesh_index
@@ -57,8 +57,10 @@ reference:
   desc: These are to obtain model summaries.
   contents:
   - glance
+  - glance.highd_vis_model
   - predict_emb
   - augment
+  - augment.highd_vis_model
   - gen_diffbin1_errors
   - plot_rmse_layouts
 - title: "2-D visualisation"
@@ -91,7 +93,7 @@ reference:
 - title: "Additional"
   desc: These are additional functionalities.
   contents:
-  - find_pts
+  - group_hex_pts
   - find_non_empty_bins
   - gen_design
   - quad

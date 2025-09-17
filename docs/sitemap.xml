@@ -33,6 +33,7 @@
 <url><loc>https://jayanilakshika.github.io/quollr/reference/GeomHexgrid.html</loc></url>
 <url><loc>https://jayanilakshika.github.io/quollr/reference/GeomTrimesh.html</loc></url>
 <url><loc>https://jayanilakshika.github.io/quollr/reference/assign_data.html</loc></url>
+<url><loc>https://jayanilakshika.github.io/quollr/reference/augment.highd_vis_model.html</loc></url>
 <url><loc>https://jayanilakshika.github.io/quollr/reference/augment.html</loc></url>
 <url><loc>https://jayanilakshika.github.io/quollr/reference/avg_highD_data.html</loc></url>
 <url><loc>https://jayanilakshika.github.io/quollr/reference/cal_2D_dist.html</loc></url>
@@ -85,11 +86,15 @@
 <url><loc>https://jayanilakshika.github.io/quollr/reference/geom_trimesh.html</loc></url>
 <url><loc>https://jayanilakshika.github.io/quollr/reference/get_min_indices.html</loc></url>
 <url><loc>https://jayanilakshika.github.io/quollr/reference/get_projection.html</loc></url>
+<url><loc>https://jayanilakshika.github.io/quollr/reference/glance.highd_vis_model.html</loc></url>
 <url><loc>https://jayanilakshika.github.io/quollr/reference/glance.html</loc></url>
+<url><loc>https://jayanilakshika.github.io/quollr/reference/group_hex_pts.html</loc></url>
 <url><loc>https://jayanilakshika.github.io/quollr/reference/hex_binning.html</loc></url>
 <url><loc>https://jayanilakshika.github.io/quollr/reference/index.html</loc></url>
 <url><loc>https://jayanilakshika.github.io/quollr/reference/map_hexbin_id.html</loc></url>
 <url><loc>https://jayanilakshika.github.io/quollr/reference/map_polygon_id.html</loc></url>
+<url><loc>https://jayanilakshika.github.io/quollr/reference/merge_hexbin_centroids.html</loc></url>
+<url><loc>https://jayanilakshika.github.io/quollr/reference/merge_hexbin_mean.html</loc></url>
 <url><loc>https://jayanilakshika.github.io/quollr/reference/plot_proj.html</loc></url>
 <url><loc>https://jayanilakshika.github.io/quollr/reference/plot_rmse_layouts.html</loc></url>
 <url><loc>https://jayanilakshika.github.io/quollr/reference/predict_2d_embeddings.html</loc></url>

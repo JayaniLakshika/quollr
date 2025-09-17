@@ -28,7 +28,7 @@ library(dplyr)
 By passing the preprocessed 2-D embedding data and hexagonal grid configurations, you can obtain the hexagonal binning information like centroid coordinates, hexagonal polygon coordinates, the standardise counts within each hexagon etc.  
 
 ```{r}
-hb_obj <- hex_binning(nldr_obj = scurve_model_obj$nldr_obj, b1 = 5, q = 0.1)
+hb_obj <- hex_binning(nldr_scaled_obj = scurve_model_obj$nldr_scaled_obj, b1 = 15, q = 0.1)
 ```
 
 ```{r}
@@ -42,8 +42,8 @@ glimpse(hex_grid)
 
 ## To obtain the standardise counts within hexbins
 counts_df <- hb_obj$std_cts
-df_bin_centroids <- extract_hexbin_centroids(centroids_data = all_centroids_df, 
-                                             counts_data = counts_df)
+df_bin_centroids <- merge_hexbin_centroids(centroids_data = all_centroids_df, 
+                                           counts_data = counts_df)
 ```
 
 ```{r, fig.alt="Grid with hexagon centroids."}
@@ -63,7 +63,7 @@ ggplot(data = hex_grid, aes(x = x, y = y)) +
 ```
 
 ```{r, fig.alt="Grid with hexagons overlayed data."}
-umap_scaled <- scurve_model_obj$nldr_obj$scaled_nldr
+umap_scaled <- scurve_model_obj$nldr_scaled_obj$scaled_nldr
 
 ggplot(data = hex_grid, aes(x = x, y = y)) + 
   geom_polygon(fill = "white", color = "black", aes(group = h)) +

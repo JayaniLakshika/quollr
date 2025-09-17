@@ -11,7 +11,7 @@ test_that("glance() works", {
   model_fit <- fit_highd_model(highd_data = scurve,
                                nldr_data = scurve_umap,
                                b1 = 4, q = 0.1,
-                               benchmark_highdens = 5)
+                               hd_thresh = 5)
 
   testthat::expect_snapshot(glance(model_object = model_fit,
                                    highd_data = scurve))
@@ -24,7 +24,7 @@ test_that("augment() works", {
   model_fit <- fit_highd_model(highd_data = scurve,
                                nldr_data = scurve_umap,
                                b1 = 4, q = 0.1,
-                               benchmark_highdens = 5)
+                               hd_thresh = 5)
 
   testthat::expect_snapshot(augment(model_object = model_fit,
                                     highd_data = scurve))

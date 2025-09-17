@@ -25,7 +25,7 @@ This provides a quick introduction. We'll walk through fitting models to high-di
 model <- fit_highd_model(highd_data = scurve, 
                          nldr_data = scurve_umap, 
                          b1 = 4, q = 0.1, 
-                         benchmark_highdens = 5)
+                         hd_thresh = 5)
 ```
 
 The output of `fit_highd_model()` is a named list containing several components. Let’s take a quick look at each:

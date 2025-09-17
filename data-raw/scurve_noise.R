@@ -168,7 +168,7 @@ scurve_model_obj <- fit_highd_model(
   highd_data = scurve,
   nldr_data = scurve_umap,
   b1 = 15,
-  benchmark_highd = 10)
+  hd_thresh = 0)
 
 usethis::use_data(scurve_model_obj, overwrite = TRUE)
 
