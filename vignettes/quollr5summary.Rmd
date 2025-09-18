@@ -33,7 +33,7 @@ Begin by fitting a high-dimensional model and its corresponding 2-D model using 
 model <- fit_highd_model(
   highd_data = scurve, 
   nldr_data = scurve_umap, 
-  b1 = 15, 
+  b1 = 21, 
   q = 0.1, 
   hd_thresh = 0
 )

@@ -42,7 +42,9 @@ To begin, we preprocess the 2-D embedding and create hexagonal bins over the lay
 nldr_obj <- gen_scaled_data(nldr_data = scurve_umap)
 
 ## Obtain the hexbin object
-hb_obj <- hex_binning(nldr_scaled_obj = scurve_model_obj$nldr_scaled_obj, b1 = 15, q = 0.1)
+hb_obj <- hex_binning(
+  nldr_scaled_obj = scurve_model_obj$nldr_scaled_obj, 
+  b1 = 21, q = 0.1)
 
 all_centroids_df <- hb_obj$centroids
 counts_df <- hb_obj$std_cts
