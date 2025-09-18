@@ -1,3 +1,5 @@
+set.seed(20240110)
+
 test_that("compute_mean_density_hex() works", {
 
   testthat::expect_snapshot(compute_mean_density_hex(model_2d = scurve_model_obj$model_2d,

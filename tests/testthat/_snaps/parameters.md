@@ -2,44 +2,47 @@
 
     Code
       compute_mean_density_hex(model_2d = scurve_model_obj$model_2d, b1 = 4)
-    Condition
-      Warning in `compute_mean_density_hex()`:
-      There are hexagonal bins that don't have any neighbouring bins.
     Output
-      # A tibble: 26 x 2
+      # A tibble: 137 x 2
          hb_id mean_density
          <int>        <dbl>
-       1    42     NaN     
-       2    49       0.012 
-       3    52       0.012 
-       4    53       0.0113
-       5    56       0.0115
-       6    57       0.0117
-       7    67     NaN     
-       8    69       0.011 
-       9    70       0.014 
-      10    86     NaN     
-      # i 16 more rows
+       1    34      0.006  
+       2    35      0.0045 
+       3    36      0.00667
+       4    37      0.006  
+       5    38      0.007  
+       6    41      0.00933
+       7    42      0.004  
+       8    49      0.00733
+       9    50      0.0055 
+      10    51      0.0095 
+      # i 127 more rows
 
 # find_low_dens_hex() works
 
     Code
-      find_low_dens_hex(model_2d = scurve_model_obj$model_2d, b1 = 4,
-      benchmark_mean_dens = 0.05)
-    Condition
-      Warning in `compute_mean_density_hex()`:
-      There are hexagonal bins that don't have any neighbouring bins.
+      find_low_dens_hex(model_2d = scurve_model_obj$model_2d, b1 = 4, md_thresh = 0.05)
     Output
-       [1]  49  52  53  56  57  69  70 197 200 202 205 222 227 232 258 259
+        [1]  34  35  36  37  38  41  42  49  50  51  52  53  54  55  56  57  64  65
+       [19]  66  67  68  69  70  71  72  73  78  79  80  81  82  83  84  85  86  87
+       [37]  88  94  95  96  97 100 101 102 103 104 109 110 111 115 116 117 118 130
+       [55] 131 132 133 134 145 146 147 148 149 160 161 162 163 164 173 174 175 176
+       [73] 177 178 184 185 186 187 188 189 190 191 192 193 197 198 199 200 201 202
+       [91] 203 204 205 206 207 212 213 214 215 216 217 218 219 220 221 222 227 228
+      [109] 229 230 231 232 233 234 235 236 242 243 244 245 246 247 248 249 250 257
+      [127] 258 259 260 261 262 263 273 274 275 276 277
 
 ---
 
     Code
-      find_low_dens_hex(model_2d = scurve_model_obj$model_2d, b1 = 4,
-      benchmark_mean_dens = 0.1)
-    Condition
-      Warning in `compute_mean_density_hex()`:
-      There are hexagonal bins that don't have any neighbouring bins.
+      find_low_dens_hex(model_2d = scurve_model_obj$model_2d, b1 = 4, md_thresh = 0.1)
     Output
-       [1]  49  52  53  56  57  69  70 197 200 202 205 222 227 232 258 259
+        [1]  34  35  36  37  38  41  42  49  50  51  52  53  54  55  56  57  64  65
+       [19]  66  67  68  69  70  71  72  73  78  79  80  81  82  83  84  85  86  87
+       [37]  88  94  95  96  97 100 101 102 103 104 109 110 111 115 116 117 118 130
+       [55] 131 132 133 134 145 146 147 148 149 160 161 162 163 164 173 174 175 176
+       [73] 177 178 184 185 186 187 188 189 190 191 192 193 197 198 199 200 201 202
+       [91] 203 204 205 206 207 212 213 214 215 216 217 218 219 220 221 222 227 228
+      [109] 229 230 231 232 233 234 235 236 242 243 244 245 246 247 248 249 250 257
+      [127] 258 259 260 261 262 263 273 274 275 276 277
 

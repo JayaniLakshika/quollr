@@ -1,3 +1,5 @@
+set.seed(20240110)
+
 test_that("avg_highd_data() works", {
 
   umap_with_hb_id <- scurve_model_obj$hb_obj$data_hb_id

@@ -1,3 +1,5 @@
+set.seed(20240110)
+
 test_that("predict_emb() works", {
 
   testthat::expect_snapshot(predict_emb(highd_data = scurve,

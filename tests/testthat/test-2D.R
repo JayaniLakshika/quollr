@@ -1,6 +1,7 @@
+set.seed(20240110)
 test_that("gen_centroids() works", {
 
-  all_centroids_df <- gen_centroids(nldr_obj = scurve_model_obj$nldr_obj,
+  all_centroids_df <- gen_centroids(nldr_scaled_obj = scurve_model_obj$nldr_scaled_obj,
                                     b1 = 4, q = 0.1)
 
   testthat::expect_snapshot(all_centroids_df)
@@ -20,7 +21,7 @@ test_that("gen_hex_coord() works", {
 test_that("assign_data() works", {
 
   all_centroids_df <- scurve_model_obj$hb_obj$centroids
-  umap_with_hb_id <- assign_data(nldr_obj = scurve_model_obj$nldr_obj,
+  umap_with_hb_id <- assign_data(nldr_scaled_obj = scurve_model_obj$nldr_scaled_obj,
                                  centroids_data = all_centroids_df)
 
   testthat::expect_snapshot(umap_with_hb_id)
@@ -46,17 +47,17 @@ test_that("group_hex_pts() works", {
 
 test_that("hex_binning() works", {
 
-  testthat::expect_snapshot(hex_binning(nldr_obj = scurve_model_obj$nldr_obj,
+  testthat::expect_snapshot(hex_binning(nldr_scaled_obj = scurve_model_obj$nldr_scaled_obj,
                                         b1 = 4, q = 0.1))
 
 })
 
 test_that("find_non_empty_bins() works", {
 
-  testthat::expect_snapshot(find_non_empty_bins(nldr_obj = scurve_model_obj$nldr_obj,
+  testthat::expect_snapshot(find_non_empty_bins(nldr_scaled_obj = scurve_model_obj$nldr_scaled_obj,
                                                 m = 5))
 
-  testthat::expect_error(find_non_empty_bins(nldr_obj = scurve_model_obj$nldr_obj,
+  testthat::expect_error(find_non_empty_bins(nldr_scaled_obj = scurve_model_obj$nldr_scaled_obj,
                                              m = 21))
 
 })

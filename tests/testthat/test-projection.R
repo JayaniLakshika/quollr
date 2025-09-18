@@ -1,3 +1,5 @@
+set.seed(20240110)
+
 test_that("gen_axes() works", {
 
   projection_df <- cbind(

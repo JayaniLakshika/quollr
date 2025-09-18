@@ -1,3 +1,5 @@
+set.seed(20240110)
+
 test_that("comb_all_data_model() works", {
 
   testthat::expect_snapshot(comb_all_data_model(highd_data = scurve,

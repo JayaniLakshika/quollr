@@ -2,12 +2,12 @@
 
     Code
       fit_highd_model(highd_data = scurve, nldr_data = scurve_umap, b1 = 4, q = 0.1,
-        benchmark_highdens = 5)
+        hd_thresh = 5)
     Message
       v Model generated successfully!!!
     Output
-      $nldr_obj
-      $nldr_obj$scaled_nldr
+      $nldr_scaled_obj
+      $nldr_scaled_obj$scaled_nldr
       # A tibble: 1,000 x 3
           emb1  emb2    ID
          <dbl> <dbl> <int>
@@ -23,27 +23,27 @@
       10 0.932 0.410    10
       # i 990 more rows
       
-      $nldr_obj$lim1
+      $nldr_scaled_obj$lim1
       [1] -9.146398  8.552211
       
-      $nldr_obj$lim2
+      $nldr_scaled_obj$lim2
       [1] -10.36686  10.10691
       
       
       $hb_obj
-      $hb_obj$a1
+      $a1
       [1] 0.3962013
       
-      $hb_obj$a2
+      $a2
       [1] 0.3431204
       
-      $hb_obj$bins
+      $bins
       [1] 4 5
       
-      $hb_obj$start_point
+      $start_point
       [1] -0.1000000 -0.1156801
       
-      $hb_obj$centroids
+      $centroids
       # A tibble: 20 x 3
              h     c_x    c_y
          <int>   <dbl>  <dbl>
@@ -68,7 +68,7 @@
       19    19  0.692   1.26 
       20    20  1.09    1.26 
       
-      $hb_obj$hex_poly
+      $hex_poly
            h           x            y
       1    1 -0.10000000  0.113066785
       2    1 -0.29810065 -0.001306679
@@ -191,7 +191,7 @@
       119 20  1.28670455  1.142427959
       120 20  1.28670455  1.371174887
       
-      $hb_obj$data_hb_id
+      $data_hb_id
       # A tibble: 1,000 x 4
           emb1  emb2    ID     h
          <dbl> <dbl> <int> <int>
@@ -207,7 +207,7 @@
       10 0.932 0.410    10     7
       # i 990 more rows
       
-      $hb_obj$std_cts
+      $std_cts
       # A tibble: 13 x 3
              h   n_h   w_h
          <int> <int> <dbl>
@@ -225,13 +225,13 @@
       12    17     4 0.004
       13    18    44 0.044
       
-      $hb_obj$b
+      $b
       [1] 20
       
-      $hb_obj$m
+      $m
       [1] 13
       
-      $hb_obj$pts_bins
+      $pts_bins
       # A tibble: 13 x 2
              h pts_list   
          <int> <list>     
@@ -249,6 +249,8 @@
       12    17 <int [4]>  
       13    18 <int [44]> 
       
+      attr(,"class")
+      [1] "hex_bin_obj"
       
       $model_highd
       # A tibble: 12 x 8
@@ -283,20 +285,21 @@
       12 18 0.29620130  1.2568014  44 0.044
       
       $trimesh_data
-      # A tibble: 23 x 8
-          from    to x_from y_from  x_to  y_to from_count to_count
-         <int> <int>  <dbl>  <dbl> <dbl> <dbl>      <dbl>    <dbl>
-       1     3     4 0.0981  0.227 0.494 0.227         75      137
-       2     3     6 0.0981  0.227 0.296 0.571         75       12
-       3     2     4 0.692  -0.116 0.494 0.227         14      137
-       4     4     5 0.494   0.227 0.891 0.227        137      132
-       5     4     7 0.494   0.227 0.692 0.571        137      132
-       6     6    10 0.296   0.571 0.494 0.914         12      176
-       7     6     7 0.296   0.571 0.692 0.571         12      132
-       8     7     8 0.692   0.571 1.09  0.571        132       37
-       9     7    11 0.692   0.571 0.891 0.914        132       67
-      10     9    12 0.0981  0.914 0.296 1.26         140       44
+      # A tibble: 23 x 10
+          from    to x_from y_from  x_to  y_to from_count to_count from_reindexed
+         <int> <int>  <dbl>  <dbl> <dbl> <dbl>      <dbl>    <dbl>          <int>
+       1     5     6 0.0981  0.227 0.494 0.227         75      137              3
+       2     5    10 0.0981  0.227 0.296 0.571         75       12              3
+       3     3     6 0.692  -0.116 0.494 0.227         14      137              2
+       4     6     7 0.494   0.227 0.891 0.227        137      132              4
+       5     6    11 0.494   0.227 0.692 0.571        137      132              4
+       6    10    14 0.296   0.571 0.494 0.914         12      176              6
+       7    10    11 0.296   0.571 0.692 0.571         12      132              6
+       8    11    12 0.692   0.571 1.09  0.571        132       37              7
+       9    11    15 0.692   0.571 0.891 0.914        132       67              7
+      10    13    18 0.0981  0.914 0.296 1.26         140       44              9
       # i 13 more rows
+      # i 1 more variable: to_reindexed <int>
       
       attr(,"class")
       [1] "highd_vis_model"
@@ -305,12 +308,12 @@
 
     Code
       fit_highd_model(highd_data = scurve, nldr_data = scurve_umap, b1 = 15, q = 0.1,
-        benchmark_highdens = 5)
+        hd_thresh = 5)
     Message
       v Model generated successfully!!!
     Output
-      $nldr_obj
-      $nldr_obj$scaled_nldr
+      $nldr_scaled_obj
+      $nldr_scaled_obj$scaled_nldr
       # A tibble: 1,000 x 3
           emb1  emb2    ID
          <dbl> <dbl> <int>
@@ -326,27 +329,27 @@
       10 0.932 0.410    10
       # i 990 more rows
       
-      $nldr_obj$lim1
+      $nldr_scaled_obj$lim1
       [1] -9.146398  8.552211
       
-      $nldr_obj$lim2
+      $nldr_scaled_obj$lim2
       [1] -10.36686  10.10691
       
       
       $hb_obj
-      $hb_obj$a1
+      $a1
       [1] 0.0834108
       
-      $hb_obj$a2
+      $a2
       [1] 0.07223587
       
-      $hb_obj$bins
+      $bins
       [1] 15 20
       
-      $hb_obj$start_point
+      $start_point
       [1] -0.1000000 -0.1156801
       
-      $hb_obj$centroids
+      $centroids
       # A tibble: 300 x 3
              h     c_x    c_y
          <int>   <dbl>  <dbl>
@@ -362,7 +365,7 @@
       10    10  0.651  -0.116
       # i 290 more rows
       
-      $hb_obj$hex_poly
+      $hex_poly
              h          x            y
       1      1 -0.1000000 -0.067522894
       2      1 -0.1417054 -0.091601518
@@ -2165,7 +2168,7 @@
       1799 300  1.1511620  1.232722799
       1800 300  1.1511620  1.280880047
       
-      $hb_obj$data_hb_id
+      $data_hb_id
       # A tibble: 1,000 x 4
           emb1  emb2    ID     h
          <dbl> <dbl> <int> <int>
@@ -2181,7 +2184,7 @@
       10 0.932 0.410    10   118
       # i 990 more rows
       
-      $hb_obj$std_cts
+      $std_cts
       # A tibble: 137 x 3
              h   n_h   w_h
          <int> <int> <dbl>
@@ -2197,13 +2200,13 @@
       10    51     4 0.004
       # i 127 more rows
       
-      $hb_obj$b
+      $b
       [1] 300
       
-      $hb_obj$m
+      $m
       [1] 137
       
-      $hb_obj$pts_bins
+      $pts_bins
       # A tibble: 137 x 2
              h pts_list  
          <int> <list>    
@@ -2219,6 +2222,8 @@
       10    51 <int [4]> 
       # i 127 more rows
       
+      attr(,"class")
+      [1] "hex_bin_obj"
       
       $model_highd
       # A tibble: 92 x 8
@@ -2332,20 +2337,21 @@
       92 263 0.5255810 1.1123297  10 0.010
       
       $trimesh_data
-      # A tibble: 172 x 8
-          from    to x_from y_from  x_to   y_to from_count to_count
-         <int> <int>  <dbl>  <dbl> <dbl>  <dbl>      <dbl>    <dbl>
-       1     1     5  0.234 0.0288 0.192 0.101          10       11
-       2     5    12  0.192 0.101  0.234 0.173          11       10
-       3     1     2  0.234 0.0288 0.317 0.0288         10        8
-       4     1     6  0.234 0.0288 0.275 0.101          10        9
-       5     2     6  0.317 0.0288 0.275 0.101           8        9
-       6    12    13  0.234 0.173  0.317 0.173          10       10
-       7     6    12  0.275 0.101  0.234 0.173           9       10
-       8     2     3  0.317 0.0288 0.400 0.0288          8        8
-       9    13    21  0.317 0.173  0.359 0.245          10        8
-      10    13    14  0.317 0.173  0.400 0.173          10       11
+      # A tibble: 172 x 10
+          from    to x_from y_from  x_to   y_to from_count to_count from_reindexed
+         <int> <int>  <dbl>  <dbl> <dbl>  <dbl>      <dbl>    <dbl>          <int>
+       1    35    49  0.234 0.0288 0.192 0.101          10       11              1
+       2    49    65  0.192 0.101  0.234 0.173          11       10              5
+       3    35    36  0.234 0.0288 0.317 0.0288         10        8              1
+       4    35    50  0.234 0.0288 0.275 0.101          10        9              1
+       5    36    50  0.317 0.0288 0.275 0.101           8        9              2
+       6    65    66  0.234 0.173  0.317 0.173          10       10             12
+       7    50    65  0.275 0.101  0.234 0.173           9       10              6
+       8    36    37  0.317 0.0288 0.400 0.0288          8        8              2
+       9    66    81  0.317 0.173  0.359 0.245          10        8             13
+      10    66    67  0.317 0.173  0.400 0.173          10       11             13
       # i 162 more rows
+      # i 1 more variable: to_reindexed <int>
       
       attr(,"class")
       [1] "highd_vis_model"
