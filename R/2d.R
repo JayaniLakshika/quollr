@@ -53,10 +53,10 @@ gen_centroids <- function(nldr_scaled_obj, b1 = 30, q = 0.1){
   c_x_vec <- c(c_x_vec_odd, c_x_vec_even)
 
   # To compute vertical spacing
-  a2 <- sqrt(3) * a1/2
+  vs <- sqrt(3) * a1/2
 
   # Generate y-coordinate of centroids
-  c_y_vec <- seq(s2, by = a2, length.out = b2)
+  c_y_vec <- seq(s2, by = vs, length.out = b2)
   c_y <- rep(c_y_vec, each = b1)
 
   ## Do the number of belongs y axis is even or odd and adjust the x-coordinates

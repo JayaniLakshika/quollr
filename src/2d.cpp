@@ -13,10 +13,10 @@ DataFrame gen_hex_coord_cpp(IntegerVector hexID, NumericVector c_x, NumericVecto
 
   double dx = a1 / 2.0;
   double dy = a1 / sqrt(3.0);
-  double vs = a1 / (2.0 * sqrt(3.0));
+  double vf = a1 / (2.0 * sqrt(3.0));
 
   NumericVector x_add = NumericVector::create(0, -dx, -dx, 0, dx, dx);
-  NumericVector y_add = NumericVector::create(dy, vs, -vs, -dy, -vs, vs);
+  NumericVector y_add = NumericVector::create(dy, vf, -vf, -dy, -vf, vf);
 
   for (int i = 0; i < n; ++i) {
     double cx = c_x[i];
