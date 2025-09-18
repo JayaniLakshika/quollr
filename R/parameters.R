@@ -22,6 +22,10 @@ compute_mean_density_hex <- function(model_2d, b1 = 30) {
     stop("Number of bins along x axis is not defined.")
   }
 
+  ## Only take the hexagons which have the data
+  model_2d <- model_2d |>
+    dplyr::filter(w_h > 0)
+
   hexID_vec <- model_2d$h
 
   # To store mean densities of hexagons
