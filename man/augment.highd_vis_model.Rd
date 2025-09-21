@@ -4,10 +4,10 @@
 \alias{augment.highd_vis_model}
 \title{Augment Data with Predictions and Error Metrics for NLDR Models}
 \usage{
-\method{augment}{highd_vis_model}(model_object, highd_data, ...)
+\method{augment}{highd_vis_model}(x, highd_data, ...)
 }
 \arguments{
-\item{model_object}{An object of class \code{highd_vis_model} containing the model outputs.}
+\item{x}{An object of class \code{highd_vis_model} containing the model outputs.}
 
 \item{highd_data}{A data frame or tibble containing the original high-dimensional coordinates with an \code{ID} column.}
 
@@ -25,7 +25,7 @@ from a nonlinear dimension reduction (NLDR) model stored in a \code{highd_vis_mo
 # Assuming 'fit' is a highd_vis_model object and 'scurve' contains the original data:
 fit <- fit_highd_model(highd_data = scurve, nldr_data = scurve_umap, b1 = 30,
 q = 0.1, hd_thresh = 5)
-augment(fit, highd_data = scurve)
+augment(x = fit, highd_data = scurve)
 
 
 }

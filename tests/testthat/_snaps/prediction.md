@@ -22,7 +22,7 @@
 # glance() works
 
     Code
-      glance(model_object = model_fit, highd_data = scurve)
+      glance(x = model_fit, highd_data = scurve)
     Output
       # A tibble: 1 x 2
         Error  RMSE
@@ -32,7 +32,7 @@
 # augment() works
 
     Code
-      augment(model_object = model_fit, highd_data = scurve)
+      augment(x = model_fit, highd_data = scurve)
     Output
       # A tibble: 1,000 x 32
             ID      x1    x2       x3       x4       x5       x6        x7 pred_h

@@ -82,7 +82,7 @@ Use the `glance()` function to compute summary statistics that describe how well
 
 ```{r}
 glance(
-  model_object = scurve_model_obj,
+  x = scurve_model_obj,
   highd_data = scurve
 )
 ```
@@ -93,7 +93,7 @@ To obtain a detailed data frame that includes the high-dimensional observations,
   
 ```{r}
 augment(
-  model_object = scurve_model_obj,
+  x = scurve_model_obj,
   highd_data = scurve
 ) |>
   head(5)

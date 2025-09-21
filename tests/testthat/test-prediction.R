@@ -15,7 +15,7 @@ test_that("glance() works", {
                                b1 = 4, q = 0.1,
                                hd_thresh = 5)
 
-  testthat::expect_snapshot(glance(model_object = model_fit,
+  testthat::expect_snapshot(glance(x = model_fit,
                                    highd_data = scurve))
 
 })
@@ -28,7 +28,7 @@ test_that("augment() works", {
                                b1 = 4, q = 0.1,
                                hd_thresh = 5)
 
-  testthat::expect_snapshot(augment(model_object = model_fit,
+  testthat::expect_snapshot(augment(x = model_fit,
                                     highd_data = scurve))
 
 })

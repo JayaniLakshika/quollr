@@ -43,8 +43,7 @@ Imports:
     stats,
     tibble,
     tidyr,
-    tidyselect,
-    utils
+    tidyselect
 Suggests: 
     knitr,
     rmarkdown,
