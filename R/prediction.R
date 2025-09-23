@@ -59,8 +59,9 @@ glance <- function(x, ...) {
 #'
 #' @return A tibble contains Error, and MSE values.
 #'
-#' @importFrom dplyr left_join
+#' @importFrom dplyr left_join across group_by summarize n first
 #' @importFrom tibble tibble
+#' @importFrom tidyselect all_of
 #'
 #' @examples
 #' # Assuming 'fit' is a hex_model object and 'scurve' contains the original data:
@@ -90,7 +91,10 @@ glance.highd_vis_model <- function(x, highd_data, ...) {
   res <- compute_errors(as.matrix(prediction_df[, cols]),
                         as.matrix(prediction_df[, high_d_model_cols]))
 
-  tibble(Error = res$Error, RMSE = res$RMSE)
+  tibble(
+    Error = res$Error,
+    RMSE  = res$RMSE
+  )
 }
 
 #' S3 generic for augment
@@ -169,6 +173,7 @@ augment.highd_vis_model <- function(x, highd_data, ...) {
   abs_summary_df$row_wise_abs_error <- rowSums(abs_summary_df[, abs_error_cols])
 
   fit_data <- dplyr::bind_cols(prediction_df, summary_df, abs_summary_df)
+
   return(fit_data)
 
 }
