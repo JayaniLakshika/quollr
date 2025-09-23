@@ -1,0 +1,24 @@
+Version: 1.0
+ProjectId: 30a09adc-9940-4c02-8a23-1c1a43115795
+
+RestoreWorkspace: Default
+SaveWorkspace: Default
+AlwaysSaveHistory: Default
+
+EnableCodeIndexing: Yes
+UseSpacesForTab: Yes
+NumSpacesForTab: 2
+Encoding: UTF-8
+
+RnwWeave: Sweave
+LaTeX: pdfLaTeX
+
+AutoAppendNewline: Yes
+StripTrailingWhitespace: Yes
+
+BuildType: Package
+PackageUseDevtools: Yes
+PackagePath: /Users/jpiy0001/Desktop/PhD Monash research files/quollr
+PackageInstallArgs: --no-multiarch --with-keep.source
+PackageCheckArgs: --as-cran
+PackageRoxygenize: rd,collate,namespace,vignette
