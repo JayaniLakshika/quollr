@@ -214,6 +214,7 @@ quad <- function(a = 3, b = 2, c = -1)
 #' @param highd_data A tibble that contains the high-dimensional data with a unique identifier.
 #' @param nldr_data A tibble that contains the embedding with a unique identifier.
 #' @param hd_thresh (default: 1) A numeric value using to filter high-density hexagons.
+#' @param bin1_vec A numeric vector contains the range of b1 values.
 #'
 #' @return A tibble containing the augmented data with predictions,
 #' error metrics, and absolute error metrics.
@@ -224,7 +225,7 @@ quad <- function(a = 3, b = 2, c = -1)
 #' gen_diffbin1_errors(highd_data = scurve_sample, nldr_data = scurve_umap_sample)
 #'
 #' @export
-gen_diffbin1_errors <- function(highd_data, nldr_data, hd_thresh = 1) {
+gen_diffbin1_errors <- function(highd_data, nldr_data, hd_thresh = 1, bin1_vec = NULL) {
 
   nldr_scaled_obj <- gen_scaled_data(nldr_data = nldr_data)
   ## To compute the range
@@ -232,9 +233,12 @@ gen_diffbin1_errors <- function(highd_data, nldr_data, hd_thresh = 1) {
   lim2 <- nldr_scaled_obj$lim2
   r2 <- diff(lim2)/diff(lim1)
 
+  if (is.null(bin1_vec)) {
 
-  ## To initialize number of bins along the x-axis
-  bin1_vec <- 5:sqrt(NROW(highd_data)/r2)
+    ## To initialize number of bins along the x-axis
+    bin1_vec <- 5:sqrt(NROW(highd_data)/r2)
+
+  }
 
   bin_error_df <- data.frame(matrix(nrow = 0, ncol = 0))
 

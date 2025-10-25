@@ -4,7 +4,7 @@
 \alias{gen_diffbin1_errors}
 \title{Generate erros and MSE for different bin widths}
 \usage{
-gen_diffbin1_errors(highd_data, nldr_data, hd_thresh = 1)
+gen_diffbin1_errors(highd_data, nldr_data, hd_thresh = 1, bin1_vec = NULL)
 }
 \arguments{
 \item{highd_data}{A tibble that contains the high-dimensional data with a unique identifier.}
@@ -12,6 +12,8 @@ gen_diffbin1_errors(highd_data, nldr_data, hd_thresh = 1)
 \item{nldr_data}{A tibble that contains the embedding with a unique identifier.}
 
 \item{hd_thresh}{(default: 1) A numeric value using to filter high-density hexagons.}
+
+\item{bin1_vec}{A numeric vector contains the range of b1 values.}
 }
 \value{
 A tibble containing the augmented data with predictions,
