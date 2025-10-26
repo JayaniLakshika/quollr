@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">quollr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.10</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.15</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -83,9 +83,9 @@
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">20240110</span><span class="op">)</span></span></code></pre></div>
 <p>This illustrates how to compare multiple NLDR layouts and select the
-most appropriate one. The evaluation is typically based on Residual Mean
-Squared Error (RMSE), allowing you to assess the quality of different
-binning configurations or modeling strategies.</p>
+most appropriate one. The evaluation is typically based on hexbin error
+(HBE), allowing you to assess the quality of different binning
+configurations or modeling strategies.</p>
 <div class="section level2">
 <h2 id="step-1-generate-design-for-2-d-nldr-layouts">Step 1: Generate design for 2-D NLDR layouts<a class="anchor" aria-label="anchor" href="#step-1-generate-design-for-2-d-nldr-layouts"></a>
 </h2>
@@ -95,17 +95,16 @@ design defines the arrangement of 2-D NLDR layouts.</p>
 <code class="sourceCode R"><span><span class="va">design</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gen_design.html">gen_design</a></span><span class="op">(</span>n_right <span class="op">=</span> <span class="fl">4</span>, ncol_right <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="step-2-visualising-rmse-across-configurations">Step 2: Visualising RMSE across configurations<a class="anchor" aria-label="anchor" href="#step-2-visualising-rmse-across-configurations"></a>
+<h2 id="step-2-visualising-hbe-across-configurations">Step 2: Visualising HBE across configurations<a class="anchor" aria-label="anchor" href="#step-2-visualising-hbe-across-configurations"></a>
 </h2>
 <p>To visually compare multiple 2-D NLDR layouts, we use the
-<code><a href="../reference/plot_rmse_layouts.html">plot_rmse_layouts()</a></code> function. This function plots RMSE
-values against different bin width configurations along with 2-D NLDR
-layouts, making it easier to identify the best-performing model
-visually.</p>
+<code><a href="../reference/plot_hbe_layouts.html">plot_hbe_layouts()</a></code> function. This function plots HBE values
+against different bin width configurations along with 2-D NLDR layouts,
+making it easier to identify the best-performing model visually.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
-<span><span class="fu"><a href="../reference/plot_rmse_layouts.html">plot_rmse_layouts</a></span><span class="op">(</span>plots <span class="op">=</span> <span class="va">scurve_plts</span>, design <span class="op">=</span> <span class="va">design</span><span class="op">)</span></span></code></pre></div>
-<p><img src="quollr7bestfit_files/figure-html/unnamed-chunk-3-1.png" alt="RMSE Vs binw idths." width="100%"></p>
+<span><span class="fu"><a href="../reference/plot_hbe_layouts.html">plot_hbe_layouts</a></span><span class="op">(</span>plots <span class="op">=</span> <span class="va">scurve_plts</span>, design <span class="op">=</span> <span class="va">design</span><span class="op">)</span></span></code></pre></div>
+<p><img src="quollr7bestfit_files/figure-html/unnamed-chunk-3-1.png" alt="HBE Vs binwidths." width="100%"></p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

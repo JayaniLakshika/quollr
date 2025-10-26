@@ -25,7 +25,7 @@
       glance(x = model_fit, highd_data = scurve)
     Output
       # A tibble: 1 x 2
-        Error  RMSE
+        Error   HBE
         <dbl> <dbl>
       1  881. 0.590
 
@@ -86,7 +86,7 @@
       v Model generated successfully!!!
       v Model generated successfully!!!
     Output
-            Error      RMSE b1 b2    b   m   a1   a2       d_bar
+            Error       HBE b1 b2    b   m   a1   a2       d_bar
       1  628.8048 0.4098319  5  7   35  22 0.26 0.23 0.040914704
       2  562.7530 0.3672331  6  8   48  27 0.23 0.20 0.036862602
       3  520.4474 0.3364583  7  9   63  33 0.20 0.17 0.032327667
