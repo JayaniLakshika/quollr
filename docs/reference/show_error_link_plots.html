@@ -9,7 +9,7 @@ conditions and input parameters with 2-D wireframe."><meta property="og:image" c
 
     <a class="navbar-brand me-2" href="../index.html">quollr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.10</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.15</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -89,13 +89,10 @@ the high-dimensional data and model.</p></dd>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">model_error</span> <span class="op">&lt;-</span> <span class="fu"><a href="augment.html">augment</a></span><span class="op">(</span>highd_data <span class="op">=</span> <span class="va">scurve</span>, model_highd <span class="op">=</span> <span class="va">scurve_model_obj</span><span class="op">$</span><span class="va">model_highd</span>,</span></span>
-<span class="r-in"><span>model_2d <span class="op">=</span> <span class="va">scurve_model_obj</span><span class="op">$</span><span class="va">model_2d</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in UseMethod("augment"):</span> no applicable method for 'augment' applied to an object of class "c('tbl_df', 'tbl', 'data.frame')"</span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">model_error</span> <span class="op">&lt;-</span> <span class="fu"><a href="augment.html">augment</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">scurve_model_obj</span>, highd_data <span class="op">=</span> <span class="va">scurve</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">df_exe</span> <span class="op">&lt;-</span> <span class="fu"><a href="comb_all_data_model_error.html">comb_all_data_model_error</a></span><span class="op">(</span>highd_data <span class="op">=</span> <span class="va">scurve</span>, nldr_data <span class="op">=</span> <span class="va">scurve_umap</span>,</span></span>
 <span class="r-in"><span>model_highd <span class="op">=</span> <span class="va">scurve_model_obj</span><span class="op">$</span><span class="va">model_highd</span>, model_2d <span class="op">=</span> <span class="va">scurve_model_obj</span><span class="op">$</span><span class="va">model_2d</span>,</span></span>
 <span class="r-in"><span>error_data <span class="op">=</span> <span class="va">model_error</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'model_error' not found</span>
 <span class="r-in"><span><span class="va">edge_data</span> <span class="op">&lt;-</span> <span class="va">scurve_model_obj</span><span class="op">$</span><span class="va">trimesh_data</span></span></span>
 <span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
 <span class="r-in"><span>  <span class="fu">show_error_link_plots</span><span class="op">(</span>point_data <span class="op">=</span> <span class="va">df_exe</span>, edge_data <span class="op">=</span> <span class="va">edge_data</span><span class="op">)</span></span></span>

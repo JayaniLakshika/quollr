@@ -9,7 +9,7 @@ from a nonlinear dimension reduction (NLDR) model stored in a highd_vis_model ob
 
     <a class="navbar-brand me-2" href="../index.html">quollr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.10</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.15</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -52,14 +52,14 @@ from a nonlinear dimension reduction (NLDR) model stored in a <code>highd_vis_mo
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="co"># S3 method for class 'highd_vis_model'</span></span>
-<span><span class="fu"><a href="augment.html">augment</a></span><span class="op">(</span><span class="va">model_object</span>, <span class="va">highd_data</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="augment.html">augment</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">highd_data</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
 
 
-<dl><dt id="arg-model-object">model_object<a class="anchor" aria-label="anchor" href="#arg-model-object"></a></dt>
+<dl><dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
 <dd><p>An object of class <code>highd_vis_model</code> containing the model outputs.</p></dd>
 
 
@@ -85,7 +85,7 @@ error metrics, and absolute error metrics.</p>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>triangle collapsed!</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>three points coincide or are collinear!</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Model generated successfully!!!</span>
-<span class="r-in"><span><span class="fu"><a href="augment.html">augment</a></span><span class="op">(</span><span class="va">fit</span>, highd_data <span class="op">=</span> <span class="va">scurve</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="augment.html">augment</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">fit</span>, highd_data <span class="op">=</span> <span class="va">scurve</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1,000 × 32</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       ID      x1    x2       x3       x4       x5       x6        x7 pred_h</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span>

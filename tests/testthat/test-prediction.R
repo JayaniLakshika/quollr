@@ -40,10 +40,10 @@ test_that("gen_diffbin1_errors() works", {
 
 })
 
-test_that("plot_rmse_layouts() works", {
+test_that("plot_hbe_layouts() works", {
 
   design <- gen_design(n_right = 6, ncol_right = 2)
-  result <- plot_rmse_layouts(plots = scurve_plts,
+  result <- plot_hbe_layouts(plots = scurve_plts,
                     design = design)
 
   testthat::expect_s3_class(result, "patchwork")

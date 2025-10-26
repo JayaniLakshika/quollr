@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">quollr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.10</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.15</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -152,13 +152,13 @@ that describe how well the 2-D model captures structure in the
 high-dimensional space.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/glance.html">glance</a></span><span class="op">(</span></span>
-<span>  model_object <span class="op">=</span> <span class="va">scurve_model_obj</span>,</span>
+<span>  x <span class="op">=</span> <span class="va">scurve_model_obj</span>,</span>
 <span>  highd_data <span class="op">=</span> <span class="va">scurve</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 2</span></span></span>
-<span><span class="co">#&gt;   Error  RMSE</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>  265. 0.157</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 1</span></span></span>
+<span><span class="co">#&gt;   Error</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>  265.</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="step-4-augmenting-the-dataset">Step 4: Augmenting the dataset<a class="anchor" aria-label="anchor" href="#step-4-augmenting-the-dataset"></a>
@@ -168,7 +168,7 @@ observations, their assigned bins, predicted embeddings, and summary
 metrics, use the <code><a href="../reference/augment.html">augment()</a></code> function:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/augment.html">augment</a></span><span class="op">(</span></span>
-<span>  model_object <span class="op">=</span> <span class="va">scurve_model_obj</span>,</span>
+<span>  x <span class="op">=</span> <span class="va">scurve_model_obj</span>,</span>
 <span>  highd_data <span class="op">=</span> <span class="va">scurve</span></span>
 <span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fl">5</span><span class="op">)</span></span>

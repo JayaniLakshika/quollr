@@ -17,7 +17,7 @@
 A tibble contains Error, and MSE values.
 }
 \description{
-This function computes evaluation metrics (Error and RMSE) by comparing
+This function computes evaluation metrics (Error and HBE) by comparing
 the high-dimensional data to the predictions obtained from a hex_model object.
 }
 \examples{

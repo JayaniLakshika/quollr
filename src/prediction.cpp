@@ -33,7 +33,7 @@ IntegerVector compute_highd_dist(NumericMatrix test_data, NumericMatrix centroid
   return min_indices;
 }
 
-// RMSE and absolute error computation
+// HBE and absolute error computation
 // [[Rcpp::export]]
 List compute_errors(NumericMatrix true_data, NumericMatrix pred_data) {
   int n = true_data.nrow();
@@ -54,8 +54,8 @@ List compute_errors(NumericMatrix true_data, NumericMatrix pred_data) {
     total_squared_error += squared_sum;
   }
 
-  double rmse = std::sqrt(total_squared_error / n);
-  return List::create(Named("Error") = total_abs_error, Named("RMSE") = rmse);
+  double hbe = std::sqrt(total_squared_error / n);
+  return List::create(Named("Error") = total_abs_error, Named("HBE") = hbe);
 }
 
 // [[Rcpp::export]]

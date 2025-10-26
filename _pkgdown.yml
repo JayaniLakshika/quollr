@@ -62,7 +62,7 @@ reference:
   - augment
   - augment.highd_vis_model
   - gen_diffbin1_errors
-  - plot_rmse_layouts
+  - plot_hbe_layouts
 - title: "2-D visualisation"
   desc: These are to visualise the model in 2-D.
   contents:

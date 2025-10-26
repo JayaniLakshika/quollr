@@ -26,7 +26,7 @@ set.seed(20240110)
 
 We demonstrate how to identify the optimal bin width for hexagonal binning in the 2-D embedding space. Selecting an appropriate bin width is crucial for balancing model complexity and prediction accuracy when comparing structures between high-dimensional data and their 2-D layout.
 
-We begin by computing model errors across a range of bin width values using the `gen_diffbin1_errors()` function. This function fits models for multiple bin widths and returns root mean squared error (RMSE) values for each configuration.
+We begin by computing model errors across a range of bin width values using the `gen_diffbin1_errors()` function. This function fits models for multiple bin widths and returns hexbin error (HBE) values for each configuration.
 
 ```{r}
 
@@ -37,11 +37,11 @@ error_df_all <- error_df_all |>
   mutate(a1 = round(a1, 2)) |>
   filter(b1 >= 5) |>
   group_by(a1) |>
-  filter(RMSE == min(RMSE)) |>
+  filter(HBE == min(HBE)) |>
   ungroup()
 ```
 
-We round the bin width values (`a1`), filter for sufficient bin resolution (`b1 >= 5`), and select the configuration with the lowest RMSE for each unique bin width.
+We round the bin width values (`a1`), filter for sufficient bin resolution (`b1 >= 5`), and select the configuration with the lowest HBE for each unique bin width.
 
 ```{r}
 error_df_all |>
@@ -49,19 +49,19 @@ error_df_all |>
   head(5)
 ```
 
-The plot below shows the relationship between bin width (`a1`) and RMSE. The goal is to identify a bin width that minimizes RMSE while avoiding overly coarse or fine binning.
+The plot below shows the relationship between bin width (`a1`) and HBE. The goal is to identify a bin width that minimizes HBE while avoiding overly coarse or fine binning.
 
-```{r, fig.alt="RMSE Vs binw idths."}
+```{r, fig.alt="HBE Vs binwidths."}
 #| fig-height: 4
 #| fig-width: 6
 #| out-width: 100%
 
 ggplot(error_df_all,
          aes(x = a1,
-             y = RMSE)) +
+             y = HBE)) +
     geom_point(size = 0.8) +
     geom_line(linewidth = 0.3) +
-    ylab("RMSE") +
+    ylab("HBE") +
     xlab(expression(paste("binwidth (", a[1], ")"))) +
     theme_minimal() +
     theme(panel.border = element_rect(fill = 'transparent'),

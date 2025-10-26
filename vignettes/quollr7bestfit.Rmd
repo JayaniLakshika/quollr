@@ -27,7 +27,7 @@ library(patchwork)
 set.seed(20240110)
 ```
 
-This illustrates how to compare multiple NLDR layouts and select the most appropriate one. The evaluation is typically based on Residual Mean Squared Error (RMSE), allowing you to assess the quality of different binning configurations or modeling strategies.
+This illustrates how to compare multiple NLDR layouts and select the most appropriate one. The evaluation is typically based on hexbin error (HBE), allowing you to assess the quality of different binning configurations or modeling strategies.
 
 ## Step 1: Generate design for 2-D NLDR layouts
 
@@ -37,12 +37,12 @@ We begin by specifying a layout design for arranging the plots. The design defin
 design <- gen_design(n_right = 4, ncol_right = 2)
 ```
 
-## Step 2: Visualising RMSE across configurations
+## Step 2: Visualising HBE across configurations
 
-To visually compare multiple 2-D NLDR layouts, we use the `plot_rmse_layouts()` function. This function plots RMSE values against different bin width configurations along with 2-D NLDR layouts, making it easier to identify the best-performing model visually.
+To visually compare multiple 2-D NLDR layouts, we use the `plot_hbe_layouts()` function. This function plots HBE values against different bin width configurations along with 2-D NLDR layouts, making it easier to identify the best-performing model visually.
 
-```{r, fig.alt="RMSE Vs binw idths.", fig.height=10, fig.width=15, out.width="100%"}
+```{r, fig.alt="HBE Vs binwidths.", fig.height=10, fig.width=15, out.width="100%"}
 
-plot_rmse_layouts(plots = scurve_plts, design = design)
+plot_hbe_layouts(plots = scurve_plts, design = design)
 ```
 

@@ -11,7 +11,7 @@ model error data."><meta property="og:image" content="https://jayanilakshika.git
 
     <a class="navbar-brand me-2" href="../index.html">quollr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.10</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.15</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -95,7 +95,7 @@ each hexagonal bin and high-dimensional data, non-linear dimension reduction dat
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">model_error</span> <span class="op">&lt;-</span> <span class="fu"><a href="augment.html">augment</a></span><span class="op">(</span>model_object <span class="op">=</span> <span class="va">scurve_model_obj</span>, highd_data <span class="op">=</span> <span class="va">scurve</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">model_error</span> <span class="op">&lt;-</span> <span class="fu"><a href="augment.html">augment</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">scurve_model_obj</span>, highd_data <span class="op">=</span> <span class="va">scurve</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">comb_all_data_model_error</span><span class="op">(</span>highd_data <span class="op">=</span> <span class="va">scurve</span>, nldr_data <span class="op">=</span> <span class="va">scurve_umap</span>,</span></span>
 <span class="r-in"><span>model_highd <span class="op">=</span> <span class="va">scurve_model_obj</span><span class="op">$</span><span class="va">model_highd</span>, model_2d <span class="op">=</span> <span class="va">scurve_model_obj</span><span class="op">$</span><span class="va">model_2d</span>,</span></span>
 <span class="r-in"><span>error_data <span class="op">=</span> <span class="va">model_error</span><span class="op">)</span></span></span>
