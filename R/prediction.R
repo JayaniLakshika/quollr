@@ -262,7 +262,7 @@ gen_diffbin1_errors <- function(highd_data, nldr_data, hd_thresh = 1, bin1_vec =
       dplyr::mutate(l = quad(a=3, b = 2 * a2, c = -(a2^2 + a1^2))) |>
       dplyr::mutate(A = (3 * sqrt(3)/2) * l^2) |>
       dplyr::mutate(m = NROW(df_bin_centroids_scurve)) |>
-      dplyr::mutate(d = w_h/(m*A))
+      dplyr::mutate(d = w_h/A)
 
     ## Compute error
     error_df <- glance(
