@@ -274,7 +274,7 @@ gen_diffbin1_errors <- function(highd_data, nldr_data, hd_thresh = 1, bin1_vec =
                     m = NROW(df_bin_centroids_scurve),
                     a1 = round(a1, 2),
                     a2 = round(a2, 2),
-                    d_bar = mean(df_bin_centroids_scurve$d))
+                    n_bar = NROW(highd_data)/m)
 
     bin_error_df <- dplyr::bind_rows(bin_error_df, error_df)
 
