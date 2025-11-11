@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">quollr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.15</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.17</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -109,13 +109,13 @@ configuration with the lowest HBE for each unique bin width.</p>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="op">-</span><span class="va">a1</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fl">5</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 5 × 9</span></span></span>
-<span><span class="co">#&gt;   Error   HBE    b1    b2     b     m    a1    a2  d_bar</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>  629. 0.410     5     7    35    22  0.26  0.23 0.040<span style="text-decoration: underline;">9</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span>  563. 0.367     6     8    48    27  0.23  0.2  0.036<span style="text-decoration: underline;">9</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span>  520. 0.336     7     9    63    33  0.2   0.17 0.032<span style="text-decoration: underline;">3</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span>  430. 0.272     8    11    88    46  0.16  0.14 0.026<span style="text-decoration: underline;">0</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span>  407. 0.254     9    12   108    51  0.14  0.12 0.025<span style="text-decoration: underline;">5</span></span></span></code></pre></div>
+<span><span class="co">#&gt;   Error   HBE    b1    b2     b     m    a1    a2 n_bar</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>  629. 0.410     5     7    35    22  0.26  0.23  45.5</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span>  563. 0.367     6     8    48    27  0.23  0.2   37.0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span>  520. 0.336     7     9    63    33  0.2   0.17  30.3</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span>  430. 0.272     8    11    88    46  0.16  0.14  21.7</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span>  407. 0.254     9    12   108    51  0.14  0.12  19.6</span></span></code></pre></div>
 <p>The plot below shows the relationship between bin width
 (<code>a1</code>) and HBE. The goal is to identify a bin width that
 minimizes HBE while avoiding overly coarse or fine binning.</p>

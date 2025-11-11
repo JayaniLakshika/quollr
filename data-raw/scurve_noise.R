@@ -197,12 +197,12 @@ error_df <- bind_rows(scurve_umap_rmse, scurve_umap_rmse2,
   mutate(a1 = round(a1, 2)) |>
   filter(b1 >= 5) |>
   group_by(method, a1) |>
-  filter(RMSE == min(RMSE)) |>
+  filter(HBE == min(HBE)) |>
   ungroup()
 
 rmse_plot <- ggplot(error_df,
        aes(x = a1,
-           y = RMSE,
+           y = HBE,
            colour = method)) +
   geom_point(size = 0.8) +
   geom_line(linewidth = 0.3) +
@@ -215,7 +215,7 @@ rmse_plot <- ggplot(error_df,
     values=c('#e41a1c','#ff7f00','#4daf4a',
              "#a65628",'#636363', '#984ea3')) +
   theme(aspect.ratio = 1.5) +
-  ylab("RMSE") +
+  ylab("HBE") +
   xlab(expression(paste("binwidth (", a[1], ")"))) +
   theme_minimal() +
   theme(panel.border = element_rect(fill = 'transparent'),
