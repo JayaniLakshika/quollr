@@ -125,12 +125,24 @@ show_link_plots <- function(point_data, edge_data,
                                                  linkFilter=FALSE)
 
   linked_plt <- crosstalk::bscols(
-    htmltools::div(style="display: grid; grid-template-columns: 1fr 1fr;",
-                   nldr_plt,
-                   htmltools::div(style = "margin-top: 20px;", langevitour_output)
+
+    # Left panel: NLDR
+    htmltools::div(
+      class = "col-12 col-md-6",
+      style = "text-align: center; margin-bottom: 20px;",
+      htmltools::h4("2-D NLDR layout"),
+      nldr_plt
     ),
-    device = "xs"
+
+    # Right panel: Tour
+    htmltools::div(
+      class = "col-12 col-md-6",
+      style = "text-align: center; margin-bottom: 20px;",
+      htmltools::h4("Tour view"),
+      langevitour_output
+    )
   )
+
 
   linked_plt
 
@@ -252,7 +264,7 @@ show_error_link_plots <- function(point_data, edge_data,
   error_plt <- shared_df |>
     ggplot(aes(x=sqrt_row_wise_total_error, y = density)) +
     geom_point(colour = point_colours[1]) +
-    xlab(expression(e[hj])) +
+    xlab("") +
     ylab("") +
     theme_bw() +
     theme(
@@ -263,7 +275,7 @@ show_error_link_plots <- function(point_data, edge_data,
                                       colour = NA),
       panel.grid.major = element_blank(),
       panel.grid.minor = element_blank(),
-      axis.title.x = element_blank(), axis.title.y = element_blank(),
+      #axis.title.x = element_blank(), axis.title.y = element_blank(),
       axis.text.x = element_blank(), axis.ticks.x = element_blank(),
       axis.text.y = element_blank(), axis.ticks.y = element_blank()
     )
@@ -311,12 +323,30 @@ show_error_link_plots <- function(point_data, edge_data,
                                                  height = "458")
 
   linked_plt <- crosstalk::bscols(
-    htmltools::div(style="display: grid; grid-template-columns: 1fr 1fr 1fr;",
-                   error_plt,
-                   nldr_plt,
-                   htmltools::div(style = "margin-top: 20px;", langevitour_output)
+
+    # Left panel: Error
+    htmltools::div(
+      class = "col-12 col-md-4",
+      style = "text-align: center; margin-bottom: 20px;",
+      htmltools::h4("Distribution of residuals"),
+      error_plt
     ),
-    device = "xs"
+
+    # Middle panel: NLDR
+    htmltools::div(
+      class = "col-12 col-md-4",
+      style = "text-align: center; margin-bottom: 20px;",
+      htmltools::h4("2-D NLDR layout"),
+      nldr_plt
+    ),
+
+    # Right panel: Tour
+    htmltools::div(
+      class = "col-12 col-md-4",
+      style = "text-align: center; margin-bottom: 20px;",
+      htmltools::h4("Tour view"),
+      langevitour_output
+    )
   )
 
   linked_plt
