@@ -1,0 +1,35 @@
+---
+title: "2. Data preprocessing"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{2. Data preprocessing}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+options(rmarkdown.html_vignette.check_title = FALSE)
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  warning = FALSE, 
+  message = FALSE
+)
+```
+
+Here, we'll walk through the process of preprocessing 2-D embedding data to obtain regular hexagons.
+
+```{r setup}
+library(quollr)
+library(dplyr)
+```
+
+First, you'll need 2-D embedding data generated for your high-dimensional data. For our example, we'll use a $3\text{-}D$ S-curve dataset with four additional noise dimensions (`scurve`). We've used UMAP as our non-linear dimension reduction method (NLDR) to generate embeddings for the `scurve` data.
+
+```{r}
+scaled_umap <- gen_scaled_data(nldr_data = scurve_umap)
+
+glimpse(scaled_umap)
+```
+
+The function `gen_scaled_data()` standardises the 2-D embedding and rescales it so that hexagons generated during visualisation or analysis will be regular. 
