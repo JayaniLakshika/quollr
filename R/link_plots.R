@@ -63,7 +63,7 @@ comb_all_data_model <- function(highd_data, nldr_data, model_highd, model_2d) {
 #' @importFrom dplyr mutate bind_rows filter select
 #' @importFrom langevitour langevitour
 #' @importFrom ggplot2 ggplot theme_linedraw aes_string theme element_rect element_text element_blank
-#' @importFrom plotly ggplotly config highlight style
+#' @importFrom plotly plot_ly config highlight style layout
 #'
 #' @examples
 #' df_exe <- comb_all_data_model(highd_data = scurve, nldr_data = scurve_umap,
@@ -90,26 +90,43 @@ show_link_plots <- function(point_data, edge_data,
 
   shared_df <- crosstalk::SharedData$new(point_data)
 
-  nldr_plt <- shared_df |>
-    ggplot(aes(x = emb1, y = emb2)) +
-    geom_point(alpha=0.5, colour=point_colours[1], size = 0.5) +
-    theme_linedraw() +
-    theme(
-      #aspect.ratio = 1,
-      plot.background = element_rect(fill = 'transparent', colour = NA),
-      plot.title = element_text(size = 7, hjust = 0.5, vjust = -0.5),
-      panel.background = element_rect(fill = 'transparent',
-                                      colour = NA),
-      panel.grid.major = element_blank(),
-      panel.grid.minor = element_blank(),
-      axis.title.x = element_blank(), axis.title.y = element_blank(),
-      axis.text.x = element_blank(), axis.ticks.x = element_blank(),
-      axis.text.y = element_blank(), axis.ticks.y = element_blank()
-    )
-
-  nldr_plt <- ggplotly(nldr_plt, width = 600,
-                       height = 600, tooltip = "none") |>
-    style(unselected=list(marker=list(opacity=1))) |>
+  nldr_plt <- plot_ly(
+    shared_df,
+    x = ~emb1, y = ~emb2,
+    type = "scatter",
+    mode = "markers",
+    marker = list(
+      color = point_colours[1],
+      size = 3,
+      opacity = 0.5
+    ),
+    hoverinfo = "none",
+    width = 300,
+    height = 300
+  ) |>
+    layout(
+      xaxis = list(
+        title = "",
+        showgrid = FALSE,
+        zeroline = FALSE,
+        showticklabels = FALSE,
+        ticks = "",
+        linecolor = "black",
+        mirror = TRUE
+      ),
+      yaxis = list(
+        title = "",
+        showgrid = FALSE,
+        zeroline = FALSE,
+        showticklabels = FALSE,
+        ticks = "",
+        linecolor = "black",
+        mirror = TRUE
+      ),
+      margin = list(l = 20, r = 20, t = 20, b = 20),
+      dragmode = "select"
+    ) |>
+    style(selected   = list(marker = list(opacity = 1)), unselected=list(marker=list(opacity=1))) |>
     highlight(on="plotly_selected", off="plotly_deselect") |>
     config(displayModeBar = FALSE)
 
@@ -122,26 +139,26 @@ show_link_plots <- function(point_data, edge_data,
                                                                     rep(point_sizes[2], NROW(df_all))),
                                                  levelColors = point_colours,
                                                  link=shared_df,
-                                                 linkFilter=FALSE)
+                                                 linkFilter=FALSE,
+                                                 height = "350px",
+                                                 width = "350px")
 
-  linked_plt <- crosstalk::bscols(
-
-    # Left panel: NLDR
-    htmltools::div(
-      class = "col-12 col-md-6",
-      style = "text-align: center; margin-bottom: 20px;",
-      htmltools::h4("2-D NLDR layout"),
-      nldr_plt
-    ),
-
-    # Right panel: Tour
-    htmltools::div(
-      class = "col-12 col-md-6",
-      style = "text-align: center; margin-bottom: 20px;",
-      htmltools::h4("Tour view"),
+  linked_plt <- crosstalk::bscols(htmltools::div(
+    style = "display: grid; grid-template-columns: 1fr 1fr;
+    gap: 0px;
+    align-items: start;
+    justify-items: center;
+    margin: 0;
+    padding: 0;",
+    htmltools::div(style = 'margin: 0; padding: 0; height: 300px; width: 300px; text-align: center; align-items: center;',
+                   htmltools::h4("2-D NLDR layout"), nldr_plt),
+    htmltools::div(style = 'margin: 0; padding: 0; height: 350px; width: 300px; text-align: center;',
+                   htmltools::h4("Tour view"), htmltools::div(
+      style = "margin-top: 40px;",
       langevitour_output
-    )
-  )
+    ))
+  ),
+  device = "xs")
 
 
   linked_plt
@@ -233,7 +250,7 @@ comb_all_data_model_error <- function(highd_data, nldr_data, model_highd,
 #' @importFrom dplyr mutate bind_rows filter select
 #' @importFrom langevitour langevitour
 #' @importFrom ggplot2 ggplot theme_bw theme_linedraw aes aes_string theme element_rect element_text element_blank geom_point xlab ylab
-#' @importFrom plotly ggplotly config highlight style
+#' @importFrom plotly plot_ly config highlight style layout
 #' @examples
 #' model_error <- augment(x = scurve_model_obj, highd_data = scurve)
 #' df_exe <- comb_all_data_model_error(highd_data = scurve, nldr_data = scurve_umap,
@@ -261,51 +278,83 @@ show_error_link_plots <- function(point_data, edge_data,
 
   shared_df <- crosstalk::SharedData$new(point_data)
 
-  error_plt <- shared_df |>
-    ggplot(aes(x=sqrt_row_wise_total_error, y = density)) +
-    geom_point(colour = point_colours[1]) +
-    xlab("") +
-    ylab("") +
-    theme_bw() +
-    theme(
-      #aspect.ratio = 1,
-      plot.background = element_rect(fill = 'transparent', colour = NA),
-      plot.title = element_text(size = 7, hjust = 0.5, vjust = -0.5),
-      panel.background = element_rect(fill = 'transparent',
-                                      colour = NA),
-      panel.grid.major = element_blank(),
-      panel.grid.minor = element_blank(),
-      #axis.title.x = element_blank(), axis.title.y = element_blank(),
-      axis.text.x = element_blank(), axis.ticks.x = element_blank(),
-      axis.text.y = element_blank(), axis.ticks.y = element_blank()
-    )
-
-  error_plt <- ggplotly(error_plt, width = 400,
-                        height = 400, tooltip = "none") |>
-    style(unselected=list(marker=list(opacity=1))) |>
+  error_plt <- plot_ly(
+    shared_df,
+    x = ~sqrt_row_wise_total_error, y = ~density,
+    type = "scatter",
+    mode = "markers",
+    marker = list(
+      color = point_colours[1],
+      size = 3,
+      opacity = 0.5
+    ),
+    hoverinfo = "none",
+    width = 250,
+    height = 250
+  ) |>
+    layout(
+      xaxis = list(
+        title = "",
+        showgrid = FALSE,
+        zeroline = FALSE,
+        showticklabels = FALSE,
+        ticks = "",
+        linecolor = "black",
+        mirror = TRUE
+      ),
+      yaxis = list(
+        title = "",
+        showgrid = FALSE,
+        zeroline = FALSE,
+        showticklabels = FALSE,
+        ticks = "",
+        linecolor = "black",
+        mirror = TRUE
+      ),
+      margin = list(l = 20, r = 20, t = 20, b = 20),
+      dragmode = "select"
+    ) |>
+    style(selected   = list(marker = list(opacity = 1)), unselected=list(marker=list(opacity=1))) |>
     highlight(on="plotly_selected", off="plotly_deselect") |>
     config(displayModeBar = FALSE)
 
-  nldr_plt <- shared_df |>
-    ggplot(aes(x = emb1, y = emb2)) +
-    geom_point(alpha=0.5, colour=point_colours[1], size = 0.5) +
-    theme_linedraw() +
-    theme(
-      #aspect.ratio = 1,
-      plot.background = element_rect(fill = 'transparent', colour = NA),
-      plot.title = element_text(size = 7, hjust = 0.5, vjust = -0.5),
-      panel.background = element_rect(fill = 'transparent',
-                                      colour = NA),
-      panel.grid.major = element_blank(),
-      panel.grid.minor = element_blank(),
-      axis.title.x = element_blank(), axis.title.y = element_blank(),
-      axis.text.x = element_blank(), axis.ticks.x = element_blank(),
-      axis.text.y = element_blank(), axis.ticks.y = element_blank()
-    )
-
-  nldr_plt <- ggplotly(nldr_plt, width = 400,
-                       height = 400, tooltip = "none") |>
-    style(unselected=list(marker=list(opacity=1))) |>
+  nldr_plt <- plot_ly(
+    shared_df,
+    x = ~emb1, y = ~emb2,
+    type = "scatter",
+    mode = "markers",
+    marker = list(
+      color = point_colours[1],
+      size = 3,
+      opacity = 0.5
+    ),
+    hoverinfo = "none",
+    width = 250,
+    height = 250
+  ) |>
+    layout(
+      xaxis = list(
+        title = "",
+        showgrid = FALSE,
+        zeroline = FALSE,
+        showticklabels = FALSE,
+        ticks = "",
+        linecolor = "black",
+        mirror = TRUE
+      ),
+      yaxis = list(
+        title = "",
+        showgrid = FALSE,
+        zeroline = FALSE,
+        showticklabels = FALSE,
+        ticks = "",
+        linecolor = "black",
+        mirror = TRUE
+      ),
+      margin = list(l = 20, r = 20, t = 20, b = 20),
+      dragmode = "select"
+    ) |>
+    style(selected   = list(marker = list(opacity = 1)), unselected=list(marker=list(opacity=1))) |>
     highlight(on="plotly_selected", off="plotly_deselect") |>
     config(displayModeBar = FALSE)
 
@@ -319,35 +368,25 @@ show_error_link_plots <- function(point_data, edge_data,
                                                  levelColors = point_colours,
                                                  link=shared_df,
                                                  linkFilter=FALSE,
-                                                 width = "458",
-                                                 height = "458")
+                                                 width = "300px",
+                                                 height = "300px")
 
-  linked_plt <- crosstalk::bscols(
-
-    # Left panel: Error
-    htmltools::div(
-      class = "col-12 col-md-4",
-      style = "text-align: center; margin-bottom: 20px;",
-      htmltools::h4("Distribution of residuals"),
-      error_plt
-    ),
-
-    # Middle panel: NLDR
-    htmltools::div(
-      class = "col-12 col-md-4",
-      style = "text-align: center; margin-bottom: 20px;",
-      htmltools::h4("2-D NLDR layout"),
-      nldr_plt
-    ),
-
-    # Right panel: Tour
-    htmltools::div(
-      class = "col-12 col-md-4",
-      style = "text-align: center; margin-bottom: 20px;",
-      htmltools::h4("Tour view"),
-      langevitour_output
-    )
-  )
+  linked_plt <- crosstalk::bscols(htmltools::div(style = "display: grid; grid-template-columns: 1fr 1fr 1fr;
+    gap: 0px;
+    align-items: start;
+    justify-items: center;
+    margin: 0;
+    padding: 0;",
+    htmltools::div(style = 'margin: 0; padding: 0; height: 300px; width: 300px; text-align: center; align-items: center;',
+                   htmltools::h4("Distribution of residuals"), error_plt),
+    htmltools::div(style = 'margin: 0; padding: 0; height: 300px; width: 300px; text-align: center; align-items: center;',
+                   htmltools::h4("2-D NLDR layout"), nldr_plt),
+    htmltools::div(style = 'margin: 0; padding: 0; height: 350px; width: 300px; text-align: center; align-items: center;',
+                   htmltools::h4("Tour view"), htmltools::div(
+                     style = "margin-top: 40px;",
+                     langevitour_output
+                   ))
+  ))
 
   linked_plt
 
