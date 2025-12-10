@@ -47,6 +47,9 @@ fit_highd_model <- function(highd_data, nldr_data, b1 = 30, q = 0.1,
     dplyr::filter(from_count > hd_thresh,
                   to_count > hd_thresh)
 
+  ## Update the edge indexes to start from 1
+  trimesh_data <- update_trimesh_index(trimesh_data)
+
   ## averaged high-D data
   nldr_df_with_hex_id <- hb_obj$data_hb_id
   model_highd <- avg_highd_data(highd_data = highd_data,

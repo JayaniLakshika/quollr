@@ -500,19 +500,42 @@ gen_edges <- function(tri_object, a1) { #centroids_data
     to_count = to_count[keep]
   )
 
-  ## Irrespective of the software, ordering the indexes
+  return(edge_data)
+}
+
+
+#' Update from and to values in trimesh data
+#'
+#' This function update the from and to indexes.
+#'
+#' @param trimesh_data A tibble that contains wireframe data.
+#'
+#' @return A tibble that contains the updated edge information.
+#'
+#' @importFrom dplyr left_join mutate select
+#'
+#' @examples
+#' tr_from_to_df <- scurve_model_obj$trimesh_data
+#' update_trimesh_index(trimesh_data = tr_from_to_df)
+#'
+#' @export
+update_trimesh_index <- function(trimesh_data) {
+
   # Create unique sorted vector of node IDs
-  unique_values <- sort(unique(c(edge_data$from, edge_data$to)))
+  unique_values <- sort(unique(c(trimesh_data$from, trimesh_data$to)))
 
   # Create named vector mapping old IDs to new ones
   id_map <- setNames(seq_along(unique_values), unique_values)
 
   # Vectorized replacement using the map
-  edge_data$from <- id_map[as.character(edge_data$from)]
-  edge_data$to   <- id_map[as.character(edge_data$to)]
+  trimesh_data$from_reindexed <- id_map[as.character(trimesh_data$from)]
+  trimesh_data$to_reindexed   <- id_map[as.character(trimesh_data$to)]
 
-  return(edge_data)
+  return(trimesh_data)
+
+
 }
+
 
 #' Find the number of bins required to achieve required number of non-empty bins.
 #'
