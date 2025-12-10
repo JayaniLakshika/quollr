@@ -377,12 +377,15 @@ show_error_link_plots <- function(point_data, edge_data,
     justify-items: center;
     margin: 0;
     padding: 0;",
-    htmltools::div(style = 'margin: 0; padding: 0; height: 300px; width: 200px; text-align: center; align-items: center;',
-                   htmltools::h4("Distribution of residuals"), error_plt),
-    htmltools::div(style = 'margin: 0; padding: 0; height: 300px; width: 200px; text-align: center; align-items: center;',
-                   htmltools::h4("2-D NLDR layout"), nldr_plt),
-    htmltools::div(style = 'margin: 0; padding: 0; height: 300px; width: 250px; text-align: center; align-items: center;',
-                   htmltools::h4("Tour view"), htmltools::div(
+    htmltools::div(style = 'margin: 0; padding: 0; height: 400px; width: 200px; text-align: center; align-items: center;',
+                   htmltools::h5("Distribution of residuals"), htmltools::div(
+                     style = "margin-top: -10px;",
+                     error_plt
+                   )),
+    htmltools::div(style = 'margin: 0; padding: 0; height: 400px; width: 200px; text-align: center; align-items: center;',
+                   htmltools::h5("2-D NLDR layout"), nldr_plt),
+    htmltools::div(style = 'margin: 0; padding: 0; height: 400px; width: 250px; text-align: center; align-items: center;',
+                   htmltools::h5("Tour view"), htmltools::div(
                      style = "margin-top: 40px;",
                      langevitour_output
                    ))
