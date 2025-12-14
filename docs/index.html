@@ -28,7 +28,7 @@
 
     <a class="navbar-brand me-2" href="index.html">quollr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -48,6 +48,7 @@
     <li><a class="dropdown-item" href="articles/quollr5summary.html">5. Generating model summaries</a></li>
     <li><a class="dropdown-item" href="articles/quollr6bestbinwidth.html">6. Selecting the optimal bin width</a></li>
     <li><a class="dropdown-item" href="articles/quollr7bestfit.html">7. Selecting the best fit</a></li>
+    <li><a class="dropdown-item" href="articles/quollr8linkeddetourr.html">8. Linked plots with detourr</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="news/index.html">Changelog</a></li>
@@ -86,7 +87,7 @@
 <div class="section level2">
 <h2 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a>
 </h2>
-<p>Our approach involves dividing the high-dimensional data set into two parts: a training set to construct the model and a test set to generate model summaries. To implement our approach, first we use a 2-D embedding data set as the initial point. The output of our algorithm is a tour that displays the model overlaid on high-dimensional data. Our algorithm comprises two main phases: (1) generate the model in the 2-D space, and (2) lift the model into high-dimensional space. This methodology is available in this package.</p>
+<p>Our approach involves dividing the high-dimensional data set into two parts: a training set to construct the model and a test set to generate model summaries. To implement our approach, first we use a <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mtext mathvariant="normal">-</mtext><mi>D</mi></mrow><annotation encoding="application/x-tex">2\text{-}D</annotation></semantics></math> embedding data set as the initial point. The output of our algorithm is a tour that displays the model overlaid on high-dimensional data. Our algorithm comprises two main phases: (1) generate the model in the <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mtext mathvariant="normal">-</mtext><mi>D</mi></mrow><annotation encoding="application/x-tex">2\text{-}D</annotation></semantics></math> space, and (2) lift the model into high-dimensional space. This methodology is available in this package.</p>
 <p><img src="reference/figures/quollr-methodology.png" width="80%" style="display: block; margin: auto;" alt="Methodology diagram"></p>
 </div>
 <div class="section level2">
@@ -111,6 +112,8 @@
 <li>To select the optimal bin width: <a href="https://jayanilakshika.github.io/quollr/articles/quollr6bestbinwidth.html">6. Selecting the best bin width</a>
 </li>
 <li>To select the most reasonable NLDR layout: <a href="https://jayanilakshika.github.io/quollr/articles/quollr7bestfit.html">7. Selecting the best fit</a>
+</li>
+<li>To generate linked plots with <code>detourr</code>: <a href="https://jayanilakshika.github.io/quollr/articles/quollr8linkeddetourr.html">8. Linked plots with detourr</a>
 </li>
 </ul>
 </div>
