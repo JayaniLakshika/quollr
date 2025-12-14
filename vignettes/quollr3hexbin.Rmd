@@ -1,6 +1,8 @@
 ---
 title: "3. Algorithm for binning data"
-output: rmarkdown::html_vignette
+output:
+  rmarkdown::html_vignette:
+    keep_md: true
 vignette: >
   %\VignetteIndexEntry{3. Algorithm for binning data}
   %\VignetteEngine{knitr::rmarkdown}

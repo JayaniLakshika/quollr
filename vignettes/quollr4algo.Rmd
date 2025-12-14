@@ -1,6 +1,8 @@
 ---
 title: "4. Algorithm for visualising the model overlaid on high-dimensional data"
-output: rmarkdown::html_vignette
+output:
+  rmarkdown::html_vignette:
+    keep_md: true
 vignette: >
   %\VignetteIndexEntry{4. Algorithm for visualising the model overlaid on high-dimensional data}
   %\VignetteEngine{knitr::rmarkdown}

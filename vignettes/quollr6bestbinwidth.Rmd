@@ -1,6 +1,8 @@
 ---
 title: "6. Selecting the optimal bin width"
-output: rmarkdown::html_vignette
+output:
+  rmarkdown::html_vignette:
+    keep_md: true
 vignette: >
   %\VignetteIndexEntry{6. Selecting the optimal bin width}
   %\VignetteEngine{knitr::rmarkdown}

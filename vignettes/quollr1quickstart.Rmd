@@ -1,6 +1,8 @@
 ---
 title: "1. Quick start"
-output: rmarkdown::html_vignette
+output:
+  rmarkdown::html_vignette:
+    keep_md: true
 vignette: >
   %\VignetteIndexEntry{1. Quick start}
   %\VignetteEngine{knitr::rmarkdown}

@@ -1,6 +1,8 @@
 ---
 title: "5. Generating model summaries"
-output: rmarkdown::html_vignette
+output:
+  rmarkdown::html_vignette:
+    keep_md: true
 vignette: >
   %\VignetteIndexEntry{5. Generating model summaries}
   %\VignetteEngine{knitr::rmarkdown}

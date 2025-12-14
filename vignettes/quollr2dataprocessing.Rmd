@@ -1,6 +1,8 @@
 ---
 title: "2. Data preprocessing"
-output: rmarkdown::html_vignette
+output:
+  rmarkdown::html_vignette:
+    keep_md: true
 vignette: >
   %\VignetteIndexEntry{2. Data preprocessing}
   %\VignetteEngine{knitr::rmarkdown}
