@@ -1,10 +1,10 @@
 ---
-title: "8. Linked plots with detourr"
+title: "8. Linked plots with `detourr`"
 output:
   rmarkdown::html_vignette:
     keep_md: true
 vignette: >
-  %\VignetteIndexEntry{8. Linked plots with detourr}
+  %\VignetteIndexEntry{8. Linked plots with `detourr`}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
