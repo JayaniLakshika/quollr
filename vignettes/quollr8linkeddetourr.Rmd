@@ -121,7 +121,7 @@ detourr_output <- detour(
 
 These two views are arranged side by side using `bscols()`:
 
-```{r}
+```{r, eval=FALSE}
 lndet_link <- crosstalk::bscols(
   htmltools::div(
     style = "display: grid; grid-template-columns: 1fr 1fr;",
@@ -232,7 +232,7 @@ error_plt <- plot_ly(
 
 All three panels are arranged in a single linked display:
 
-```{r}
+```{r, eval=FALSE}
 erlndet_link <- crosstalk::bscols(
   htmltools::div(
     style = "display: grid; grid-template-columns: 1fr 1fr 1fr;",

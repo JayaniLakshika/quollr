@@ -45,6 +45,7 @@ Imports:
     tidyr,
     tidyselect
 Suggests: 
+    detourr,
     knitr,
     rmarkdown,
     testthat (>= 3.0.0),
