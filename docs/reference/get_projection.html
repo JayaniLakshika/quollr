@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">quollr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.5</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -49,14 +49,7 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_projection</span><span class="op">(</span></span>
-<span>  <span class="va">projection</span>,</span>
-<span>  <span class="va">proj_scale</span>,</span>
-<span>  <span class="va">highd_data</span>,</span>
-<span>  <span class="va">model_highd</span>,</span>
-<span>  <span class="va">trimesh_data</span>,</span>
-<span>  <span class="va">axis_param</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_projection</span><span class="op">(</span><span class="va">projection</span>, <span class="va">highd_data</span>, <span class="va">model_highd</span>, <span class="va">trimesh_data</span>, <span class="va">axis_param</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -65,10 +58,6 @@
 
 <dl><dt id="arg-projection">projection<a class="anchor" aria-label="anchor" href="#arg-projection"></a></dt>
 <dd><p>A matrix or data frame representing the projection.</p></dd>
-
-
-<dt id="arg-proj-scale">proj_scale<a class="anchor" aria-label="anchor" href="#arg-proj-scale"></a></dt>
-<dd><p>Scaling factor for the projection.</p></dd>
 
 
 <dt id="arg-highd-data">highd_data<a class="anchor" aria-label="anchor" href="#arg-highd-data"></a></dt>
@@ -101,7 +90,7 @@
 <span class="r-in"><span><span class="va">df_bin</span> <span class="op">&lt;-</span> <span class="va">scurve_model_obj</span><span class="op">$</span><span class="va">model_highd</span></span></span>
 <span class="r-in"><span><span class="va">edge_data</span> <span class="op">&lt;-</span> <span class="va">scurve_model_obj</span><span class="op">$</span><span class="va">trimesh_data</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu">get_projection</span><span class="op">(</span>projection <span class="op">=</span> <span class="va">projection_df</span>, proj_scale <span class="op">=</span> <span class="fl">1</span>,</span></span>
+<span class="r-in"><span><span class="fu">get_projection</span><span class="op">(</span>projection <span class="op">=</span> <span class="va">projection_df</span>,</span></span>
 <span class="r-in"><span>highd_data <span class="op">=</span> <span class="va">scurve</span>, model_highd <span class="op">=</span> <span class="va">df_bin</span>,</span></span>
 <span class="r-in"><span>trimesh_data <span class="op">=</span> <span class="va">edge_data</span>,</span></span>
 <span class="r-in"><span>axis_param <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>limits <span class="op">=</span> <span class="fl">1</span>, axis_scaled <span class="op">=</span> <span class="fl">3</span>, axis_pos_x <span class="op">=</span> <span class="op">-</span><span class="fl">0.72</span>,</span></span>

@@ -19,7 +19,7 @@ test_that("gen_axes() works", {
   df_bin <- scurve_model_obj$model_highd
   edge_data <- scurve_model_obj$trimesh_data
 
-  testthat::expect_snapshot(get_projection(projection = projection_df, proj_scale = 1,
+  testthat::expect_snapshot(get_projection(projection = projection_df,
                                            highd_data = scurve, model_highd = df_bin,
                                            trimesh_data = edge_data,
                                            axis_param = list(limits = 1,
@@ -38,7 +38,7 @@ test_that("gen_proj_langevitour() works", {
   df_bin <- scurve_model_obj$model_highd
   edge_data <- scurve_model_obj$trimesh_data
 
-  proj_obj1 <- get_projection(projection = projection_df, proj_scale = 1,
+  proj_obj1 <- get_projection(projection = projection_df,
   highd_data = scurve, model_highd = df_bin,
   trimesh_data = edge_data,
   axis_param = list(limits = 1, axis_scaled = 3, axis_pos_x = -0.72,

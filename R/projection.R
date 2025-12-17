@@ -57,7 +57,6 @@ gen_axes <- function(proj, limits = 1, axis_pos_x = NULL, axis_pos_y = NULL,
 #' Compute Projection for High-Dimensional Data
 #'
 #' @param projection A matrix or data frame representing the projection.
-#' @param proj_scale Scaling factor for the projection.
 #' @param highd_data A data frame or matrix of high-dimensional data.
 #' @param model_highd A model object or function used for high-dimensional transformation.
 #' @param trimesh_data A data frame defining transformation from one space to another.
@@ -74,20 +73,20 @@ gen_axes <- function(proj, limits = 1, axis_pos_x = NULL, axis_pos_y = NULL,
 #' df_bin <- scurve_model_obj$model_highd
 #' edge_data <- scurve_model_obj$trimesh_data
 #'
-#' get_projection(projection = projection_df, proj_scale = 1,
+#' get_projection(projection = projection_df,
 #' highd_data = scurve, model_highd = df_bin,
 #' trimesh_data = edge_data,
 #' axis_param = list(limits = 1, axis_scaled = 3, axis_pos_x = -0.72,
 #' axis_pos_y = -0.72,threshold = 0.09))
 #'
-get_projection <- function(projection, proj_scale, highd_data, model_highd,
+get_projection <- function(projection, highd_data, model_highd,
                            trimesh_data, axis_param) {
 
   highd_data <- highd_data |>
     dplyr::select(tidyselect::starts_with("x"))
 
-  projection_scaled <- projection * proj_scale
-  projected <- as.matrix(highd_data) %*% projection_scaled
+  #projection_scaled <- projection * proj_scale
+  projected <- as.matrix(highd_data) %*% projection
 
   projected_df <- projected |>
     tibble::as_tibble(.name_repair = "unique") |>
@@ -98,7 +97,7 @@ get_projection <- function(projection, proj_scale, highd_data, model_highd,
   model_highd <- model_highd |>
     dplyr::select(tidyselect::starts_with("x"))
 
-  projected_model <- as.matrix(model_highd) %*% projection_scaled
+  projected_model <- as.matrix(model_highd) %*% projection
 
   projected_model_df <- projected_model |>
     tibble::as_tibble(.name_repair = "unique") |>

@@ -4,19 +4,10 @@
 \alias{get_projection}
 \title{Compute Projection for High-Dimensional Data}
 \usage{
-get_projection(
-  projection,
-  proj_scale,
-  highd_data,
-  model_highd,
-  trimesh_data,
-  axis_param
-)
+get_projection(projection, highd_data, model_highd, trimesh_data, axis_param)
 }
 \arguments{
 \item{projection}{A matrix or data frame representing the projection.}
-
-\item{proj_scale}{Scaling factor for the projection.}
 
 \item{highd_data}{A data frame or matrix of high-dimensional data.}
 
@@ -40,7 +31,7 @@ c(-0.10551,0.14829,-0.02063,0.02658,-0.03150,0.19698,0.00044))
 df_bin <- scurve_model_obj$model_highd
 edge_data <- scurve_model_obj$trimesh_data
 
-get_projection(projection = projection_df, proj_scale = 1,
+get_projection(projection = projection_df,
 highd_data = scurve, model_highd = df_bin,
 trimesh_data = edge_data,
 axis_param = list(limits = 1, axis_scaled = 3, axis_pos_x = -0.72,
