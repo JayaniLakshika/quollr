@@ -42,7 +42,7 @@ c(-0.10551,0.14829,-0.02063,0.02658,-0.03150,0.19698,0.00044))
 df_bin <- scurve_model_obj$model_highd
 edge_data <- scurve_model_obj$trimesh_data
 
-proj_obj1 <- get_projection(projection = projection_df, proj_scale = 1,
+proj_obj1 <- get_projection(projection = projection_df,
 highd_data = scurve, model_highd = df_bin,
 trimesh_data = edge_data,
 axis_param = list(limits = 1, axis_scaled = 3, axis_pos_x = -0.72,
