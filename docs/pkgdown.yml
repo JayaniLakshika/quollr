@@ -1,0 +1,16 @@
+pandoc: 3.6.3
+pkgdown: 2.1.3
+pkgdown_sha: ~
+articles:
+  quollr1quickstart: quollr1quickstart.html
+  quollr2dataprocessing: quollr2dataprocessing.html
+  quollr3hexbin: quollr3hexbin.html
+  quollr4algo: quollr4algo.html
+  quollr5summary: quollr5summary.html
+  quollr6bestbinwidth: quollr6bestbinwidth.html
+  quollr7bestfit: quollr7bestfit.html
+  quollr8linkeddetourr: quollr8linkeddetourr.html
+last_built: 2025-12-18T07:58Z
+urls:
+  reference: https://jayanilakshika.github.io/quollr/reference
+  article: https://jayanilakshika.github.io/quollr/articles
