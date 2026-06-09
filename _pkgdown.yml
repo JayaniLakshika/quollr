@@ -1,0 +1,100 @@
+url: https://jayanilakshika.github.io/quollr/
+template:
+  bootstrap: 5
+  bootswatch: sandstone
+
+reference:
+- title: "Data"
+  desc: The example data sets.
+  contents:
+  - scurve
+  - scurve_model_obj
+  - scurve_plts
+  - scurve_umap
+  - scurve_umap_predict
+  - scurve_umap2
+  - scurve_umap3
+  - scurve_umap4
+  - scurve_umap_rmse
+  - scurve_umap_rmse2
+  - scurve_umap_rmse3
+  - scurve_umap_rmse4
+- title: "Data preprocessing"
+  desc: These are for data preprocessing.
+  contents:
+  - gen_scaled_data
+- title: "Hexagonal binning"
+  desc: These are for hexagonal binning.
+  contents:
+  - calc_bins_y
+  - gen_centroids
+  - gen_hex_coord
+  - assign_data
+  - compute_std_counts
+  - hex_binning
+- title: "2-D model construction"
+  desc: These are to construct the 2-D model.
+  contents:
+  - merge_hexbin_centroids
+  - merge_hexbin_mean
+  - tri_bin_centroids
+  - gen_edges
+  - update_trimesh_index
+- title: "Parameters"
+  desc: These are to compute default parameter values.
+  contents:
+  - compute_mean_density_hex
+  - find_low_dens_hex
+- title: "Lift to high dimensions"
+  desc: The function is to lift the constructed 2-D model into high-dimensions.
+  contents:
+  - avg_highd_data
+- title: "Fit the model"
+  desc: The function is to fit the model.
+  contents:
+  - fit_highd_model
+- title: "Model summaries"
+  desc: These are to obtain model summaries.
+  contents:
+  - glance
+  - glance.highd_vis_model
+  - predict_emb
+  - augment
+  - augment.highd_vis_model
+  - gen_diffbin1_errors
+  - plot_hbe_layouts
+- title: "2-D visualisation"
+  desc: These are to visualise the model in 2-D.
+  contents:
+  - GeomHexgrid
+  - stat_hexgrid
+  - geom_hexgrid
+  - GeomTrimesh
+  - stat_trimesh
+  - geom_trimesh
+- title: "High-dimensional visualisation"
+  desc: These are to visualise the model in high-dimensional space.
+  contents:
+  - comb_data_model
+  - show_langevitour
+- title: "Projection"
+  desc: These are to generate 2-D projections from tour.
+  contents:
+  - gen_axes
+  - get_projection
+  - plot_proj
+- title: "Link plots"
+  desc: These are to diagnoise with interactivity.
+  contents:
+  - comb_all_data_model
+  - show_link_plots
+  - comb_all_data_model_error
+  - show_error_link_plots
+- title: "Additional"
+  desc: These are additional functionalities.
+  contents:
+  - group_hex_pts
+  - find_non_empty_bins
+  - gen_design
+  - quad
+  - calc_2d_dist
