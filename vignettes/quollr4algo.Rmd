@@ -15,7 +15,10 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
   warning = FALSE, 
-  message = FALSE
+  message = FALSE,
+  fig.width = 4,
+  fig.height = 4,
+  dpi = 150
 )
 ```
 
@@ -45,7 +48,7 @@ nldr_obj <- gen_scaled_data(nldr_data = scurve_umap)
 
 ## Obtain the hexbin object
 hb_obj <- hex_binning(
-  nldr_scaled_obj = scurve_model_obj$nldr_scaled_obj, 
+  nldr_scaled_obj = nldr_obj, 
   b1 = 21, q = 0.1)
 
 all_centroids_df <- hb_obj$centroids
@@ -96,15 +99,19 @@ glimpse(trimesh_data)
 
 ### Visualise the triangular mesh
 
-```{r, fig.alt="Triangular mesh."}
-trimesh <- ggplot(model_2d, aes(x = c_x, y = c_y)) +
+```{r trimesh-plot, fig.alt = "Triangular mesh connecting hexagonal bin centroids over the UMAP layout of the scurve data."}
+trimesh_plt <- ggplot(model_2d, aes(x = c_x, y = c_y)) +
   geom_trimesh() +
   coord_equal() +
-  xlab(expression(C[x]^{(2)})) + ylab(expression(C[y]^{(2)})) +
-  theme(axis.text = element_text(size = 5),
-        axis.title = element_text(size = 7))
+  xlab(expression(C[x]^{(2)})) +
+  ylab(expression(C[y]^{(2)})) +
+  theme_bw() +
+  theme(
+    axis.text  = element_text(size = 5),
+    axis.title = element_text(size = 7)
+  )
 
-trimesh
+trimesh_plt
 ```
 
 
@@ -119,15 +126,17 @@ nldr_df_with_hex_id <- hb_obj$data_hb_id
 glimpse(nldr_df_with_hex_id)
 ```
 
-### Compute high-dimensional coordinates for bins
+### Compute high-dimensional coordinates for each bin
 
-We calculate the average high-dimensional coordinates for each bin and retain only the ones matching the 2-D model bins.
+For each bin, we calculate the average high-dimensional coordinates
+across all data points assigned to it. This produces one high-dimensional
+summary point per bin, which together form the lifted wireframe model.
 
-```{r} 
-model_highd <- avg_highd_data(highd_data = scurve, scaled_nldr_hexid = nldr_df_with_hex_id)
-
-model_highd <- model_highd |>
-  dplyr::filter(h %in% model_2d$h)
+```{r}
+model_highd <- avg_highd_data(
+  highd_data        = scurve,
+  scaled_nldr_hexid = nldr_df_with_hex_id
+)
 
 glimpse(model_highd)
 ```
@@ -139,16 +148,20 @@ We now combine all components—high-dimensional data, the 2-D model, lifted hig
 ### Prepare data for visualisation
 
 ```{r}
-df_exe <- comb_data_model(highd_data = scurve, 
-                          model_highd = model_highd, 
-                          model_2d = model_2d)
-
+df_exe <- comb_data_model(
+  highd_data  = scurve,
+  model_highd = model_highd,
+  model_2d    = model_2d
+)
 ```
 
 ### Interactive tour of model overlay
 
 ```{r}
-tour1 <- show_langevitour(point_data = df_exe, edge_data = trimesh_data)
+tour1 <- show_langevitour(
+  point_data = df_exe,
+  edge_data  = trimesh_data
+)
 
 tour1
 ```

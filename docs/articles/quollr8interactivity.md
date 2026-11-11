@@ -1,0 +1,72 @@
+# 8. Interactivity
+
+``` r
+
+library(quollr)
+```
+
+We demonstrate how to use interactive visualisations to explore model
+residuals and structure in both the high-dimensional space and its 2-D
+embedding. These interactive diagnostics allow users to link views
+across dimensions, enhancing interpretability and supporting more
+informed decision-making during model evaluation.
+
+## Step 1: Augmenting data with model errors
+
+We begin by computing model errors using the
+[`augment()`](https://jayanilakshika.github.io/quollr/reference/augment.md)
+function. This step appends prediction errors from both the
+high-dimensional and 2-D models to the original dataset.
+
+``` r
+
+model_error <- augment(
+  highd_data = scurve, 
+  model_highd = scurve_model_obj$model_highd, 
+  model_2d = scurve_model_obj$model_2d
+)
+```
+
+## Step 2: Combining all components
+
+Next, we prepare a comprehensive data frame that brings together the
+high-dimensional data, 2-D embeddings, model predictions, and error
+metrics. This combined object serves as the foundation for linked
+interactive plots.
+
+``` r
+
+df_exe <- comb_all_data_model_error(
+  highd_data = scurve, 
+  nldr_data = scurve_umap, 
+  model_highd = scurve_model_obj$model_highd, 
+  model_2d = scurve_model_obj$model_2d, 
+  error_data = model_error
+)
+```
+
+We also extract edge data (e.g., triangulations) used to define
+neighborhood relationships in the 2-D space.
+
+``` r
+
+edge_data <- scurve_model_obj$trimesh_data
+```
+
+## Step 3: Generating linked interactive plots
+
+Finally, we use the
+[`show_error_link_plots()`](https://jayanilakshika.github.io/quollr/reference/show_error_link_plots.md)
+function to produce interactive linked views. These plots allow users to
+examine prediction errors spatially, investigate neighborhood
+relationships via edge links, and interactively select and highlight
+points across plots.
+
+``` r
+
+show_error_link_plots(point_data = df_exe, edge_data = edge_data)
+```
+
+This interactive visualisation bridges the gap between model diagnostics
+and exploratory data analysis, enabling a richer understanding of model
+performance and structural preservation in dimension reduction.

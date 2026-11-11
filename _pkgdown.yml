@@ -3,7 +3,26 @@ template:
   bootstrap: 5
   bootswatch: sandstone
 
+articles:
+- title: Overview
+  contents:
+  - quollr0overview
+- title: Detailed guides
+  contents:
+  - quollr1quickstart
+  - quollr2dataprocessing
+  - quollr3hexbin
+  - quollr4algo
+  - quollr5summary
+  - quollr6bestbinwidth
+  - quollr7bestfit
+  - quollr8linkeddetourr
+
 reference:
+- title: "Package overview"
+  desc: Package-level documentation.
+  contents:
+  - quollr
 - title: "Data"
   desc: The example data sets.
   contents:
