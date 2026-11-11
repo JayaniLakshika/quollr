@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# quollr <img src="man/figures/logo.png" align="right" height="139" alt="" />
+# quollr <a href="https://jayanilakshika.github.io/quollr/"><img src="man/figures/logo.svg" align="right" height="139" alt="quollr website" /></a>
 
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/quollr)](https://CRAN.R-project.org/package=quollr)
 [![Downloads](http://cranlogs.r-pkg.org/badges/quollr)](https://cran.r-project.org/package=quollr)
