@@ -1,0 +1,250 @@
+---
+title: "8. Linked plots with `detourr`"
+output:
+  rmarkdown::html_vignette:
+    keep_md: true
+vignette: >
+  %\VignetteIndexEntry{8. Linked plots with `detourr`}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+options(rmarkdown.html_vignette.check_title = FALSE)
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  warning = FALSE, 
+  message = FALSE
+)
+```
+
+```{r}
+library(quollr)
+library(plotly)
+library(detourr)
+```
+
+While `quollr` integrates directly with `langevitour` for interactive exploration, an alternative workflow is to use the `detourr` package. This approach gives users more flexibility to manually construct linked, browser-based visualizations using `crosstalk` and `htmltools`. In this setup, multiple views—such as the $2\text{-}D$ NLDR layout, model diagnostics, and a tour are displayed side by side and interactively linked through brushing and selection.
+
+### Fitting the Model
+
+We begin by fitting a model using a high-dimensional dataset and its corresponding NLDR embedding.
+
+```{r}
+model_obj <- fit_highd_model(
+  highd_data = scurve, 
+  nldr_data = scurve_umap, 
+  b1 = 21, 
+  q = 0.1, 
+  hd_thresh = 0
+)
+```
+
+From the fitted object, we extract the $2\text{-}D$ model (`df_bin_centroids`), the lifted high-dimensional representation (`df_bin`), and the triangular mesh (`trimesh`) used to define neighborhood relationships.
+
+```{r}
+df_bin_centroids <- model_obj$model_2d
+df_bin <- model_obj$model_highd
+trimesh <- model_obj$trimesh_data
+
+model_error <- augment(
+  x = model_obj,
+  highd_data = scurve
+)
+```
+
+To support linked interaction across views, the model and data are combined into a single data structure.
+
+```{r}
+df_exe <- comb_all_data_model(
+  highd_data = scurve, 
+  nldr_data = scurve_umap, 
+  model_highd = df_bin, 
+  model_2d = df_bin_centroids
+)
+```
+
+
+## Two-Panel Linked View: NLDR Layout and Tour
+
+A simple linked view pairs the $2\text{-}D$ NLDR layout with a tour generated using `detourr`. Both panels are connected using `crosstalk`, allowing selections in one view to be reflected in the other.
+
+The NLDR plot is constructed with `plotly` to enable interactive brushing:
+
+```{r}
+point_colours <- c("#66B2CC", "#FF7755")
+point_sizes <- c(0, 1)
+
+shared_df <- crosstalk::SharedData$new(df_exe)
+
+nldr_plt <- plot_ly(
+    shared_df,
+    x = ~emb1, y = ~emb2,
+    type = "scatter",
+    mode = "markers",
+    marker = list( color = point_colours[1], size = 3, opacity = 0.5),
+    hoverinfo = "none"
+) |>
+    layout(
+        width = 300, height = 300,
+        xaxis = list(title = "", showgrid = FALSE, zeroline = FALSE, 
+                     showticklabels = FALSE, ticks = "", 
+                     linecolor = "black", mirror = TRUE
+        ),
+        yaxis = list(
+            title = "", showgrid = FALSE, zeroline = FALSE, 
+            showticklabels = FALSE, ticks = "", linecolor = "black", mirror = TRUE
+        ),
+        margin = list(l = 20, r = 20, t = 20, b = 20),
+        dragmode = "select"
+    ) |> 
+    style(selected = list(marker = list(opacity = 1)), 
+          unselected=list(marker=list(opacity=1))) |>
+    highlight(on="plotly_selected", off="plotly_deselect") |>
+    config(displayModeBar = FALSE)
+```
+
+The corresponding tour view is created using `detourr`, with the triangular mesh overlaid to show neighborhood structure:
+
+```{r}
+detourr_output <- detour(
+  shared_df, tour_aes(projection = starts_with("x"), colour = type)
+) |>
+  tour_path(grand_tour(2), 
+                    max_bases=50, fps = 60) |>
+  show_scatter(axes = TRUE, size = 0.5, alpha = 0.8, 
+               edges = as.matrix(trimesh[, c("from_reindexed", "to_reindexed")]),
+               palette = c("#66B2CC", "#FF7755"),
+              width = "300px", height = "300px")
+```
+
+These two views are arranged side by side using `bscols()`:
+
+```{r, eval=FALSE}
+lndet_link <- crosstalk::bscols(
+  htmltools::div(
+    style = "display: grid; grid-template-columns: 1fr 1fr;",
+    nldr_plt,
+    htmltools::div(style = "margin-top: 20px;", detourr_output)
+  ),
+  device = "xs"
+)
+
+class(lndet_link) <- c(class(lndet_link), "htmlwidget")
+lndet_link
+```
+
+This two-panel display allows users to explore how selections in the $2\text{-}D$ embedding correspond to structures observed in high-dimensional space.
+
+## Three-Panel Linked View: Adding Model Error
+
+To support deeper diagnostic exploration, a third panel showing the **error distribution** can be added. This view highlights how well different regions of the $2\text{-}D$ layout represent the original high-dimensional data.
+
+First, we recombine the data to include per-point error information:
+
+```{r}
+df_exe <- comb_all_data_model_error(
+  highd_data = scurve, 
+  nldr_data = scurve_umap, 
+  model_highd = df_bin, 
+  model_2d = df_bin_centroids, 
+  error_data = model_error
+)
+
+shared_df <- crosstalk::SharedData$new(df_exe)
+```
+
+The NLDR and tour views are constructed as before, but using a different `SharedData` object.
+
+```{r}
+nldr_plt_n <- plot_ly(
+    shared_df,
+    x = ~emb1, y = ~emb2,
+    type = "scatter",
+    mode = "markers",
+    marker = list(color = point_colours[1], size = 3, opacity = 0.5),
+    hoverinfo = "none"
+) |>
+    layout(
+        width = 250, height = 250,
+        xaxis = list(
+            title = "", showgrid = FALSE, zeroline = FALSE, 
+            showticklabels = FALSE, ticks = "", linecolor = "black", 
+            mirror = TRUE
+        ),
+        yaxis = list(
+            title = "", showgrid = FALSE, zeroline = FALSE, 
+            showticklabels = FALSE, ticks = "", linecolor = "black",
+            mirror = TRUE
+        ),
+        margin = list(l = 20, r = 20, t = 20, b = 20),
+        dragmode = "select"
+    ) |> 
+    style(selected   = list(marker = list(opacity = 1)), 
+          unselected=list(marker=list(opacity=1))) |>
+    highlight(on="plotly_selected", off="plotly_deselect") |>
+    config(displayModeBar = FALSE)
+
+detourr_output_n <- detour(
+  shared_df,
+  tour_aes(projection = starts_with("x"), colour = type)
+) |>
+  tour_path(grand_tour(2), 
+                    max_bases=50, fps = 60) |>
+  show_scatter(axes = TRUE, size = 0.5, alpha = 0.8, 
+               edges = as.matrix(trimesh[, c("from_reindexed", "to_reindexed")]),
+               palette = c("#66B2CC", "#FF7755"),
+                width = "250px", height = "250px")
+```
+
+The error distribution is visualized as an interactive scatter plot:
+
+```{r}
+error_plt <- plot_ly(
+    shared_df,
+    x = ~sqrt_row_wise_total_error, y = ~density,
+    type = "scatter",
+    mode = "markers",
+    marker = list(color = point_colours[1], size = 3, opacity = 0.5),
+    hoverinfo = "none"
+) |>
+    layout(
+        width = 250, height = 250,
+        xaxis = list(
+            title = "", showgrid = FALSE, zeroline = FALSE,
+            showticklabels = FALSE, ticks = "", linecolor = "black",
+            mirror = TRUE
+        ),
+        yaxis = list(
+            title = "", showgrid = FALSE, zeroline = FALSE,
+            showticklabels = FALSE, ticks = "", linecolor = "black",
+            mirror = TRUE
+        ),
+        margin = list(l = 20, r = 20, t = 20, b = 20),
+        dragmode = "select"
+    ) |> 
+    style(selected   = list(marker = list(opacity = 1)), 
+          unselected=list(marker=list(opacity=1))) |>
+    highlight(on="plotly_selected", off="plotly_deselect") |>
+    config(displayModeBar = FALSE)
+```
+
+All three panels are arranged in a single linked display:
+
+```{r, eval=FALSE}
+erlndet_link <- crosstalk::bscols(
+  htmltools::div(
+    style = "display: grid; grid-template-columns: 1fr 1fr 1fr;",
+    error_plt, nldr_plt_n,
+    htmltools::div(style = "margin-top: 20px;", detourr_output_n)
+  ),
+  device = "xs"
+)
+
+class(erlndet_link) <- c(class(erlndet_link), "htmlwidget")
+erlndet_link
+```
+
+This three-panel view allows users to explore between **embedding space**, **model error**, and **tour**, making it easier to identify regions where the NLDR layout may distort distances or cluster relationships.
+
